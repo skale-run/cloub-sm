@@ -72,6 +72,24 @@ function App() {
   const toggleSidebar = () => setSidebarOpen((open) => !open)
   const handleSidebarNavigate = () => setSidebarOpen(false)
 
+  useEffect(() => {
+    if (!sidebarOpen) {
+      return
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setSidebarOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [sidebarOpen])
+
   const handleProfileChange = (key: keyof Profile, value: string) => {
     setProfileDraft((previous) => ({ ...previous, [key]: value }))
   }
@@ -125,59 +143,61 @@ function App() {
         />
       ) : null}
 
-      <div className="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-10 lg:py-10">
-        <Sidebar
-          open={sidebarOpen}
-          onToggleSidebar={toggleSidebar}
-          onNavigate={handleSidebarNavigate}
-          onNavigateTo={navigateTo}
-          currentPath={currentPath}
-          savedProfile={savedProfile}
-        />
+      <Sidebar
+        open={sidebarOpen}
+        onToggleSidebar={toggleSidebar}
+        onNavigate={handleSidebarNavigate}
+        onNavigateTo={navigateTo}
+        currentPath={currentPath}
+        savedProfile={savedProfile}
+      />
 
-        <div className="flex flex-1 flex-col rounded-3xl border border-white/5 bg-slate-950/60 shadow-[0_35px_120px_rgba(8,15,35,0.55)] backdrop-blur xl:rounded-[32px]">
-          <Header isSidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} savedProfile={savedProfile} />
+      <div className="relative flex min-h-screen flex-col lg:pl-[24rem]">
+        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
+          <div className="flex flex-1 flex-col rounded-3xl border border-white/5 bg-slate-950/60 shadow-[0_35px_120px_rgba(8,15,35,0.55)] backdrop-blur xl:rounded-[32px]">
+            <Header isSidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} savedProfile={savedProfile} />
 
-          <main className="relative z-0 flex-1 space-y-12 px-4 pb-16 pt-6 sm:px-8 lg:px-12">
-            {(() => {
-              switch (currentPath) {
-                case '/calendar':
-                  return <CalendarSection />
-                case '/academic-record':
-                  return <AcademicRecordSection />
-                case '/billing':
-                  return <BillingSection />
-                case '/training-attendance':
-                  return <TrainingAttendanceSection />
-                case '/coach-evaluation':
-                  return <CoachEvaluationSection />
-                case '/progress-overview':
-                  return <ProgressOverviewSection />
-                case '/performance-tracking':
-                  return <PerformanceTrackingSection />
-                case '/profile':
-                  return (
-                    <ProfileSection
-                      profileDraft={profileDraft}
-                      onProfileChange={handleProfileChange}
-                      onSaveProfile={handleSaveProfile}
-                      onResetProfile={handleResetProfile}
-                      onDeleteProfile={handleDeleteProfile}
-                      statusMessage={statusMessage}
-                      achievements={achievements}
-                      newAchievement={newAchievement}
-                      onNewAchievementChange={setNewAchievement}
-                      onAddAchievement={handleAddAchievement}
-                      onRemoveAchievement={handleRemoveAchievement}
-                    />
-                  )
-                case '/access':
-                  return <AccessSection savedProfile={savedProfile} />
-                default:
-                  return <CalendarSection />
-              }
-            })()}
-          </main>
+            <main className="relative z-0 flex-1 space-y-12 px-4 pb-16 pt-6 sm:px-8 lg:px-12">
+              {(() => {
+                switch (currentPath) {
+                  case '/calendar':
+                    return <CalendarSection />
+                  case '/academic-record':
+                    return <AcademicRecordSection />
+                  case '/billing':
+                    return <BillingSection />
+                  case '/training-attendance':
+                    return <TrainingAttendanceSection />
+                  case '/coach-evaluation':
+                    return <CoachEvaluationSection />
+                  case '/progress-overview':
+                    return <ProgressOverviewSection />
+                  case '/performance-tracking':
+                    return <PerformanceTrackingSection />
+                  case '/profile':
+                    return (
+                      <ProfileSection
+                        profileDraft={profileDraft}
+                        onProfileChange={handleProfileChange}
+                        onSaveProfile={handleSaveProfile}
+                        onResetProfile={handleResetProfile}
+                        onDeleteProfile={handleDeleteProfile}
+                        statusMessage={statusMessage}
+                        achievements={achievements}
+                        newAchievement={newAchievement}
+                        onNewAchievementChange={setNewAchievement}
+                        onAddAchievement={handleAddAchievement}
+                        onRemoveAchievement={handleRemoveAchievement}
+                      />
+                    )
+                  case '/access':
+                    return <AccessSection savedProfile={savedProfile} />
+                  default:
+                    return <CalendarSection />
+                }
+              })()}
+            </main>
+          </div>
         </div>
       </div>
     </div>
