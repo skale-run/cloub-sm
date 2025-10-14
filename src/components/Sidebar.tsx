@@ -150,12 +150,12 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
   return (
     <aside
       id="app-sidebar"
-      className={`relative z-40 w-full max-w-sm shrink-0 rounded-3xl border border-white/5 bg-slate-950/80 shadow-[0_30px_80px_rgba(8,15,35,0.6)] backdrop-blur transition-transform duration-300 ease-out lg:static lg:translate-x-0 lg:max-w-xs ${
-        open ? 'translate-x-0' : '-translate-x-[120%] lg:-translate-x-0'
+      className={`fixed inset-y-6 left-4 right-4 z-40 w-auto max-w-sm shrink-0 overflow-hidden rounded-3xl border border-white/5 bg-slate-950/80 shadow-[0_30px_80px_rgba(8,15,35,0.6)] backdrop-blur transition-transform duration-300 ease-out lg:inset-y-10 lg:left-10 lg:right-auto lg:w-80 lg:max-w-none ${
+        open ? 'translate-x-0' : '-translate-x-[120%] lg:translate-x-0'
       }`}
       aria-label="Primary navigation"
     >
-      <div className="flex h-full flex-col gap-8 p-6">
+      <div className="flex h-full flex-col gap-8 overflow-y-auto p-6">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
             <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500/30 via-sky-500/10 to-transparent text-sky-200">
