@@ -341,6 +341,12 @@
       var(--motion-easing-standard, ease);
 }
 
+.topbar__theme--static {
+  cursor: default;
+  pointer-events: none;
+  transform: none;
+}
+
 .topbar__theme:hover,
 .topbar__theme:focus-visible {
   border-color: color-mix(

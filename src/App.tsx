@@ -135,7 +135,7 @@ const emptyProfile: Profile = {
 }
 
 function App() {
-  const { toggleMode, isDark } = useTheme()
+  const { mode } = useTheme()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [profileDraft, setProfileDraft] = useState<Profile>(emptyProfile)
   const [savedProfile, setSavedProfile] = useState<Profile | null>(null)
@@ -249,17 +249,14 @@ function App() {
                 <p className="topbar__date">14 April 2025</p>
                 <p className="topbar__status">Focus: Speed refinement · Hydration priority</p>
               </div>
-              <button
-                type="button"
-                className="topbar__theme"
-                onClick={toggleMode}
-                aria-label={`Switch to ${isDark ? 'light' : 'dark'} theme`}
+              <div
+                className="topbar__theme topbar__theme--static"
+                role="status"
+                aria-label="Dark mode enabled"
               >
-                <span aria-hidden="true">{isDark ? '🌙' : '☀️'}</span>
-                <span className="topbar__theme-label">
-                  {isDark ? 'Dark mode' : 'Light mode'}
-                </span>
-              </button>
+                <span aria-hidden="true">{mode === 'dark' ? '🌙' : '☀️'}</span>
+                <span className="topbar__theme-label">Dark mode</span>
+              </div>
             </div>
           </div>
         </header>
