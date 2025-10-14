@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
 import AccessSection from './features/access/AccessSection'
+import AuthenticationExperienceModal from './features/auth/AuthenticationExperienceModal'
+import { useAthletePortalModal } from './features/auth/AthletePortalModalContext'
 import CalendarSection from './features/calendar/CalendarSection'
 import CoachEvaluationSection from './features/evaluations/CoachEvaluationSection'
 import ProgressOverviewSection from './features/evaluations/ProgressOverviewSection'
@@ -132,75 +134,85 @@ function App() {
     setAchievements((previous) => previous.filter((_, idx) => idx !== index))
   }
 
+  const { open: openAthletePortal } = useAthletePortalModal()
+
   return (
-    <div className="relative min-h-screen overflow-hidden text-slate-100">
-      {sidebarOpen ? (
-        <button
-          type="button"
-          aria-label="Close navigation"
-          onClick={handleSidebarNavigate}
-          className="fixed inset-0 z-30 bg-slate-950/70 backdrop-blur-sm lg:hidden"
+    <>
+      <div className="relative min-h-screen overflow-hidden text-slate-100">
+        {sidebarOpen ? (
+          <button
+            type="button"
+            aria-label="Close navigation"
+            onClick={handleSidebarNavigate}
+            className="fixed inset-0 z-30 bg-slate-950/70 backdrop-blur-sm lg:hidden"
+          />
+        ) : null}
+
+        <Sidebar
+          open={sidebarOpen}
+          onToggleSidebar={toggleSidebar}
+          onNavigate={handleSidebarNavigate}
+          onNavigateTo={navigateTo}
+          currentPath={currentPath}
+          savedProfile={savedProfile}
         />
-      ) : null}
 
-      <Sidebar
-        open={sidebarOpen}
-        onToggleSidebar={toggleSidebar}
-        onNavigate={handleSidebarNavigate}
-        onNavigateTo={navigateTo}
-        currentPath={currentPath}
-        savedProfile={savedProfile}
-      />
+        <div className="relative flex min-h-screen flex-col lg:pl-[24rem]">
+          <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
+            <div className="flex flex-1 flex-col rounded-3xl border border-white/5 bg-slate-950/60 shadow-[0_35px_120px_rgba(8,15,35,0.55)] backdrop-blur xl:rounded-[32px]">
+              <Header
+                isSidebarOpen={sidebarOpen}
+                onToggleSidebar={toggleSidebar}
+                savedProfile={savedProfile}
+                onOpenAthletePortal={openAthletePortal}
+              />
 
-      <div className="relative flex min-h-screen flex-col lg:pl-[24rem]">
-        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
-          <div className="flex flex-1 flex-col rounded-3xl border border-white/5 bg-slate-950/60 shadow-[0_35px_120px_rgba(8,15,35,0.55)] backdrop-blur xl:rounded-[32px]">
-            <Header isSidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} savedProfile={savedProfile} />
-
-            <main className="relative z-0 flex-1 space-y-12 px-4 pb-16 pt-6 sm:px-8 lg:px-12">
-              {(() => {
-                switch (currentPath) {
-                  case '/calendar':
-                    return <CalendarSection />
-                  case '/academic-record':
-                    return <AcademicRecordSection />
-                  case '/billing':
-                    return <BillingSection />
-                  case '/training-attendance':
-                    return <TrainingAttendanceSection />
-                  case '/coach-evaluation':
-                    return <CoachEvaluationSection />
-                  case '/progress-overview':
-                    return <ProgressOverviewSection />
-                  case '/performance-tracking':
-                    return <PerformanceTrackingSection />
-                  case '/profile':
-                    return (
-                      <ProfileSection
-                        profileDraft={profileDraft}
-                        onProfileChange={handleProfileChange}
-                        onSaveProfile={handleSaveProfile}
-                        onResetProfile={handleResetProfile}
-                        onDeleteProfile={handleDeleteProfile}
-                        statusMessage={statusMessage}
-                        achievements={achievements}
-                        newAchievement={newAchievement}
-                        onNewAchievementChange={setNewAchievement}
-                        onAddAchievement={handleAddAchievement}
-                        onRemoveAchievement={handleRemoveAchievement}
-                      />
-                    )
-                  case '/access':
-                    return <AccessSection savedProfile={savedProfile} />
-                  default:
-                    return <CalendarSection />
-                }
-              })()}
-            </main>
+              <main className="relative z-0 flex-1 space-y-12 px-4 pb-16 pt-6 sm:px-8 lg:px-12">
+                {(() => {
+                  switch (currentPath) {
+                    case '/calendar':
+                      return <CalendarSection />
+                    case '/academic-record':
+                      return <AcademicRecordSection />
+                    case '/billing':
+                      return <BillingSection />
+                    case '/training-attendance':
+                      return <TrainingAttendanceSection />
+                    case '/coach-evaluation':
+                      return <CoachEvaluationSection />
+                    case '/progress-overview':
+                      return <ProgressOverviewSection />
+                    case '/performance-tracking':
+                      return <PerformanceTrackingSection />
+                    case '/profile':
+                      return (
+                        <ProfileSection
+                          profileDraft={profileDraft}
+                          onProfileChange={handleProfileChange}
+                          onSaveProfile={handleSaveProfile}
+                          onResetProfile={handleResetProfile}
+                          onDeleteProfile={handleDeleteProfile}
+                          statusMessage={statusMessage}
+                          achievements={achievements}
+                          newAchievement={newAchievement}
+                          onNewAchievementChange={setNewAchievement}
+                          onAddAchievement={handleAddAchievement}
+                          onRemoveAchievement={handleRemoveAchievement}
+                        />
+                      )
+                    case '/access':
+                      return <AccessSection savedProfile={savedProfile} />
+                    default:
+                      return <CalendarSection />
+                  }
+                })()}
+              </main>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <AuthenticationExperienceModal />
+    </>
   )
 }
 

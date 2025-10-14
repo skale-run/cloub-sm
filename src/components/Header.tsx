@@ -11,6 +11,7 @@ type HeaderProps = {
   isSidebarOpen: boolean
   onToggleSidebar: () => void
   savedProfile: HeaderProfile | null
+  onOpenAthletePortal: () => void
 }
 
 const focusChips = [
@@ -19,7 +20,7 @@ const focusChips = [
   { label: 'Coach note', value: 'Refine drive phase' },
 ]
 
-function Header({ isSidebarOpen, onToggleSidebar, savedProfile }: HeaderProps) {
+function Header({ isSidebarOpen, onToggleSidebar, savedProfile, onOpenAthletePortal }: HeaderProps) {
   const { mode } = useTheme()
   const ThemeIcon = mode === 'dark' ? Moon : Sun
 
@@ -88,6 +89,13 @@ function Header({ isSidebarOpen, onToggleSidebar, savedProfile }: HeaderProps) {
             <ThemeIcon aria-hidden className="h-4 w-4 text-sky-300" />
             <span>{mode === 'dark' ? 'Dark mode' : 'Light mode'}</span>
           </div>
+          <button
+            type="button"
+            onClick={onOpenAthletePortal}
+            className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-sky-500 via-cyan-400 to-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-[0_18px_50px_rgba(14,165,233,0.45)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+          >
+            Access athlete portal
+          </button>
         </div>
       </div>
     </header>
