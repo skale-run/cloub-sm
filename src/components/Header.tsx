@@ -60,20 +60,20 @@ function Header({ isSidebarOpen, onToggleSidebar, savedProfile, onOpenAthletePor
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {focusChips.map((chip) => (
-              <span
+              <div
                 key={chip.label}
-                className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200/90 transition hover:border-sky-400/40 hover:bg-sky-500/10 hover:text-white"
+                className="group flex w-full items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200/90 transition hover:border-sky-400/40 hover:bg-sky-500/10 hover:text-white"
               >
                 <span className="text-xs uppercase tracking-wider text-sky-200/70 group-hover:text-sky-100">{chip.label}</span>
-                <span className="font-medium">{chip.value}</span>
-              </span>
+                <span className="font-medium text-right">{chip.value}</span>
+              </div>
             ))}
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-slate-200/80 shadow-[0_20px_60px_rgba(8,15,35,0.55)] backdrop-blur">
+        <div className="flex w-full flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-slate-200/80 shadow-[0_20px_60px_rgba(8,15,35,0.55)] backdrop-blur lg:max-w-sm">
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-slate-300/70">Today</p>
             <p className="mt-1 text-lg font-semibold text-white">14 April 2025</p>
