@@ -89,7 +89,7 @@ function Sidebar({ open, onToggleSidebar, onNavigate, savedProfile }: SidebarPro
           <Activity className="sidebar__logo-icon" />
         </span>
         <div>
-          <p className="sidebar__title">ClubPulse</p>
+          <p className="sidebar__title">Club Section Manager</p>
           <p className="sidebar__subtitle">Athlete Command Hub</p>
         </div>
       </div>
