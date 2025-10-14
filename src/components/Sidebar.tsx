@@ -1,19 +1,13 @@
-import {
-  Activity,
-  BarChart3,
-  CalendarDays,
-  Flag,
-  ScanQrCode,
-  UserCircle,
-  type LucideIcon,
-} from 'lucide-react'
+import { Activity, BarChart3, CalendarDays, Flag, ScanQrCode, UserCircle, X } from 'lucide-react'
 
-const navItems: ReadonlyArray<{
+type NavItem = {
   href: string
   label: string
   description: string
-  Icon: LucideIcon
-}> = [
+  Icon: typeof Activity
+}
+
+const navItems: ReadonlyArray<NavItem> = [
   {
     href: '#training',
     label: 'Training Sessions',
@@ -74,84 +68,103 @@ function Sidebar({ open, onToggleSidebar, onNavigate, savedProfile }: SidebarPro
   }
 
   return (
-    <aside id="app-sidebar" className={`sidebar ${open ? 'open' : ''}`} aria-label="Primary navigation">
-      <button
-        type="button"
-        className="sidebar__close"
-        onClick={onToggleSidebar}
-        aria-label="Close navigation"
-      >
-        <span aria-hidden="true">×</span>
-      </button>
-
-      <div className="sidebar__brand">
-        <span className="sidebar__logo" aria-hidden="true">
-          <Activity className="sidebar__logo-icon" />
-        </span>
-        <div>
-          <p className="sidebar__title">Club Section Manager</p>
-          <p className="sidebar__subtitle">Athlete Command Hub</p>
+    <aside
+      id="app-sidebar"
+      className={`relative z-40 w-full max-w-sm shrink-0 rounded-3xl border border-white/5 bg-slate-950/80 shadow-[0_30px_80px_rgba(8,15,35,0.6)] backdrop-blur transition-transform duration-300 ease-out lg:static lg:translate-x-0 lg:max-w-xs ${
+        open ? 'translate-x-0' : '-translate-x-[120%] lg:-translate-x-0'
+      }`}
+      aria-label="Primary navigation"
+    >
+      <div className="flex h-full flex-col gap-8 p-6">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500/30 via-sky-500/10 to-transparent text-sky-200">
+              <Activity className="h-6 w-6" aria-hidden />
+            </span>
+            <div>
+              <p className="text-sm font-semibold text-white">Club Section Manager</p>
+              <p className="text-xs uppercase tracking-[0.35em] text-slate-400/70">Athlete Command Hub</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 text-slate-300 transition hover:border-sky-500/50 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 lg:hidden"
+            onClick={onToggleSidebar}
+            aria-label="Close navigation"
+          >
+            <X className="h-4 w-4" aria-hidden />
+          </button>
         </div>
-      </div>
 
-      <section className="sidebar__section" aria-label="Navigation">
-        <p className="sidebar__section-title">Navigate</p>
-        <nav className="sidebar__nav">
-          {navItems.map((item) => (
-            <a key={item.href} href={item.href} className="sidebar__nav-item" onClick={handleNavigate}>
-              <item.Icon className="sidebar__nav-icon" aria-hidden="true" />
-              <span className="sidebar__nav-text">
-                <span className="sidebar__nav-label">{item.label}</span>
-                <span className="sidebar__nav-description">{item.description}</span>
-              </span>
-            </a>
-          ))}
-        </nav>
-      </section>
+        <section className="space-y-4" aria-label="Navigation">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400/70">Navigate</p>
+          <nav className="grid gap-2">
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={handleNavigate}
+                className="group flex items-center gap-4 rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-sm text-slate-200 transition hover:border-sky-400/40 hover:bg-slate-900/60 hover:text-white"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900/70 text-sky-200 group-hover:bg-sky-500/15">
+                  <item.Icon className="h-5 w-5" aria-hidden />
+                </span>
+                <span className="flex flex-col">
+                  <span className="font-semibold">{item.label}</span>
+                  <span className="text-xs text-slate-400/80">{item.description}</span>
+                </span>
+              </a>
+            ))}
+          </nav>
+        </section>
 
-      <section className="sidebar__section" aria-label="Readiness overview">
-        <p className="sidebar__section-title">Today&apos;s readiness</p>
-        <ul className="sidebar__metrics">
-          {readinessHighlights.map((item) => (
-            <li key={item.label} className="sidebar__metric">
-              <span className="sidebar__metric-label">{item.label}</span>
-              <span className="sidebar__metric-value">{item.value}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section className="space-y-4" aria-label="Readiness overview">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400/70">Today&apos;s readiness</p>
+          <ul className="grid gap-3">
+            {readinessHighlights.map((item) => (
+              <li
+                key={item.label}
+                className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-sm text-slate-200"
+              >
+                <span className="text-xs uppercase tracking-wide text-slate-400/80">{item.label}</span>
+                <span className="font-semibold text-white">{item.value}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <div className="sidebar__section sidebar__profile-card" aria-live="polite">
-        <p className="sidebar__section-title">Member snapshot</p>
-        {savedProfile ? (
-          <dl className="sidebar__profile-details">
-            <div>
-              <dt>Member</dt>
-              <dd>{savedProfile.fullName}</dd>
-            </div>
-            <div>
-              <dt>Role</dt>
-              <dd>{savedProfile.role || 'Assign a role'}</dd>
-            </div>
-            <div>
-              <dt>Squad</dt>
-              <dd>{savedProfile.squad || 'Update squad to personalise drills'}</dd>
-            </div>
-            <div>
-              <dt>ID</dt>
-              <dd>{savedProfile.membershipId}</dd>
-            </div>
-          </dl>
-        ) : (
-          <p className="sidebar__profile-empty">
-            Save your athlete profile to unlock tailored navigation insights.
-          </p>
-        )}
-      </div>
+        <section className="space-y-4 rounded-3xl border border-white/5 bg-slate-900/60 p-5" aria-live="polite">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400/70">Member snapshot</p>
+          {savedProfile ? (
+            <dl className="grid gap-3 text-sm text-slate-200">
+              <div className="flex flex-col gap-1">
+                <dt className="text-xs uppercase tracking-wide text-slate-400/80">Member</dt>
+                <dd className="font-semibold text-white">{savedProfile.fullName}</dd>
+              </div>
+              <div className="flex flex-col gap-1">
+                <dt className="text-xs uppercase tracking-wide text-slate-400/80">Role</dt>
+                <dd>{savedProfile.role || 'Assign a role'}</dd>
+              </div>
+              <div className="flex flex-col gap-1">
+                <dt className="text-xs uppercase tracking-wide text-slate-400/80">Squad</dt>
+                <dd>{savedProfile.squad || 'Update squad to personalise drills'}</dd>
+              </div>
+              <div className="flex flex-col gap-1">
+                <dt className="text-xs uppercase tracking-wide text-slate-400/80">ID</dt>
+                <dd className="font-medium tracking-wide text-sky-200">{savedProfile.membershipId}</dd>
+              </div>
+            </dl>
+          ) : (
+            <p className="text-sm leading-relaxed text-slate-300/80">
+              Save your athlete profile to unlock tailored navigation insights.
+            </p>
+          )}
+        </section>
 
-      <div className="sidebar__footer">
-        <p>Season 2025 · Wave 2 Squad</p>
-        <p className="sidebar__footer-highlight">Next rest day: Sun, 20 Apr</p>
+        <div className="mt-auto space-y-1 text-xs text-slate-400/80">
+          <p>Season 2025 · Wave 2 Squad</p>
+          <p className="font-semibold text-sky-200">Next rest day: Sun, 20 Apr</p>
+        </div>
       </div>
     </aside>
   )

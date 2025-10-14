@@ -9,10 +9,37 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+              display: ['Space Grotesk', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            },
+            colors: {
+              midnight: {
+                950: '#020617',
+                900: '#0f172a',
+                800: '#1e293b',
+              },
+            },
+            boxShadow: {
+              glow: '0 30px 80px -40px rgba(14, 116, 144, 0.65)',
+            },
+            backgroundImage: {
+              'hero-glow':
+                'radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.25), transparent 60%), radial-gradient(circle at 80% 0%, rgba(168, 85, 247, 0.18), transparent 65%)',
+            },
+          },
+        },
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>cloub-sm</title>
   </head>
-  <body>
+  <body class="bg-midnight-950">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
