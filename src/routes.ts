@@ -1,6 +1,8 @@
+export const landingPath = "/" as const;
 export const defaultPath = "/calendar" as const;
 
 export const routePaths = [
+  landingPath,
   defaultPath,
   "/academic-record",
   "/billing",
@@ -17,11 +19,9 @@ export type RoutePath = (typeof routePaths)[number];
 const routePathSet = new Set<RoutePath>(routePaths);
 
 export function normalizePath(pathname: string): RoutePath {
-  if (pathname === "/") {
-    return defaultPath;
+  if (routePathSet.has(pathname as RoutePath)) {
+    return pathname as RoutePath;
   }
 
-  return routePathSet.has(pathname as RoutePath)
-    ? (pathname as RoutePath)
-    : defaultPath;
+  return defaultPath;
 }

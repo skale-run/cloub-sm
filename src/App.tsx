@@ -15,7 +15,8 @@ import TrainingAttendanceSection from "./features/information/TrainingAttendance
 import PerformanceTrackingSection from "./features/performance/PerformanceTrackingSection";
 import ProfileSection from "./features/profile/ProfileSection";
 import { emptyProfile, type Profile } from "./features/profile/profileTypes";
-import { normalizePath, type RoutePath } from "./routes";
+import LandingPage from "./features/landing/LandingPage";
+import { landingPath, normalizePath, type RoutePath } from "./routes";
 
 const DESKTOP_BREAKPOINT = "(min-width: 1024px)" as const;
 
@@ -24,6 +25,7 @@ const getIsDesktop = () =>
   window.matchMedia(DESKTOP_BREAKPOINT).matches;
 
 const pageTitles: Record<RoutePath, string> = {
+  [landingPath]: "Welcome to Cloub",
   "/calendar": "Calendar overview",
   "/academic-record": "Academic record",
   "/billing": "Billing",
@@ -191,6 +193,32 @@ function App() {
   const handleRemoveAchievement = (index: number) => {
     setAchievements((previous) => previous.filter((_, idx) => idx !== index));
   };
+
+  const isLandingPage = currentPath === landingPath;
+
+  const handleContactClick = () => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    const contactSection = document.getElementById("landing-contact");
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  if (isLandingPage) {
+    return (
+      <>
+        <LandingPage
+          onSignup={() => navigateTo("/access")}
+          onLogin={() => navigateTo("/calendar")}
+          onContact={handleContactClick}
+        />
+        <AuthenticationExperienceModal />
+      </>
+    );
+  }
 
   return (
     <>
