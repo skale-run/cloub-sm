@@ -19,6 +19,84 @@ import LandingPage from "./features/landing/LandingPage";
 import { landingPath, normalizePath, type RoutePath } from "./routes";
 
 const DESKTOP_BREAKPOINT = "(min-width: 1024px)" as const;
+const PROFILE_DRAFT_STORAGE_KEY = "cloub-profile-draft" as const;
+const SAVED_PROFILE_STORAGE_KEY = "cloub-saved-profile" as const;
+const ACHIEVEMENTS_STORAGE_KEY = "cloub-profile-achievements" as const;
+
+function getStoredJsonValue<T extends Record<string, unknown>>(
+  key: string,
+  fallback: T,
+): T {
+  if (typeof window === "undefined") {
+    return fallback;
+  }
+
+  try {
+    const rawValue = window.localStorage.getItem(key);
+    if (!rawValue) {
+      return fallback;
+    }
+
+    const parsed = JSON.parse(rawValue) as unknown;
+    if (parsed === null || typeof parsed !== "object") {
+      return fallback;
+    }
+
+    return { ...fallback, ...(parsed as Record<string, unknown>) } as T;
+  } catch (error) {
+    console.error(`Failed to parse localStorage value for "${key}"`, error);
+    return fallback;
+  }
+}
+
+function getStoredArrayValue(key: string, fallback: string[]): string[] {
+  if (typeof window === "undefined") {
+    return fallback;
+  }
+
+  try {
+    const rawValue = window.localStorage.getItem(key);
+    if (!rawValue) {
+      return fallback;
+    }
+
+    const parsed = JSON.parse(rawValue);
+    if (!Array.isArray(parsed)) {
+      return fallback;
+    }
+
+    return parsed.filter((item): item is string => typeof item === "string");
+  } catch (error) {
+    console.error(`Failed to parse localStorage value for "${key}"`, error);
+    return fallback;
+  }
+}
+
+function getStoredProfileOrNull(): Profile | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const rawValue = window.localStorage.getItem(SAVED_PROFILE_STORAGE_KEY);
+    if (!rawValue) {
+      return null;
+    }
+
+    const parsed = JSON.parse(rawValue);
+    if (parsed === null || typeof parsed !== "object") {
+      return null;
+    }
+
+    return { ...emptyProfile, ...(parsed as Record<string, unknown>) } as Profile;
+  } catch (error) {
+    console.error(
+      `Failed to parse localStorage value for "${SAVED_PROFILE_STORAGE_KEY}"`,
+      error,
+    );
+    return null;
+  }
+}
 
 const getIsDesktop = () =>
   typeof window !== "undefined" &&
@@ -40,12 +118,18 @@ const pageTitles: Record<RoutePath, string> = {
 function App() {
   const [isDesktop, setIsDesktop] = useState(getIsDesktop);
   const [sidebarOpen, setSidebarOpen] = useState(getIsDesktop);
-  const [profileDraft, setProfileDraft] = useState<Profile>(emptyProfile);
-  const [savedProfile, setSavedProfile] = useState<Profile | null>(null);
-  const [achievements, setAchievements] = useState<string[]>([
-    "Season-best 400m: 49.20s",
-    "Bronze medal · State Indoor Championships",
-  ]);
+  const [profileDraft, setProfileDraft] = useState<Profile>(() =>
+    getStoredJsonValue(PROFILE_DRAFT_STORAGE_KEY, emptyProfile),
+  );
+  const [savedProfile, setSavedProfile] = useState<Profile | null>(
+    getStoredProfileOrNull,
+  );
+  const [achievements, setAchievements] = useState<string[]>(() =>
+    getStoredArrayValue(ACHIEVEMENTS_STORAGE_KEY, [
+      "Season-best 400m: 49.20s",
+      "Bronze medal · State Indoor Championships",
+    ]),
+  );
   const [newAchievement, setNewAchievement] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
 
@@ -145,6 +229,43 @@ function App() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [sidebarOpen]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem(
+      PROFILE_DRAFT_STORAGE_KEY,
+      JSON.stringify(profileDraft),
+    );
+  }, [profileDraft]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (savedProfile) {
+      window.localStorage.setItem(
+        SAVED_PROFILE_STORAGE_KEY,
+        JSON.stringify(savedProfile),
+      );
+    } else {
+      window.localStorage.removeItem(SAVED_PROFILE_STORAGE_KEY);
+    }
+  }, [savedProfile]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem(
+      ACHIEVEMENTS_STORAGE_KEY,
+      JSON.stringify(achievements),
+    );
+  }, [achievements]);
 
   const handleProfileChange = (key: keyof Profile, value: string) => {
     setProfileDraft((previous) => ({ ...previous, [key]: value }));
