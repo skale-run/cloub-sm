@@ -947,28 +947,29 @@ export const ar = {
     academic: {
       heading: "السجل الأكاديمي",
       description:
-        "حافظ على توافق متطلبات الأهلية مع تخطيط فصلك الدراسي الحالي.",
+        "تابع متطلبات الأهلية وخطة هذا الفصل الدراسي في مكان واحد.",
       creditBadge: {
-        label: "وتيرة الساعات",
-        value: "{{current}} / {{target}} ساعة قيد التقدّم",
-        helper: "هامش الأهلية مستقر",
+        label: "تقدم الساعات",
+        value: "{{current}} / {{target}} ساعة مؤكدة",
+        helper: "هامش الأهلية آمن",
       },
       creditLoad: {
-        heading: "نظرة على حمل الساعات",
-        caption: "من أصل {{target}} ساعة مستهدفة مؤكدة لهذا الفصل",
+        heading: "ملخص حمل الساعات",
+        caption:
+          "تم اعتماد {{current}} من أصل {{target}} ساعة مستهدفة لهذا الفصل",
         helper:
-          "{{available}} ساعات إضافية متاحة لمساقات علوم الرياضة الاختيارية للحفاظ على الأهلية.",
+          "لا يزال بإمكانك إضافة {{available}} ساعات اختيارية للحفاظ على الأهلية.",
       },
       creditDistribution: {
         coreSciences: {
           label: "العلوم الأساسية",
           value: "9 ساعات",
-          context: "كُتل الميكانيكا الحيوية والفسيولوجيا",
+          context: "كتل الميكانيكا الحيوية والفسيولوجيا",
         },
         performanceLabs: {
           label: "مختبرات الأداء",
           value: "6 ساعات",
-          context: "ساعات المختبر المسجّلة أسبوعيًا",
+          context: "ساعات المختبر المسجلة أسبوعيًا",
         },
         leadershipElectives: {
           label: "القيادة والمساقات الاختيارية",
@@ -983,7 +984,7 @@ export const ar = {
         currentGpa: {
           label: "المعدل التراكمي الحالي",
           value: "3.82",
-          context: "+0.12 هذا الفصل",
+          context: "بزيادة 0.12 هذا الفصل",
         },
         scholarshipEligibility: {
           label: "أهلية المنحة",
@@ -993,7 +994,7 @@ export const ar = {
         graduationPath: {
           label: "مسار التخرّج",
           value: "62 / 90 ساعة",
-          context: "على الجدول — فصلان متبقيان",
+          context: "على الجدول — تبقّى فصلان",
         },
       },
       modules: {
@@ -1044,16 +1045,16 @@ export const ar = {
       },
       checklist: {
         heading: "قائمة الأهلية",
-        helper: "تزامن تلقائي يومي",
+        helper: "تتم المزامنة تلقائيًا كل يوم",
         statuses: {
           onTrack: "ضمن المسار",
-          reviewNeeded: "بحاجة لمراجعة",
+          reviewNeeded: "بحاجة إلى مراجعة",
           scheduled: "مجدول",
         },
         items: {
           ncaaMinimum: {
             label: "الحفاظ على الحد الأدنى 12 ساعة لـ NCAA",
-            detail: "تم تأمين 18 ساعة مع إمكانية إضافة مقرر اختياري.",
+            detail: "تم تأكيد 18 ساعة مع إمكانية إضافة مقرر اختياري.",
           },
           labReport: {
             label: "تسليم تقرير مختبر الميكانيكا الحيوية",
@@ -1062,13 +1063,13 @@ export const ar = {
           },
           advisingSession: {
             label: "جلسة إرشاد مع المدرب ريفيرا",
-            detail: "تأكيد نقطة التخطيط المهني في 22 أبريل.",
+            detail: "موعد التخطيط المهني مؤكد في 22 أبريل.",
           },
         },
       },
       advisor: {
         heading: "إرشادات المستشار",
-        helper: "آخر مزامنة 10 أبريل",
+        helper: "آخر مزامنة في 10 أبريل",
         notes: {
           capstoneIntegration: {
             title: "دمج المشروع الختامي",
@@ -1093,7 +1094,7 @@ export const ar = {
     billing: {
       heading: "نظرة على الفوترة",
       description:
-        "تابع الرسوم المتكررة، الإضافات، والأرصدة المستحقة في مكان واحد.",
+        "راقب الرسوم المتكررة، والإضافات، والأرصدة المستحقة في لوحة واحدة.",
       balanceBadge: {
         label: "الرصيد",
         value: "{{amount}}",
@@ -1117,7 +1118,7 @@ export const ar = {
       },
       invoices: {
         heading: "الفواتير",
-        helper: "سجل الكشوف للأشهر الستة الماضية",
+        helper: "سجل الكشوف لآخر 6 أشهر",
         download: "تنزيل الكشف",
         sendReceipt: "إرسال إيصال",
         pending: {
@@ -1227,7 +1228,7 @@ export const ar = {
     trainingAttendance: {
       heading: "الحضور التدريبي",
       description:
-        "نظرة أسبوعية على تسجيلات الدخول المؤكدة وأي ملاحظات من مكتب الطاقم.",
+        "نظرة أسبوعية على تسجيلات الدخول المؤكدة وأبرز ملاحظات الطاقم.",
       seasonRate: {
         label: "نسبة الموسم",
         value: "{{percent}}٪",
@@ -1235,9 +1236,9 @@ export const ar = {
       rateDelta: "{{value}}٪ مقارنة بالكتلة السابقة",
       byWeek: {
         heading: "الحضور حسب الأسبوع",
-        summary: "{{attended}} / {{planned}} جلسات محضورة",
-        peak: "ذروة التنفيذ: {{label}} · {{highlight}}",
-        focus: "تركيز قادم: {{label}} · {{highlight}}",
+        summary: "حُضر {{attended}} من أصل {{planned}} جلسة",
+        peak: "أفضل أسبوع: {{label}} · {{highlight}}",
+        focus: "أسبوع التركيز: {{label}} · {{highlight}}",
         weeklyAttendance: "{{percent}}٪ حضور",
         sessions: "{{attended}} من أصل {{planned}} جلسات · {{highlight}}",
         items: {
@@ -1269,7 +1270,7 @@ export const ar = {
         readinessIndex: {
           label: "مؤشر الجهوزية",
           value: "92٪",
-          detail: "ملاحظات المدرب + موافقة العلاج الطبيعي في ارتفاع",
+          detail: "تعليقات المدرب وموافقة العلاج الطبيعي في تصاعد",
         },
       },
       upcoming: {
@@ -1277,7 +1278,7 @@ export const ar = {
       },
       followUp: {
         heading: "إجراءات المتابعة",
-        helper: "أولويات التسجيل هذا الأسبوع",
+        helper: "أولويات تسجيل الحضور هذا الأسبوع",
         actions: {
           pending: {
             label: "تأكيد الوصولات للسفر",
