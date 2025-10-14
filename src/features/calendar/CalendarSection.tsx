@@ -61,6 +61,50 @@ const typeStyles: Record<CalendarEvent['category'], string> = {
   competition: 'border-fuchsia-400/40 bg-fuchsia-500/15 text-fuchsia-100',
 }
 
+const categoryMetadata: Record<CalendarEvent['category'], { label: string; description: string; accent: string }> = {
+  training: {
+    label: 'Training Sessions',
+    description: 'Skill development, conditioning, and video review touchpoints.',
+    accent: 'bg-red-400',
+  },
+  competition: {
+    label: 'Competition Days',
+    description: 'Travel logistics, qualifying rounds, and championship meets.',
+    accent: 'bg-fuchsia-400',
+  },
+}
+
+const calendarViewOptions = ['month', 'week', 'day'] satisfies readonly CalendarView[]
+const categoryOrder = ['training', 'competition'] satisfies readonly CalendarEvent['category'][]
+
+function formatRelativeDay(target: Date): string {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const eventDay = new Date(target)
+  eventDay.setHours(0, 0, 0, 0)
+
+  const diffDays = Math.round((eventDay.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+
+  if (diffDays > 1) {
+    return `In ${diffDays} days`
+  }
+
+  if (diffDays === 1) {
+    return 'Tomorrow'
+  }
+
+  if (diffDays === 0) {
+    return 'Today'
+  }
+
+  if (diffDays === -1) {
+    return 'Yesterday'
+  }
+
+  return `${Math.abs(diffDays)} days ago`
+}
+
 function getDateKey(date: Date): string {
   return date.toISOString().split('T')[0] ?? ''
 }
@@ -97,10 +141,20 @@ function CalendarSection(): ReactElement {
     [],
   )
 
+  const [activeCategories, setActiveCategories] = useState<Record<CalendarEvent['category'], boolean>>({
+    training: true,
+    competition: true,
+  })
+
+  const filteredEvents = useMemo(
+    () => sortedEvents.filter((event) => activeCategories[event.category]),
+    [sortedEvents, activeCategories],
+  )
+
   const months = useMemo(() => {
     const monthBuckets = new Map<string, MonthBucket>()
 
-    sortedEvents.forEach((event) => {
+    filteredEvents.forEach((event) => {
       const startDate = new Date(event.start)
       const monthKey = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}`
       const bucket = monthBuckets.get(monthKey)
@@ -117,12 +171,12 @@ function CalendarSection(): ReactElement {
     })
 
     return Array.from(monthBuckets.values())
-  }, [sortedEvents])
+  }, [filteredEvents])
 
   const weeks = useMemo(() => {
     const weekBuckets = new Map<string, WeekBucket>()
 
-    sortedEvents.forEach((event) => {
+    filteredEvents.forEach((event) => {
       const startDate = new Date(event.start)
       const weekStart = startOfWeek(startDate)
       const weekKey = getDateKey(weekStart)
@@ -169,12 +223,12 @@ function CalendarSection(): ReactElement {
         ),
       })),
     }))
-  }, [sortedEvents])
+  }, [filteredEvents])
 
   const dayOptions = useMemo(() => {
     const seen = new Map<string, DayOption>()
 
-    sortedEvents.forEach((event) => {
+    filteredEvents.forEach((event) => {
       const startDate = new Date(event.start)
       const key = getDateKey(startDate)
 
@@ -189,10 +243,16 @@ function CalendarSection(): ReactElement {
     })
 
     return Array.from(seen.values()).sort((first, second) => first.date.getTime() - second.date.getTime())
-  }, [sortedEvents])
+  }, [filteredEvents])
 
   const [view, setView] = useState<CalendarView>('month')
-  const [selectedDayKey, setSelectedDayKey] = useState<string>(dayOptions[0]?.key ?? '')
+  const [selectedDayKey, setSelectedDayKey] = useState<string>('')
+
+  const activeCategoryCount = Object.values(activeCategories).filter(Boolean).length
+
+  const toggleCategory = (category: CalendarEvent['category']) => {
+    setActiveCategories((previous) => ({ ...previous, [category]: !previous[category] }))
+  }
 
   useEffect(() => {
     if (dayOptions.length === 0) {
@@ -209,8 +269,23 @@ function CalendarSection(): ReactElement {
 
   const selectedDay = dayOptions.find((option) => option.key === selectedDayKey)
   const eventsOnSelectedDay = selectedDay
-    ? sortedEvents.filter((event) => isSameDay(new Date(event.start), selectedDay.date))
+    ? filteredEvents.filter((event) => isSameDay(new Date(event.start), selectedDay.date))
     : []
+
+  const upcomingEvent = useMemo(() => {
+    if (filteredEvents.length === 0) {
+      return undefined
+    }
+
+    const now = new Date()
+    const futureEvent = filteredEvents.find((event) => new Date(event.end).getTime() >= now.getTime())
+
+    return futureEvent ?? filteredEvents[filteredEvents.length - 1]
+  }, [filteredEvents])
+
+  const upcomingEventStart = upcomingEvent ? new Date(upcomingEvent.start) : undefined
+  const upcomingEventEnd = upcomingEvent ? new Date(upcomingEvent.end) : undefined
+  const upcomingEventRelativeText = upcomingEventStart ? formatRelativeDay(upcomingEventStart) : ''
 
   return (
     <section id="calendar" className="space-y-6">
@@ -223,7 +298,7 @@ function CalendarSection(): ReactElement {
           </p>
         </div>
         <div className="inline-flex rounded-full border border-red-500/35 bg-red-950/60 p-1 text-xs font-semibold text-red-100">
-          {(['month', 'week', 'day'] satisfies CalendarView[]).map((option) => (
+          {calendarViewOptions.map((option) => (
             <button
               key={option}
               type="button"
@@ -240,7 +315,104 @@ function CalendarSection(): ReactElement {
         </div>
       </div>
 
-      {view === 'month' ? (
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <RedSurface tone="muted" className="flex flex-col gap-4 rounded-3xl p-6 text-red-50">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">Next on the agenda</p>
+              <h3 className="mt-1 text-lg font-semibold text-red-50">
+                {upcomingEvent ? upcomingEvent.title : 'No visible events'}
+              </h3>
+            </div>
+            {upcomingEvent ? (
+              <span
+                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${typeStyles[upcomingEvent.category]}`}
+              >
+                <span className={`h-2.5 w-2.5 rounded-full ${categoryMetadata[upcomingEvent.category].accent}`} />
+                {categoryMetadata[upcomingEvent.category].label}
+              </span>
+            ) : null}
+          </div>
+
+          {upcomingEvent && upcomingEventStart && upcomingEventEnd ? (
+            <div className="space-y-2 text-sm text-red-200/80">
+              <div className="flex flex-wrap items-center gap-2 text-red-100">
+                <span className="text-base font-semibold text-red-50">{longDayFormatter.format(upcomingEventStart)}</span>
+                <span className="text-xs uppercase tracking-[0.35em] text-red-200/70">{upcomingEventRelativeText}</span>
+              </div>
+              <p>
+                {timeFormatter.format(upcomingEventStart)} – {timeFormatter.format(upcomingEventEnd)} · {upcomingEvent.location}
+              </p>
+              {upcomingEvent.category === 'training' ? (
+                <p>Lead coach: {upcomingEvent.coach}</p>
+              ) : (
+                <p>
+                  {upcomingEvent.level} meet · Check-in {upcomingEvent.checkIn}
+                </p>
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-red-200/70">
+              Adjust the focus filters to surface the next training session or competition on the shared schedule.
+            </p>
+          )}
+        </RedSurface>
+
+        <RedSurface tone="glass" className="flex flex-col gap-4 rounded-3xl border border-red-500/25 p-6 text-red-50">
+          <div>
+            <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">Focus filters</p>
+            <h3 className="mt-1 text-lg font-semibold text-red-50">Highlight the moments that matter</h3>
+            <p className="mt-2 text-sm text-red-200/75">
+              Toggle categories to focus on upcoming training preparation or competition execution.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {categoryOrder.map((category) => (
+              <button
+                key={category}
+                type="button"
+                onClick={() => toggleCategory(category)}
+                aria-pressed={activeCategories[category]}
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 ${
+                  activeCategories[category]
+                    ? 'border-red-400/55 bg-red-500/20 text-red-50 shadow-[0_12px_30px_rgba(220,38,38,0.2)]'
+                    : 'border-red-500/25 bg-red-950/50 text-red-200/80 hover:text-red-100'
+                }`}
+              >
+                <span className={`h-2.5 w-2.5 rounded-full ${categoryMetadata[category].accent}`} />
+                {categoryMetadata[category].label}
+              </button>
+            ))}
+          </div>
+          <div className="space-y-3 text-sm text-red-200/75">
+            {categoryOrder.map((category) => (
+              <div key={category} className="flex items-start gap-3">
+                <span className={`mt-1 h-2.5 w-2.5 rounded-full ${categoryMetadata[category].accent}`} aria-hidden />
+                <div>
+                  <p className="font-semibold text-red-50">{categoryMetadata[category].label}</p>
+                  <p>{categoryMetadata[category].description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-red-200/60">
+            {activeCategoryCount === categoryOrder.length
+              ? 'Both categories are visible.'
+              : activeCategoryCount === 1
+                ? 'Only one category is active—tap again to bring the full schedule back.'
+                : 'No categories selected—turn one on to see the upcoming schedule.'}
+          </p>
+        </RedSurface>
+      </div>
+
+      {filteredEvents.length === 0 ? (
+        <RedSurface tone="muted" className="rounded-3xl p-6 text-sm text-red-200/80">
+          No events match the current focus filters. Re-enable a category or adjust your selection to view the team
+          schedule again.
+        </RedSurface>
+      ) : null}
+
+      {filteredEvents.length > 0 && view === 'month' ? (
         <div className="grid gap-5 lg:grid-cols-2">
           {months.map((month) => (
             <RedSurface
@@ -288,7 +460,7 @@ function CalendarSection(): ReactElement {
         </div>
       ) : null}
 
-      {view === 'week' ? (
+      {filteredEvents.length > 0 && view === 'week' ? (
         <div className="space-y-5">
           {weeks.map((week) => (
             <RedSurface
@@ -348,7 +520,7 @@ function CalendarSection(): ReactElement {
         </div>
       ) : null}
 
-      {view === 'day' ? (
+      {filteredEvents.length > 0 && view === 'day' ? (
         <div className="space-y-5">
           <div className="flex flex-wrap gap-2">
             {dayOptions.map((option) => (
