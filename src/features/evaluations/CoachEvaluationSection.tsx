@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import {
   CalendarDays,
@@ -8,100 +9,66 @@ import {
   Users,
 } from "../../lucide-react";
 
-const evaluationSummary = {
-  overallScore: 4.2,
-  leadCoach: "Coach Amara Lewis",
-  lastReview: "Apr 18, 2024",
-  nextReview: "May 2, 2024",
-  momentum: "Positive trend",
-  focusStatement: "Sharpen top-end speed for national trials in May.",
+type HighlightItem = {
+  title: string;
+  detail: string;
 };
 
-const highlightWins = [
-  {
-    title: "Block work clicking",
-    detail:
-      "Explosive phase is cleaner after contrast sprints · keep 2x weekly rhythm drills.",
-  },
-  {
-    title: "Race rehearsal",
-    detail:
-      "Confidence high following indoor meet simulation · pre-race routine locked in.",
-  },
-];
+type ActionItem = {
+  title: string;
+  owner: string;
+  due: string;
+  status: string;
+};
 
-const watchList = [
-  {
-    title: "Late-race relaxation",
-    detail:
-      "Neck and jaw tension returning under fatigue · integrate breathing reset cue.",
-  },
-  {
-    title: "Regeneration block",
-    detail:
-      "Sleep quality dipped on travel week · align physio flush with light tempo day.",
-  },
-];
-
-const actionItems = [
-  {
-    title: "30m fly timing",
-    owner: "Coach Lewis",
-    due: "Apr 26",
-    status: "Scheduled",
-  },
-  {
-    title: "Sprint mechanics video review",
-    owner: "Athlete",
-    due: "Apr 24",
-    status: "In progress",
-  },
-  {
-    title: "Hydration tracker check-in",
-    owner: "Performance staff",
-    due: "Weekly",
-    status: "On track",
-  },
-];
-
-const competencyScores = [
-  {
-    label: "Explosive starts",
-    score: 4.5,
-    note: "Improved block exit · maintain shin angle drills",
-  },
-  {
-    label: "Speed endurance",
-    score: 4.2,
-    note: "Hold form in final 60m · add resisted runs",
-  },
-  {
-    label: "Race tactics",
-    score: 4.0,
-    note: "Continue video briefs · refine lane positioning",
-  },
-  {
-    label: "Recovery habits",
-    score: 3.8,
-    note: "Consistency improving · log hydration daily",
-  },
-];
+type CompetencyScore = {
+  label: string;
+  score: number;
+  note: string;
+};
 
 function CoachEvaluationSection(): ReactElement {
+  const { t } = useTranslation();
+
+  const evaluationSummary = {
+    overallScore: 4.2,
+    leadCoach: t("coachEvaluation.summary.leadCoach.value"),
+    lastReview: t("coachEvaluation.summary.lastReview.value"),
+    nextReview: t("coachEvaluation.summary.nextTouchpoint.value"),
+    momentum: t("coachEvaluation.summary.momentum.value"),
+    focusStatement: t("coachEvaluation.summary.focusStatement"),
+  };
+
+  const highlightWins = t("coachEvaluation.highlightWins.items", {
+    returnObjects: true,
+  }) as HighlightItem[];
+
+  const watchList = t("coachEvaluation.watchList.items", {
+    returnObjects: true,
+  }) as HighlightItem[];
+
+  const actionItems = t("coachEvaluation.accountability.items", {
+    returnObjects: true,
+  }) as ActionItem[];
+
+  const competencyScores = t("coachEvaluation.competencySnapshot.scores", {
+    returnObjects: true,
+  }) as CompetencyScore[];
+
   return (
     <section id="coach-evaluation" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
-            Coach evaluation
+            {t("coachEvaluation.heading")}
           </h2>
           <p className="text-sm text-red-200/75">
-            Snapshot from the latest bi-weekly meeting with the coaching staff.
+            {t("coachEvaluation.description")}
           </p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-3xl border border-amber-400/40 bg-amber-500/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-amber-100">
           <ChevronUp size={16} className="text-amber-200" aria-hidden />
-          Overall · {evaluationSummary.overallScore.toFixed(1)} / 5
+          {t("coachEvaluation.overallLabel")} · {evaluationSummary.overallScore.toFixed(1)} / 5
         </span>
       </div>
 
@@ -109,7 +76,7 @@ function CoachEvaluationSection(): ReactElement {
         <header className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-              Focus for next review
+              {t("coachEvaluation.focusLabel")}
             </p>
             <p className="text-sm text-red-100/80">
               {evaluationSummary.focusStatement}
@@ -120,14 +87,14 @@ function CoachEvaluationSection(): ReactElement {
             className="inline-flex items-center justify-center gap-2 rounded-2xl border border-red-400/40 bg-red-500/20 px-4 py-2 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
           >
             <ClipboardCheck size={16} aria-hidden />
-            Add coach note
+            {t("coachEvaluation.addNote")}
           </button>
         </header>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <RedSurface tone="glass" className="flex flex-col gap-1 rounded-2xl p-4">
             <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-              Lead coach
+              {t("coachEvaluation.summary.leadCoach.label")}
             </p>
             <div className="flex items-center gap-2 text-sm font-semibold text-red-50">
               <Users size={18} aria-hidden className="text-red-200/80" />
@@ -136,7 +103,7 @@ function CoachEvaluationSection(): ReactElement {
           </RedSurface>
           <RedSurface tone="glass" className="flex flex-col gap-1 rounded-2xl p-4">
             <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-              Last review
+              {t("coachEvaluation.summary.lastReview.label")}
             </p>
             <div className="flex items-center gap-2 text-sm font-semibold text-red-50">
               <CalendarDays size={18} aria-hidden className="text-red-200/80" />
@@ -145,7 +112,7 @@ function CoachEvaluationSection(): ReactElement {
           </RedSurface>
           <RedSurface tone="glass" className="flex flex-col gap-1 rounded-2xl p-4">
             <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-              Next touchpoint
+              {t("coachEvaluation.summary.nextTouchpoint.label")}
             </p>
             <div className="flex items-center gap-2 text-sm font-semibold text-red-50">
               <CalendarDays size={18} aria-hidden className="text-red-200/80" />
@@ -154,7 +121,7 @@ function CoachEvaluationSection(): ReactElement {
           </RedSurface>
           <RedSurface tone="glass" className="flex flex-col gap-1 rounded-2xl p-4">
             <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-              Momentum
+              {t("coachEvaluation.summary.momentum.label")}
             </p>
             <div className="flex items-center gap-2 text-sm font-semibold text-red-50">
               <Flag size={18} aria-hidden className="text-amber-200/90" />
@@ -168,7 +135,7 @@ function CoachEvaluationSection(): ReactElement {
             <div className="grid gap-4 lg:grid-cols-2">
               <RedSurface tone="glass" className="rounded-2xl p-4">
                 <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-                  Momentum drivers
+                  {t("coachEvaluation.highlightWins.heading")}
                 </p>
                 <ul className="mt-3 space-y-3">
                   {highlightWins.map((item) => (
@@ -184,7 +151,7 @@ function CoachEvaluationSection(): ReactElement {
 
               <RedSurface tone="glass" className="rounded-2xl p-4">
                 <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-                  Watch closely
+                  {t("coachEvaluation.watchList.heading")}
                 </p>
                 <ul className="mt-3 space-y-3">
                   {watchList.map((item) => (
@@ -202,10 +169,10 @@ function CoachEvaluationSection(): ReactElement {
             <RedSurface tone="glass" className="rounded-2xl p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-                  Accountability board
+                  {t("coachEvaluation.accountability.heading")}
                 </p>
                 <span className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-100">
-                  Updated weekly
+                  {t("coachEvaluation.accountability.updatedLabel")}
                 </span>
               </div>
               <ul className="mt-3 space-y-3">
@@ -219,14 +186,14 @@ function CoachEvaluationSection(): ReactElement {
                         {item.title}
                       </p>
                       <p className="text-xs text-red-100/70">
-                        Owner · {item.owner}
+                        {t("coachEvaluation.accountability.ownerPrefix", { owner: item.owner })}
                       </p>
                     </div>
                     <div className="text-right text-xs text-red-100/70">
                       <p className="font-semibold uppercase tracking-[0.25em] text-red-100">
                         {item.status}
                       </p>
-                      <p>Due {item.due}</p>
+                      <p>{t("coachEvaluation.accountability.dueLabel", { date: item.due })}</p>
                     </div>
                   </li>
                 ))}
@@ -236,7 +203,7 @@ function CoachEvaluationSection(): ReactElement {
 
           <div className="space-y-4">
             <h3 className="text-sm uppercase tracking-[0.3em] text-red-200/70">
-              Competency snapshot
+              {t("coachEvaluation.competencySnapshot.heading")}
             </h3>
             <ul className="space-y-4">
               {competencyScores.map((competency) => (

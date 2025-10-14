@@ -166,6 +166,119 @@ export const en = {
         line2: "Next rest day: Sun, 20 Apr",
       },
     },
+    training: {
+      title: "Training Session Calendar",
+      description: "Stay aligned with the squad and confirm your availability early.",
+      weekLabel: "Week {{week}}",
+      lead: "Lead · {{coach}}",
+      confirmAvailability: "Confirm availability",
+    coachEvaluation: {
+      heading: "Coach evaluation",
+      description: "Snapshot from the latest bi-weekly meeting with the coaching staff.",
+      overallLabel: "Overall",
+      focusLabel: "Focus for next review",
+      addNote: "Add coach note",
+      summary: {
+        focusStatement: "Sharpen top-end speed for national trials in May.",
+        leadCoach: {
+          label: "Lead coach",
+          value: "Coach Amara Lewis",
+        },
+        lastReview: {
+          label: "Last review",
+          value: "Apr 18, 2024",
+        },
+        nextTouchpoint: {
+          label: "Next touchpoint",
+          value: "May 2, 2024",
+        },
+        momentum: {
+          label: "Momentum",
+          value: "Positive trend",
+        },
+      },
+      highlightWins: {
+        heading: "Momentum drivers",
+        items: [
+          {
+            title: "Block work clicking",
+            detail:
+              "Explosive phase is cleaner after contrast sprints · keep 2x weekly rhythm drills.",
+          },
+          {
+            title: "Race rehearsal",
+            detail:
+              "Confidence high following indoor meet simulation · pre-race routine locked in.",
+          },
+        ],
+      },
+      watchList: {
+        heading: "Watch closely",
+        items: [
+          {
+            title: "Late-race relaxation",
+            detail:
+              "Neck and jaw tension returning under fatigue · integrate breathing reset cue.",
+          },
+          {
+            title: "Regeneration block",
+            detail:
+              "Sleep quality dipped on travel week · align physio flush with light tempo day.",
+          },
+        ],
+      },
+      accountability: {
+        heading: "Accountability board",
+        updatedLabel: "Updated weekly",
+        ownerPrefix: "Owner · {{owner}}",
+        dueLabel: "Due {{date}}",
+        items: [
+          {
+            title: "30m fly timing",
+            owner: "Coach Lewis",
+            due: "Apr 26",
+            status: "Scheduled",
+          },
+          {
+            title: "Sprint mechanics video review",
+            owner: "Athlete",
+            due: "Apr 24",
+            status: "In progress",
+          },
+          {
+            title: "Hydration tracker check-in",
+            owner: "Performance staff",
+            due: "Weekly",
+            status: "On track",
+          },
+        ],
+      },
+      competencySnapshot: {
+        heading: "Competency snapshot",
+        scores: [
+          {
+            label: "Explosive starts",
+            score: 4.5,
+            note: "Improved block exit · maintain shin angle drills",
+          },
+          {
+            label: "Speed endurance",
+            score: 4.2,
+            note: "Hold form in final 60m · add resisted runs",
+          },
+          {
+            label: "Race tactics",
+            score: 4.0,
+            note: "Continue video briefs · refine lane positioning",
+          },
+          {
+            label: "Recovery habits",
+            score: 3.8,
+            note: "Consistency improving · log hydration daily",
+          },
+        ],
+      },
+    },
     landing: {
       badge: "Cloud-based sports management",
       heroTitle: "Simplify club operations and inspire every athlete",
@@ -314,6 +427,90 @@ export const en = {
         placeholder: "Add new highlight",
         removeAria: "Remove highlight",
         empty: "No highlights yet. Start by celebrating a recent win.",
+    performanceTracking: {
+      title: "Performance tracking",
+      description:
+        "Draft dashboard for monitoring technical progress, presence milestones and competitive readiness.",
+      technicalProgress: {
+        title: "Technical progress",
+        lastAudit: "Last audit · Apr 12",
+        milestones: [
+          {
+            phase: "Block phase",
+            milestone: "Shin angles within 45° for first three steps",
+            status: "Verified on Apr 12 video review",
+          },
+          {
+            phase: "Acceleration",
+            milestone: "Maintain horizontal force through 30m mark",
+            status: "Needs second cue · schedule sled sprints",
+          },
+        ],
+      },
+      attendance: {
+        title: "Total attendance",
+        totalSessionsLabel: "{{count}} sessions",
+        summary: {
+          totalSessions: 46,
+          attended: 42,
+          excused: 3,
+          unexcused: 1,
+        },
+        labels: {
+          attended: "Attended",
+          excused: "Excused",
+          unexcused: "Unexcused",
+        },
+      },
+      trainingStatistics: {
+        title: "Training statistics",
+        subtitle: "Block summary",
+        items: [
+          { label: "Total hours", value: "118h", trend: "+6% vs last block" },
+          { label: "Sessions logged", value: "64", trend: "Target: 72 sessions" },
+          { label: "Load score", value: "Moderate", trend: "Maintain during taper" },
+        ],
+      },
+      competitionResults: {
+        title: "Competition results",
+        subtitle: "Season highlights",
+        placementFormat: "Placement · {{placement}}",
+        items: [
+          {
+            event: "Metropolitan Invitational",
+            result: "400m · 49.20s",
+            placing: "Bronze",
+          },
+          {
+            event: "State Indoor Championships",
+            result: "200m · 21.80s",
+            placing: "Finalist",
+          },
+        ],
+      },
+      weightTracking: {
+        title: "Body weight log",
+        subtitle: "Weekly check-ins",
+        entries: [
+          { label: "Week 13", weight: "78.4 kg" },
+          { label: "Week 14", weight: "78.1 kg" },
+          { label: "Week 15", weight: "77.9 kg" },
+          { label: "Week 16", weight: "78.0 kg" },
+        ],
+        rangeNote:
+          "Range target 77.8 kg – 78.4 kg. Flag a nutrition review if weight drifts outside band for two consecutive weeks.",
+    competitions: {
+      heading: "Competition Calendar",
+      description:
+        "Visualise your travel blocks and prepare your race-day checklists.",
+      badge: "Season Peak",
+      checkIn: "Check-in {{time}}",
+      logistics: "Logistics",
+      cta: "Travel briefing",
+      levels: {
+        Regional: "Regional",
+        National: "National",
+        International: "International",
       },
     },
   },

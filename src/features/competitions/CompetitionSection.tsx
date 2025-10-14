@@ -1,12 +1,7 @@
-import type { ReactElement } from "react";
+import { useMemo, type ReactElement } from "react";
+import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import { competitionCalendarEvents } from "../calendar/calendarEvents";
-
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-});
 
 const levelColors: Record<"Regional" | "National" | "International", string> = {
   Regional: "from-amber-500/30 to-amber-400/40 text-amber-100",
@@ -15,6 +10,17 @@ const levelColors: Record<"Regional" | "National" | "International", string> = {
 };
 
 function CompetitionSection(): ReactElement {
+  const { i18n, t } = useTranslation("competitions");
+  const locale = i18n.language.startsWith("ar") ? "ar-EG" : "en-US";
+  const dateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      }),
+    [locale],
+  );
   const events = competitionCalendarEvents.map((event) => ({
     id: event.id,
     title: event.title,
@@ -29,14 +35,14 @@ function CompetitionSection(): ReactElement {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
-            Competition Calendar
+            {t("heading")}
           </h2>
           <p className="text-sm text-red-200/75">
-            Visualise your travel blocks and prepare your race-day checklists.
+            {t("description")}
           </p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full border border-red-400/40 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
-          Season Peak
+          {t("badge")}
         </span>
       </div>
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -51,10 +57,10 @@ function CompetitionSection(): ReactElement {
               <span
                 className={`inline-flex items-center rounded-full bg-gradient-to-r px-3 py-1 text-xs font-semibold uppercase tracking-wide ${levelColors[event.level]}`}
               >
-                {event.level}
+                {t(`levels.${event.level}`)}
               </span>
               <span className="text-xs uppercase tracking-wide text-red-200/70">
-                Check-in {event.checkIn}
+                {t("checkIn", { time: event.checkIn })}
               </span>
             </div>
             <div className="mt-4 space-y-3">
@@ -66,13 +72,13 @@ function CompetitionSection(): ReactElement {
             </div>
             <div className="mt-6 flex items-center justify-between gap-3">
               <span className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                Logistics
+                {t("logistics")}
               </span>
               <button
                 type="button"
                 className="inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
               >
-                Travel briefing
+                {t("cta")}
               </button>
             </div>
           </RedSurface>
