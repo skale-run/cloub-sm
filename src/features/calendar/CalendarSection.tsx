@@ -138,18 +138,25 @@ function isSameDay(a: Date, b: Date): boolean {
 function CalendarSection(): ReactElement {
   const { t, i18n } = useTranslation();
 
+  const isArabic = useMemo(() => i18n.language.startsWith("ar"), [i18n.language]);
   const dateLocale = useMemo(
-    () => (i18n.language.startsWith("ar") ? "ar-EG" : "en-US"),
-    [i18n.language],
+    () => (isArabic ? "ar-EG" : "en-US"),
+    [isArabic],
   );
+  const numberingSystem = useMemo(
+    () => (isArabic ? "arab" : "latn"),
+    [isArabic],
+  );
+  const direction = useMemo(() => (isArabic ? "rtl" : "ltr"), [isArabic]);
 
   const monthFormatter = useMemo(
     () =>
       new Intl.DateTimeFormat(dateLocale, {
         month: "long",
         year: "numeric",
+        numberingSystem,
       }),
-    [dateLocale],
+    [dateLocale, numberingSystem],
   );
 
   const dayFormatter = useMemo(
@@ -157,8 +164,9 @@ function CalendarSection(): ReactElement {
       new Intl.DateTimeFormat(dateLocale, {
         weekday: "short",
         day: "numeric",
+        numberingSystem,
       }),
-    [dateLocale],
+    [dateLocale, numberingSystem],
   );
 
   const longDayFormatter = useMemo(
@@ -167,8 +175,9 @@ function CalendarSection(): ReactElement {
         weekday: "long",
         month: "long",
         day: "numeric",
+        numberingSystem,
       }),
-    [dateLocale],
+    [dateLocale, numberingSystem],
   );
 
   const timeFormatter = useMemo(
@@ -176,8 +185,9 @@ function CalendarSection(): ReactElement {
       new Intl.DateTimeFormat(dateLocale, {
         hour: "numeric",
         minute: "2-digit",
+        numberingSystem,
       }),
-    [dateLocale],
+    [dateLocale, numberingSystem],
   );
 
   const rangeFormatter = useMemo(
@@ -185,8 +195,9 @@ function CalendarSection(): ReactElement {
       new Intl.DateTimeFormat(dateLocale, {
         month: "short",
         day: "numeric",
+        numberingSystem,
       }),
-    [dateLocale],
+    [dateLocale, numberingSystem],
   );
 
   const sortedEvents = useMemo(
@@ -424,7 +435,7 @@ function CalendarSection(): ReactElement {
     : "";
 
   return (
-    <section id="calendar" className="space-y-6">
+    <section id="calendar" className="space-y-6" dir={direction}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
@@ -567,7 +578,7 @@ function CalendarSection(): ReactElement {
                 <p>
                   {t("calendar.upcoming.competitionDetails", {
                     level: t(`calendar.levels.${upcomingEvent.level}`),
-                    time: upcomingEvent.checkIn,
+                    time: timeFormatter.format(new Date(upcomingEvent.checkIn)),
                   })}
                 </p>
               )}
@@ -892,7 +903,7 @@ function CalendarSection(): ReactElement {
                         ) : (
                           <p className="text-xs text-red-200/70">
                             {t("calendar.dayView.checkIn", {
-                              time: event.checkIn,
+                              time: timeFormatter.format(new Date(event.checkIn)),
                             })}
                           </p>
                         )}

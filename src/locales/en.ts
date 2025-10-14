@@ -289,7 +289,7 @@ export const en = {
         fallback:
           "Adjust the focus filters to surface the next training session or competition on the shared schedule.",
         coach: "Lead coach: {{name}}",
-        competitionDetails: "{{level}} meet · Check-in {{time}}",
+        competitionDetails: "{{level}} meet · Check-in at {{time}}",
       },
       filters: {
         heading: "Focus filters",
@@ -345,7 +345,7 @@ export const en = {
         eventCount_one: "{{count}} event",
         eventCount_other: "{{count}} events",
         coachLabel: "Lead · {{name}}",
-        checkIn: "Check-in {{time}}",
+        checkIn: "Check-in at {{time}}",
       },
       relativeDay: {
         inDays_one: "In {{count}} day",
@@ -905,7 +905,7 @@ export const en = {
       description:
         "Visualise your travel blocks and prepare your race-day checklists.",
       badge: "Season Peak",
-      checkIn: "Check-in {{time}}",
+      checkIn: "Check-in at {{time}}",
       logistics: "Logistics",
       cta: "Travel briefing",
       levels: {
