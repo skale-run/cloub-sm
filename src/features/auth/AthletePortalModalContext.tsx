@@ -56,7 +56,7 @@ export function useAthletePortalModal() {
 
   if (!context) {
     throw new Error(
-      "useAthletePortalModal must be used within an AthletePortalModalProvider",
+      "يجب استخدام useAthletePortalModal ضمن AthletePortalModalProvider",
     );
   }
 
