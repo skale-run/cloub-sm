@@ -31,6 +31,20 @@ const highlights = [
 
 type AuthMode = "login" | "register";
 
+const LOGIN_FORM_STORAGE_KEY = "cloub-auth-login-form" as const;
+const REGISTER_FORM_STORAGE_KEY = "cloub-auth-register-form" as const;
+
+type LoginFormState = {
+  email: string;
+  password: string;
+};
+
+type RegisterFormState = {
+  fullName: string;
+  email: string;
+  password: string;
+};
+
 const authCopy: Record<
   AuthMode,
   { heading: string; cta: string; description: string }
@@ -54,6 +68,77 @@ function AuthenticationExperienceModal() {
   const [mode, setMode] = useState<AuthMode>("login");
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
+  const [loginForm, setLoginForm] = useState<LoginFormState>(() => {
+    if (typeof window === "undefined") {
+      return { email: "", password: "" };
+    }
+
+    try {
+      const rawValue = window.localStorage.getItem(LOGIN_FORM_STORAGE_KEY);
+      if (!rawValue) {
+        return { email: "", password: "" };
+      }
+
+      const parsed = JSON.parse(rawValue) as Partial<
+        Record<"email" | "password", string>
+      >;
+
+      return {
+        email: parsed.email ?? "",
+        password: parsed.password ?? "",
+      };
+    } catch (error) {
+      console.error("Failed to parse stored login form", error);
+      return { email: "", password: "" };
+    }
+  });
+  const [registerForm, setRegisterForm] = useState<RegisterFormState>(() => {
+    if (typeof window === "undefined") {
+      return { fullName: "", email: "", password: "" };
+    }
+
+    try {
+      const rawValue = window.localStorage.getItem(REGISTER_FORM_STORAGE_KEY);
+      if (!rawValue) {
+        return { fullName: "", email: "", password: "" };
+      }
+
+      const parsed = JSON.parse(rawValue) as Partial<
+        Record<"fullName" | "email" | "password", string>
+      >;
+
+      return {
+        fullName: parsed.fullName ?? "",
+        email: parsed.email ?? "",
+        password: parsed.password ?? "",
+      };
+    } catch (error) {
+      console.error("Failed to parse stored registration form", error);
+      return { fullName: "", email: "", password: "" };
+    }
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem(
+      LOGIN_FORM_STORAGE_KEY,
+      JSON.stringify(loginForm),
+    );
+  }, [loginForm]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem(
+      REGISTER_FORM_STORAGE_KEY,
+      JSON.stringify(registerForm),
+    );
+  }, [registerForm]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -165,7 +250,13 @@ function AuthenticationExperienceModal() {
               </div>
 
               {mode === "login" ? (
-                <form className="space-y-4" aria-label="Log in form">
+                <form
+                  className="space-y-4"
+                  aria-label="Log in form"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                  }}
+                >
                   <label className="block text-sm font-medium text-red-100">
                     Email
                     <input
@@ -175,6 +266,13 @@ function AuthenticationExperienceModal() {
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                       placeholder="you@club.com"
                       required
+                      value={loginForm.email}
+                      onChange={(event) =>
+                        setLoginForm((previous) => ({
+                          ...previous,
+                          email: event.target.value,
+                        }))
+                      }
                     />
                   </label>
                   <label className="block text-sm font-medium text-red-100">
@@ -186,6 +284,13 @@ function AuthenticationExperienceModal() {
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                       placeholder="••••••••"
                       required
+                      value={loginForm.password}
+                      onChange={(event) =>
+                        setLoginForm((previous) => ({
+                          ...previous,
+                          password: event.target.value,
+                        }))
+                      }
                     />
                   </label>
                   <button
@@ -199,7 +304,13 @@ function AuthenticationExperienceModal() {
                   </p>
                 </form>
               ) : (
-                <form className="space-y-4" aria-label="Register form">
+                <form
+                  className="space-y-4"
+                  aria-label="Register form"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                  }}
+                >
                   <label className="block text-sm font-medium text-red-100">
                     Full name
                     <input
@@ -209,6 +320,13 @@ function AuthenticationExperienceModal() {
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                       placeholder="Jordan Adebayo"
                       required
+                      value={registerForm.fullName}
+                      onChange={(event) =>
+                        setRegisterForm((previous) => ({
+                          ...previous,
+                          fullName: event.target.value,
+                        }))
+                      }
                     />
                   </label>
                   <label className="block text-sm font-medium text-red-100">
@@ -220,6 +338,13 @@ function AuthenticationExperienceModal() {
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                       placeholder="you@club.com"
                       required
+                      value={registerForm.email}
+                      onChange={(event) =>
+                        setRegisterForm((previous) => ({
+                          ...previous,
+                          email: event.target.value,
+                        }))
+                      }
                     />
                   </label>
                   <label className="block text-sm font-medium text-red-100">
@@ -231,6 +356,13 @@ function AuthenticationExperienceModal() {
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                       placeholder="Create a secure passphrase"
                       required
+                      value={registerForm.password}
+                      onChange={(event) =>
+                        setRegisterForm((previous) => ({
+                          ...previous,
+                          password: event.target.value,
+                        }))
+                      }
                     />
                   </label>
                   <button
