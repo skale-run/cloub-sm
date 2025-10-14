@@ -50,6 +50,92 @@ export const en = {
         },
       },
     },
+    auth: {
+      modal: {
+        aria: {
+          close: "Close authentication modal",
+          loginForm: "Log in form",
+          registerForm: "Register form",
+        },
+        badge: "Athlete portal",
+        modes: {
+          login: "Log in",
+          register: "Register",
+        },
+        copy: {
+          login: {
+            heading: "Log in to your athlete HQ",
+            description:
+              "Jump back into your performance cockpit and sync with today’s focus.",
+            cta: "Sign in",
+          },
+          register: {
+            heading: "Activate your athlete passport",
+            description:
+              "Create your credentials to unlock tailored sessions and squad support.",
+            cta: "Create account",
+          },
+        },
+        loginForm: {
+          email: {
+            label: "Email",
+            placeholder: "you@club.com",
+          },
+          password: {
+            label: "Password",
+            placeholder: "••••••••",
+          },
+          forgotPassword:
+            "Forgot password? Contact your coach to reset access.",
+        },
+        registerForm: {
+          fullName: {
+            label: "Full name",
+            placeholder: "Jordan Adebayo",
+          },
+          email: {
+            label: "Email",
+            placeholder: "you@club.com",
+          },
+          password: {
+            label: "Password",
+            placeholder: "Create a secure passphrase",
+          },
+          disclaimer:
+            "By creating an account you accept the athlete charter and consent to performance tracking.",
+        },
+        highlights: {
+          heading: "Why athletes love it",
+          items: {
+            eliteTraining: {
+              title: "Elite training blueprints",
+              description:
+                "Unlock coach-curated weekly blocks personalised to your season arc.",
+            },
+            performanceIntelligence: {
+              title: "Performance intelligence",
+              description:
+                "Track velocity, recovery, and readiness trends with adaptive insights.",
+            },
+            communityRecognition: {
+              title: "Community recognition",
+              description:
+                "Share milestones, capture badges, and climb the squad leaderboard.",
+            },
+            supportCrew: {
+              title: "All-access support crew",
+              description:
+                "Coordinate with physio, nutrition, and mentors from a single hub.",
+            },
+          },
+        },
+        support: {
+          heading: "Need help getting started?",
+          intro: "Drop a note to",
+          outro: "or chat with your coaching team in the squad channel.",
+        },
+      },
+    },
     sidebar: {
       brand: {
         name: "Wydad Taekwondo",

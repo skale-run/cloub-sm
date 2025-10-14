@@ -1,30 +1,29 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Activity, Award, BarChart3, Users, X } from "../../lucide-react";
 import { useAthletePortalModal } from "./AthletePortalModalContext";
 
-const highlights = [
+const highlightConfig = [
   {
-    title: "Elite training blueprints",
-    description:
-      "Unlock coach-curated weekly blocks personalised to your season arc.",
+    titleKey: "auth.modal.highlights.items.eliteTraining.title",
+    descriptionKey: "auth.modal.highlights.items.eliteTraining.description",
     icon: Activity,
   },
   {
-    title: "Performance intelligence",
-    description:
-      "Track velocity, recovery, and readiness trends with adaptive insights.",
+    titleKey: "auth.modal.highlights.items.performanceIntelligence.title",
+    descriptionKey:
+      "auth.modal.highlights.items.performanceIntelligence.description",
     icon: BarChart3,
   },
   {
-    title: "Community recognition",
-    description:
-      "Share milestones, capture badges, and climb the squad leaderboard.",
+    titleKey: "auth.modal.highlights.items.communityRecognition.title",
+    descriptionKey:
+      "auth.modal.highlights.items.communityRecognition.description",
     icon: Award,
   },
   {
-    title: "All-access support crew",
-    description:
-      "Coordinate with physio, nutrition, and mentors from a single hub.",
+    titleKey: "auth.modal.highlights.items.supportCrew.title",
+    descriptionKey: "auth.modal.highlights.items.supportCrew.description",
     icon: Users,
   },
 ];
@@ -47,24 +46,25 @@ type RegisterFormState = {
 
 const authCopy: Record<
   AuthMode,
-  { heading: string; cta: string; description: string }
+  { headingKey: string; descriptionKey: string; ctaKey: string }
 > = {
   login: {
-    heading: "Log in to your athlete HQ",
-    description:
-      "Jump back into your performance cockpit and sync with today’s focus.",
-    cta: "Sign in",
+    headingKey: "auth.modal.copy.login.heading",
+    descriptionKey: "auth.modal.copy.login.description",
+    ctaKey: "auth.modal.copy.login.cta",
   },
   register: {
-    heading: "Activate your athlete passport",
-    description:
-      "Create your credentials to unlock tailored sessions and squad support.",
-    cta: "Create account",
+    headingKey: "auth.modal.copy.register.heading",
+    descriptionKey: "auth.modal.copy.register.description",
+    ctaKey: "auth.modal.copy.register.cta",
   },
 };
 
+const supportEmail = "coach@aerodash.com" as const;
+
 function AuthenticationExperienceModal() {
   const { isOpen, close } = useAthletePortalModal();
+  const { t } = useTranslation();
   const [mode, setMode] = useState<AuthMode>("login");
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
@@ -179,7 +179,25 @@ function AuthenticationExperienceModal() {
     }
   }, [isOpen]);
 
-  const { heading, description, cta } = useMemo(() => authCopy[mode], [mode]);
+  const { heading, description, cta } = useMemo(() => {
+    const { headingKey, descriptionKey, ctaKey } = authCopy[mode];
+
+    return {
+      heading: t(headingKey),
+      description: t(descriptionKey),
+      cta: t(ctaKey),
+    };
+  }, [mode, t]);
+
+  const highlights = useMemo(
+    () =>
+      highlightConfig.map((item) => ({
+        ...item,
+        title: t(item.titleKey),
+        description: t(item.descriptionKey),
+      })),
+    [t],
+  );
 
   if (!isOpen) {
     return null;
@@ -203,7 +221,7 @@ function AuthenticationExperienceModal() {
           type="button"
           onClick={close}
           className="absolute right-6 top-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-red-400/40 bg-red-950/40 text-red-100 transition hover:border-red-300/60 hover:bg-red-900/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
-          aria-label="Close authentication modal"
+          aria-label={t("auth.modal.aria.close")}
         >
           <X className="h-5 w-5" aria-hidden />
         </button>
@@ -212,7 +230,7 @@ function AuthenticationExperienceModal() {
           <section className="flex flex-col justify-between gap-10">
             <div className="space-y-5">
               <p className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-500/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-red-200/80">
-                Athlete portal
+                {t("auth.modal.badge")}
               </p>
               <h2
                 id="athlete-auth-modal-title"
@@ -229,8 +247,14 @@ function AuthenticationExperienceModal() {
               <div className="inline-flex rounded-full border border-red-400/35 bg-red-950/35 p-1 text-sm text-red-100/85">
                 {(
                   [
-                    { label: "Log in", value: "login" },
-                    { label: "Register", value: "register" },
+                    {
+                      label: t("auth.modal.modes.login"),
+                      value: "login",
+                    },
+                    {
+                      label: t("auth.modal.modes.register"),
+                      value: "register",
+                    },
                   ] as const
                 ).map((option) => (
                   <button
@@ -252,19 +276,19 @@ function AuthenticationExperienceModal() {
               {mode === "login" ? (
                 <form
                   className="space-y-4"
-                  aria-label="Log in form"
+                  aria-label={t("auth.modal.aria.loginForm")}
                   onSubmit={(event) => {
                     event.preventDefault();
                   }}
                 >
                   <label className="block text-sm font-medium text-red-100">
-                    Email
+                    {t("auth.modal.loginForm.email.label")}
                     <input
                       type="email"
                       name="email"
                       autoComplete="email"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder="you@club.com"
+                      placeholder={t("auth.modal.loginForm.email.placeholder")}
                       required
                       value={loginForm.email}
                       onChange={(event) =>
@@ -276,13 +300,13 @@ function AuthenticationExperienceModal() {
                     />
                   </label>
                   <label className="block text-sm font-medium text-red-100">
-                    Password
+                    {t("auth.modal.loginForm.password.label")}
                     <input
                       type="password"
                       name="password"
                       autoComplete="current-password"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder="••••••••"
+                      placeholder={t("auth.modal.loginForm.password.placeholder")}
                       required
                       value={loginForm.password}
                       onChange={(event) =>
@@ -300,25 +324,27 @@ function AuthenticationExperienceModal() {
                     {cta}
                   </button>
                   <p className="text-center text-xs text-red-200/75">
-                    Forgot password? Contact your coach to reset access.
+                    {t("auth.modal.loginForm.forgotPassword")}
                   </p>
                 </form>
               ) : (
                 <form
                   className="space-y-4"
-                  aria-label="Register form"
+                  aria-label={t("auth.modal.aria.registerForm")}
                   onSubmit={(event) => {
                     event.preventDefault();
                   }}
                 >
                   <label className="block text-sm font-medium text-red-100">
-                    Full name
+                    {t("auth.modal.registerForm.fullName.label")}
                     <input
                       type="text"
                       name="fullName"
                       autoComplete="name"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder="Jordan Adebayo"
+                      placeholder={t(
+                        "auth.modal.registerForm.fullName.placeholder",
+                      )}
                       required
                       value={registerForm.fullName}
                       onChange={(event) =>
@@ -330,13 +356,13 @@ function AuthenticationExperienceModal() {
                     />
                   </label>
                   <label className="block text-sm font-medium text-red-100">
-                    Email
+                    {t("auth.modal.registerForm.email.label")}
                     <input
                       type="email"
                       name="email"
                       autoComplete="email"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder="you@club.com"
+                      placeholder={t("auth.modal.registerForm.email.placeholder")}
                       required
                       value={registerForm.email}
                       onChange={(event) =>
@@ -348,13 +374,15 @@ function AuthenticationExperienceModal() {
                     />
                   </label>
                   <label className="block text-sm font-medium text-red-100">
-                    Password
+                    {t("auth.modal.registerForm.password.label")}
                     <input
                       type="password"
                       name="password"
                       autoComplete="new-password"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder="Create a secure passphrase"
+                      placeholder={t(
+                        "auth.modal.registerForm.password.placeholder",
+                      )}
                       required
                       value={registerForm.password}
                       onChange={(event) =>
@@ -372,8 +400,7 @@ function AuthenticationExperienceModal() {
                     {cta}
                   </button>
                   <p className="text-center text-xs text-red-200/75">
-                    By creating an account you accept the athlete charter and
-                    consent to performance tracking.
+                    {t("auth.modal.registerForm.disclaimer")}
                   </p>
                 </form>
               )}
@@ -383,14 +410,14 @@ function AuthenticationExperienceModal() {
           <aside className="flex flex-col justify-between gap-8 rounded-3xl border border-red-400/35 bg-red-950/35 p-8 text-red-100/85 backdrop-blur">
             <div className="space-y-6">
               <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                Why athletes love it
+                {t("auth.modal.highlights.heading")}
               </p>
               <ul className="space-y-4">
                 {highlights.map((highlight) => {
                   const Icon = highlight.icon;
                   return (
                     <li
-                      key={highlight.title}
+                      key={highlight.titleKey}
                       className="group flex gap-4 rounded-2xl border border-red-400/35 bg-red-950/45 p-4 transition hover:border-red-400/50 hover:bg-red-500/15"
                     >
                       <span className="mt-1 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-red-500/15 text-red-200">
@@ -412,14 +439,12 @@ function AuthenticationExperienceModal() {
 
             <div className="rounded-3xl border border-red-400/30 bg-gradient-to-br from-red-500/20 via-amber-500/10 to-transparent p-6 text-sm text-red-100/85">
               <p className="font-semibold text-red-50">
-                Need help getting started?
+                {t("auth.modal.support.heading")}
               </p>
               <p className="mt-2 text-red-200/75">
-                Drop a note to{" "}
-                <span className="font-medium text-red-200">
-                  coach@aerodash.com
-                </span>{" "}
-                or chat with your coaching team in the squad channel.
+                {t("auth.modal.support.intro")} {" "}
+                <span className="font-medium text-red-200">{supportEmail}</span>{" "}
+                {t("auth.modal.support.outro")}
               </p>
             </div>
           </aside>

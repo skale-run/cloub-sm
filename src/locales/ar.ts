@@ -50,6 +50,91 @@ export const ar = {
         },
       },
     },
+    auth: {
+      modal: {
+        aria: {
+          close: "إغلاق نافذة المصادقة",
+          loginForm: "نموذج تسجيل الدخول",
+          registerForm: "نموذج التسجيل",
+        },
+        badge: "بوابة الرياضي",
+        modes: {
+          login: "تسجيل الدخول",
+          register: "تسجيل",
+        },
+        copy: {
+          login: {
+            heading: "سجّل الدخول إلى مقر الرياضي",
+            description:
+              "عد إلى قمرة الأداء الخاصة بك ونسّق تركيز اليوم.",
+            cta: "تسجيل الدخول",
+          },
+          register: {
+            heading: "فعّل جواز الرياضي الخاص بك",
+            description:
+              "أنشئ بيانات اعتمادك لفتح الحصص المخصصة ودعم الفريق.",
+            cta: "إنشاء حساب",
+          },
+        },
+        loginForm: {
+          email: {
+            label: "البريد الإلكتروني",
+            placeholder: "you@club.com",
+          },
+          password: {
+            label: "كلمة المرور",
+            placeholder: "••••••••",
+          },
+          forgotPassword: "نسيت كلمة المرور؟ تواصل مع مدربك لإعادة الوصول.",
+        },
+        registerForm: {
+          fullName: {
+            label: "الاسم الكامل",
+            placeholder: "جوردان أديبايو",
+          },
+          email: {
+            label: "البريد الإلكتروني",
+            placeholder: "you@club.com",
+          },
+          password: {
+            label: "كلمة المرور",
+            placeholder: "أنشئ عبارة مرور آمنة",
+          },
+          disclaimer:
+            "بإنشائك حسابًا فإنك توافق على ميثاق الرياضي وتقر بمراقبة الأداء.",
+        },
+        highlights: {
+          heading: "لماذا يحبها الرياضيون",
+          items: {
+            eliteTraining: {
+              title: "خطط تدريب نخبوية",
+              description:
+                "افتح الجلسات الأسبوعية المنسقة من المدرب والمخصصة لمسارك الموسمي.",
+            },
+            performanceIntelligence: {
+              title: "ذكاء الأداء",
+              description:
+                "تتبّع السرعة والتعافي وجهوزية اليوم عبر رؤى تكيفية.",
+            },
+            communityRecognition: {
+              title: "تقدير المجتمع",
+              description:
+                "شارك إنجازاتك، اجمع الشارات، وارتقِ في لوحة شرف الفريق.",
+            },
+            supportCrew: {
+              title: "طاقم دعم متاح بالكامل",
+              description:
+                "نسّق مع العلاج الطبيعي والتغذية والمرشدين من مركز واحد.",
+            },
+          },
+        },
+        support: {
+          heading: "تحتاج مساعدة للانطلاق؟",
+          intro: "أرسل رسالة إلى",
+          outro: "أو تواصل مع جهازك التدريبي في قناة الفريق.",
+        },
+      },
+    },
     sidebar: {
       brand: {
         name: "وداد تايكواندو",
