@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import RedSurface from "../../components/RedSurface";
 import type { LucideIcon } from "../../lucide-react";
 import {
+  Activity,
   CalendarDays,
   ClipboardCheck,
   LineChart,
@@ -92,6 +93,55 @@ const statusBadgeStyles: Record<
   "Medical hold": "border-rose-400/30 bg-rose-500/15 text-rose-100",
 };
 
+const statusSummaryStyles = {
+  Confirmed: {
+    icon: ClipboardCheck,
+    track: "bg-emerald-400/15",
+    bar: "bg-emerald-400/80",
+  },
+  Pending: {
+    icon: CalendarDays,
+    track: "bg-amber-400/15",
+    bar: "bg-amber-400/80",
+  },
+  "Medical hold": {
+    icon: Activity,
+    track: "bg-rose-400/15",
+    bar: "bg-rose-400/80",
+  },
+} satisfies Record<
+  (typeof rosterAttendance)[number]["status"],
+  { icon: LucideIcon; track: string; bar: string }
+>;
+
+type RosterStatus = (typeof rosterAttendance)[number]["status"];
+
+type FollowUpAction = {
+  id: string;
+  label: string;
+  detail: string;
+  emphasis: string;
+  icon: LucideIcon;
+};
+
+const sessionFocusNotes: Record<
+  (typeof trainingCalendarEvents)[number]["id"],
+  { focus: string; emphasis: string }
+> = {
+  "ts-1": {
+    focus: "Velocity testing during strength sets—assign check-in tablets near racks.",
+    emphasis: "Wellness survey opens 30 minutes prior; capture RPE after each block.",
+  },
+  "ts-2": {
+    focus: "Travel squad tune-up with individual mobility protocols staged on arrival.",
+    emphasis: "Ensure hydration scans are logged before main warm-up lap.",
+  },
+  "ts-3": {
+    focus: "Film room breakdown with positional pairings and leadership huddles.",
+    emphasis: "Circulate remote check-in link for athletes on modified plans.",
+  },
+};
+
 function TrainingAttendanceSection(): ReactElement {
   const totalPlanned = attendanceByWeek.reduce(
     (total, week) => total + week.plannedSessions,
@@ -108,6 +158,7 @@ function TrainingAttendanceSection(): ReactElement {
 
   const upcomingSessions = trainingCalendarEvents.slice(0, 3).map((session) => {
     const start = new Date(session.start);
+    const focus = sessionFocusNotes[session.id];
     return {
       id: session.id,
       title: session.title,
@@ -121,8 +172,95 @@ function TrainingAttendanceSection(): ReactElement {
         minute: "2-digit",
       }),
       coach: session.coach,
+      location: session.location,
+      focus: focus?.focus,
+      emphasis: focus?.emphasis,
     };
   });
+
+  const totalRoster = rosterAttendance.length;
+
+  const rosterStatusCounts = rosterAttendance.reduce(
+    (accumulator, entry) => {
+      accumulator[entry.status] = (accumulator[entry.status] ?? 0) + 1;
+      return accumulator;
+    },
+    {} as Partial<Record<RosterStatus, number>>,
+  );
+
+  const statusBreakdown = (Object.keys(statusBadgeStyles) as RosterStatus[]).map(
+    (status) => {
+      const count = rosterStatusCounts[status] ?? 0;
+      const percent = totalRoster === 0 ? 0 : Math.round((count / totalRoster) * 100);
+      const summaryStyle = statusSummaryStyles[status];
+      const SummaryIcon = summaryStyle.icon;
+      return {
+        status,
+        count,
+        percent,
+        SummaryIcon,
+        trackClassName: summaryStyle.track,
+        barClassName: summaryStyle.bar,
+      };
+    },
+  );
+
+  const followUpActions = [
+    rosterStatusCounts.Pending
+      ? {
+          id: "pending",
+          label: "Confirm travel arrivals",
+          detail: `${rosterStatusCounts.Pending} athlete${
+            rosterStatusCounts.Pending > 1 ? "s" : ""
+          } are awaiting travel desk confirmation and location briefings.`,
+          emphasis: "Send reminder before Thursday noon logistics call.",
+          icon: CalendarDays,
+        }
+      : null,
+    rosterStatusCounts["Medical hold"]
+      ? {
+          id: "medical",
+          label: "Coordinate medical reviews",
+          detail: `${rosterStatusCounts["Medical hold"]} athlete${
+            (rosterStatusCounts["Medical hold"] ?? 0) > 1 ? "s" : ""
+          } flagged for clearance need updated return timelines.`,
+          emphasis: "Sync physio notes with coaching staff before Friday block plan.",
+          icon: Activity,
+        }
+      : null,
+  ].filter(Boolean) as FollowUpAction[];
+
+  const weeklyAttendanceRanking = attendanceByWeek.reduce(
+    (
+      accumulator,
+      week,
+    ): {
+      bestWeek: (typeof attendanceByWeek)[number] | null;
+      bestRate: number;
+      focusWeek: (typeof attendanceByWeek)[number] | null;
+      focusRate: number;
+    } => {
+      const weeklyRate = week.attendedSessions / week.plannedSessions;
+      if (accumulator.bestWeek === null || weeklyRate > accumulator.bestRate) {
+        accumulator.bestWeek = week;
+        accumulator.bestRate = weeklyRate;
+      }
+      if (accumulator.focusWeek === null || weeklyRate < accumulator.focusRate) {
+        accumulator.focusWeek = week;
+        accumulator.focusRate = weeklyRate;
+      }
+      return accumulator;
+    },
+    {
+      bestWeek: null,
+      bestRate: -Infinity,
+      focusWeek: null,
+      focusRate: Infinity,
+    },
+  );
+
+  const bestWeek = weeklyAttendanceRanking.bestWeek;
+  const focusWeek = weeklyAttendanceRanking.focusWeek;
 
   return (
     <section id="training-attendance" className="space-y-6">
@@ -161,6 +299,18 @@ function TrainingAttendanceSection(): ReactElement {
               {totalAttended} / {totalPlanned} sessions attended
             </p>
           </header>
+          <div className="space-y-2 text-xs text-red-100/70">
+            {bestWeek ? (
+              <p>
+                Peak execution: {bestWeek.label} · {bestWeek.highlight}
+              </p>
+            ) : null}
+            {focusWeek ? (
+              <p>
+                Upcoming focus: {focusWeek.label} · {focusWeek.highlight}
+              </p>
+            ) : null}
+          </div>
           <div className="grid gap-3 sm:grid-cols-3">
             {attendanceInsights.map((insight) => {
               const InsightIcon = insight.icon;
@@ -250,13 +400,70 @@ function TrainingAttendanceSection(): ReactElement {
                   <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-200/70">
                     {session.dateLabel} · {session.timeLabel}
                   </p>
+                  <p className="mt-1 text-xs text-red-100/75">
+                    {session.location}
+                  </p>
                   <p className="mt-1 text-sm text-red-100/80">
                     Coach {session.coach}
                   </p>
+                  {session.focus ? (
+                    <p className="mt-3 text-xs text-red-100/80">{session.focus}</p>
+                  ) : null}
+                  {session.emphasis ? (
+                    <p className="text-[0.7rem] uppercase tracking-[0.35em] text-red-200/70">
+                      {session.emphasis}
+                    </p>
+                  ) : null}
                 </RedSurface>
               ))}
             </ul>
           </RedSurface>
+
+          {followUpActions.length > 0 ? (
+            <RedSurface
+              as="section"
+              tone="muted"
+              className="flex flex-col gap-4 p-6 text-red-50"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-semibold text-red-50">
+                    Follow-up actions
+                  </h3>
+                  <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                    Check-in priorities this week
+                  </p>
+                </div>
+                <ClipboardCheck className="h-5 w-5 text-red-200/75" aria-hidden />
+              </div>
+              <ul className="space-y-3">
+                {followUpActions.map((action) => {
+                  const ActionIcon = action.icon;
+                  return (
+                    <li
+                      key={action.id}
+                      className="rounded-2xl border border-red-400/25 bg-red-500/10 p-4"
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="rounded-full border border-red-400/40 bg-red-500/15 p-2 text-red-100/85">
+                          <ActionIcon className="h-4 w-4" aria-hidden />
+                        </span>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold text-red-50">
+                            {action.label}
+                          </p>
+                          <p className="text-xs text-red-100/80">{action.detail}</p>
+                          <p className="text-[0.7rem] uppercase tracking-[0.35em] text-red-200/70">
+                            {action.emphasis}
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </RedSurface>
+          ) : null}
 
           <RedSurface
             as="section"
@@ -273,6 +480,42 @@ function TrainingAttendanceSection(): ReactElement {
                 </p>
               </div>
               <Users className="h-5 w-5 text-red-200/75" aria-hidden />
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {statusBreakdown.map((status) => (
+                <RedSurface
+                  key={status.status}
+                  tone="glass"
+                  className="rounded-2xl p-4"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
+                        {status.status}
+                      </p>
+                      <p className="text-lg font-semibold text-red-50">
+                        {status.count} athlete{status.count === 1 ? "" : "s"}
+                      </p>
+                    </div>
+                    <status.SummaryIcon
+                      className="h-5 w-5 text-red-200/80"
+                      aria-hidden
+                    />
+                  </div>
+                  <div
+                    className={`mt-3 h-1.5 rounded-full ${status.trackClassName}`}
+                  >
+                    <div
+                      className={`h-full rounded-full ${status.barClassName}`}
+                      style={{ width: `${status.percent}%` }}
+                      aria-hidden
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-red-100/75">
+                    {status.percent}% of roster
+                  </p>
+                </RedSurface>
+              ))}
             </div>
             <ul className="space-y-3">
               {rosterAttendance.map((entry) => (
