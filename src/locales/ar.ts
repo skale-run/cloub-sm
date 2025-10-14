@@ -338,5 +338,18 @@ export const ar = {
         },
       },
     },
+    competitions: {
+      heading: "تقويم البطولات",
+      description: "تتبّع خطط السفر واستعد لقوائم مهام يوم السباق.",
+      badge: "ذروة الموسم",
+      checkIn: "تسجيل الوصول {{time}}",
+      logistics: "اللوجستيات",
+      cta: "موجز السفر",
+      levels: {
+        Regional: "إقليمي",
+        National: "وطني",
+        International: "دولي",
+      },
+    },
   },
 } as const;
