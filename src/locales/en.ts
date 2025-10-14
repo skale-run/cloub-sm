@@ -339,6 +339,94 @@ export const en = {
         },
       },
     },
+    profile: {
+      heading: {
+        title: "My athlete profile",
+        description:
+          "Keep your credentials current to unlock personalised drills and access.",
+        badge: "Manage & update",
+      },
+      photo: {
+        title: "Profile photo",
+        description: "Drag a clear headshot or browse to upload.",
+        uploadedAlt: "Uploaded athlete portrait",
+        uploaded: {
+          hint: "Drop a new image or press enter to replace your photo.",
+          note: "PNG or JPG up to 5MB.",
+        },
+        empty: {
+          heading: "Drag & drop your athlete photo here",
+          note: "PNG or JPG up to 5MB, or click to browse.",
+        },
+        errors: {
+          invalidType: "Please upload an image file.",
+          fileTooLarge: "Please choose an image smaller than {{size}}MB.",
+        },
+      },
+      fields: {
+        fullName: {
+          label: "Full name",
+          placeholder: "e.g. Lina Carter",
+          readinessLabel: "the full name",
+        },
+        role: {
+          label: "Role",
+          placeholder: "Sprinter / Mid-distance",
+          readinessLabel: "a role",
+        },
+        squad: {
+          label: "Squad / Tier",
+          placeholder: "Elite Performance Squad",
+          readinessLabel: "a squad assignment",
+        },
+        email: {
+          label: "Email",
+          placeholder: "athlete@clubpulse.io",
+          readinessLabel: "an email address",
+        },
+        emergencyContact: {
+          label: "Emergency contact",
+          placeholder: "Jordan Carter · +44 7700 000000",
+          readinessLabel: "an emergency contact",
+        },
+        membershipId: {
+          label: "Membership ID",
+          placeholder: "CP-2025-184",
+          helperText: "Used to verify entry and sync wearable data.",
+          readinessLabel: "the membership ID",
+        },
+      },
+      actions: {
+        save: "Save profile",
+        reset: "Reset draft",
+        delete: "Delete profile",
+        remove: "Remove",
+        add: "Add",
+      },
+      readiness: {
+        heading: "Profile readiness",
+        completeDescription: "Every detail is in place.",
+        incompleteDescription: "Complete the profile to unlock the full experience.",
+        readyMessage: "You're ready to share this profile with coaches.",
+        nextField: "Next up: add {{field}}.",
+        remaining: "Add the remaining details to finish your profile.",
+      },
+      summary: {
+        heading: "Membership snapshot",
+        fallbackName: "Awaiting athlete details",
+        membershipIdLabel: "Membership ID",
+        membershipIdFallback: "Pending assignment",
+        roleLabel: "Role",
+        roleFallback: "Define your training focus",
+        squadLabel: "Squad",
+        squadFallback: "Assign a squad for tailored drills",
+      },
+      achievements: {
+        heading: "Highlights & achievements",
+        description: "Capture season wins to keep your motivation board updated.",
+        placeholder: "Add new highlight",
+        removeAria: "Remove highlight",
+        empty: "No highlights yet. Start by celebrating a recent win.",
     performanceTracking: {
       title: "Performance tracking",
       description:

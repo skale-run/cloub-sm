@@ -338,6 +338,94 @@ export const ar = {
         },
       },
     },
+    profile: {
+      heading: {
+        title: "ملفي الرياضي",
+        description:
+          "حافظ على بيانات اعتمادك محدثة لتحصل على تمارين مخصصة وإمكانية الوصول.",
+        badge: "إدارة وتحديث",
+      },
+      photo: {
+        title: "صورة الملف",
+        description: "اسحب صورة شخصية واضحة أو اختر لتحميلها.",
+        uploadedAlt: "صورة الرياضي المرفوعة",
+        uploaded: {
+          hint: "اسقط صورة جديدة أو اضغط إدخال لاستبدال صورتك.",
+          note: "PNG أو JPG حتى 5 ميجابايت.",
+        },
+        empty: {
+          heading: "اسحب وأفلت صورة الرياضي هنا",
+          note: "PNG أو JPG حتى 5 ميجابايت، أو انقر للاختيار.",
+        },
+        errors: {
+          invalidType: "يرجى تحميل ملف صورة.",
+          fileTooLarge: "يرجى اختيار صورة أصغر من {{size}} ميجابايت.",
+        },
+      },
+      fields: {
+        fullName: {
+          label: "الاسم الكامل",
+          placeholder: "مثال: لينا كارتر",
+          readinessLabel: "الاسم الكامل",
+        },
+        role: {
+          label: "الدور",
+          placeholder: "عدّاء سرعة / متسابق مسافات متوسطة",
+          readinessLabel: "الدور",
+        },
+        squad: {
+          label: "الفريق / المستوى",
+          placeholder: "فريق الأداء النخبوي",
+          readinessLabel: "الفريق",
+        },
+        email: {
+          label: "البريد الإلكتروني",
+          placeholder: "athlete@clubpulse.io",
+          readinessLabel: "البريد الإلكتروني",
+        },
+        emergencyContact: {
+          label: "جهة الاتصال للطوارئ",
+          placeholder: "جوردان كارتر · ‎+44 7700 000000",
+          readinessLabel: "جهة الاتصال للطوارئ",
+        },
+        membershipId: {
+          label: "معرف العضوية",
+          placeholder: "CP-2025-184",
+          helperText: "يُستخدم للتحقق من الدخول ومزامنة بيانات الأجهزة القابلة للارتداء.",
+          readinessLabel: "معرف العضوية",
+        },
+      },
+      actions: {
+        save: "حفظ الملف الشخصي",
+        reset: "إعادة تعيين المسودة",
+        delete: "حذف الملف الشخصي",
+        remove: "إزالة",
+        add: "إضافة",
+      },
+      readiness: {
+        heading: "جاهزية الملف",
+        completeDescription: "كل التفاصيل جاهزة.",
+        incompleteDescription: "أكمل الملف لتحصل على تجربة كاملة.",
+        readyMessage: "يمكنك الآن مشاركة هذا الملف مع المدربين.",
+        nextField: "التالي: أضف {{field}}.",
+        remaining: "أضف التفاصيل المتبقية لإكمال ملفك.",
+      },
+      summary: {
+        heading: "لمحة العضوية",
+        fallbackName: "بانتظار تفاصيل الرياضي",
+        membershipIdLabel: "معرف العضوية",
+        membershipIdFallback: "قيد التعيين",
+        roleLabel: "الدور",
+        roleFallback: "حدّد تركيز تدريبك",
+        squadLabel: "الفريق",
+        squadFallback: "عيّن فريقًا للحصول على تمارين مخصصة",
+      },
+      achievements: {
+        heading: "أبرز اللحظات والإنجازات",
+        description: "دوّن انتصارات الموسم لإبقاء لوحة التحفيز محدثة.",
+        placeholder: "أضف إنجازًا جديدًا",
+        removeAria: "إزالة الإنجاز",
+        empty: "لا توجد أبرز لحظات بعد. ابدأ بالاحتفال بفوز حديث.",
     performanceTracking: {
       title: "تتبع الأداء",
       description:
