@@ -1,10 +1,19 @@
 terraform {
-  required_version = ">= 1.3.0"
+  required_version = ">= 1.5.0"
+
+
+  backend "gcs" {
+    bucket = "lkany-io-tfstate/club-sm"
+  }
 
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 4.51.0"
+      version = "~> 5.8"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 5.8"
     }
   }
 }
