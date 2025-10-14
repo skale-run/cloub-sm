@@ -3,10 +3,13 @@ import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import { competitionCalendarEvents } from "../calendar/calendarEvents";
 
-const levelColors: Record<"Regional" | "National" | "International", string> = {
-  Regional: "from-amber-500/30 to-amber-400/40 text-amber-100",
-  National: "from-red-500/30 to-red-400/40 text-red-100",
-  International: "from-fuchsia-500/30 to-fuchsia-400/40 text-fuchsia-100",
+const levelColors: Record<
+  (typeof competitionCalendarEvents)[number]["level"],
+  string
+> = {
+  regional: "from-amber-500/30 to-amber-400/40 text-amber-100",
+  national: "from-red-500/30 to-red-400/40 text-red-100",
+  international: "from-fuchsia-500/30 to-fuchsia-400/40 text-fuchsia-100",
 };
 
 function CompetitionSection(): ReactElement {
@@ -23,9 +26,9 @@ function CompetitionSection(): ReactElement {
   );
   const events = competitionCalendarEvents.map((event) => ({
     id: event.id,
-    title: event.title,
+    title: t(event.titleKey, { ns: "translation" }),
     level: event.level,
-    location: event.location,
+    location: t(event.locationKey, { ns: "translation" }),
     dateLabel: dateFormatter.format(new Date(event.start)),
     checkIn: event.checkIn,
   }));
@@ -57,7 +60,7 @@ function CompetitionSection(): ReactElement {
               <span
                 className={`inline-flex items-center rounded-full bg-gradient-to-r px-3 py-1 text-xs font-semibold uppercase tracking-wide ${levelColors[event.level]}`}
               >
-                {t(`levels.${event.level}`)}
+                {t(`calendar.levels.${event.level}`, { ns: "translation" })}
               </span>
               <span className="text-xs uppercase tracking-wide text-red-200/70">
                 {t("checkIn", { time: event.checkIn })}
