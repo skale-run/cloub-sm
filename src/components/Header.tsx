@@ -11,6 +11,7 @@ type HeaderProps = {
   isSidebarOpen: boolean
   onToggleSidebar: () => void
   savedProfile: HeaderProfile | null
+  onOpenAuthModal: () => void
 }
 
 const focusChips = [
@@ -19,7 +20,7 @@ const focusChips = [
   { label: 'Coach note', value: 'Refine drive phase' },
 ]
 
-function Header({ isSidebarOpen, onToggleSidebar, savedProfile }: HeaderProps) {
+function Header({ isSidebarOpen, onToggleSidebar, savedProfile, onOpenAuthModal }: HeaderProps) {
   const { mode } = useTheme()
   const ThemeIcon = mode === 'dark' ? Moon : Sun
 
@@ -73,6 +74,14 @@ function Header({ isSidebarOpen, onToggleSidebar, savedProfile }: HeaderProps) {
         </div>
 
         <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-slate-200/80 shadow-[0_20px_60px_rgba(8,15,35,0.55)] backdrop-blur">
+          <button
+            type="button"
+            onClick={onOpenAuthModal}
+            className="flex items-center justify-center rounded-2xl bg-gradient-to-r from-sky-400 via-sky-500 to-violet-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:brightness-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+          >
+            Access athlete portal
+          </button>
+
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-slate-300/70">Today</p>
             <p className="mt-1 text-lg font-semibold text-white">14 April 2025</p>

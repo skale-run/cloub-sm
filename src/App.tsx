@@ -1,6 +1,7 @@
 import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
 import Header from './components/Header'
+import AuthModal from './components/AuthModal'
 import Sidebar from './components/Sidebar'
 import AccessSection from './features/access/AccessSection'
 import CalendarSection from './features/calendar/CalendarSection'
@@ -16,6 +17,7 @@ import { normalizePath, type RoutePath } from './routes'
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [profileDraft, setProfileDraft] = useState<Profile>(emptyProfile)
   const [savedProfile, setSavedProfile] = useState<Profile | null>(null)
   const [achievements, setAchievements] = useState<string[]>([
@@ -71,6 +73,8 @@ function App() {
 
   const toggleSidebar = () => setSidebarOpen((open) => !open)
   const handleSidebarNavigate = () => setSidebarOpen(false)
+  const openAuthModal = () => setIsAuthModalOpen(true)
+  const closeAuthModal = () => setIsAuthModalOpen(false)
 
   const handleProfileChange = (key: keyof Profile, value: string) => {
     setProfileDraft((previous) => ({ ...previous, [key]: value }))
@@ -136,7 +140,12 @@ function App() {
         />
 
         <div className="flex flex-1 flex-col rounded-3xl border border-white/5 bg-slate-950/60 shadow-[0_35px_120px_rgba(8,15,35,0.55)] backdrop-blur xl:rounded-[32px]">
-          <Header isSidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} savedProfile={savedProfile} />
+          <Header
+            isSidebarOpen={sidebarOpen}
+            onToggleSidebar={toggleSidebar}
+            savedProfile={savedProfile}
+            onOpenAuthModal={openAuthModal}
+          />
 
           <main className="relative z-0 flex-1 space-y-12 px-4 pb-16 pt-6 sm:px-8 lg:px-12">
             {(() => {
@@ -180,6 +189,7 @@ function App() {
           </main>
         </div>
       </div>
+      <AuthModal open={isAuthModalOpen} onClose={closeAuthModal} />
     </div>
   )
 }
