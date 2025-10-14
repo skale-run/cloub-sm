@@ -139,13 +139,13 @@ function App() {
 
   return (
     <>
-      <div className="relative min-h-screen overflow-hidden text-rose-100">
+      <div className="relative min-h-screen overflow-hidden text-red-100">
         {sidebarOpen ? (
           <button
             type="button"
             aria-label="Close navigation"
             onClick={handleSidebarNavigate}
-            className="fixed inset-0 z-30 bg-rose-950/70 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-30 bg-red-950/70 backdrop-blur-sm lg:hidden"
           />
         ) : null}
 

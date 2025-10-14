@@ -57,7 +57,7 @@ const rangeFormatter = new Intl.DateTimeFormat('en-US', {
 })
 
 const typeStyles: Record<CalendarEvent['category'], string> = {
-  training: 'border-rose-400/40 bg-rose-500/15 text-rose-100',
+  training: 'border-red-400/40 bg-red-500/15 text-red-100',
   competition: 'border-fuchsia-400/40 bg-fuchsia-500/15 text-fuchsia-100',
 }
 
@@ -216,22 +216,22 @@ function CalendarSection(): ReactElement {
     <section id="calendar" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-rose-50 sm:text-2xl">Integrated Team Calendar</h2>
-          <p className="text-sm text-rose-200/75">
+          <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">Integrated Team Calendar</h2>
+          <p className="text-sm text-red-200/75">
             Switch between monthly, weekly, and daily perspectives to coordinate every training session and
             competition.
           </p>
         </div>
-        <div className="inline-flex rounded-full border border-rose-500/35 bg-rose-950/60 p-1 text-xs font-semibold text-rose-100">
+        <div className="inline-flex rounded-full border border-red-500/35 bg-red-950/60 p-1 text-xs font-semibold text-red-100">
           {(['month', 'week', 'day'] satisfies CalendarView[]).map((option) => (
             <button
               key={option}
               type="button"
               onClick={() => setView(option)}
-              className={`rounded-full px-4 py-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300 ${
+              className={`rounded-full px-4 py-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 ${
                 view === option
-                  ? 'bg-rose-500/25 text-rose-50 shadow-[0_8px_20px_rgba(244,63,94,0.25)]'
-                  : 'text-rose-200/70 hover:text-rose-100'
+                  ? 'bg-red-500/25 text-red-50 shadow-[0_8px_20px_rgba(220,38,38,0.25)]'
+                  : 'text-red-200/70 hover:text-red-100'
               }`}
             >
               {option.charAt(0).toUpperCase() + option.slice(1)}
@@ -247,11 +247,11 @@ function CalendarSection(): ReactElement {
               key={month.id}
               as="article"
               tone="muted"
-              className="flex flex-col gap-4 p-6 text-rose-50"
+              className="flex flex-col gap-4 p-6 text-red-50"
             >
               <header className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-rose-50">{month.label}</h3>
-                <span className="text-xs uppercase tracking-[0.35em] text-rose-200/70">{month.events.length} events</span>
+                <h3 className="text-lg font-semibold text-red-50">{month.label}</h3>
+                <span className="text-xs uppercase tracking-[0.35em] text-red-200/70">{month.events.length} events</span>
               </header>
               <div className="space-y-4">
                 {month.events.map((event) => {
@@ -262,18 +262,18 @@ function CalendarSection(): ReactElement {
                     <RedSurface
                       key={event.id}
                       tone="glass"
-                      className="rounded-2xl p-4 transition hover:border-rose-400/45"
+                      className="rounded-2xl p-4 transition hover:border-red-400/45"
                     >
-                      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-rose-200/75">
-                        <span className="font-semibold text-rose-50">{dayFormatter.format(startDate)}</span>
+                      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-red-200/75">
+                        <span className="font-semibold text-red-50">{dayFormatter.format(startDate)}</span>
                         <span>
                           {timeFormatter.format(startDate)} – {timeFormatter.format(endDate)}
                         </span>
                       </div>
                       <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
                         <div>
-                          <p className="text-base font-semibold text-rose-50">{event.title}</p>
-                          <p className="text-sm text-rose-200/75">{event.location}</p>
+                          <p className="text-base font-semibold text-red-50">{event.title}</p>
+                          <p className="text-sm text-red-200/75">{event.location}</p>
                         </div>
                         <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${typeStyles[event.category]}`}>
                           {event.category === 'training' ? 'Training Session' : 'Competition Day'}
@@ -295,14 +295,14 @@ function CalendarSection(): ReactElement {
               key={week.id}
               as="article"
               tone="muted"
-              className="p-6 text-rose-50"
+              className="p-6 text-red-50"
             >
               <header className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h3 className="text-lg font-semibold text-rose-50">{week.label}</h3>
-                  <p className="text-xs uppercase tracking-[0.35em] text-rose-200/70">{week.range}</p>
+                  <h3 className="text-lg font-semibold text-red-50">{week.label}</h3>
+                  <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">{week.range}</p>
                 </div>
-                <span className="text-xs text-rose-200/70">
+                <span className="text-xs text-red-200/70">
                   {week.days.reduce((total, day) => total + day.events.length, 0)} scheduled events
                 </span>
               </header>
@@ -312,11 +312,11 @@ function CalendarSection(): ReactElement {
                     key={day.key}
                     className={`flex flex-col gap-3 rounded-2xl border p-4 transition ${
                       day.events.length > 0
-                        ? 'border-rose-400/35 bg-rose-950/55'
-                        : 'border-rose-500/20 bg-rose-950/30 text-rose-200/60'
+                        ? 'border-red-400/35 bg-red-950/55'
+                        : 'border-red-500/20 bg-red-950/30 text-red-200/60'
                     }`}
                   >
-                    <div className="text-xs font-semibold uppercase tracking-wide text-rose-200/70">{day.label}</div>
+                    <div className="text-xs font-semibold uppercase tracking-wide text-red-200/70">{day.label}</div>
                     <div className="space-y-3">
                       {day.events.length > 0 ? (
                         day.events.map((event) => {
@@ -325,11 +325,11 @@ function CalendarSection(): ReactElement {
 
                           return (
                             <RedSurface key={event.id} tone="glass" className="rounded-xl p-3">
-                              <p className="text-sm font-semibold text-rose-50">{event.title}</p>
-                              <p className="text-xs text-rose-200/75">
+                              <p className="text-sm font-semibold text-red-50">{event.title}</p>
+                              <p className="text-xs text-red-200/75">
                                 {timeFormatter.format(startDate)} – {timeFormatter.format(endDate)}
                               </p>
-                              <p className="mt-1 text-xs text-rose-200/70">{event.location}</p>
+                              <p className="mt-1 text-xs text-red-200/70">{event.location}</p>
                               <span className={`mt-2 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.25em] ${typeStyles[event.category]}`}>
                                 {event.category === 'training' ? 'Training' : 'Competition'}
                               </span>
@@ -337,7 +337,7 @@ function CalendarSection(): ReactElement {
                           )
                         })
                       ) : (
-                        <p className="text-xs text-rose-200/60">No events scheduled</p>
+                        <p className="text-xs text-red-200/60">No events scheduled</p>
                       )}
                     </div>
                   </div>
@@ -356,10 +356,10 @@ function CalendarSection(): ReactElement {
                 key={option.key}
                 type="button"
                 onClick={() => setSelectedDayKey(option.key)}
-                className={`rounded-full border px-4 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300 ${
+                className={`rounded-full border px-4 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 ${
                   selectedDayKey === option.key
-                    ? 'border-rose-400/55 bg-rose-500/20 text-rose-50 shadow-[0_12px_30px_rgba(244,63,94,0.2)]'
-                    : 'border-rose-500/25 bg-rose-950/50 text-rose-200/80 hover:text-rose-100'
+                    ? 'border-red-400/55 bg-red-500/20 text-red-50 shadow-[0_12px_30px_rgba(220,38,38,0.2)]'
+                    : 'border-red-500/25 bg-red-950/50 text-red-200/80 hover:text-red-100'
                 }`}
               >
                 {option.shortLabel}
@@ -367,13 +367,13 @@ function CalendarSection(): ReactElement {
             ))}
           </div>
 
-          <RedSurface as="article" tone="muted" className="p-6 text-rose-50">
+          <RedSurface as="article" tone="muted" className="p-6 text-red-50">
             <header className="flex items-start justify-between gap-3">
               <div>
-                <h3 className="text-lg font-semibold text-rose-50">{selectedDay?.label ?? 'No day selected'}</h3>
-                <p className="text-sm text-rose-200/75">All training sessions and competition duties for this date.</p>
+                <h3 className="text-lg font-semibold text-red-50">{selectedDay?.label ?? 'No day selected'}</h3>
+                <p className="text-sm text-red-200/75">All training sessions and competition duties for this date.</p>
               </div>
-              <span className="text-xs uppercase tracking-[0.35em] text-rose-200/70">
+              <span className="text-xs uppercase tracking-[0.35em] text-red-200/70">
                 {eventsOnSelectedDay.length} {eventsOnSelectedDay.length === 1 ? 'event' : 'events'}
               </span>
             </header>
@@ -388,9 +388,9 @@ function CalendarSection(): ReactElement {
                     <RedSurface
                       key={event.id}
                       tone="glass"
-                      className="rounded-2xl p-5 transition hover:border-rose-400/45"
+                      className="rounded-2xl p-5 transition hover:border-red-400/45"
                     >
-                      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-rose-200/75">
+                      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-red-200/75">
                         <span>
                           {timeFormatter.format(startDate)} – {timeFormatter.format(endDate)}
                         </span>
@@ -399,19 +399,19 @@ function CalendarSection(): ReactElement {
                         </span>
                       </div>
                       <div className="mt-3 space-y-1">
-                        <p className="text-base font-semibold text-rose-50">{event.title}</p>
-                        <p className="text-sm text-rose-200/75">{event.location}</p>
+                        <p className="text-base font-semibold text-red-50">{event.title}</p>
+                        <p className="text-sm text-red-200/75">{event.location}</p>
                         {event.category === 'training' ? (
-                          <p className="text-xs text-rose-200/70">Lead · {event.coach}</p>
+                          <p className="text-xs text-red-200/70">Lead · {event.coach}</p>
                         ) : (
-                          <p className="text-xs text-rose-200/70">Check-in {event.checkIn}</p>
+                          <p className="text-xs text-red-200/70">Check-in {event.checkIn}</p>
                         )}
                       </div>
                     </RedSurface>
                   )
                 })
               ) : (
-                <p className="text-sm text-rose-200/60">No scheduled activity on this date.</p>
+                <p className="text-sm text-red-200/60">No scheduled activity on this date.</p>
               )}
             </div>
           </RedSurface>
