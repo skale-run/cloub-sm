@@ -56,7 +56,7 @@ const rangeFormatter = new Intl.DateTimeFormat('en-US', {
 })
 
 const typeStyles: Record<CalendarEvent['category'], string> = {
-  training: 'border-sky-400/40 bg-sky-500/15 text-sky-100',
+  training: 'border-rose-400/40 bg-rose-500/15 text-rose-100',
   competition: 'border-fuchsia-400/40 bg-fuchsia-500/15 text-fuchsia-100',
 }
 
@@ -227,9 +227,9 @@ function CalendarSection(): ReactElement {
               key={option}
               type="button"
               onClick={() => setView(option)}
-              className={`rounded-full px-4 py-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300 ${
+              className={`rounded-full px-4 py-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300 ${
                 view === option
-                  ? 'bg-sky-500/20 text-white shadow-[0_8px_20px_rgba(14,165,233,0.25)]'
+                  ? 'bg-rose-500/20 text-white shadow-[0_8px_20px_rgba(244,63,94,0.25)]'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -258,7 +258,7 @@ function CalendarSection(): ReactElement {
                   return (
                     <div
                       key={event.id}
-                      className="rounded-2xl border border-white/5 bg-slate-950/60 p-4 transition hover:border-sky-400/40"
+                      className="rounded-2xl border border-white/5 bg-slate-950/60 p-4 transition hover:border-rose-400/40"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-400/80">
                         <span className="font-semibold text-slate-200">{dayFormatter.format(startDate)}</span>
@@ -306,7 +306,7 @@ function CalendarSection(): ReactElement {
                     key={day.key}
                     className={`flex flex-col gap-3 rounded-2xl border p-4 transition ${
                       day.events.length > 0
-                        ? 'border-sky-400/30 bg-slate-950/60'
+                        ? 'border-rose-400/30 bg-slate-950/60'
                         : 'border-white/5 bg-slate-950/40 text-slate-500'
                     }`}
                   >
@@ -350,9 +350,9 @@ function CalendarSection(): ReactElement {
                 key={option.key}
                 type="button"
                 onClick={() => setSelectedDayKey(option.key)}
-                className={`rounded-full border px-4 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300 ${
+                className={`rounded-full border px-4 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300 ${
                   selectedDayKey === option.key
-                    ? 'border-sky-400/50 bg-sky-500/20 text-white shadow-[0_12px_30px_rgba(14,165,233,0.2)]'
+                    ? 'border-rose-400/50 bg-rose-500/20 text-white shadow-[0_12px_30px_rgba(244,63,94,0.2)]'
                     : 'border-white/10 bg-slate-900/60 text-slate-300 hover:text-white'
                 }`}
               >
@@ -381,7 +381,7 @@ function CalendarSection(): ReactElement {
                   return (
                     <div
                       key={event.id}
-                      className="rounded-2xl border border-white/5 bg-slate-950/60 p-5 transition hover:border-sky-400/40"
+                      className="rounded-2xl border border-white/5 bg-slate-950/60 p-5 transition hover:border-rose-400/40"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-400/80">
                         <span>

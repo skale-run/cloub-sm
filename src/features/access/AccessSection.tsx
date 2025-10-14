@@ -27,7 +27,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
           <h2 className="text-xl font-semibold text-white sm:text-2xl">Club access QR</h2>
           <p className="text-sm text-slate-400/80">Instantly retrieve your smart gate pass once your profile is saved.</p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-emerald-100">
+        <span className="inline-flex items-center gap-2 rounded-full border border-rose-400/40 bg-rose-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-rose-100">
           Instant pass
         </span>
       </div>

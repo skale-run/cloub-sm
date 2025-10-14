@@ -34,7 +34,7 @@ function BillingSection(): ReactElement {
             Keep track of recurring fees, add-ons and outstanding balances in one place.
           </p>
         </div>
-        <div className="flex items-center gap-3 rounded-3xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-emerald-100">
+        <div className="flex items-center gap-3 rounded-3xl border border-rose-400/30 bg-rose-500/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-rose-100">
           <span>Balance</span>
           <span className="text-sm font-semibold text-white">$180.00</span>
         </div>
@@ -48,7 +48,7 @@ function BillingSection(): ReactElement {
           </div>
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-2xl border border-sky-400/40 bg-sky-500/20 px-4 py-2 text-sm font-semibold text-sky-100 transition hover:border-sky-400/60 hover:bg-sky-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
+            className="inline-flex items-center justify-center rounded-2xl border border-rose-400/40 bg-rose-500/20 px-4 py-2 text-sm font-semibold text-rose-100 transition hover:border-rose-400/60 hover:bg-rose-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300"
           >
             Update payment method
           </button>
@@ -82,7 +82,7 @@ function BillingSection(): ReactElement {
                     <span
                       className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${
                         invoice.status === 'Paid'
-                          ? 'border-emerald-400/40 bg-emerald-500/15 text-emerald-100'
+                          ? 'border-rose-400/40 bg-rose-500/15 text-rose-100'
                           : 'border-amber-400/40 bg-amber-500/15 text-amber-100'
                       }`}
                     >
