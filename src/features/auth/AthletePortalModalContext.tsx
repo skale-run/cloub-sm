@@ -35,6 +35,7 @@ export function AthletePortalModalProvider({ children }: AthletePortalModalProvi
   return <AthletePortalModalContext.Provider value={value}>{children}</AthletePortalModalContext.Provider>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAthletePortalModal() {
   const context = useContext(AthletePortalModalContext)
 
