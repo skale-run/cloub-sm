@@ -54,7 +54,7 @@ function ProfileSection({
                 onChange={(event) => onProfileChange('fullName', event.target.value)}
                 placeholder="e.g. Lina Carter"
                 required
-                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-sky-400/60 focus:outline-none focus:ring-2 focus:ring-sky-400/40"
+                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-rose-400/60 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
               />
             </label>
             <label className="flex flex-col gap-2 text-sm">
@@ -63,7 +63,7 @@ function ProfileSection({
                 value={profileDraft.role}
                 onChange={(event) => onProfileChange('role', event.target.value)}
                 placeholder="Sprinter / Mid-distance"
-                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-sky-400/60 focus:outline-none focus:ring-2 focus:ring-sky-400/40"
+                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-rose-400/60 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
               />
             </label>
             <label className="flex flex-col gap-2 text-sm">
@@ -72,7 +72,7 @@ function ProfileSection({
                 value={profileDraft.squad}
                 onChange={(event) => onProfileChange('squad', event.target.value)}
                 placeholder="Elite Performance Squad"
-                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-sky-400/60 focus:outline-none focus:ring-2 focus:ring-sky-400/40"
+                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-rose-400/60 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
               />
             </label>
             <label className="flex flex-col gap-2 text-sm">
@@ -82,7 +82,7 @@ function ProfileSection({
                 value={profileDraft.email}
                 onChange={(event) => onProfileChange('email', event.target.value)}
                 placeholder="athlete@clubpulse.io"
-                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-sky-400/60 focus:outline-none focus:ring-2 focus:ring-sky-400/40"
+                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-rose-400/60 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
               />
             </label>
             <label className="flex flex-col gap-2 text-sm">
@@ -91,7 +91,7 @@ function ProfileSection({
                 value={profileDraft.emergencyContact}
                 onChange={(event) => onProfileChange('emergencyContact', event.target.value)}
                 placeholder="Jordan Carter · +44 7700 000000"
-                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-sky-400/60 focus:outline-none focus:ring-2 focus:ring-sky-400/40"
+                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-rose-400/60 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
               />
             </label>
             <label className="flex flex-col gap-2 text-sm">
@@ -101,7 +101,7 @@ function ProfileSection({
                 onChange={(event) => onProfileChange('membershipId', event.target.value)}
                 placeholder="CP-2025-184"
                 required
-                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-sky-400/60 focus:outline-none focus:ring-2 focus:ring-sky-400/40"
+                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-rose-400/60 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
               />
             </label>
           </div>
@@ -109,7 +109,7 @@ function ProfileSection({
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               type="submit"
-              className="inline-flex items-center justify-center rounded-2xl border border-sky-400/40 bg-sky-500/20 px-5 py-2.5 text-sm font-semibold text-sky-100 transition hover:border-sky-400/60 hover:bg-sky-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
+              className="inline-flex items-center justify-center rounded-2xl border border-rose-400/40 bg-rose-500/20 px-5 py-2.5 text-sm font-semibold text-rose-100 transition hover:border-rose-400/60 hover:bg-rose-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300"
             >
               Save profile
             </button>
@@ -130,7 +130,7 @@ function ProfileSection({
           </div>
 
           {statusMessage && (
-            <p className="mt-4 inline-flex rounded-2xl border border-sky-400/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-100">
+            <p className="mt-4 inline-flex rounded-2xl border border-rose-400/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-100">
               {statusMessage}
             </p>
           )}
@@ -147,12 +147,12 @@ function ProfileSection({
                 value={newAchievement}
                 onChange={(event) => onNewAchievementChange(event.target.value)}
                 placeholder="Add new highlight"
-                className="flex-1 rounded-xl border border-transparent bg-transparent px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-400/60 focus:outline-none focus:ring-2 focus:ring-sky-400/40"
+                className="flex-1 rounded-xl border border-transparent bg-transparent px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-rose-400/60 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
               />
               <button
                 type="button"
                 onClick={onAddAchievement}
-                className="inline-flex items-center justify-center rounded-xl bg-sky-500/20 px-4 py-2 text-sm font-semibold text-sky-100 transition hover:bg-sky-400/30 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
+                className="inline-flex items-center justify-center rounded-xl bg-rose-500/20 px-4 py-2 text-sm font-semibold text-rose-100 transition hover:bg-rose-400/30 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300"
               >
                 Add
               </button>

@@ -158,7 +158,7 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
       <div className="flex h-full flex-col gap-8 overflow-y-auto p-6">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500/30 via-sky-500/10 to-transparent text-sky-200">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500/30 via-rose-500/10 to-transparent text-rose-200">
               <Activity className="h-6 w-6" aria-hidden />
             </span>
             <div>
@@ -168,7 +168,7 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
           </div>
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 text-slate-300 transition hover:border-sky-500/50 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 text-slate-300 transition hover:border-rose-500/50 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400 lg:hidden"
             onClick={onToggleSidebar}
             aria-label="Close navigation"
           >
@@ -191,13 +191,13 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
                       href={item.to}
                       onClick={(event) => handleItemClick(event, item.to)}
                       aria-current={isActive ? 'page' : undefined}
-                      className={`group flex items-center gap-4 rounded-2xl border px-4 py-3 text-sm transition hover:border-sky-400/40 hover:bg-slate-900/60 hover:text-white ${
-                        isActive ? 'border-sky-400/60 bg-slate-900/70 text-white' : 'border-white/5 bg-white/5 text-slate-200'
+                      className={`group flex items-center gap-4 rounded-2xl border px-4 py-3 text-sm transition hover:border-rose-400/40 hover:bg-slate-900/60 hover:text-white ${
+                        isActive ? 'border-rose-400/60 bg-slate-900/70 text-white' : 'border-white/5 bg-white/5 text-slate-200'
                       }`}
                     >
                       <span
-                        className={`flex h-10 w-10 items-center justify-center rounded-2xl text-sky-200 transition-colors group-hover:bg-sky-500/15 ${
-                          isActive ? 'bg-sky-500/20 text-sky-100' : 'bg-slate-900/70'
+                        className={`flex h-10 w-10 items-center justify-center rounded-2xl text-rose-200 transition-colors group-hover:bg-rose-500/15 ${
+                          isActive ? 'bg-rose-500/20 text-rose-100' : 'bg-slate-900/70'
                         }`}
                       >
                         <item.Icon className="h-5 w-5" aria-hidden />
@@ -247,7 +247,7 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
               </div>
               <div className="flex flex-col gap-1">
                 <dt className="text-xs uppercase tracking-wide text-slate-400/80">ID</dt>
-                <dd className="font-medium tracking-wide text-sky-200">{savedProfile.membershipId}</dd>
+                <dd className="font-medium tracking-wide text-rose-200">{savedProfile.membershipId}</dd>
               </div>
             </dl>
           ) : (
@@ -259,7 +259,7 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
 
         <div className="mt-auto space-y-1 text-xs text-slate-400/80">
           <p>Season 2025 · Wave 2 Squad</p>
-          <p className="font-semibold text-sky-200">Next rest day: Sun, 20 Apr</p>
+          <p className="font-semibold text-rose-200">Next rest day: Sun, 20 Apr</p>
         </div>
       </div>
     </aside>

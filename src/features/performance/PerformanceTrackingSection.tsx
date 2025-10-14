@@ -61,7 +61,7 @@ function PerformanceTrackingSection(): ReactElement {
               <li key={item.phase} className="rounded-2xl border border-white/5 bg-white/5 p-4">
                 <p className="text-sm font-semibold text-white">{item.phase}</p>
                 <p className="mt-1 text-sm text-slate-300/90">{item.milestone}</p>
-                <p className="mt-2 text-xs uppercase tracking-[0.3em] text-sky-200/80">{item.status}</p>
+                <p className="mt-2 text-xs uppercase tracking-[0.3em] text-rose-200/80">{item.status}</p>
               </li>
             ))}
           </ul>
@@ -73,7 +73,7 @@ function PerformanceTrackingSection(): ReactElement {
             <span className="text-xs uppercase tracking-[0.3em] text-slate-400/70">{attendanceSummary.totalSessions} sessions</span>
           </div>
           <div className="flex flex-wrap items-center gap-4">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-sky-400/50 bg-slate-950 text-2xl font-semibold text-white">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-rose-400/50 bg-slate-950 text-2xl font-semibold text-white">
               {attendanceRate}%
             </div>
             <dl className="grid flex-1 gap-2 text-sm">
@@ -104,7 +104,7 @@ function PerformanceTrackingSection(): ReactElement {
             <div key={stat.label} className="rounded-2xl border border-white/5 bg-white/5 p-4">
               <p className="text-xs uppercase tracking-[0.3em] text-slate-400/70">{stat.label}</p>
               <p className="mt-2 text-xl font-semibold text-white">{stat.value}</p>
-              <p className="mt-1 text-xs uppercase tracking-[0.3em] text-sky-200/80">{stat.trend}</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.3em] text-rose-200/80">{stat.trend}</p>
             </div>
           ))}
         </div>
@@ -121,7 +121,7 @@ function PerformanceTrackingSection(): ReactElement {
               <li key={meet.event} className="rounded-2xl border border-white/5 bg-white/5 p-4">
                 <p className="text-sm font-semibold text-white">{meet.event}</p>
                 <p className="mt-1 text-sm text-slate-300/90">{meet.result}</p>
-                <p className="mt-1 text-xs uppercase tracking-[0.3em] text-sky-200/80">Placement · {meet.placing}</p>
+                <p className="mt-1 text-xs uppercase tracking-[0.3em] text-rose-200/80">Placement · {meet.placing}</p>
               </li>
             ))}
           </ul>

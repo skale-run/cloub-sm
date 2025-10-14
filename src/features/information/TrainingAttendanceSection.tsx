@@ -54,7 +54,7 @@ function TrainingAttendanceSection(): ReactElement {
             Weekly overview of confirmed check-ins and any notes from the staff desk.
           </p>
         </div>
-        <span className="inline-flex items-center gap-3 rounded-3xl border border-sky-400/30 bg-sky-500/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-sky-100">
+        <span className="inline-flex items-center gap-3 rounded-3xl border border-rose-400/30 bg-rose-500/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-rose-100">
           <span>Season rate</span>
           <span className="text-base font-semibold text-white">{attendanceRate}%</span>
         </span>
@@ -78,14 +78,14 @@ function TrainingAttendanceSection(): ReactElement {
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <p className="text-sm font-semibold text-white">{week.label}</p>
-                    <span className="text-xs uppercase tracking-[0.3em] text-sky-200/80">{weeklyRate}% attendance</span>
+                    <span className="text-xs uppercase tracking-[0.3em] text-rose-200/80">{weeklyRate}% attendance</span>
                   </div>
                   <p className="mt-2 text-sm text-slate-300/90">
                     {week.attendedSessions} of {week.plannedSessions} sessions · {week.highlight}
                   </p>
                   <div className="mt-3 h-2 rounded-full bg-slate-800/70">
                     <div
-                      className="h-full rounded-full bg-sky-400/60"
+                      className="h-full rounded-full bg-rose-400/60"
                       style={{ width: `${weeklyRate}%` }}
                       aria-hidden
                     />

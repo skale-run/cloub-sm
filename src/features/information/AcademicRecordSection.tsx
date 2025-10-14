@@ -34,7 +34,7 @@ function AcademicRecordSection(): ReactElement {
             Keep eligibility requirements aligned with your current semester planning.
           </p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-sky-100">
+        <span className="inline-flex items-center gap-2 rounded-full border border-rose-400/30 bg-rose-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-rose-100">
           18 / 24 credits
         </span>
       </div>
@@ -51,7 +51,7 @@ function AcademicRecordSection(): ReactElement {
             </div>
             <h3 className="text-lg font-semibold text-white">{module.title}</h3>
             <p className="text-sm text-slate-300/90">Status · {module.status}</p>
-            <p className="text-xs uppercase tracking-[0.3em] text-sky-200/80">
+            <p className="text-xs uppercase tracking-[0.3em] text-rose-200/80">
               Next evaluation · {module.nextEvaluation}
             </p>
           </article>

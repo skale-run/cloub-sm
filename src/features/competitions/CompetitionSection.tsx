@@ -8,8 +8,8 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
 })
 
 const levelColors: Record<'Regional' | 'National' | 'International', string> = {
-  Regional: 'from-emerald-500/30 to-emerald-400/40 text-emerald-100',
-  National: 'from-sky-500/30 to-sky-400/40 text-sky-100',
+  Regional: 'from-amber-500/30 to-amber-400/40 text-amber-100',
+  National: 'from-rose-500/30 to-rose-400/40 text-rose-100',
   International: 'from-fuchsia-500/30 to-fuchsia-400/40 text-fuchsia-100',
 }
 
@@ -30,7 +30,7 @@ function CompetitionSection(): ReactElement {
           <h2 className="text-xl font-semibold text-white sm:text-2xl">Competition Calendar</h2>
           <p className="text-sm text-slate-400/80">Visualise your travel blocks and prepare your race-day checklists.</p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-fuchsia-400/40 bg-fuchsia-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-fuchsia-100">
+        <span className="inline-flex items-center gap-2 rounded-full border border-rose-400/40 bg-rose-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-rose-100">
           Season Peak
         </span>
       </div>
@@ -38,7 +38,7 @@ function CompetitionSection(): ReactElement {
         {events.map((event) => (
           <article
             key={event.id}
-            className="group flex h-full flex-col justify-between rounded-3xl border border-white/5 bg-gradient-to-br from-slate-900/70 via-slate-900/50 to-slate-900/40 p-6 text-slate-200 shadow-[0_25px_60px_rgba(8,15,35,0.45)] transition hover:-translate-y-1 hover:border-fuchsia-400/40 hover:from-slate-900/80"
+            className="group flex h-full flex-col justify-between rounded-3xl border border-white/5 bg-gradient-to-br from-slate-900/70 via-slate-900/50 to-slate-900/40 p-6 text-slate-200 shadow-[0_25px_60px_rgba(8,15,35,0.45)] transition hover:-translate-y-1 hover:border-rose-400/45 hover:from-slate-900/80"
           >
             <div className="flex items-center justify-between">
               <span
@@ -57,7 +57,7 @@ function CompetitionSection(): ReactElement {
               <span className="text-xs uppercase tracking-[0.35em] text-slate-400/70">Logistics</span>
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-2xl border border-fuchsia-400/40 bg-fuchsia-500/10 px-4 py-2 text-sm font-semibold text-fuchsia-100 transition hover:border-fuchsia-400/60 hover:bg-fuchsia-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
+                className="inline-flex items-center justify-center rounded-2xl border border-rose-400/40 bg-rose-500/10 px-4 py-2 text-sm font-semibold text-rose-100 transition hover:border-rose-400/60 hover:bg-rose-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300"
               >
                 Travel briefing
               </button>

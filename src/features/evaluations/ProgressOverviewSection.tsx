@@ -26,7 +26,7 @@ function ProgressOverviewSection(): ReactElement {
           <h2 className="text-xl font-semibold text-white sm:text-2xl">Progress insight</h2>
           <p className="text-sm text-slate-400/80">Quarter-to-date progression towards the season performance targets.</p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-3xl border border-sky-400/30 bg-sky-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-sky-100">
+        <span className="inline-flex items-center gap-2 rounded-3xl border border-rose-400/30 bg-rose-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-rose-100">
           Ahead of plan
         </span>
       </div>
@@ -43,7 +43,7 @@ function ProgressOverviewSection(): ReactElement {
                 <div className="flex h-36 w-full items-end justify-center rounded-2xl border border-white/5 bg-white/5 p-2">
                   <div className="relative flex h-full w-6 flex-col justify-end">
                     <div
-                      className="rounded-t-lg bg-sky-400/60"
+                      className="rounded-t-lg bg-rose-400/60"
                       style={{ height: `${point.performance}%` }}
                       aria-hidden
                     />
