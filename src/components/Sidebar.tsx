@@ -156,7 +156,9 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
       }`}
       aria-label="Primary navigation"
     >
-      <div className="flex h-full flex-col gap-8 overflow-y-auto p-6">
+      <div
+        className="flex max-h-[calc(100vh-2.5rem)] flex-col gap-8 overflow-y-auto p-6 lg:max-h-[calc(100vh-5rem)]"
+      >
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
             <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500/30 via-red-500/10 to-transparent text-red-200">
