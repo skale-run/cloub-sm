@@ -66,6 +66,14 @@ export const ChevronUp = createLucideIcon(
   <polyline points="6 15 12 9 18 15" />,
 )
 
+export const ChevronLeft = createLucideIcon(
+  <polyline points="15 18 9 12 15 6" />,
+)
+
+export const ChevronRight = createLucideIcon(
+  <polyline points="9 18 15 12 9 6" />,
+)
+
 export const BarChart3 = createLucideIcon(
   <>
     <line x1="3" y1="22" x2="21" y2="22" />

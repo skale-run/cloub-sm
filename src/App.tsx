@@ -1,5 +1,6 @@
 import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Header from './components/Header'
 import RedSurface from './components/RedSurface'
 import Sidebar from './components/Sidebar'
@@ -17,8 +18,19 @@ import ProfileSection from './features/profile/ProfileSection'
 import { emptyProfile, type Profile } from './features/profile/profileTypes'
 import { normalizePath, type RoutePath } from './routes'
 
+const DESKTOP_BREAKPOINT = '(min-width: 1024px)'
+
+const getIsDesktop = () => {
+  if (typeof window === 'undefined') {
+    return false
+  }
+
+  return window.matchMedia(DESKTOP_BREAKPOINT).matches
+}
+
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(getIsDesktop)
+  const [sidebarOpen, setSidebarOpen] = useState(getIsDesktop)
   const [profileDraft, setProfileDraft] = useState<Profile>(emptyProfile)
   const [savedProfile, setSavedProfile] = useState<Profile | null>(null)
   const [achievements, setAchievements] = useState<string[]>([
@@ -72,8 +84,40 @@ function App() {
     setCurrentPath(normalized)
   }
 
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const mediaQuery = window.matchMedia(DESKTOP_BREAKPOINT)
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsDesktop(event.matches)
+      if (event.matches) {
+        setSidebarOpen(true)
+      } else {
+        setSidebarOpen(false)
+      }
+    }
+
+    setIsDesktop(mediaQuery.matches)
+    setSidebarOpen(mediaQuery.matches)
+
+    mediaQuery.addEventListener('change', handleChange)
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange)
+    }
+  }, [])
+
   const toggleSidebar = () => setSidebarOpen((open) => !open)
-  const handleSidebarNavigate = () => setSidebarOpen(false)
+  const handleSidebarNavigate = () => {
+    if (isDesktop) {
+      return
+    }
+
+    setSidebarOpen(false)
+  }
 
   useEffect(() => {
     if (!sidebarOpen) {
@@ -139,8 +183,12 @@ function App() {
 
   return (
     <>
-      <div className="relative min-h-screen overflow-x-hidden text-red-100">
-        {sidebarOpen ? (
+      <div
+        className={`relative min-h-screen overflow-x-hidden text-red-100 transition-[padding-left] duration-300 ease-out ${
+          sidebarOpen && isDesktop ? 'lg:pl-80' : 'lg:pl-0'
+        }`}
+      >
+        {sidebarOpen && !isDesktop ? (
           <button
             type="button"
             aria-label="Close navigation"
@@ -149,7 +197,26 @@ function App() {
           />
         ) : null}
 
-        <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-3 py-5 sm:px-6 sm:py-6 lg:flex-row lg:items-start lg:gap-8 lg:px-10 lg:py-10">
+        {isDesktop ? (
+          <button
+            type="button"
+            onClick={toggleSidebar}
+            aria-label={`${sidebarOpen ? 'Collapse' : 'Expand'} navigation`}
+            aria-controls="app-sidebar"
+            aria-expanded={sidebarOpen}
+            className={`fixed top-6 z-50 hidden h-12 w-12 items-center justify-center rounded-r-2xl border border-red-500/40 bg-red-950/80 text-red-100 shadow-[0_15px_35px_rgba(127,29,29,0.35)] transition hover:border-red-400/70 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 lg:flex ${
+              sidebarOpen ? 'left-80' : 'left-0'
+            }`}
+          >
+            {sidebarOpen ? (
+              <ChevronLeft aria-hidden className="h-5 w-5" />
+            ) : (
+              <ChevronRight aria-hidden className="h-5 w-5" />
+            )}
+          </button>
+        ) : null}
+
+        <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-3 py-5 sm:px-6 sm:py-6 lg:items-start lg:gap-8 lg:px-10 lg:py-10">
           <Sidebar
             open={sidebarOpen}
             onToggleSidebar={toggleSidebar}
