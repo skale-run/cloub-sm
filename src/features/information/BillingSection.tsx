@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react'
 import RedSurface from '../../components/RedSurface'
+import { CalendarDays, CreditCard } from '../../lucide-react'
 
 const invoices = [
   {
@@ -25,9 +26,70 @@ const invoices = [
   },
 ]
 
+const summaryCards = [
+  {
+    id: 'balance',
+    label: 'Outstanding balance',
+    value: '$180.00',
+    helper: 'Due Apr 25, 2025',
+    tone: 'border-amber-400/40 bg-amber-500/10 text-amber-100',
+  },
+  {
+    id: 'autopay',
+    label: 'Next auto-pay',
+    value: 'May 01, 2025',
+    helper: 'Spring membership dues',
+    tone: 'border-red-400/45 bg-red-500/15 text-red-100',
+  },
+  {
+    id: 'last-payment',
+    label: 'Last payment received',
+    value: '$60.00',
+    helper: 'Posted Mar 18, 2025',
+    tone: 'border-red-400/25 bg-red-500/10 text-red-50',
+  },
+]
+
+const upcomingCharges = [
+  {
+    id: 'charge-1',
+    label: 'Team physiotherapy block',
+    date: 'May 08, 2025',
+    amount: '$45.00',
+  },
+  {
+    id: 'charge-2',
+    label: 'Facility upgrade levy',
+    date: 'Jun 12, 2025',
+    amount: '$25.00',
+  },
+  {
+    id: 'charge-3',
+    label: 'Summer travel fund',
+    date: 'Jul 01, 2025',
+    amount: '$90.00',
+  },
+]
+
+const paymentMethods = [
+  {
+    id: 'card',
+    label: 'Primary payment method',
+    detail: 'Visa •••• 4298',
+    expires: 'Exp. 08/27',
+    status: 'Auto-pay enabled',
+  },
+  {
+    id: 'backup',
+    label: 'Backup payment method',
+    detail: 'Checking · First Peninsula Bank',
+    status: 'Used for overdue balances',
+  },
+]
+
 function BillingSection(): ReactElement {
   return (
-    <section id="billing" className="space-y-6">
+    <section id="billing" className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">Billing overview</h2>
@@ -41,61 +103,141 @@ function BillingSection(): ReactElement {
         </div>
       </div>
 
-      <RedSurface tone="muted" className="space-y-4 p-6">
-        <header className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">Auto-pay</p>
-            <p className="text-sm text-red-100/80">Enabled for monthly subscriptions</p>
-          </div>
-          <button
-            type="button"
-            className="inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-500/20 px-4 py-2 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {summaryCards.map((card) => (
+          <div
+            key={card.id}
+            className={`flex flex-col gap-1 rounded-2xl border px-5 py-4 ${card.tone}`}
           >
-            Update payment method
-          </button>
-        </header>
+            <span className="text-xs uppercase tracking-[0.32em] text-red-200/70">{card.label}</span>
+            <span className="text-2xl font-semibold text-red-50">{card.value}</span>
+            <span className="text-sm text-red-100/80">{card.helper}</span>
+          </div>
+        ))}
+      </div>
 
-        <div className="overflow-hidden rounded-2xl border border-red-500/25">
-          <table className="min-w-full divide-y divide-red-500/20 text-left text-sm text-red-50">
-            <thead className="bg-red-950/40 text-xs uppercase tracking-[0.3em] text-red-200/70">
-              <tr>
-                <th scope="col" className="px-4 py-3 font-semibold">
-                  Invoice
-                </th>
-                <th scope="col" className="px-4 py-3 font-semibold">
-                  Due date
-                </th>
-                <th scope="col" className="px-4 py-3 font-semibold">
-                  Amount
-                </th>
-                <th scope="col" className="px-4 py-3 font-semibold">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-red-500/15 bg-red-950/35">
-              {invoices.map((invoice) => (
-                <tr key={invoice.id}>
-                  <td className="px-4 py-3 font-semibold text-red-50">{invoice.label}</td>
-                  <td className="px-4 py-3 text-red-100/80">{invoice.dueDate}</td>
-                  <td className="px-4 py-3 font-medium text-red-100">{invoice.amount}</td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${
-                        invoice.status === 'Paid'
-                          ? 'border-red-400/40 bg-red-500/15 text-red-100'
-                          : 'border-amber-400/40 bg-amber-500/15 text-amber-100'
-                      }`}
-                    >
-                      {invoice.status}
-                    </span>
-                  </td>
+      <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+        <RedSurface tone="muted" className="space-y-6 p-6">
+          <header className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">Invoices</p>
+              <p className="text-sm text-red-100/80">Statement history for the past 6 months</p>
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                className="inline-flex items-center justify-center rounded-2xl border border-red-400/35 bg-red-500/15 px-4 py-2 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              >
+                Download statement
+              </button>
+              <button
+                type="button"
+                className="inline-flex items-center justify-center rounded-2xl border border-red-400/25 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-100 transition hover:border-red-400/45 hover:bg-red-400/20 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              >
+                Send receipt
+              </button>
+            </div>
+          </header>
+
+          <div className="overflow-hidden rounded-2xl border border-red-500/25">
+            <table className="min-w-full divide-y divide-red-500/20 text-left text-sm text-red-50">
+              <thead className="bg-red-950/40 text-xs uppercase tracking-[0.3em] text-red-200/70">
+                <tr>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    Invoice
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    Due date
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    Amount
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    Status
+                  </th>
                 </tr>
+              </thead>
+              <tbody className="divide-y divide-red-500/15 bg-red-950/35">
+                {invoices.map((invoice) => (
+                  <tr key={invoice.id}>
+                    <td className="px-4 py-3 font-semibold text-red-50">{invoice.label}</td>
+                    <td className="px-4 py-3 text-red-100/80">{invoice.dueDate}</td>
+                    <td className="px-4 py-3 font-medium text-red-100">{invoice.amount}</td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${
+                          invoice.status === 'Paid'
+                            ? 'border-red-400/40 bg-red-500/15 text-red-100'
+                            : 'border-amber-400/40 bg-amber-500/15 text-amber-100'
+                        }`}
+                      >
+                        {invoice.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </RedSurface>
+
+        <div className="space-y-6">
+          <RedSurface tone="muted" className="space-y-5 p-6">
+            <header className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">Auto-pay</p>
+                <p className="text-sm text-red-100/80">Enabled for monthly subscriptions</p>
+              </div>
+              <button
+                type="button"
+                className="inline-flex items-center justify-center rounded-2xl border border-red-400/35 bg-red-500/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-red-100 transition hover:border-red-400/55 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              >
+                Manage
+              </button>
+            </header>
+
+            <div className="space-y-3">
+              {paymentMethods.map((method) => (
+                <div key={method.id} className="flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-950/35 p-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-red-500/30 bg-red-500/15 text-red-100">
+                    <CreditCard size={18} />
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm font-semibold text-red-50">{method.label}</p>
+                    <p className="text-sm text-red-100/80">{method.detail}</p>
+                    {method.expires ? (
+                      <p className="text-xs uppercase tracking-[0.28em] text-red-200/70">{method.expires}</p>
+                    ) : null}
+                    <p className="text-xs text-red-200/70">{method.status}</p>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </RedSurface>
+
+          <RedSurface tone="muted" className="space-y-5 p-6">
+            <header className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">Upcoming charges</p>
+                <p className="text-sm text-red-100/80">Automatically scheduled through the season</p>
+              </div>
+              <CalendarDays className="text-red-200/70" size={20} />
+            </header>
+
+            <ul className="space-y-4">
+              {upcomingCharges.map((charge) => (
+                <li key={charge.id} className="flex items-center justify-between gap-3 rounded-2xl border border-red-500/20 bg-red-950/40 px-4 py-3">
+                  <div>
+                    <p className="text-sm font-semibold text-red-50">{charge.label}</p>
+                    <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">{charge.date}</p>
+                  </div>
+                  <span className="text-sm font-semibold text-red-100">{charge.amount}</span>
+                </li>
+              ))}
+            </ul>
+          </RedSurface>
         </div>
-      </RedSurface>
+      </div>
     </section>
   )
 }
