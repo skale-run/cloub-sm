@@ -10,7 +10,7 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
 
 const levelColors: Record<'Regional' | 'National' | 'International', string> = {
   Regional: 'from-amber-500/30 to-amber-400/40 text-amber-100',
-  National: 'from-rose-500/30 to-rose-400/40 text-rose-100',
+  National: 'from-red-500/30 to-red-400/40 text-red-100',
   International: 'from-fuchsia-500/30 to-fuchsia-400/40 text-fuchsia-100',
 }
 
@@ -28,10 +28,10 @@ function CompetitionSection(): ReactElement {
     <section id="competitions" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-rose-50 sm:text-2xl">Competition Calendar</h2>
-          <p className="text-sm text-rose-200/75">Visualise your travel blocks and prepare your race-day checklists.</p>
+          <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">Competition Calendar</h2>
+          <p className="text-sm text-red-200/75">Visualise your travel blocks and prepare your race-day checklists.</p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-rose-400/40 bg-rose-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-rose-100">
+        <span className="inline-flex items-center gap-2 rounded-full border border-red-400/40 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
           Season Peak
         </span>
       </div>
@@ -41,7 +41,7 @@ function CompetitionSection(): ReactElement {
             key={event.id}
             as="article"
             tone="muted"
-            className="group flex h-full flex-col justify-between rounded-3xl p-6 text-rose-50 shadow-[0_25px_60px_rgba(136,19,55,0.4)] transition hover:-translate-y-1 hover:border-rose-400/45 hover:bg-rose-950/65"
+            className="group flex h-full flex-col justify-between rounded-3xl p-6 text-red-50 shadow-[0_25px_60px_rgba(127,29,29,0.4)] transition hover:-translate-y-1 hover:border-red-400/45 hover:bg-red-950/65"
           >
             <div className="flex items-center justify-between">
               <span
@@ -49,18 +49,18 @@ function CompetitionSection(): ReactElement {
               >
                 {event.level}
               </span>
-              <span className="text-xs uppercase tracking-wide text-rose-200/70">Check-in {event.checkIn}</span>
+              <span className="text-xs uppercase tracking-wide text-red-200/70">Check-in {event.checkIn}</span>
             </div>
             <div className="mt-4 space-y-3">
-              <h3 className="text-lg font-semibold text-rose-50">{event.title}</h3>
-              <p className="text-sm text-rose-100/80">{event.dateLabel}</p>
-              <p className="text-sm text-rose-200/75">{event.location}</p>
+              <h3 className="text-lg font-semibold text-red-50">{event.title}</h3>
+              <p className="text-sm text-red-100/80">{event.dateLabel}</p>
+              <p className="text-sm text-red-200/75">{event.location}</p>
             </div>
             <div className="mt-6 flex items-center justify-between gap-3">
-              <span className="text-xs uppercase tracking-[0.35em] text-rose-200/70">Logistics</span>
+              <span className="text-xs uppercase tracking-[0.35em] text-red-200/70">Logistics</span>
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-2xl border border-rose-400/40 bg-rose-500/10 px-4 py-2 text-sm font-semibold text-rose-100 transition hover:border-rose-400/60 hover:bg-rose-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300"
+                className="inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
               >
                 Travel briefing
               </button>

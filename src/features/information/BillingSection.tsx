@@ -30,34 +30,34 @@ function BillingSection(): ReactElement {
     <section id="billing" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-rose-50 sm:text-2xl">Billing overview</h2>
-          <p className="text-sm text-rose-200/75">
+          <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">Billing overview</h2>
+          <p className="text-sm text-red-200/75">
             Keep track of recurring fees, add-ons and outstanding balances in one place.
           </p>
         </div>
-        <div className="flex items-center gap-3 rounded-3xl border border-rose-400/45 bg-rose-500/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-rose-100">
+        <div className="flex items-center gap-3 rounded-3xl border border-red-400/45 bg-red-500/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-red-100">
           <span>Balance</span>
-          <span className="text-sm font-semibold text-rose-50">$180.00</span>
+          <span className="text-sm font-semibold text-red-50">$180.00</span>
         </div>
       </div>
 
       <RedSurface tone="muted" className="space-y-4 p-6">
         <header className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-rose-200/70">Auto-pay</p>
-            <p className="text-sm text-rose-100/80">Enabled for monthly subscriptions</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">Auto-pay</p>
+            <p className="text-sm text-red-100/80">Enabled for monthly subscriptions</p>
           </div>
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-2xl border border-rose-400/40 bg-rose-500/20 px-4 py-2 text-sm font-semibold text-rose-100 transition hover:border-rose-400/60 hover:bg-rose-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300"
+            className="inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-500/20 px-4 py-2 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
           >
             Update payment method
           </button>
         </header>
 
-        <div className="overflow-hidden rounded-2xl border border-rose-500/25">
-          <table className="min-w-full divide-y divide-rose-500/20 text-left text-sm text-rose-50">
-            <thead className="bg-rose-950/40 text-xs uppercase tracking-[0.3em] text-rose-200/70">
+        <div className="overflow-hidden rounded-2xl border border-red-500/25">
+          <table className="min-w-full divide-y divide-red-500/20 text-left text-sm text-red-50">
+            <thead className="bg-red-950/40 text-xs uppercase tracking-[0.3em] text-red-200/70">
               <tr>
                 <th scope="col" className="px-4 py-3 font-semibold">
                   Invoice
@@ -73,17 +73,17 @@ function BillingSection(): ReactElement {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-rose-500/15 bg-rose-950/35">
+            <tbody className="divide-y divide-red-500/15 bg-red-950/35">
               {invoices.map((invoice) => (
                 <tr key={invoice.id}>
-                  <td className="px-4 py-3 font-semibold text-rose-50">{invoice.label}</td>
-                  <td className="px-4 py-3 text-rose-100/80">{invoice.dueDate}</td>
-                  <td className="px-4 py-3 font-medium text-rose-100">{invoice.amount}</td>
+                  <td className="px-4 py-3 font-semibold text-red-50">{invoice.label}</td>
+                  <td className="px-4 py-3 text-red-100/80">{invoice.dueDate}</td>
+                  <td className="px-4 py-3 font-medium text-red-100">{invoice.amount}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${
                         invoice.status === 'Paid'
-                          ? 'border-rose-400/40 bg-rose-500/15 text-rose-100'
+                          ? 'border-red-400/40 bg-red-500/15 text-red-100'
                           : 'border-amber-400/40 bg-amber-500/15 text-amber-100'
                       }`}
                     >

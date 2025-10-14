@@ -32,10 +32,10 @@ function TrainingSection(): ReactElement {
     <section id="training" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-rose-50 sm:text-2xl">Training Session Calendar</h2>
-          <p className="text-sm text-rose-200/75">Stay aligned with the squad and confirm your availability early.</p>
+          <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">Training Session Calendar</h2>
+          <p className="text-sm text-red-200/75">Stay aligned with the squad and confirm your availability early.</p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-rose-400/30 bg-rose-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-rose-100">
+        <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
           Week 16
         </span>
       </div>
@@ -45,25 +45,25 @@ function TrainingSection(): ReactElement {
             key={session.id}
             as="article"
             tone="muted"
-            className="group relative flex h-full flex-col justify-between rounded-3xl p-6 text-rose-50 shadow-[0_20px_50px_rgba(136,19,55,0.4)] transition hover:-translate-y-1 hover:border-rose-400/45 hover:bg-rose-950/65"
+            className="group relative flex h-full flex-col justify-between rounded-3xl p-6 text-red-50 shadow-[0_20px_50px_rgba(127,29,29,0.4)] transition hover:-translate-y-1 hover:border-red-400/45 hover:bg-red-950/65"
           >
-            <div className="flex items-start justify-between text-xs uppercase tracking-wide text-rose-200/70">
+            <div className="flex items-start justify-between text-xs uppercase tracking-wide text-red-200/70">
               <span>{session.dateLabel}</span>
               <span>{session.timeLabel}</span>
             </div>
             <div className="mt-4 space-y-3">
-              <h3 className="text-lg font-semibold text-rose-50">{session.title}</h3>
-              <p className="text-sm text-rose-100/80">{session.location}</p>
-              <p className="text-sm text-rose-200/75">Lead · {session.coach}</p>
+              <h3 className="text-lg font-semibold text-red-50">{session.title}</h3>
+              <p className="text-sm text-red-100/80">{session.location}</p>
+              <p className="text-sm text-red-200/75">Lead · {session.coach}</p>
             </div>
             <button
               type="button"
-              className="mt-6 inline-flex items-center justify-center rounded-2xl border border-rose-400/40 bg-rose-500/20 px-4 py-2 text-sm font-semibold text-rose-100 transition hover:border-rose-400/60 hover:bg-rose-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300"
+              className="mt-6 inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-500/20 px-4 py-2 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
             >
               Confirm availability
             </button>
             <div
-              className="pointer-events-none absolute inset-x-6 bottom-6 -z-10 h-24 rounded-[40px] bg-rose-500/10 opacity-70 blur-3xl transition-opacity group-hover:opacity-100"
+              className="pointer-events-none absolute inset-x-6 bottom-6 -z-10 h-24 rounded-[40px] bg-red-500/10 opacity-70 blur-3xl transition-opacity group-hover:opacity-100"
               aria-hidden
             />
           </RedSurface>
