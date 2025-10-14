@@ -1,19 +1,35 @@
-import type { ReactElement } from "react";
+import { useMemo, type ReactElement } from "react";
+import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import { trainingCalendarEvents } from "../calendar/calendarEvents";
 
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-});
-
-const timeFormatter = new Intl.DateTimeFormat("en-US", {
-  hour: "numeric",
-  minute: "2-digit",
-});
-
 function TrainingSection(): ReactElement {
+  const { t, i18n } = useTranslation();
+
+  const dateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(i18n.language, {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      }),
+    [i18n.language],
+  );
+
+  const timeFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(i18n.language, {
+        hour: "numeric",
+        minute: "2-digit",
+      }),
+    [i18n.language],
+  );
+
+  const weekNumber = 16;
+  const weekLabel = t("training.weekLabel", {
+    week: new Intl.NumberFormat(i18n.language).format(weekNumber),
+  });
+
   const sessions = trainingCalendarEvents.map((session) => {
     const start = new Date(session.start);
     const end = new Date(session.end);
@@ -33,14 +49,14 @@ function TrainingSection(): ReactElement {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
-            Training Session Calendar
+            {t("training.title")}
           </h2>
           <p className="text-sm text-red-200/75">
-            Stay aligned with the squad and confirm your availability early.
+            {t("training.description")}
           </p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
-          Week 16
+          {weekLabel}
         </span>
       </div>
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -60,13 +76,15 @@ function TrainingSection(): ReactElement {
                 {session.title}
               </h3>
               <p className="text-sm text-red-100/80">{session.location}</p>
-              <p className="text-sm text-red-200/75">Lead · {session.coach}</p>
+              <p className="text-sm text-red-200/75">
+                {t("training.lead", { coach: session.coach })}
+              </p>
             </div>
             <button
               type="button"
               className="mt-6 inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-500/20 px-4 py-2 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
             >
-              Confirm availability
+              {t("training.confirmAvailability")}
             </button>
             <div
               className="pointer-events-none absolute inset-x-6 bottom-6 -z-10 h-24 rounded-[40px] bg-red-500/10 opacity-70 blur-3xl transition-opacity group-hover:opacity-100"
