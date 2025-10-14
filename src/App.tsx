@@ -1,3 +1,4 @@
+import { X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import './App.css'
@@ -406,7 +407,7 @@ function App() {
                       <li key={item}>
                         <span>{item}</span>
                         <button type="button" onClick={() => handleRemoveAchievement(index)} aria-label="Remove">
-                          ×
+                          <X aria-hidden className="achievements__remove-icon" />
                         </button>
                       </li>
                     ))}
