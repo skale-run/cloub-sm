@@ -5,9 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build --outDir run",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build": "rm -rf dist run/assets run/index.html && vite build",
+    "preview": "vite preview",
+    "lint": "npm run lint:js && npm run lint:styles",
+    "lint:js": "eslint src --ext .js,.jsx --max-warnings=0",
+    "lint:js:fix": "npm run lint:js -- --fix",
+    "lint:styles": "stylelint \"src/**/*.{css,scss}\"",
+    "lint:styles:fix": "npm run lint:styles -- --fix",
+    "format": "prettier . --check",
+    "format:fix": "prettier . --write"
   },
   "dependencies": {
     "react": "^19.1.1",
