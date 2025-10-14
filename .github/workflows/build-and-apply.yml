@@ -34,11 +34,11 @@ jobs:
           node-version: 20
 
       - name: Install app dependencies
-        working-directory: ./app
+        working-directory: ./
         run: npm install
 
       - name: Build web app
-        working-directory: ./app
+        working-directory: ./
         run: npm run build
 
       - name: Set up QEMU
