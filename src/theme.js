@@ -158,16 +158,16 @@ const colorRamps = {
     900: '#881337',
   },
   accent: {
-    50: '#ECFEFF',
-    100: '#CFFAFE',
-    200: '#A5F3FC',
-    300: '#67E8F9',
-    400: '#22D3EE',
-    500: '#06B6D4',
-    600: '#0891B2',
-    700: '#0E7490',
-    800: '#155E75',
-    900: '#164E63',
+    50: '#FDF2F8',
+    100: '#FCE7F3',
+    200: '#FBCFE8',
+    300: '#F9A8D4',
+    400: '#F472B6',
+    500: '#EC4899',
+    600: '#DB2777',
+    700: '#BE185D',
+    800: '#9D174D',
+    900: '#831843',
   },
   neutral: {
     50: '#F8FAFC',
@@ -346,15 +346,15 @@ const componentButtonTokensLight = {
       spinner: 'rgba(148, 163, 184, 0.6)',
     },
     accent: {
-      bg: 'rgba(6, 182, 212, 0.16)',
+      bg: 'rgba(236, 72, 153, 0.16)',
       fg: lightTheme.accent,
-      border: 'rgba(6, 182, 212, 0.42)',
-      hoverBg: 'rgba(6, 182, 212, 0.22)',
+      border: 'rgba(236, 72, 153, 0.42)',
+      hoverBg: 'rgba(236, 72, 153, 0.22)',
       hoverFg: lightTheme.accent,
-      hoverBorder: 'rgba(6, 182, 212, 0.55)',
+      hoverBorder: 'rgba(236, 72, 153, 0.55)',
       shadow: 'none',
       hoverShadow: 'none',
-      spinner: 'rgba(6, 182, 212, 0.82)',
+      spinner: 'rgba(236, 72, 153, 0.82)',
     },
     info: {
       bg: 'rgba(14, 165, 233, 0.16)',
@@ -472,15 +472,15 @@ const componentButtonTokensDark = {
       spinner: 'rgba(148, 163, 184, 0.55)',
     },
     accent: {
-      bg: 'rgba(6, 182, 212, 0.18)',
+      bg: 'rgba(236, 72, 153, 0.18)',
       fg: darkTheme.accent,
-      border: 'rgba(6, 182, 212, 0.45)',
-      hoverBg: 'rgba(6, 182, 212, 0.24)',
+      border: 'rgba(236, 72, 153, 0.45)',
+      hoverBg: 'rgba(236, 72, 153, 0.24)',
       hoverFg: darkTheme.accent,
-      hoverBorder: 'rgba(6, 182, 212, 0.58)',
+      hoverBorder: 'rgba(236, 72, 153, 0.58)',
       shadow: 'none',
       hoverShadow: 'none',
-      spinner: 'rgba(34, 211, 238, 0.82)',
+      spinner: 'rgba(244, 114, 182, 0.82)',
     },
     info: {
       bg: 'rgba(14, 165, 233, 0.2)',
@@ -566,8 +566,8 @@ const componentBadgeTokensLight = {
   },
   accent: {
     soft: {
-      bg: 'rgba(6, 182, 212, 0.12)',
-      border: 'rgba(6, 182, 212, 0.32)',
+      bg: 'rgba(236, 72, 153, 0.12)',
+      border: 'rgba(236, 72, 153, 0.32)',
       fg: lightTheme.accent,
     },
     solid: {
@@ -577,7 +577,7 @@ const componentBadgeTokensLight = {
     },
     outline: {
       bg: 'transparent',
-      border: 'rgba(6, 182, 212, 0.45)',
+      border: 'rgba(236, 72, 153, 0.45)',
       fg: lightTheme.accent,
     },
   },
@@ -688,8 +688,8 @@ const componentBadgeTokensDark = {
   },
   accent: {
     soft: {
-      bg: 'rgba(6, 182, 212, 0.14)',
-      border: 'rgba(6, 182, 212, 0.35)',
+      bg: 'rgba(236, 72, 153, 0.14)',
+      border: 'rgba(236, 72, 153, 0.35)',
       fg: darkTheme.accent,
     },
     solid: {
@@ -699,7 +699,7 @@ const componentBadgeTokensDark = {
     },
     outline: {
       bg: 'transparent',
-      border: 'rgba(6, 182, 212, 0.45)',
+      border: 'rgba(236, 72, 153, 0.45)',
       fg: darkTheme.accent,
     },
   },
