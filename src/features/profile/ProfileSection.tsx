@@ -126,9 +126,10 @@ function ProfileSection({
         return;
       }
 
-      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+      const MAX_FILE_SIZE_MB = 3.5;
+      const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024; // Keep base64 under ~5 MB localStorage limit
       if (file.size > MAX_FILE_SIZE) {
-        setUploadError("Please choose an image smaller than 5MB.");
+        setUploadError(`Please choose an image smaller than ${MAX_FILE_SIZE_MB}MB.`);
         return;
       }
 
