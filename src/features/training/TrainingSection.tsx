@@ -1,42 +1,32 @@
 import type { ReactElement } from 'react'
+import { trainingCalendarEvents } from '../calendar/calendarEvents'
 
-type TrainingSession = {
-  id: string
-  title: string
-  coach: string
-  location: string
-  date: string
-  time: string
-}
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  weekday: 'short',
+  day: 'numeric',
+  month: 'short',
+})
 
-const trainingSessions: TrainingSession[] = [
-  {
-    id: 'ts-1',
-    title: 'Explosive Strength & Plyometrics',
-    coach: 'Coach Amara Lewis',
-    location: 'Arena Studio 2',
-    date: 'Mon, 14 Apr',
-    time: '06:30 - 08:00',
-  },
-  {
-    id: 'ts-2',
-    title: 'Technical Drills & Recovery',
-    coach: 'Coach Hugo Martín',
-    location: 'Track 1',
-    date: 'Wed, 16 Apr',
-    time: '18:00 - 20:00',
-  },
-  {
-    id: 'ts-3',
-    title: 'Video Review & Strategy Lab',
-    coach: 'Analyst Team',
-    location: 'HQ Briefing Room',
-    date: 'Fri, 18 Apr',
-    time: '11:00 - 12:30',
-  },
-]
+const timeFormatter = new Intl.DateTimeFormat('en-US', {
+  hour: 'numeric',
+  minute: '2-digit',
+})
 
 function TrainingSection(): ReactElement {
+  const sessions = trainingCalendarEvents.map((session) => {
+    const start = new Date(session.start)
+    const end = new Date(session.end)
+
+    return {
+      id: session.id,
+      title: session.title,
+      coach: session.coach,
+      location: session.location,
+      dateLabel: dateFormatter.format(start),
+      timeLabel: `${timeFormatter.format(start)} – ${timeFormatter.format(end)}`,
+    }
+  })
+
   return (
     <section id="training" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -49,14 +39,14 @@ function TrainingSection(): ReactElement {
         </span>
       </div>
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {trainingSessions.map((session) => (
+        {sessions.map((session) => (
           <article
             key={session.id}
             className="group relative flex h-full flex-col justify-between rounded-3xl border border-white/5 bg-slate-900/60 p-6 text-slate-200 shadow-[0_20px_50px_rgba(8,15,35,0.45)] transition hover:-translate-y-1 hover:border-sky-400/40 hover:bg-slate-900/70"
           >
             <div className="flex items-start justify-between text-xs uppercase tracking-wide text-slate-400/70">
-              <span>{session.date}</span>
-              <span>{session.time}</span>
+              <span>{session.dateLabel}</span>
+              <span>{session.timeLabel}</span>
             </div>
             <div className="mt-4 space-y-3">
               <h3 className="text-lg font-semibold text-white">{session.title}</h3>

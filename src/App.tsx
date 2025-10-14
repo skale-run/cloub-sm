@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
 import AccessSection from './features/access/AccessSection'
+import CalendarSection from './features/calendar/CalendarSection'
 import CompetitionSection from './features/competitions/CompetitionSection'
 import PerformanceSection from './features/performance/PerformanceSection'
 import ProfileSection from './features/profile/ProfileSection'
@@ -88,6 +89,7 @@ function App() {
           <Header isSidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} savedProfile={savedProfile} />
 
           <main className="relative z-0 flex-1 space-y-12 px-4 pb-16 pt-6 sm:px-8 lg:px-12">
+            <CalendarSection />
             <TrainingSection />
             <CompetitionSection />
             <PerformanceSection />
