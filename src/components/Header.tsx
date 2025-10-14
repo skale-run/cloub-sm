@@ -107,3 +107,4 @@ function Header({ isSidebarOpen, onToggleSidebar, savedProfile, onOpenAthletePor
 }
 
 export default Header
+
