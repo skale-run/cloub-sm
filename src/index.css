@@ -10,21 +10,21 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #130104;
+  background-color: #120108;
   background-image:
-    radial-gradient(1180px 560px at 12% -10%, rgba(237, 60, 108, 0.28), transparent 68%),
-    radial-gradient(980px 600px at 86% -8%, rgba(210, 30, 85, 0.24), transparent 72%),
-    linear-gradient(180deg, #130104 0%, #1c0509 42%, #2c080f 100%);
-  color: rgb(255 232 238);
-  accent-color: #d21e55;
+    radial-gradient(1280px 560px at 12% -12%, rgba(235, 58, 123, 0.34), transparent 68%),
+    radial-gradient(1040px 620px at 88% -10%, rgba(207, 31, 95, 0.28), transparent 72%),
+    linear-gradient(180deg, #120108 0%, #1a040c 38%, #280712 100%);
+  color: rgb(255 226 234);
+  accent-color: #cf1f5f;
   -webkit-font-smoothing: antialiased;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: rgba(237, 60, 108, 0.48);
-  color: #fff7fa;
+  background: rgba(235, 58, 123, 0.56);
+  color: #fff5f8;
 }
 
 a {

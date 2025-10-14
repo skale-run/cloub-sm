@@ -13,125 +13,125 @@
       "primary": {
         "50": {
           "$type": "color",
-          "$value": "#FFF1F4"
+          "$value": "#FFF2F6"
         },
         "100": {
           "$type": "color",
-          "$value": "#FFE2E9"
+          "$value": "#FFE1EA"
         },
         "200": {
           "$type": "color",
-          "$value": "#FFC0D4"
+          "$value": "#FFC0D6"
         },
         "300": {
           "$type": "color",
-          "$value": "#FF95B6"
+          "$value": "#FF95BA"
         },
         "400": {
           "$type": "color",
-          "$value": "#F86995"
+          "$value": "#F8679B"
         },
         "500": {
           "$type": "color",
-          "$value": "#ED3C72"
+          "$value": "#EB3A7B"
         },
         "600": {
           "$type": "color",
-          "$value": "#D21E55"
+          "$value": "#CF1F5F"
         },
         "700": {
           "$type": "color",
-          "$value": "#AD1544"
+          "$value": "#A71549"
         },
         "800": {
           "$type": "color",
-          "$value": "#870F34"
+          "$value": "#7F0E35"
         },
         "900": {
           "$type": "color",
-          "$value": "#5A0A23"
+          "$value": "#4F0620"
         },
         "$description": "Brand reds used for primary actions and key highlights."
       },
       "accent": {
         "50": {
           "$type": "color",
-          "$value": "#FFF4F6"
+          "$value": "#FFF4F8"
         },
         "100": {
           "$type": "color",
-          "$value": "#FFE6EC"
+          "$value": "#FFE6EF"
         },
         "200": {
           "$type": "color",
-          "$value": "#FFC8D6"
+          "$value": "#FFC9DE"
         },
         "300": {
           "$type": "color",
-          "$value": "#FF9FB9"
+          "$value": "#FF9FC4"
         },
         "400": {
           "$type": "color",
-          "$value": "#FF6F97"
+          "$value": "#FF73A7"
         },
         "500": {
           "$type": "color",
-          "$value": "#F54A7C"
+          "$value": "#F54A8B"
         },
         "600": {
           "$type": "color",
-          "$value": "#E02A63"
+          "$value": "#DE2E72"
         },
         "700": {
           "$type": "color",
-          "$value": "#B71E4C"
+          "$value": "#B62258"
         },
         "800": {
           "$type": "color",
-          "$value": "#8C1539"
+          "$value": "#8C1A41"
         },
         "900": {
           "$type": "color",
-          "$value": "#5E0D25"
+          "$value": "#5E112C"
         },
         "$description": "Supporting crimson accents for surfaces, focus states, and data viz."
       },
       "neutral": {
         "50": {
           "$type": "color",
-          "$value": "#FFF7F9"
+          "$value": "#FFF7FA"
         },
         "100": {
           "$type": "color",
-          "$value": "#FEEEF2"
+          "$value": "#FDEBF1"
         },
         "200": {
           "$type": "color",
-          "$value": "#F8DDE4"
+          "$value": "#F6D5E1"
         },
         "300": {
           "$type": "color",
-          "$value": "#EEC4CF"
+          "$value": "#EBB8CB"
         },
         "400": {
           "$type": "color",
-          "$value": "#D5A1B3"
+          "$value": "#D08DA9"
         },
         "500": {
           "$type": "color",
-          "$value": "#B37D8E"
+          "$value": "#B06888"
         },
         "600": {
           "$type": "color",
-          "$value": "#8C5D6D"
+          "$value": "#8D4C6B"
         },
         "700": {
           "$type": "color",
-          "$value": "#673F4E"
+          "$value": "#68354D"
         },
         "800": {
           "$type": "color",
-          "$value": "#452733"
+          "$value": "#442132"
         },
         "900": {
           "$type": "color",
@@ -273,39 +273,39 @@
         },
         "bg": {
           "$type": "color",
-          "$value": "{color.ramps.neutral.50}"
+          "$value": "#FFF6F8"
         },
         "surface": {
           "$type": "color",
-          "$value": "#FFF4F6"
+          "$value": "#FFEFF3"
         },
         "surfaceAlt": {
           "$type": "color",
-          "$value": "#FFE8EC"
+          "$value": "#FFE1EA"
         },
         "surfaceMuted": {
           "$type": "color",
-          "$value": "#F9D3DC"
+          "$value": "#FFD4E2"
         },
         "text": {
           "$type": "color",
-          "$value": "{color.ramps.neutral.900}"
+          "$value": "#3E0714"
         },
         "textMuted": {
           "$type": "color",
-          "$value": "{color.ramps.neutral.600}"
+          "$value": "#8E1C3D"
         },
         "textMutedStrong": {
           "$type": "color",
-          "$value": "{color.ramps.neutral.700}"
+          "$value": "#65102A"
         },
         "textInverse": {
           "$type": "color",
-          "$value": "#130104"
+          "$value": "#FFF6F8"
         },
         "buttonText": {
           "$type": "color",
-          "$value": "#2C080F"
+          "$value": "#320715"
         },
         "primary": {
           "$type": "color",
@@ -313,11 +313,11 @@
         },
         "primaryContrast": {
           "$type": "color",
-          "$value": "#FFF7F9"
+          "$value": "#FFF5F9"
         },
         "primarySoft": {
           "$type": "color",
-          "$value": "rgba(210, 30, 85, 0.16)"
+          "$value": "rgba(207, 31, 95, 0.12)"
         },
         "secondary": {
           "$type": "color",
@@ -325,7 +325,7 @@
         },
         "accent": {
           "$type": "color",
-          "$value": "{color.ramps.accent.600}"
+          "$value": "{color.ramps.accent.500}"
         },
         "success": {
           "$type": "color",
@@ -345,31 +345,31 @@
         },
         "border": {
           "$type": "color",
-          "$value": "rgba(199, 97, 128, 0.45)"
+          "$value": "rgba(182, 34, 82, 0.28)"
         },
         "borderMuted": {
           "$type": "color",
-          "$value": "rgba(199, 97, 128, 0.24)"
+          "$value": "rgba(182, 34, 82, 0.18)"
         },
         "borderStrong": {
           "$type": "color",
-          "$value": "rgba(90, 10, 35, 0.32)"
+          "$value": "rgba(98, 11, 36, 0.42)"
         },
         "muted": {
           "$type": "color",
-          "$value": "rgba(173, 21, 68, 0.08)"
+          "$value": "rgba(207, 31, 95, 0.08)"
         },
         "ring": {
           "$type": "color",
-          "$value": "rgba(210, 30, 85, 0.5)"
+          "$value": "rgba(235, 58, 123, 0.42)"
         },
         "overlay": {
           "$type": "color",
-          "$value": "rgba(36, 2, 15, 0.55)"
+          "$value": "rgba(84, 7, 34, 0.28)"
         },
         "scrim": {
           "$type": "color",
-          "$value": "rgba(36, 2, 15, 0.4)"
+          "$value": "rgba(54, 4, 22, 0.22)"
         }
       },
       "dark": {
@@ -380,39 +380,39 @@
         },
         "bg": {
           "$type": "color",
-          "$value": "#130104"
+          "$value": "#120108"
         },
         "surface": {
           "$type": "color",
-          "$value": "#1B0509"
+          "$value": "#19010A"
         },
         "surfaceAlt": {
           "$type": "color",
-          "$value": "#23070C"
+          "$value": "#22010E"
         },
         "surfaceMuted": {
           "$type": "color",
-          "$value": "#2D0911"
+          "$value": "#2C0814"
         },
         "text": {
           "$type": "color",
-          "$value": "{color.ramps.neutral.50}"
+          "$value": "#FFE4EE"
         },
         "textMuted": {
           "$type": "color",
-          "$value": "{color.ramps.neutral.300}"
+          "$value": "#F898B9"
         },
         "textMutedStrong": {
           "$type": "color",
-          "$value": "{color.ramps.neutral.200}"
+          "$value": "#FFC1D6"
         },
         "textInverse": {
           "$type": "color",
-          "$value": "#FFF7F9"
+          "$value": "#1A040C"
         },
         "buttonText": {
           "$type": "color",
-          "$value": "#160309"
+          "$value": "#16020A"
         },
         "primary": {
           "$type": "color",
@@ -420,15 +420,15 @@
         },
         "primaryContrast": {
           "$type": "color",
-          "$value": "#060106"
+          "$value": "#16020A"
         },
         "primarySoft": {
           "$type": "color",
-          "$value": "rgba(237, 60, 114, 0.22)"
+          "$value": "rgba(235, 58, 123, 0.18)"
         },
         "secondary": {
           "$type": "color",
-          "$value": "{color.ramps.accent.500}"
+          "$value": "{color.ramps.accent.400}"
         },
         "accent": {
           "$type": "color",
@@ -452,31 +452,31 @@
         },
         "border": {
           "$type": "color",
-          "$value": "rgba(237, 60, 114, 0.28)"
+          "$value": "rgba(235, 58, 123, 0.26)"
         },
         "borderMuted": {
           "$type": "color",
-          "$value": "rgba(173, 21, 68, 0.2)"
+          "$value": "rgba(235, 58, 123, 0.16)"
         },
         "borderStrong": {
           "$type": "color",
-          "$value": "rgba(237, 60, 114, 0.38)"
+          "$value": "rgba(235, 58, 123, 0.35)"
         },
         "muted": {
           "$type": "color",
-          "$value": "rgba(173, 21, 68, 0.16)"
+          "$value": "rgba(235, 58, 123, 0.12)"
         },
         "ring": {
           "$type": "color",
-          "$value": "rgba(237, 60, 114, 0.6)"
+          "$value": "rgba(235, 58, 123, 0.48)"
         },
         "overlay": {
           "$type": "color",
-          "$value": "rgba(8, 1, 4, 0.7)"
+          "$value": "rgba(10, 1, 4, 0.72)"
         },
         "scrim": {
           "$type": "color",
-          "$value": "rgba(8, 1, 4, 0.52)"
+          "$value": "rgba(10, 1, 4, 0.52)"
         }
       }
     },
@@ -511,15 +511,15 @@
             },
             "shadow": {
               "$type": "shadow",
-              "$value": "0 12px 32px rgba(210, 30, 85, 0.25)"
+              "$value": "0 12px 32px rgba(167, 21, 73, 0.24)"
             },
             "hoverShadow": {
               "$type": "shadow",
-              "$value": "0 16px 36px rgba(210, 30, 85, 0.32)"
+              "$value": "0 16px 36px rgba(167, 21, 73, 0.3)"
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(255, 247, 249, 0.75)"
+              "$value": "rgba(255, 246, 250, 0.78)"
             }
           },
           "secondary": {
@@ -533,7 +533,7 @@
             },
             "border": {
               "$type": "color",
-              "$value": "rgba(199, 97, 128, 0.42)"
+              "$value": "rgba(182, 34, 82, 0.35)"
             },
             "hoverBg": {
               "$type": "color",
@@ -545,19 +545,19 @@
             },
             "hoverBorder": {
               "$type": "color",
-              "$value": "rgba(210, 30, 85, 0.5)"
+              "$value": "rgba(182, 34, 82, 0.55)"
             },
             "shadow": {
               "$type": "shadow",
-              "$value": "0 6px 18px rgba(90, 10, 35, 0.18)"
+              "$value": "0 6px 18px rgba(167, 21, 73, 0.14)"
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(90, 10, 35, 0.55)"
+              "$value": "rgba(78, 11, 31, 0.55)"
             },
             "hoverShadow": {
               "$type": "shadow",
-              "$value": "0 8px 22px rgba(90, 10, 35, 0.26)"
+              "$value": "0 8px 22px rgba(167, 21, 73, 0.2)"
             }
           },
           "subtle": {
@@ -571,15 +571,15 @@
             },
             "border": {
               "$type": "color",
-              "$value": "rgba(210, 30, 85, 0.32)"
+              "$value": "rgba(207, 31, 95, 0.38)"
             },
             "hoverBg": {
               "$type": "color",
-              "$value": "rgba(210, 30, 85, 0.22)"
+              "$value": "rgba(167, 21, 73, 0.24)"
             },
             "hoverBorder": {
               "$type": "color",
-              "$value": "rgba(210, 30, 85, 0.48)"
+              "$value": "rgba(207, 31, 95, 0.58)"
             },
             "hoverFg": {
               "$type": "color",
@@ -591,7 +591,7 @@
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(210, 30, 85, 0.72)"
+              "$value": "rgba(167, 21, 73, 0.75)"
             },
             "hoverShadow": {
               "$type": "shadow",
@@ -613,7 +613,7 @@
             },
             "hoverBg": {
               "$type": "color",
-              "$value": "rgba(210, 30, 85, 0.12)"
+              "$value": "rgba(167, 21, 73, 0.08)"
             },
             "hoverFg": {
               "$type": "color",
@@ -629,7 +629,7 @@
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(90, 10, 35, 0.45)"
+              "$value": "rgba(84, 7, 34, 0.5)"
             },
             "hoverShadow": {
               "$type": "shadow",
@@ -663,15 +663,15 @@
             },
             "shadow": {
               "$type": "shadow",
-              "$value": "0 12px 30px rgba(198, 31, 71, 0.24)"
+              "$value": "0 12px 30px rgba(222, 46, 114, 0.22)"
             },
             "hoverShadow": {
               "$type": "shadow",
-              "$value": "0 16px 34px rgba(198, 31, 71, 0.3)"
+              "$value": "0 16px 34px rgba(222, 46, 114, 0.28)"
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(36, 2, 15, 0.6)"
+              "$value": "rgba(84, 7, 34, 0.6)"
             }
           },
           "tone": {
@@ -686,7 +686,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(199, 97, 128, 0.38)"
+                "$value": "rgba(182, 34, 82, 0.32)"
               },
               "hoverBg": {
                 "$type": "color",
@@ -698,7 +698,7 @@
               },
               "hoverBorder": {
                 "$type": "color",
-                "$value": "rgba(199, 97, 128, 0.5)"
+                "$value": "rgba(182, 34, 82, 0.45)"
               },
               "shadow": {
                 "$type": "shadow",
@@ -706,7 +706,7 @@
               },
               "spinner": {
                 "$type": "color",
-                "$value": "rgba(199, 97, 128, 0.55)"
+                "$value": "rgba(182, 34, 82, 0.55)"
               },
               "hoverShadow": {
                 "$type": "shadow",
@@ -716,7 +716,7 @@
             "accent": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.16)"
+                "$value": "rgba(245, 74, 139, 0.16)"
               },
               "fg": {
                 "$type": "color",
@@ -724,11 +724,11 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.42)"
+                "$value": "rgba(245, 74, 139, 0.42)"
               },
               "hoverBg": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.22)"
+                "$value": "rgba(245, 74, 139, 0.22)"
               },
               "hoverFg": {
                 "$type": "color",
@@ -736,7 +736,7 @@
               },
               "hoverBorder": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.55)"
+                "$value": "rgba(245, 74, 139, 0.55)"
               },
               "shadow": {
                 "$type": "shadow",
@@ -744,7 +744,7 @@
               },
               "spinner": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.8)"
+                "$value": "rgba(245, 74, 139, 0.82)"
               },
               "hoverShadow": {
                 "$type": "shadow",
@@ -868,7 +868,7 @@
             "danger": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(198, 31, 71, 0.22)"
+                "$value": "rgba(239, 68, 68, 0.22)"
               },
               "fg": {
                 "$type": "color",
@@ -876,11 +876,11 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(198, 31, 71, 0.5)"
+                "$value": "rgba(239, 68, 68, 0.48)"
               },
               "hoverBg": {
                 "$type": "color",
-                "$value": "rgba(198, 31, 71, 0.28)"
+                "$value": "rgba(239, 68, 68, 0.28)"
               },
               "hoverFg": {
                 "$type": "color",
@@ -888,7 +888,7 @@
               },
               "hoverBorder": {
                 "$type": "color",
-                "$value": "rgba(198, 31, 71, 0.62)"
+                "$value": "rgba(239, 68, 68, 0.6)"
               },
               "shadow": {
                 "$type": "shadow",
@@ -896,7 +896,7 @@
               },
               "spinner": {
                 "$type": "color",
-                "$value": "rgba(198, 31, 71, 0.82)"
+                "$value": "rgba(239, 68, 68, 0.8)"
               },
               "hoverShadow": {
                 "$type": "shadow",
@@ -933,15 +933,15 @@
             },
             "shadow": {
               "$type": "shadow",
-              "$value": "0 12px 32px rgba(210, 30, 85, 0.32)"
+              "$value": "0 12px 32px rgba(167, 21, 73, 0.32)"
             },
             "hoverShadow": {
               "$type": "shadow",
-              "$value": "0 16px 36px rgba(210, 30, 85, 0.38)"
+              "$value": "0 16px 36px rgba(167, 21, 73, 0.38)"
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(255, 247, 249, 0.65)"
+              "$value": "rgba(255, 237, 245, 0.7)"
             }
           },
           "secondary": {
@@ -955,7 +955,7 @@
             },
             "border": {
               "$type": "color",
-              "$value": "rgba(237, 60, 114, 0.28)"
+              "$value": "rgba(235, 58, 123, 0.28)"
             },
             "hoverBg": {
               "$type": "color",
@@ -967,19 +967,19 @@
             },
             "hoverBorder": {
               "$type": "color",
-              "$value": "rgba(237, 60, 114, 0.38)"
+              "$value": "rgba(235, 58, 123, 0.45)"
             },
             "shadow": {
               "$type": "shadow",
-              "$value": "0 8px 24px rgba(19, 5, 9, 0.42)"
+              "$value": "0 8px 24px rgba(12, 1, 5, 0.48)"
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(199, 97, 128, 0.6)"
+              "$value": "rgba(235, 58, 123, 0.6)"
             },
             "hoverShadow": {
               "$type": "shadow",
-              "$value": "0 10px 28px rgba(19, 5, 9, 0.5)"
+              "$value": "0 10px 28px rgba(12, 1, 5, 0.55)"
             }
           },
           "subtle": {
@@ -993,11 +993,11 @@
             },
             "border": {
               "$type": "color",
-              "$value": "rgba(237, 60, 114, 0.32)"
+              "$value": "rgba(235, 58, 123, 0.38)"
             },
             "hoverBg": {
               "$type": "color",
-              "$value": "rgba(237, 60, 114, 0.2)"
+              "$value": "rgba(167, 21, 73, 0.2)"
             },
             "hoverFg": {
               "$type": "color",
@@ -1005,7 +1005,7 @@
             },
             "hoverBorder": {
               "$type": "color",
-              "$value": "rgba(237, 60, 114, 0.45)"
+              "$value": "rgba(235, 58, 123, 0.58)"
             },
             "shadow": {
               "$type": "shadow",
@@ -1013,7 +1013,7 @@
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(237, 60, 114, 0.72)"
+              "$value": "rgba(235, 58, 123, 0.75)"
             },
             "hoverShadow": {
               "$type": "shadow",
@@ -1035,7 +1035,7 @@
             },
             "hoverBg": {
               "$type": "color",
-              "$value": "rgba(237, 60, 114, 0.14)"
+              "$value": "rgba(235, 58, 123, 0.12)"
             },
             "hoverFg": {
               "$type": "color",
@@ -1051,7 +1051,7 @@
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(199, 97, 128, 0.55)"
+              "$value": "rgba(235, 58, 123, 0.6)"
             },
             "hoverShadow": {
               "$type": "shadow",
@@ -1085,15 +1085,15 @@
             },
             "shadow": {
               "$type": "shadow",
-              "$value": "0 12px 30px rgba(237, 60, 114, 0.24)"
+              "$value": "0 12px 30px rgba(222, 46, 114, 0.26)"
             },
             "hoverShadow": {
               "$type": "shadow",
-              "$value": "0 16px 34px rgba(237, 60, 114, 0.32)"
+              "$value": "0 16px 34px rgba(222, 46, 114, 0.34)"
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(255, 247, 249, 0.68)"
+              "$value": "rgba(255, 237, 245, 0.68)"
             }
           },
           "tone": {
@@ -1108,7 +1108,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(237, 60, 114, 0.24)"
+                "$value": "rgba(235, 58, 123, 0.24)"
               },
               "hoverBg": {
                 "$type": "color",
@@ -1120,7 +1120,7 @@
               },
               "hoverBorder": {
                 "$type": "color",
-                "$value": "rgba(237, 60, 114, 0.32)"
+                "$value": "rgba(235, 58, 123, 0.32)"
               },
               "shadow": {
                 "$type": "shadow",
@@ -1128,7 +1128,7 @@
               },
               "spinner": {
                 "$type": "color",
-                "$value": "rgba(199, 97, 128, 0.52)"
+                "$value": "rgba(235, 58, 123, 0.55)"
               },
               "hoverShadow": {
                 "$type": "shadow",
@@ -1138,7 +1138,7 @@
             "accent": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.2)"
+                "$value": "rgba(245, 74, 139, 0.2)"
               },
               "fg": {
                 "$type": "color",
@@ -1146,11 +1146,11 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.45)"
+                "$value": "rgba(245, 74, 139, 0.45)"
               },
               "hoverBg": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.28)"
+                "$value": "rgba(245, 74, 139, 0.26)"
               },
               "hoverFg": {
                 "$type": "color",
@@ -1158,7 +1158,7 @@
               },
               "hoverBorder": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.58)"
+                "$value": "rgba(245, 74, 139, 0.58)"
               },
               "shadow": {
                 "$type": "shadow",
@@ -1166,7 +1166,7 @@
               },
               "spinner": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.82)"
+                "$value": "rgba(245, 74, 139, 0.8)"
               },
               "hoverShadow": {
                 "$type": "shadow",
@@ -1290,7 +1290,7 @@
             "danger": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(237, 60, 114, 0.26)"
+                "$value": "rgba(248, 113, 113, 0.24)"
               },
               "fg": {
                 "$type": "color",
@@ -1298,11 +1298,11 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(237, 60, 114, 0.5)"
+                "$value": "rgba(248, 113, 113, 0.52)"
               },
               "hoverBg": {
                 "$type": "color",
-                "$value": "rgba(237, 60, 114, 0.32)"
+                "$value": "rgba(248, 113, 113, 0.32)"
               },
               "hoverFg": {
                 "$type": "color",
@@ -1310,7 +1310,7 @@
               },
               "hoverBorder": {
                 "$type": "color",
-                "$value": "rgba(237, 60, 114, 0.65)"
+                "$value": "rgba(248, 113, 113, 0.65)"
               },
               "shadow": {
                 "$type": "shadow",
@@ -1318,7 +1318,7 @@
               },
               "spinner": {
                 "$type": "color",
-                "$value": "rgba(237, 60, 114, 0.85)"
+                "$value": "rgba(248, 113, 113, 0.82)"
               },
               "hoverShadow": {
                 "$type": "shadow",
@@ -1334,11 +1334,11 @@
             "soft": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(148, 163, 184, 0.16)"
+                "$value": "rgba(182, 34, 82, 0.16)"
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(148, 163, 184, 0.35)"
+                "$value": "rgba(182, 34, 82, 0.32)"
               },
               "fg": {
                 "$type": "color",
@@ -1366,7 +1366,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(148, 163, 184, 0.45)"
+                "$value": "rgba(182, 34, 82, 0.48)"
               },
               "fg": {
                 "$type": "color",
@@ -1378,11 +1378,11 @@
             "soft": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(210, 30, 85, 0.12)"
+                "$value": "rgba(207, 31, 95, 0.12)"
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(210, 30, 85, 0.32)"
+                "$value": "rgba(207, 31, 95, 0.32)"
               },
               "fg": {
                 "$type": "color",
@@ -1410,7 +1410,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(210, 30, 85, 0.48)"
+                "$value": "rgba(207, 31, 95, 0.48)"
               },
               "fg": {
                 "$type": "color",
@@ -1422,11 +1422,11 @@
             "soft": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.12)"
+                "$value": "rgba(222, 46, 114, 0.14)"
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.32)"
+                "$value": "rgba(222, 46, 114, 0.34)"
               },
               "fg": {
                 "$type": "color",
@@ -1454,7 +1454,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.48)"
+                "$value": "rgba(222, 46, 114, 0.5)"
               },
               "fg": {
                 "$type": "color",
@@ -1598,11 +1598,11 @@
             "soft": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(198, 31, 71, 0.14)"
+                "$value": "rgba(239, 68, 68, 0.18)"
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(198, 31, 71, 0.4)"
+                "$value": "rgba(239, 68, 68, 0.4)"
               },
               "fg": {
                 "$type": "color",
@@ -1630,7 +1630,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(198, 31, 71, 0.55)"
+                "$value": "rgba(239, 68, 68, 0.55)"
               },
               "fg": {
                 "$type": "color",
@@ -1644,11 +1644,11 @@
             "soft": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(148, 163, 184, 0.16)"
+                "$value": "rgba(235, 58, 123, 0.2)"
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(148, 163, 184, 0.35)"
+                "$value": "rgba(235, 58, 123, 0.32)"
               },
               "fg": {
                 "$type": "color",
@@ -1676,7 +1676,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(148, 163, 184, 0.45)"
+                "$value": "rgba(235, 58, 123, 0.48)"
               },
               "fg": {
                 "$type": "color",
@@ -1688,11 +1688,11 @@
             "soft": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(210, 30, 85, 0.16)"
+                "$value": "rgba(235, 58, 123, 0.18)"
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(210, 30, 85, 0.35)"
+                "$value": "rgba(235, 58, 123, 0.35)"
               },
               "fg": {
                 "$type": "color",
@@ -1720,7 +1720,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(210, 30, 85, 0.48)"
+                "$value": "rgba(235, 58, 123, 0.5)"
               },
               "fg": {
                 "$type": "color",
@@ -1732,11 +1732,11 @@
             "soft": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.18)"
+                "$value": "rgba(245, 74, 139, 0.2)"
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.4)"
+                "$value": "rgba(245, 74, 139, 0.4)"
               },
               "fg": {
                 "$type": "color",
@@ -1764,7 +1764,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(224, 42, 99, 0.55)"
+                "$value": "rgba(245, 74, 139, 0.55)"
               },
               "fg": {
                 "$type": "color",
@@ -1908,11 +1908,11 @@
             "soft": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(237, 60, 114, 0.2)"
+                "$value": "rgba(248, 113, 113, 0.24)"
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(237, 60, 114, 0.45)"
+                "$value": "rgba(248, 113, 113, 0.48)"
               },
               "fg": {
                 "$type": "color",
@@ -1940,7 +1940,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(237, 60, 114, 0.6)"
+                "$value": "rgba(248, 113, 113, 0.6)"
               },
               "fg": {
                 "$type": "color",
