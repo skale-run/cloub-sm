@@ -172,6 +172,7 @@ export const en = {
       weekLabel: "Week {{week}}",
       lead: "Lead · {{coach}}",
       confirmAvailability: "Confirm availability",
+    },
     coachEvaluation: {
       heading: "Coach evaluation",
       description: "Snapshot from the latest bi-weekly meeting with the coaching staff.",
@@ -427,6 +428,8 @@ export const en = {
         placeholder: "Add new highlight",
         removeAria: "Remove highlight",
         empty: "No highlights yet. Start by celebrating a recent win.",
+      },
+    },
     performanceTracking: {
       title: "Performance tracking",
       description:
@@ -499,6 +502,8 @@ export const en = {
         ],
         rangeNote:
           "Range target 77.8 kg – 78.4 kg. Flag a nutrition review if weight drifts outside band for two consecutive weeks.",
+      },
+    },
     competitions: {
       heading: "Competition Calendar",
       description:
