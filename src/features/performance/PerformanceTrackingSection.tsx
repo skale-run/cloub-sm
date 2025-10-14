@@ -9,10 +9,10 @@ type TechnicalMilestone = {
 };
 
 type AttendanceSummary = {
-  totalSessions: number;
-  attended: number;
-  excused: number;
-  unexcused: number;
+  totalSessions: number | string;
+  attended: number | string;
+  excused: number | string;
+  unexcused: number | string;
 };
 
 type TrainingStatistic = {
@@ -30,6 +30,91 @@ type CompetitionResult = {
 type WeightEntry = {
   label: string;
   weight: string;
+};
+
+const DIGIT_ZERO_CODE_POINTS = [
+  0x0660, // Arabic-Indic
+  0x06f0, // Extended Arabic-Indic
+  0x0966, // Devanagari
+  0x09e6, // Bengali
+  0x0a66, // Gurmukhi
+  0x0ae6, // Gujarati
+  0x0b66, // Oriya
+  0x0be6, // Tamil
+  0x0c66, // Telugu
+  0x0ce6, // Kannada
+  0x0d66, // Malayalam
+  0x0e50, // Thai
+  0x0ed0, // Lao
+  0x0f20, // Tibetan
+  0x1040, // Myanmar
+  0x1090, // Myanmar Shan
+  0x17e0, // Khmer
+  0x1810, // Mongolian
+  0x1946, // Limbu
+  0x19d0, // New Tai Lue
+  0x1a80, // Tai Tham Hora
+  0x1a90, // Tai Tham Tham
+  0x1b50, // Balinese
+  0x1bb0, // Sundanese
+  0x1c40, // Lepcha
+  0x1c50, // Ol Chiki
+  0xa620, // Vai
+  0xa8d0, // Saurashtra
+  0xa900, // Kayah Li
+  0xa9d0, // Javanese
+  0xa9f0, // Myanmar Tai Laing
+  0xaa50, // Cham
+  0xabf0, // Meetei Mayek
+  0xff10, // Fullwidth
+] as const;
+
+const normalizeLocalizedDigits = (input: string): string => {
+  return Array.from(input)
+    .map((character) => {
+      const codePoint = character.codePointAt(0);
+
+      if (!codePoint) {
+        return character;
+      }
+
+      if (codePoint >= 0x30 && codePoint <= 0x39) {
+        return character;
+      }
+
+      for (const zeroPoint of DIGIT_ZERO_CODE_POINTS) {
+        if (codePoint >= zeroPoint && codePoint <= zeroPoint + 9) {
+          const asciiDigit = 0x30 + (codePoint - zeroPoint);
+
+          return String.fromCharCode(asciiDigit);
+        }
+      }
+
+      return character;
+    })
+    .join("");
+};
+
+const parseLocalizedNumber = (value: unknown): number | null => {
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : null;
+  }
+
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const normalized = normalizeLocalizedDigits(value);
+  const match = normalized.match(/-?\d+(?:[.,]\d+)?/);
+
+  if (!match) {
+    return null;
+  }
+
+  const numericCandidate = match[0].replace(",", ".");
+  const parsed = Number.parseFloat(numericCandidate);
+
+  return Number.isNaN(parsed) ? null : parsed;
 };
 
 function PerformanceTrackingSection(): ReactElement {
@@ -53,6 +138,13 @@ function PerformanceTrackingSection(): ReactElement {
       excused: string;
       unexcused: string;
     };
+  };
+
+  const normalizedAttendanceSummary = {
+    totalSessions: parseLocalizedNumber(attendance.summary.totalSessions) ?? 0,
+    attended: parseLocalizedNumber(attendance.summary.attended) ?? 0,
+    excused: parseLocalizedNumber(attendance.summary.excused) ?? 0,
+    unexcused: parseLocalizedNumber(attendance.summary.unexcused) ?? 0,
   };
 
   const trainingStats = t("performanceTracking.trainingStatistics", {
@@ -81,13 +173,16 @@ function PerformanceTrackingSection(): ReactElement {
   };
 
   const attendanceRate = Math.round(
-    (attendance.summary.attended / attendance.summary.totalSessions) * 100,
+    normalizedAttendanceSummary.totalSessions > 0
+      ? (normalizedAttendanceSummary.attended /
+          normalizedAttendanceSummary.totalSessions) * 100
+      : 0,
   );
 
   const totalSessionsLabel = t(
     "performanceTracking.attendance.totalSessionsLabel",
     {
-      count: attendance.summary.totalSessions,
+      count: normalizedAttendanceSummary.totalSessions,
     },
   );
 
