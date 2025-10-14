@@ -172,6 +172,112 @@ export const en = {
       weekLabel: "Week {{week}}",
       lead: "Lead · {{coach}}",
       confirmAvailability: "Confirm availability",
+    coachEvaluation: {
+      heading: "Coach evaluation",
+      description: "Snapshot from the latest bi-weekly meeting with the coaching staff.",
+      overallLabel: "Overall",
+      focusLabel: "Focus for next review",
+      addNote: "Add coach note",
+      summary: {
+        focusStatement: "Sharpen top-end speed for national trials in May.",
+        leadCoach: {
+          label: "Lead coach",
+          value: "Coach Amara Lewis",
+        },
+        lastReview: {
+          label: "Last review",
+          value: "Apr 18, 2024",
+        },
+        nextTouchpoint: {
+          label: "Next touchpoint",
+          value: "May 2, 2024",
+        },
+        momentum: {
+          label: "Momentum",
+          value: "Positive trend",
+        },
+      },
+      highlightWins: {
+        heading: "Momentum drivers",
+        items: [
+          {
+            title: "Block work clicking",
+            detail:
+              "Explosive phase is cleaner after contrast sprints · keep 2x weekly rhythm drills.",
+          },
+          {
+            title: "Race rehearsal",
+            detail:
+              "Confidence high following indoor meet simulation · pre-race routine locked in.",
+          },
+        ],
+      },
+      watchList: {
+        heading: "Watch closely",
+        items: [
+          {
+            title: "Late-race relaxation",
+            detail:
+              "Neck and jaw tension returning under fatigue · integrate breathing reset cue.",
+          },
+          {
+            title: "Regeneration block",
+            detail:
+              "Sleep quality dipped on travel week · align physio flush with light tempo day.",
+          },
+        ],
+      },
+      accountability: {
+        heading: "Accountability board",
+        updatedLabel: "Updated weekly",
+        ownerPrefix: "Owner · {{owner}}",
+        dueLabel: "Due {{date}}",
+        items: [
+          {
+            title: "30m fly timing",
+            owner: "Coach Lewis",
+            due: "Apr 26",
+            status: "Scheduled",
+          },
+          {
+            title: "Sprint mechanics video review",
+            owner: "Athlete",
+            due: "Apr 24",
+            status: "In progress",
+          },
+          {
+            title: "Hydration tracker check-in",
+            owner: "Performance staff",
+            due: "Weekly",
+            status: "On track",
+          },
+        ],
+      },
+      competencySnapshot: {
+        heading: "Competency snapshot",
+        scores: [
+          {
+            label: "Explosive starts",
+            score: 4.5,
+            note: "Improved block exit · maintain shin angle drills",
+          },
+          {
+            label: "Speed endurance",
+            score: 4.2,
+            note: "Hold form in final 60m · add resisted runs",
+          },
+          {
+            label: "Race tactics",
+            score: 4.0,
+            note: "Continue video briefs · refine lane positioning",
+          },
+          {
+            label: "Recovery habits",
+            score: 3.8,
+            note: "Consistency improving · log hydration daily",
+          },
+        ],
+      },
     },
     landing: {
       badge: "Cloud-based sports management",
