@@ -1,20 +1,21 @@
+import type { MouseEvent } from 'react'
 import {
   Activity,
-  Award,
-  BarChart3,
   CalendarDays,
   ClipboardCheck,
   CreditCard,
   GaugeCircle,
   GraduationCap,
   LineChart,
-  Scale,
+  ScanQrCode,
+  UserCircle,
   Users,
   X,
 } from 'lucide-react'
+import type { RoutePath } from '../routes'
 
 type NavItem = {
-  href: string
+  to: RoutePath
   label: string
   description: string
   Icon: typeof Activity
@@ -30,7 +31,7 @@ const navSections: ReadonlyArray<NavSection> = [
     heading: 'Calendar',
     items: [
       {
-        href: '#calendar',
+        to: '/calendar',
         label: 'Season calendar',
         description: 'Review meets and key sessions',
         Icon: CalendarDays,
@@ -41,19 +42,19 @@ const navSections: ReadonlyArray<NavSection> = [
     heading: 'Information',
     items: [
       {
-        href: '#academic-record',
+        to: '/academic-record',
         label: 'Academic record',
         description: 'Monitor course eligibility',
         Icon: GraduationCap,
       },
       {
-        href: '#billing',
+        to: '/billing',
         label: 'Billing overview',
         description: 'Track invoices & payments',
         Icon: CreditCard,
       },
       {
-        href: '#training-attendance',
+        to: '/training-attendance',
         label: 'Training attendance',
         description: 'See check-ins by week',
         Icon: ClipboardCheck,
@@ -64,13 +65,13 @@ const navSections: ReadonlyArray<NavSection> = [
     heading: 'Evaluations',
     items: [
       {
-        href: '#coach-evaluation',
+        to: '/coach-evaluation',
         label: 'Coach evaluation',
         description: 'Latest staff feedback',
         Icon: Users,
       },
       {
-        href: '#progress-overview',
+        to: '/progress-overview',
         label: 'Progress insight',
         description: 'Growth trends & alerts',
         Icon: LineChart,
@@ -81,34 +82,27 @@ const navSections: ReadonlyArray<NavSection> = [
     heading: 'Performance tracking',
     items: [
       {
-        href: '#technical-progress',
-        label: 'Technical progress',
-        description: 'Skill milestones by phase',
+        to: '/performance-tracking',
+        label: 'Performance dashboard',
+        description: 'Technical milestones & load',
         Icon: GaugeCircle,
       },
+    ],
+  },
+  {
+    heading: 'Profile & access',
+    items: [
       {
-        href: '#attendance-total',
-        label: 'Total attendance',
-        description: 'Season presence summary',
-        Icon: ClipboardCheck,
+        to: '/profile',
+        label: 'Athlete profile',
+        description: 'Manage member identity',
+        Icon: UserCircle,
       },
       {
-        href: '#training-statistics',
-        label: 'Training statistics',
-        description: 'Hours, sessions & load',
-        Icon: BarChart3,
-      },
-      {
-        href: '#competition-results',
-        label: 'Competition results',
-        description: 'Recent podium finishes',
-        Icon: Award,
-      },
-      {
-        href: '#weight-tracking',
-        label: 'Body weight log',
-        description: 'Monitor weight stability',
-        Icon: Scale,
+        to: '/access',
+        label: 'Digital access',
+        description: 'Share membership QR code',
+        Icon: ScanQrCode,
       },
     ],
   },
@@ -131,14 +125,26 @@ type SidebarProps = {
   open: boolean
   onToggleSidebar: () => void
   onNavigate?: () => void
+  onNavigateTo: (path: RoutePath) => void
+  currentPath: RoutePath
   savedProfile: SidebarProfile | null
 }
 
-function Sidebar({ open, onToggleSidebar, onNavigate, savedProfile }: SidebarProps) {
+function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath, savedProfile }: SidebarProps) {
   const handleNavigate = () => {
     if (open) {
       onNavigate?.()
     }
+  }
+
+  const handleItemClick = (event: MouseEvent<HTMLAnchorElement>, path: RoutePath) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
+      return
+    }
+
+    event.preventDefault()
+    onNavigateTo(path)
+    handleNavigate()
   }
 
   return (
@@ -177,22 +183,32 @@ function Sidebar({ open, onToggleSidebar, onNavigate, savedProfile }: SidebarPro
                 {section.heading}
               </p>
               <nav className="grid gap-2">
-                {section.items.map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={handleNavigate}
-                    className="group flex items-center gap-4 rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-sm text-slate-200 transition hover:border-sky-400/40 hover:bg-slate-900/60 hover:text-white"
-                  >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900/70 text-sky-200 group-hover:bg-sky-500/15">
-                      <item.Icon className="h-5 w-5" aria-hidden />
-                    </span>
-                    <span className="flex flex-col">
-                      <span className="font-semibold">{item.label}</span>
-                      <span className="text-xs text-slate-400/80">{item.description}</span>
-                    </span>
-                  </a>
-                ))}
+                {section.items.map((item) => {
+                  const isActive = currentPath === item.to
+                  return (
+                    <a
+                      key={item.to}
+                      href={item.to}
+                      onClick={(event) => handleItemClick(event, item.to)}
+                      aria-current={isActive ? 'page' : undefined}
+                      className={`group flex items-center gap-4 rounded-2xl border px-4 py-3 text-sm transition hover:border-sky-400/40 hover:bg-slate-900/60 hover:text-white ${
+                        isActive ? 'border-sky-400/60 bg-slate-900/70 text-white' : 'border-white/5 bg-white/5 text-slate-200'
+                      }`}
+                    >
+                      <span
+                        className={`flex h-10 w-10 items-center justify-center rounded-2xl text-sky-200 transition-colors group-hover:bg-sky-500/15 ${
+                          isActive ? 'bg-sky-500/20 text-sky-100' : 'bg-slate-900/70'
+                        }`}
+                      >
+                        <item.Icon className="h-5 w-5" aria-hidden />
+                      </span>
+                      <span className="flex flex-col">
+                        <span className="font-semibold">{item.label}</span>
+                        <span className="text-xs text-slate-400/80">{item.description}</span>
+                      </span>
+                    </a>
+                  )
+                })}
               </nav>
             </div>
           ))}
