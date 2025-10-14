@@ -61,6 +61,22 @@ const typeStyles: Record<CalendarEvent["category"], string> = {
   competition: "border-fuchsia-400/40 bg-fuchsia-500/15 text-fuchsia-100",
 };
 
+function formatDuration(minutes: number): string {
+  if (minutes <= 0) {
+    return "0h";
+  }
+
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  return [
+    hours > 0 ? `${hours}h` : undefined,
+    remainingMinutes > 0 ? `${remainingMinutes}m` : undefined,
+  ]
+    .filter((value): value is string => Boolean(value))
+    .join(" ");
+}
+
 const categoryMetadata: Record<
   CalendarEvent["category"],
   { label: string; description: string; accent: string }
@@ -155,6 +171,12 @@ function CalendarSection(): ReactElement {
     [],
   );
 
+  const today = useMemo(() => {
+    const reference = new Date();
+    reference.setHours(0, 0, 0, 0);
+    return reference;
+  }, []);
+
   const [activeCategories, setActiveCategories] = useState<
     Record<CalendarEvent["category"], boolean>
   >({
@@ -166,6 +188,44 @@ function CalendarSection(): ReactElement {
     () => sortedEvents.filter((event) => activeCategories[event.category]),
     [sortedEvents, activeCategories],
   );
+
+  const workloadSnapshot = useMemo(() => {
+    return filteredEvents.reduce(
+      (
+        previous,
+        event,
+      ) => {
+        const start = new Date(event.start);
+        const end = new Date(event.end);
+        const durationInMinutes = Math.max(
+          0,
+          Math.round((end.getTime() - start.getTime()) / (1000 * 60)),
+        );
+
+        const next = { ...previous };
+        next.totalEvents += 1;
+        next.totalMinutes += durationInMinutes;
+
+        if (event.category === "training") {
+          next.trainingCount += 1;
+          next.trainingMinutes += durationInMinutes;
+        } else {
+          next.competitionCount += 1;
+          next.competitionMinutes += durationInMinutes;
+        }
+
+        return next;
+      },
+      {
+        totalEvents: 0,
+        totalMinutes: 0,
+        trainingCount: 0,
+        trainingMinutes: 0,
+        competitionCount: 0,
+        competitionMinutes: 0,
+      },
+    );
+  }, [filteredEvents]);
 
   const months = useMemo(() => {
     const monthBuckets = new Map<string, MonthBucket>();
@@ -289,10 +349,18 @@ function CalendarSection(): ReactElement {
       (option) => option.key === selectedDayKey,
     );
 
-    if (!hasSelectedDay) {
-      setSelectedDayKey(dayOptions[0].key);
+    if (hasSelectedDay) {
+      return;
     }
-  }, [dayOptions, selectedDayKey]);
+
+    const upcomingOption = dayOptions.find(
+      (option) => option.date.getTime() >= today.getTime(),
+    );
+
+    const fallbackOption = upcomingOption ?? dayOptions[dayOptions.length - 1];
+
+    setSelectedDayKey(fallbackOption.key);
+  }, [dayOptions, selectedDayKey, today]);
 
   const selectedDay = dayOptions.find(
     (option) => option.key === selectedDayKey,
@@ -355,6 +423,70 @@ function CalendarSection(): ReactElement {
           ))}
         </div>
       </div>
+
+      {filteredEvents.length > 0 ? (
+        <RedSurface
+          tone="glass"
+          className="flex flex-col gap-6 rounded-3xl border border-red-500/25 p-6 text-red-100 lg:flex-row lg:items-center lg:justify-between"
+        >
+          <div>
+            <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
+              Workload snapshot
+            </p>
+            <h3 className="mt-1 text-lg font-semibold text-red-50">
+              {workloadSnapshot.totalEvents} upcoming team{" "}
+              {workloadSnapshot.totalEvents === 1
+                ? "commitment"
+                : "commitments"}
+            </h3>
+            <p className="mt-2 text-sm text-red-200/75">
+              Track how training and competition time adds up across the
+              selected focus filters.
+            </p>
+          </div>
+          <dl className="grid gap-4 sm:grid-cols-3">
+            <div>
+              <dt className="text-xs font-semibold uppercase tracking-wide text-red-200/70">
+                All events
+              </dt>
+              <dd className="mt-1 text-2xl font-semibold text-red-50">
+                {formatDuration(workloadSnapshot.totalMinutes)}
+              </dd>
+              <dd className="text-xs text-red-200/70">
+                Combined duration
+              </dd>
+            </div>
+            <div>
+              <dt className="text-xs font-semibold uppercase tracking-wide text-red-200/70">
+                Training sessions
+              </dt>
+              <dd className="mt-1 text-2xl font-semibold text-red-50">
+                {workloadSnapshot.trainingCount}{" "}
+                <span className="text-sm font-normal text-red-200/70">
+                  · {formatDuration(workloadSnapshot.trainingMinutes)}
+                </span>
+              </dd>
+              <dd className="text-xs text-red-200/70">
+                Active coaching time
+              </dd>
+            </div>
+            <div>
+              <dt className="text-xs font-semibold uppercase tracking-wide text-red-200/70">
+                Competition days
+              </dt>
+              <dd className="mt-1 text-2xl font-semibold text-red-50">
+                {workloadSnapshot.competitionCount}{" "}
+                <span className="text-sm font-normal text-red-200/70">
+                  · {formatDuration(workloadSnapshot.competitionMinutes)}
+                </span>
+              </dd>
+              <dd className="text-xs text-red-200/70">
+                Travel & execution windows
+              </dd>
+            </div>
+          </dl>
+        </RedSurface>
+      ) : null}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <RedSurface
@@ -582,10 +714,19 @@ function CalendarSection(): ReactElement {
                       day.events.length > 0
                         ? "border-red-400/35 bg-red-950/55"
                         : "border-red-500/20 bg-red-950/30 text-red-200/60"
+                    } ${
+                      isSameDay(day.date, today)
+                        ? "ring-1 ring-inset ring-red-400/70"
+                        : ""
                     }`}
                   >
-                    <div className="text-xs font-semibold uppercase tracking-wide text-red-200/70">
-                      {day.label}
+                    <div className="flex items-center justify-between gap-2 text-xs font-semibold uppercase tracking-wide text-red-200/70">
+                      <span>{day.label}</span>
+                      {isSameDay(day.date, today) ? (
+                        <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-[10px] font-semibold tracking-[0.2em] text-red-50">
+                          Today
+                        </span>
+                      ) : null}
                     </div>
                     <div className="space-y-3">
                       {day.events.length > 0 ? (
@@ -636,20 +777,30 @@ function CalendarSection(): ReactElement {
       {filteredEvents.length > 0 && view === "day" ? (
         <div className="space-y-5">
           <div className="flex flex-wrap gap-2">
-            {dayOptions.map((option) => (
-              <button
-                key={option.key}
-                type="button"
-                onClick={() => setSelectedDayKey(option.key)}
-                className={`rounded-full border px-4 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 ${
-                  selectedDayKey === option.key
-                    ? "border-red-400/55 bg-red-500/20 text-red-50 shadow-[0_12px_30px_rgba(220,38,38,0.2)]"
-                    : "border-red-500/25 bg-red-950/50 text-red-200/80 hover:text-red-100"
-                }`}
-              >
-                {option.shortLabel}
-              </button>
-            ))}
+            {dayOptions.map((option) => {
+              const isActive = selectedDayKey === option.key;
+              const isToday = isSameDay(option.date, today);
+
+              return (
+                <button
+                  key={option.key}
+                  type="button"
+                  onClick={() => setSelectedDayKey(option.key)}
+                  className={`rounded-full border px-4 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 ${
+                    isActive
+                      ? "border-red-400/55 bg-red-500/20 text-red-50 shadow-[0_12px_30px_rgba(220,38,38,0.2)]"
+                      : "border-red-500/25 bg-red-950/50 text-red-200/80 hover:text-red-100"
+                  } ${isToday ? "ring-1 ring-inset ring-red-300/60" : ""}`}
+                >
+                  <span>{option.shortLabel}</span>
+                  {isToday ? (
+                    <span className="ml-2 rounded-full bg-red-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-red-50">
+                      Today
+                    </span>
+                  ) : null}
+                </button>
+              );
+            })}
           </div>
 
           <RedSurface as="article" tone="muted" className="p-6 text-red-50">
