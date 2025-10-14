@@ -24,13 +24,21 @@ function CompetitionSection(): ReactElement {
       }),
     [locale],
   );
+  const timeFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, {
+        hour: "numeric",
+        minute: "2-digit",
+      }),
+    [locale],
+  );
   const events = competitionCalendarEvents.map((event) => ({
     id: event.id,
     title: t(event.titleKey, { ns: "translation" }),
     level: event.level,
     location: t(event.locationKey, { ns: "translation" }),
     dateLabel: dateFormatter.format(new Date(event.start)),
-    checkIn: event.checkIn,
+    checkIn: timeFormatter.format(new Date(event.checkIn)),
   }));
 
   return (
