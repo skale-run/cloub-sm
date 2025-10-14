@@ -225,5 +225,79 @@ export const ar = {
         },
       },
     },
+    performanceTracking: {
+      title: "تتبع الأداء",
+      description:
+        "لوحة مسودة لمراقبة التقدم التقني ومحطات الحضور والجاهزية للمنافسة.",
+      technicalProgress: {
+        title: "التقدم التقني",
+        lastAudit: "آخر مراجعة · 12 أبريل",
+        milestones: [
+          {
+            phase: "مرحلة الكتل",
+            milestone: "زوايا الساق ضمن 45° في أول ثلاث خطوات",
+            status: "تم التحقق في مراجعة فيديو 12 أبريل",
+          },
+          {
+            phase: "التسارع",
+            milestone: "الحفاظ على القوة الأفقية حتى علامة 30 م",
+            status: "يحتاج إلى تذكير ثانٍ · جدولة عدو بالمزلجة",
+          },
+        ],
+      },
+      attendance: {
+        title: "إجمالي الحضور",
+        totalSessionsLabel: "{{count}} حصة",
+        summary: {
+          totalSessions: 46,
+          attended: 42,
+          excused: 3,
+          unexcused: 1,
+        },
+        labels: {
+          attended: "حضور",
+          excused: "غياب مبرر",
+          unexcused: "غياب غير مبرر",
+        },
+      },
+      trainingStatistics: {
+        title: "إحصائيات التدريب",
+        subtitle: "ملخص الدورة",
+        items: [
+          { label: "إجمالي الساعات", value: "118س", trend: "+6% مقارنة بالدورة السابقة" },
+          { label: "جلسات مسجلة", value: "64", trend: "الهدف: 72 حصة" },
+          { label: "مؤشر الحمل", value: "متوسط", trend: "المحافظة خلال التخفيف" },
+        ],
+      },
+      competitionResults: {
+        title: "نتائج المنافسات",
+        subtitle: "أبرز أحداث الموسم",
+        placementFormat: "المركز · {{placement}}",
+        items: [
+          {
+            event: "بطولة متروبوليتان الدعوية",
+            result: "400م · 49.20ث",
+            placing: "برونزية",
+          },
+          {
+            event: "بطولة الولاية داخل القاعة",
+            result: "200م · 21.80ث",
+            placing: "متأهل للنهائي",
+          },
+        ],
+      },
+      weightTracking: {
+        title: "سجل الوزن",
+        subtitle: "متابعة أسبوعية",
+        entries: [
+          { label: "الأسبوع 13", weight: "78.4 كجم" },
+          { label: "الأسبوع 14", weight: "78.1 كجم" },
+          { label: "الأسبوع 15", weight: "77.9 كجم" },
+          { label: "الأسبوع 16", weight: "78.0 كجم" },
+        ],
+        rangeNote:
+          "النطاق المستهدف 77.8 كجم – 78.4 كجم. اطلب مراجعة تغذية إذا خرج الوزن عن النطاق لأسبوعين متتاليين.",
+      },
+    },
   },
 } as const;

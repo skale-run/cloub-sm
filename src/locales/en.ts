@@ -226,5 +226,79 @@ export const en = {
         },
       },
     },
+    performanceTracking: {
+      title: "Performance tracking",
+      description:
+        "Draft dashboard for monitoring technical progress, presence milestones and competitive readiness.",
+      technicalProgress: {
+        title: "Technical progress",
+        lastAudit: "Last audit · Apr 12",
+        milestones: [
+          {
+            phase: "Block phase",
+            milestone: "Shin angles within 45° for first three steps",
+            status: "Verified on Apr 12 video review",
+          },
+          {
+            phase: "Acceleration",
+            milestone: "Maintain horizontal force through 30m mark",
+            status: "Needs second cue · schedule sled sprints",
+          },
+        ],
+      },
+      attendance: {
+        title: "Total attendance",
+        totalSessionsLabel: "{{count}} sessions",
+        summary: {
+          totalSessions: 46,
+          attended: 42,
+          excused: 3,
+          unexcused: 1,
+        },
+        labels: {
+          attended: "Attended",
+          excused: "Excused",
+          unexcused: "Unexcused",
+        },
+      },
+      trainingStatistics: {
+        title: "Training statistics",
+        subtitle: "Block summary",
+        items: [
+          { label: "Total hours", value: "118h", trend: "+6% vs last block" },
+          { label: "Sessions logged", value: "64", trend: "Target: 72 sessions" },
+          { label: "Load score", value: "Moderate", trend: "Maintain during taper" },
+        ],
+      },
+      competitionResults: {
+        title: "Competition results",
+        subtitle: "Season highlights",
+        placementFormat: "Placement · {{placement}}",
+        items: [
+          {
+            event: "Metropolitan Invitational",
+            result: "400m · 49.20s",
+            placing: "Bronze",
+          },
+          {
+            event: "State Indoor Championships",
+            result: "200m · 21.80s",
+            placing: "Finalist",
+          },
+        ],
+      },
+      weightTracking: {
+        title: "Body weight log",
+        subtitle: "Weekly check-ins",
+        entries: [
+          { label: "Week 13", weight: "78.4 kg" },
+          { label: "Week 14", weight: "78.1 kg" },
+          { label: "Week 15", weight: "77.9 kg" },
+          { label: "Week 16", weight: "78.0 kg" },
+        ],
+        rangeNote:
+          "Range target 77.8 kg – 78.4 kg. Flag a nutrition review if weight drifts outside band for two consecutive weeks.",
+      },
+    },
   },
 } as const;
