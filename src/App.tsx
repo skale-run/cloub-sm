@@ -139,7 +139,7 @@ function App() {
 
   return (
     <>
-      <div className="relative min-h-screen overflow-hidden text-red-100">
+      <div className="relative min-h-screen overflow-x-hidden text-red-100">
         {sidebarOpen ? (
           <button
             type="button"
@@ -161,7 +161,7 @@ function App() {
 
           <RedSurface
             tone="primary"
-            className="flex flex-1 flex-col overflow-hidden xl:rounded-[32px]"
+            className="flex flex-1 flex-col overflow-x-hidden xl:rounded-[32px]"
           >
             <Header
               isSidebarOpen={sidebarOpen}

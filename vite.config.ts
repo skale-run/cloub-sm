@@ -10,4 +10,8 @@ export default defineConfig({
       'lucide-react': resolve(__dirname, 'src/lucide-react.tsx'),
     },
   },
+  build: {
+    outDir: 'run',
+    emptyOutDir: false,
+  },
 })
