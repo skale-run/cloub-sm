@@ -943,4 +943,470 @@ export const ar = {
       },
     },
   },
+  information: {
+    academic: {
+      heading: "السجل الأكاديمي",
+      description:
+        "حافظ على توافق متطلبات الأهلية مع تخطيط فصلك الدراسي الحالي.",
+      creditBadge: {
+        label: "وتيرة الساعات",
+        value: "{{current}} / {{target}} ساعة قيد التقدّم",
+        helper: "هامش الأهلية مستقر",
+      },
+      creditLoad: {
+        heading: "نظرة على حمل الساعات",
+        caption: "من أصل {{target}} ساعة مستهدفة مؤكدة لهذا الفصل",
+        helper:
+          "{{available}} ساعات إضافية متاحة لمساقات علوم الرياضة الاختيارية للحفاظ على الأهلية.",
+      },
+      creditDistribution: {
+        coreSciences: {
+          label: "العلوم الأساسية",
+          value: "9 ساعات",
+          context: "كُتل الميكانيكا الحيوية والفسيولوجيا",
+        },
+        performanceLabs: {
+          label: "مختبرات الأداء",
+          value: "6 ساعات",
+          context: "ساعات المختبر المسجّلة أسبوعيًا",
+        },
+        leadershipElectives: {
+          label: "القيادة والمساقات الاختيارية",
+          value: "3 ساعات",
+          context: "علم النفس الرياضي والإرشاد",
+        },
+      },
+      programInsights: {
+        heading: "رؤى البرنامج",
+      },
+      summaryInsights: {
+        currentGpa: {
+          label: "المعدل التراكمي الحالي",
+          value: "3.82",
+          context: "+0.12 هذا الفصل",
+        },
+        scholarshipEligibility: {
+          label: "أهلية المنحة",
+          value: "مؤمّنة",
+          context: "يستوفي حد 3.5 للمعدل",
+        },
+        graduationPath: {
+          label: "مسار التخرّج",
+          value: "62 / 90 ساعة",
+          context: "على الجدول — فصلان متبقيان",
+        },
+      },
+      modules: {
+        credits: "{{count}} ساعة",
+        focusCheckpoint: "نقطة تركيز",
+        progress: "{{percent}}٪ مكتمل",
+        nextEvaluationLabel: "التقييم القادم · {{date}}",
+        appliedSportsPsychology: {
+          title: "علم النفس الرياضي التطبيقي",
+          focus: "مشروع تركيز التهيئة الذهنية",
+          nextEvaluationDate: "12 مايو",
+        },
+        advancedBiomechanicsLab: {
+          title: "مختبر الميكانيكا الحيوية المتقدم",
+          focus: "تحليل المشية بالفيديو وتقرير",
+          nextEvaluationDate: "28 أبريل",
+        },
+        performanceNutritionStrategies: {
+          title: "استراتيجيات التغذية للأداء",
+          focus: "تسليم بروتوكولات تغذية الفريق",
+          nextEvaluationDate: "—",
+        },
+      },
+      moduleStatuses: {
+        onTrack: "ضمن المسار",
+        completed: "مكتمل",
+        labReportDue: "تقرير المختبر مستحق",
+      },
+      upcomingEvaluations: {
+        heading: "التقييمات القادمة",
+        helper: "خلال 30 يومًا",
+        dateLabel: "مستحق في {{date}}",
+        appliedSportsPsychology: {
+          module: "علم النفس الرياضي التطبيقي",
+          type: "تأمل منتصف الفصل",
+          date: "12 مايو",
+        },
+        advancedBiomechanicsLab: {
+          module: "مختبر الميكانيكا الحيوية المتقدم",
+          type: "تسليم تقرير مختبر",
+          date: "28 أبريل",
+        },
+        performanceNutritionStrategies: {
+          module: "استراتيجيات التغذية للأداء",
+          type: "ورشة عمل ختامية",
+          date: "02 يونيو",
+        },
+      },
+      checklist: {
+        heading: "قائمة الأهلية",
+        helper: "تزامن تلقائي يومي",
+        statuses: {
+          onTrack: "ضمن المسار",
+          reviewNeeded: "بحاجة لمراجعة",
+          scheduled: "مجدول",
+        },
+        items: {
+          ncaaMinimum: {
+            label: "الحفاظ على الحد الأدنى 12 ساعة لـ NCAA",
+            detail: "تم تأمين 18 ساعة مع إمكانية إضافة مقرر اختياري.",
+          },
+          labReport: {
+            label: "تسليم تقرير مختبر الميكانيكا الحيوية",
+            detail:
+              "المسودة مكتملة بنسبة 60٪ — حمّلها قبل 28 أبريل لتجنب الخصم.",
+          },
+          advisingSession: {
+            label: "جلسة إرشاد مع المدرب ريفيرا",
+            detail: "تأكيد نقطة التخطيط المهني في 22 أبريل.",
+          },
+        },
+      },
+      advisor: {
+        heading: "إرشادات المستشار",
+        helper: "آخر مزامنة 10 أبريل",
+        notes: {
+          capstoneIntegration: {
+            title: "دمج المشروع الختامي",
+            description:
+              "اربط مخرجات التغذية بالأداء مع انعكاس علم النفس الرياضي القادم لتقديم موحّد.",
+            action: "دمج المواد",
+          },
+          scholarshipRenewal: {
+            title: "تجديد المنحة",
+            description:
+              "المعدل فوق 3.5 بفارق مريح — أرسل مستندات التجديد بعد إعلان درجات الربيع.",
+            action: "تحضير المستندات",
+          },
+          leadershipHours: {
+            title: "ساعات القيادة",
+            description:
+              "سجّل آخر جلستين للإرشاد الزملائي لإكمال متطلب مادة القيادة قبل أسبوع الاختبارات.",
+          },
+        },
+      },
+    },
+    billing: {
+      heading: "نظرة على الفوترة",
+      description:
+        "تابع الرسوم المتكررة، الإضافات، والأرصدة المستحقة في مكان واحد.",
+      balanceBadge: {
+        label: "الرصيد",
+        value: "{{amount}}",
+      },
+      summaryCards: {
+        balance: {
+          label: "الرصيد المستحق",
+          value: "{{amount}}",
+          helper: "مستحق في 25 أبريل 2025",
+        },
+        autopay: {
+          label: "الخصم التلقائي القادم",
+          value: "01 مايو 2025",
+          helper: "رسوم عضوية الربيع",
+        },
+        lastPayment: {
+          label: "آخر دفعة مستلمة",
+          value: "{{amount}}",
+          helper: "مُقيدة في 18 مارس 2025",
+        },
+      },
+      invoices: {
+        heading: "الفواتير",
+        helper: "سجل الكشوف للأشهر الستة الماضية",
+        download: "تنزيل الكشف",
+        sendReceipt: "إرسال إيصال",
+        pending: {
+          label: "فواتير قيد الانتظار",
+          count_zero: "لا توجد فواتير مستحقة",
+          count_one: "فاتورة واحدة مستحقة",
+          count_two: "فاتورتان مستحقتان",
+          count_few: "{{count}} فواتير مستحقة",
+          count_many: "{{count}} فاتورة مستحقة",
+          count_other: "{{count}} فاتورة مستحقة",
+          total: "{{amount}} متبقية",
+        },
+        paid: {
+          label: "مدفوع هذا الموسم",
+          total: "{{amount}}",
+          count_zero: "بدون فواتير مدفوعة",
+          count_one: "عبر فاتورة واحدة",
+          count_two: "عبر فاتورتين",
+          count_few: "عبر {{count}} فواتير",
+          count_many: "عبر {{count}} فاتورة",
+          count_other: "عبر {{count}} فاتورة",
+        },
+        filters: {
+          label: "عوامل التصفية",
+          items: {
+            all: "الكل",
+            pending: "قيد الانتظار",
+            paid: "مدفوع",
+          },
+        },
+        table: {
+          invoice: "الفاتورة",
+          dueDate: "تاريخ الاستحقاق",
+          amount: "المبلغ",
+          status: "الحالة",
+        },
+        items: {
+          springMembershipDues: {
+            label: "رسوم عضوية الربيع",
+            dueDate: {
+              apr252025: "25 أبريل 2025",
+            },
+          },
+          strengthLabAccess: {
+            label: "الوصول إلى مختبر القوة",
+            dueDate: {
+              mar182025: "18 مارس 2025",
+            },
+          },
+          travelContribution: {
+            label: "مساهمة السفر · نهائيات القاعة المغلقة",
+            dueDate: {
+              feb022025: "02 فبراير 2025",
+            },
+          },
+        },
+        statuses: {
+          pending: "قيد الانتظار",
+          paid: "مدفوع",
+        },
+        empty:
+          "لا توجد فواتير تطابق عامل التصفية المختار. جرّب حالة أخرى لمراجعة الكشوف السابقة.",
+      },
+      autoPay: {
+        heading: "الخصم التلقائي",
+        helper: "مفعل للاشتراكات الشهرية",
+        manage: "إدارة",
+      },
+      paymentMethods: {
+        primaryCard: {
+          label: "طريقة الدفع الأساسية",
+          detail: "فيزا •••• 4298",
+          expires: "تنتهي 08/27",
+          status: "الخصم التلقائي مفعّل",
+        },
+        backupAccount: {
+          label: "طريقة الدفع الاحتياطية",
+          detail: "حساب جاري · بنك فيرست بينينسولا",
+          status: "يُستخدم للأرصدة المتأخرة",
+        },
+      },
+      upcomingCharges: {
+        heading: "الرسوم القادمة",
+        helper: "مجدولة تلقائيًا طوال الموسم",
+        items: {
+          physiotherapyBlock: {
+            label: "حزمة العلاج الطبيعي للفريق",
+            date: {
+              may082025: "08 مايو 2025",
+            },
+          },
+          facilityLevy: {
+            label: "رسم تطوير المرافق",
+            date: {
+              jun122025: "12 يونيو 2025",
+            },
+          },
+          summerTravelFund: {
+            label: "صندوق سفر الصيف",
+            date: {
+              jul012025: "01 يوليو 2025",
+            },
+          },
+        },
+      },
+    },
+    trainingAttendance: {
+      heading: "الحضور التدريبي",
+      description:
+        "نظرة أسبوعية على تسجيلات الدخول المؤكدة وأي ملاحظات من مكتب الطاقم.",
+      seasonRate: {
+        label: "نسبة الموسم",
+        value: "{{percent}}٪",
+      },
+      rateDelta: "{{value}}٪ مقارنة بالكتلة السابقة",
+      byWeek: {
+        heading: "الحضور حسب الأسبوع",
+        summary: "{{attended}} / {{planned}} جلسات محضورة",
+        peak: "ذروة التنفيذ: {{label}} · {{highlight}}",
+        focus: "تركيز قادم: {{label}} · {{highlight}}",
+        weeklyAttendance: "{{percent}}٪ حضور",
+        sessions: "{{attended}} من أصل {{planned}} جلسات · {{highlight}}",
+        items: {
+          week14: {
+            label: "الأسبوع 14",
+            highlight: "حضور كامل",
+          },
+          week15: {
+            label: "الأسبوع 15",
+            highlight: "تم تفويت حصة القوة · تأخر الرحلة",
+          },
+          week16: {
+            label: "الأسبوع 16",
+            highlight: "كتلة تعافٍ · إخلاء من أخصائي العلاج الطبيعي",
+          },
+        },
+      },
+      insights: {
+        consistencyStreak: {
+          label: "سلسلة الالتزام",
+          value: "6 حصص",
+          detail: "لا غيابات منذ 2 أبريل · رقم شخصي جديد",
+        },
+        availabilityForms: {
+          label: "نماذج التوفر",
+          value: "3 معلّقة",
+          detail: "تأكيدات فريق السفر مطلوبة قبل الجمعة",
+        },
+        readinessIndex: {
+          label: "مؤشر الجهوزية",
+          value: "92٪",
+          detail: "ملاحظات المدرب + موافقة العلاج الطبيعي في ارتفاع",
+        },
+      },
+      upcoming: {
+        heading: "عمليات التحقق القادمة",
+      },
+      followUp: {
+        heading: "إجراءات المتابعة",
+        helper: "أولويات التسجيل هذا الأسبوع",
+        actions: {
+          pending: {
+            label: "تأكيد الوصولات للسفر",
+            detail_zero: "لا أحد ينتظر تأكيد مكتب السفر.",
+            detail_one:
+              "لاعب واحد ينتظر تأكيد مكتب السفر وتوجيه الموقع.",
+            detail_two:
+              "لاعبان ينتظران تأكيد مكتب السفر وتوجيه الموقع.",
+            detail_few:
+              "{{count}} لاعبين ينتظرون تأكيد مكتب السفر وتوجيه الموقع.",
+            detail_many:
+              "{{count}} لاعبًا ينتظرون تأكيد مكتب السفر وتوجيه الموقع.",
+            detail_other:
+              "{{count}} لاعب ينتظر تأكيد مكتب السفر وتوجيه الموقع.",
+            emphasis_zero:
+              "لا حاجة لإرسال تذكيرات هذا الأسبوع.",
+            emphasis_one:
+              "أرسل تذكيرًا قبل اجتماع الخدمات اللوجستية ظهر الخميس.",
+            emphasis_two:
+              "أرسل تذكيرًا قبل اجتماع الخدمات اللوجستية ظهر الخميس.",
+            emphasis_few:
+              "أرسل تذكيرات قبل اجتماع الخدمات اللوجستية ظهر الخميس.",
+            emphasis_many:
+              "أرسل تذكيرًا قبل اجتماع الخدمات اللوجستية ظهر الخميس.",
+            emphasis_other:
+              "أرسل تذكيرًا قبل اجتماع الخدمات اللوجستية ظهر الخميس.",
+          },
+          medical: {
+            label: "تنسيق المراجعات الطبية",
+            detail_zero: "لا توجد ملفات طبية معلّقة.",
+            detail_one:
+              "لاعب واحد بحاجة إلى تحديث جدول العودة من الإيقاف الطبي.",
+            detail_two:
+              "لاعبان بحاجة إلى تحديث جدول العودة من الإيقاف الطبي.",
+            detail_few:
+              "{{count}} لاعبين بحاجة إلى تحديث جدول العودة من الإيقاف الطبي.",
+            detail_many:
+              "{{count}} لاعبًا بحاجة إلى تحديث جدول العودة من الإيقاف الطبي.",
+            detail_other:
+              "{{count}} لاعب بحاجة إلى تحديث جدول العودة من الإيقاف الطبي.",
+            emphasis_zero:
+              "لا حاجة لمزامنة إضافية مع الطاقم الطبي.",
+            emphasis_one:
+              "زامن ملاحظات العلاج الطبيعي مع الجهاز الفني قبل خطة الجمعة.",
+            emphasis_two:
+              "زامن ملاحظات العلاج الطبيعي مع الجهاز الفني قبل خطة الجمعة.",
+            emphasis_few:
+              "زامن ملاحظات العلاج الطبيعي مع الجهاز الفني قبل خطة الجمعة.",
+            emphasis_many:
+              "زامن ملاحظات العلاج الطبيعي مع الجهاز الفني قبل خطة الجمعة.",
+            emphasis_other:
+              "زامن ملاحظات العلاج الطبيعي مع الجهاز الفني قبل خطة الجمعة.",
+          },
+        },
+      },
+      sessions: {
+        ts1: {
+          focus:
+            "اختبار السرعة أثناء مجموعات القوة — عيّن أجهزة التسجيل قرب الرفوف.",
+          emphasis:
+            "يفتح استبيان العافية قبل 30 دقيقة؛ سجّل RPE بعد كل كتلة.",
+        },
+        ts2: {
+          focus:
+            "جلسة ضبط لفريق السفر مع بروتوكولات مرونة فردية عند الوصول.",
+          emphasis:
+            "تأكد من تسجيل فحوصات الترطيب قبل لفة الإحماء الرئيسية.",
+        },
+        ts3: {
+          focus:
+            "تحليل بالفيديو في غرفة الاجتماعات مع أزواج المراكز وجلسات القيادة.",
+          emphasis:
+            "وزّع رابط تسجيل الدخول عن بُعد للاعبين ذوي الخطط المعدّلة.",
+        },
+      },
+      teamStatus: {
+        heading: "حالة تسجيل الفريق",
+        helper: "جاهزية التشكيلة المباشرة",
+      },
+      statuses: {
+        confirmed: {
+          label: "مؤكد",
+          count_zero: "لا لاعب مؤكد",
+          count_one: "لاعب واحد مؤكد",
+          count_two: "لاعبان مؤكدان",
+          count_few: "{{count}} لاعبين مؤكدين",
+          count_many: "{{count}} لاعبًا مؤكدًا",
+          count_other: "{{count}} لاعب مؤكد",
+        },
+        pending: {
+          label: "معلق",
+          count_zero: "لا لاعب معلق",
+          count_one: "لاعب واحد معلق",
+          count_two: "لاعبان معلقان",
+          count_few: "{{count}} لاعبين معلقين",
+          count_many: "{{count}} لاعبًا معلقًا",
+          count_other: "{{count}} لاعب معلق",
+        },
+        medicalHold: {
+          label: "إيقاف طبي",
+          count_zero: "لا لاعب تحت الإيقاف الطبي",
+          count_one: "لاعب واحد تحت الإيقاف الطبي",
+          count_two: "لاعبان تحت الإيقاف الطبي",
+          count_few: "{{count}} لاعبين تحت الإيقاف الطبي",
+          count_many: "{{count}} لاعبًا تحت الإيقاف الطبي",
+          count_other: "{{count}} لاعب تحت الإيقاف الطبي",
+        },
+        percent: "{{percent}}٪ من التشكيلة",
+      },
+      roster: {
+        names: {
+          linaReyes: "لينا رييس",
+          noahPetrov: "نواه بيتروف",
+          aishaKato: "عائشة كاتو",
+          jonahHill: "جونا هيل",
+        },
+        roles: {
+          linaReyes: "400 متر حواجز",
+          noahPetrov: "800 متر",
+          aishaKato: "العداءة الأخيرة للتتابع",
+          jonahHill: "دفع الجلة",
+        },
+        notes: {
+          linaReyes: "تم تسجيل الحضور عبر التطبيق · 18:05",
+          noahPetrov: "تصل الرحلة 14:20 · يحتاج إلى موجز إحماء عن بُعد",
+          aishaKato: "إتمام اختبار العودة للركض السريع لدى العلاج الطبيعي الخميس",
+          jonahHill: "تم نقل حصة القوة إلى 07:30 مع هوغو",
+        },
+      },
+    },
+  },
 };

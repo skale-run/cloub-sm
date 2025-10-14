@@ -11,135 +11,126 @@ import {
 } from "../../lucide-react";
 import { trainingCalendarEvents } from "../calendar/calendarEvents";
 
-const attendanceByWeek = [
-  {
-    label: "Week 14",
-    plannedSessions: 4,
-    attendedSessions: 4,
-    highlight: "Perfect attendance",
-  },
-  {
-    label: "Week 15",
-    plannedSessions: 5,
-    attendedSessions: 4,
-    highlight: "Missed strength lift · travel delay",
-  },
-  {
-    label: "Week 16",
-    plannedSessions: 3,
-    attendedSessions: 2,
-    highlight: "Recovery block · cleared by physio",
-  },
+type AttendanceWeekKey = "week14" | "week15" | "week16";
+
+const attendanceByWeek: Array<{
+  key: AttendanceWeekKey;
+  plannedSessions: number;
+  attendedSessions: number;
+}> = [
+  { key: "week14", plannedSessions: 4, attendedSessions: 4 },
+  { key: "week15", plannedSessions: 5, attendedSessions: 4 },
+  { key: "week16", plannedSessions: 3, attendedSessions: 2 },
 ];
 
-const attendanceInsights: Array<{
-  label: string;
-  value: string;
-  detail: string;
-  icon: LucideIcon;
+const attendanceInsights = [
+  { key: "consistencyStreak", icon: ClipboardCheck },
+  { key: "availabilityForms", icon: CalendarDays },
+  { key: "readinessIndex", icon: LineChart },
+] as const;
+
+type RosterStatus = "confirmed" | "pending" | "medicalHold";
+
+type RosterEntryKey = "linaReyes" | "noahPetrov" | "aishaKato" | "jonahHill";
+
+const rosterAttendance: Array<{
+  key: RosterEntryKey;
+  roleKey: string;
+  status: RosterStatus;
+  noteKey: string;
 }> = [
   {
-    label: "Consistency streak",
-    value: "6 sessions",
-    detail: "Zero misses since April 2 · new personal best",
-    icon: ClipboardCheck,
+    key: "linaReyes",
+    roleKey: "information.trainingAttendance.roster.roles.linaReyes",
+    status: "confirmed",
+    noteKey: "information.trainingAttendance.roster.notes.linaReyes",
   },
   {
-    label: "Availability forms",
-    value: "3 pending",
-    detail: "Travel squad confirmations required before Friday",
-    icon: CalendarDays,
+    key: "noahPetrov",
+    roleKey: "information.trainingAttendance.roster.roles.noahPetrov",
+    status: "pending",
+    noteKey: "information.trainingAttendance.roster.notes.noahPetrov",
   },
   {
-    label: "Readiness index",
-    value: "92%",
-    detail: "Coach feedback + physio clearance trending up",
-    icon: LineChart,
+    key: "aishaKato",
+    roleKey: "information.trainingAttendance.roster.roles.aishaKato",
+    status: "medicalHold",
+    noteKey: "information.trainingAttendance.roster.notes.aishaKato",
+  },
+  {
+    key: "jonahHill",
+    roleKey: "information.trainingAttendance.roster.roles.jonahHill",
+    status: "confirmed",
+    noteKey: "information.trainingAttendance.roster.notes.jonahHill",
   },
 ];
 
-const rosterAttendance = [
-  {
-    athlete: "Lina Reyes",
-    role: "400m hurdles",
-    status: "Confirmed",
-    note: "Checked in via mobile app · 18:05",
-  },
-  {
-    athlete: "Noah Petrov",
-    role: "800m",
-    status: "Pending",
-    note: "Flight arrives 14:20 · needs remote warm-up brief",
-  },
-  {
-    athlete: "Aisha Kato",
-    role: "Relay anchor",
-    status: "Medical hold",
-    note: "Clearing return-to-sprint test at Thursday physio",
-  },
-  {
-    athlete: "Jonah Hill",
-    role: "Shot put",
-    status: "Confirmed",
-    note: "Strength block moved to 07:30 with Hugo",
-  },
-];
-
-const statusBadgeStyles: Record<
-  (typeof rosterAttendance)[number]["status"],
-  string
-> = {
-  Confirmed: "border-emerald-400/30 bg-emerald-500/15 text-emerald-100",
-  Pending: "border-amber-400/30 bg-amber-500/15 text-amber-100",
-  "Medical hold": "border-rose-400/30 bg-rose-500/15 text-rose-100",
+const statusBadgeStyles: Record<RosterStatus, string> = {
+  confirmed: "border-emerald-400/30 bg-emerald-500/15 text-emerald-100",
+  pending: "border-amber-400/30 bg-amber-500/15 text-amber-100",
+  medicalHold: "border-rose-400/30 bg-rose-500/15 text-rose-100",
 };
 
-const statusSummaryStyles = {
-  Confirmed: {
+const statusSummaryStyles: Record<
+  RosterStatus,
+  { icon: LucideIcon; track: string; bar: string }
+> = {
+  confirmed: {
     icon: ClipboardCheck,
     track: "bg-emerald-400/15",
     bar: "bg-emerald-400/80",
   },
-  Pending: {
+  pending: {
     icon: CalendarDays,
     track: "bg-amber-400/15",
     bar: "bg-amber-400/80",
   },
-  "Medical hold": {
+  medicalHold: {
     icon: Activity,
     track: "bg-rose-400/15",
     bar: "bg-rose-400/80",
   },
-} satisfies Record<
-  (typeof rosterAttendance)[number]["status"],
-  { icon: LucideIcon; track: string; bar: string }
->;
+};
 
-type RosterStatus = (typeof rosterAttendance)[number]["status"];
-
-type FollowUpAction = {
-  id: string;
-  label: string;
-  detail: string;
-  emphasis: string;
+type FollowUpActionDefinition = {
+  id: "pending" | "medical";
+  status: RosterStatus;
+  translationKey:
+    | "information.trainingAttendance.followUp.actions.pending"
+    | "information.trainingAttendance.followUp.actions.medical";
   icon: LucideIcon;
 };
 
+const followUpActionDefinitions: FollowUpActionDefinition[] = [
+  {
+    id: "pending",
+    status: "pending",
+    translationKey: "information.trainingAttendance.followUp.actions.pending",
+    icon: CalendarDays,
+  },
+  {
+    id: "medical",
+    status: "medicalHold",
+    translationKey: "information.trainingAttendance.followUp.actions.medical",
+    icon: Activity,
+  },
+];
+
 const sessionFocusNotes: Record<
   (typeof trainingCalendarEvents)[number]["id"],
-  { focus: string; emphasis: string }
+  { focusKey: string; emphasisKey: string }
 > = {
   "ts-1": {
-    focus: "Velocity testing during strength sets—assign check-in tablets near racks.",
-    emphasis: "Wellness survey opens 30 minutes prior; capture RPE after each block.",
+    focusKey: "information.trainingAttendance.sessions.ts1.focus",
+    emphasisKey: "information.trainingAttendance.sessions.ts1.emphasis",
   },
   "ts-2": {
-    focus: "Travel squad tune-up with individual mobility protocols staged on arrival.",
-    emphasis: "Ensure hydration scans are logged before main warm-up lap.",
+    focusKey: "information.trainingAttendance.sessions.ts2.focus",
+    emphasisKey: "information.trainingAttendance.sessions.ts2.emphasis",
   },
   "ts-3": {
-    focus: "Film room breakdown with positional pairings and leadership huddles.",
-    emphasis: "Circulate remote check-in link for athletes on modified plans.",
+    focusKey: "information.trainingAttendance.sessions.ts3.focus",
+    emphasisKey: "information.trainingAttendance.sessions.ts3.emphasis",
   },
 };
 
@@ -177,7 +168,10 @@ function TrainingAttendanceSection(): ReactElement {
   const attendanceRate = Math.round((totalAttended / totalPlanned) * 100);
   const previousAttendanceRate = 82;
   const rateDelta = attendanceRate - previousAttendanceRate;
-  const rateDeltaLabel = `${rateDelta >= 0 ? "+" : ""}${rateDelta}% vs last block`;
+  const formattedDelta = `${rateDelta >= 0 ? "+" : ""}${rateDelta}`;
+  const rateDeltaLabel = t("information.trainingAttendance.rateDelta", {
+    value: formattedDelta,
+  });
 
   const upcomingSessions = trainingCalendarEvents.slice(0, 3).map((session) => {
     const start = new Date(session.start);
@@ -189,8 +183,8 @@ function TrainingAttendanceSection(): ReactElement {
       timeLabel: timeFormatter.format(start),
       coach: t(session.coachKey),
       location: t(session.locationKey),
-      focus: focus?.focus,
-      emphasis: focus?.emphasis,
+      focus: focus ? t(focus.focusKey) : undefined,
+      emphasis: focus ? t(focus.emphasisKey) : undefined,
     };
   });
 
@@ -221,30 +215,26 @@ function TrainingAttendanceSection(): ReactElement {
     },
   );
 
-  const followUpActions = [
-    rosterStatusCounts.Pending
-      ? {
-          id: "pending",
-          label: "Confirm travel arrivals",
-          detail: `${rosterStatusCounts.Pending} athlete${
-            rosterStatusCounts.Pending > 1 ? "s" : ""
-          } are awaiting travel desk confirmation and location briefings.`,
-          emphasis: "Send reminder before Thursday noon logistics call.",
-          icon: CalendarDays,
-        }
-      : null,
-    rosterStatusCounts["Medical hold"]
-      ? {
-          id: "medical",
-          label: "Coordinate medical reviews",
-          detail: `${rosterStatusCounts["Medical hold"]} athlete${
-            (rosterStatusCounts["Medical hold"] ?? 0) > 1 ? "s" : ""
-          } flagged for clearance need updated return timelines.`,
-          emphasis: "Sync physio notes with coaching staff before Friday block plan.",
-          icon: Activity,
-        }
-      : null,
-  ].filter(Boolean) as FollowUpAction[];
+  const followUpActions = followUpActionDefinitions
+    .map((definition) => {
+      const count = rosterStatusCounts[definition.status] ?? 0;
+      if (!count) {
+        return null;
+      }
+
+      return {
+        id: definition.id,
+        icon: definition.icon,
+        count,
+        translationKey: definition.translationKey,
+      };
+    })
+    .filter(Boolean) as Array<{
+    id: "pending" | "medical";
+    icon: LucideIcon;
+    count: number;
+    translationKey: FollowUpActionDefinition["translationKey"];
+  }>;
 
   const weeklyAttendanceRanking = attendanceByWeek.reduce(
     (
@@ -283,20 +273,21 @@ function TrainingAttendanceSection(): ReactElement {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
-            Training attendance
+            {t("information.trainingAttendance.heading")}
           </h2>
           <p className="text-sm text-red-200/75">
-            Weekly overview of confirmed check-ins and any notes from the staff
-            desk.
+            {t("information.trainingAttendance.description")}
           </p>
         </div>
         <span className="inline-flex items-center gap-4 rounded-3xl border border-red-400/45 bg-red-500/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-red-100">
           <span className="flex flex-col items-end gap-1 text-right">
             <span className="text-[0.75rem] tracking-[0.4em] text-red-200/75">
-              Season rate
+              {t("information.trainingAttendance.seasonRate.label")}
             </span>
             <span className="text-base font-semibold text-red-50">
-              {attendanceRate}%
+              {t("information.trainingAttendance.seasonRate.value", {
+                percent: attendanceRate,
+              })}
             </span>
           </span>
           <span className="rounded-full border border-red-400/40 bg-red-500/15 px-3 py-1 text-[0.7rem] font-semibold tracking-[0.2em] text-red-100/85">
@@ -309,21 +300,38 @@ function TrainingAttendanceSection(): ReactElement {
         <RedSurface tone="muted" className="space-y-4 p-6">
           <header className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-red-50">
-              Attendance by week
+              {t("information.trainingAttendance.byWeek.heading")}
             </h3>
             <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-              {totalAttended} / {totalPlanned} sessions attended
+              {t("information.trainingAttendance.byWeek.summary", {
+                attended: totalAttended,
+                planned: totalPlanned,
+              })}
             </p>
           </header>
           <div className="space-y-2 text-xs text-red-100/70">
             {bestWeek ? (
               <p>
-                Peak execution: {bestWeek.label} · {bestWeek.highlight}
+                {t("information.trainingAttendance.byWeek.peak", {
+                  label: t(
+                    `information.trainingAttendance.byWeek.items.${bestWeek.key}.label`,
+                  ),
+                  highlight: t(
+                    `information.trainingAttendance.byWeek.items.${bestWeek.key}.highlight`,
+                  ),
+                })}
               </p>
             ) : null}
             {focusWeek ? (
               <p>
-                Upcoming focus: {focusWeek.label} · {focusWeek.highlight}
+                {t("information.trainingAttendance.byWeek.focus", {
+                  label: t(
+                    `information.trainingAttendance.byWeek.items.${focusWeek.key}.label`,
+                  ),
+                  highlight: t(
+                    `information.trainingAttendance.byWeek.items.${focusWeek.key}.highlight`,
+                  ),
+                })}
               </p>
             ) : null}
           </div>
@@ -332,13 +340,15 @@ function TrainingAttendanceSection(): ReactElement {
               const InsightIcon = insight.icon;
               return (
                 <RedSurface
-                  key={insight.label}
+                  key={insight.key}
                   tone="glass"
                   className="flex flex-col gap-2 rounded-2xl p-4"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                      {insight.label}
+                      {t(
+                        `information.trainingAttendance.insights.${insight.key}.label`,
+                      )}
                     </p>
                     <InsightIcon
                       className="h-5 w-5 text-red-200/80"
@@ -346,9 +356,15 @@ function TrainingAttendanceSection(): ReactElement {
                     />
                   </div>
                   <p className="text-lg font-semibold text-red-50">
-                    {insight.value}
+                    {t(
+                      `information.trainingAttendance.insights.${insight.key}.value`,
+                    )}
                   </p>
-                  <p className="text-xs text-red-100/80">{insight.detail}</p>
+                  <p className="text-xs text-red-100/80">
+                    {t(
+                      `information.trainingAttendance.insights.${insight.key}.detail`,
+                    )}
+                  </p>
                 </RedSurface>
               );
             })}
@@ -360,22 +376,35 @@ function TrainingAttendanceSection(): ReactElement {
               );
               return (
                 <RedSurface
-                  key={week.label}
+                  key={week.key}
                   as="article"
                   tone="glass"
                   className="rounded-2xl p-4 text-red-50"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <p className="text-sm font-semibold text-red-50">
-                      {week.label}
+                      {t(
+                        `information.trainingAttendance.byWeek.items.${week.key}.label`,
+                      )}
                     </p>
                     <span className="text-xs uppercase tracking-[0.3em] text-red-200/80">
-                      {weeklyRate}% attendance
+                      {t(
+                        "information.trainingAttendance.byWeek.weeklyAttendance",
+                        { percent: weeklyRate },
+                      )}
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-red-100/80">
-                    {week.attendedSessions} of {week.plannedSessions} sessions ·{" "}
-                    {week.highlight}
+                    {t(
+                      "information.trainingAttendance.byWeek.sessions",
+                      {
+                        attended: week.attendedSessions,
+                        planned: week.plannedSessions,
+                        highlight: t(
+                          `information.trainingAttendance.byWeek.items.${week.key}.highlight`,
+                        ),
+                      },
+                    )}
                   </p>
                   <div className="mt-3 h-2 rounded-full bg-red-950/45">
                     <div
@@ -398,7 +427,7 @@ function TrainingAttendanceSection(): ReactElement {
           >
             <div className="flex items-center justify-between gap-3">
               <h3 className="text-lg font-semibold text-red-50">
-                Upcoming check-ins
+                {t("information.trainingAttendance.upcoming.heading")}
               </h3>
               <CalendarDays className="h-5 w-5 text-red-200/75" aria-hidden />
             </div>
@@ -444,10 +473,10 @@ function TrainingAttendanceSection(): ReactElement {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-semibold text-red-50">
-                    Follow-up actions
+                    {t("information.trainingAttendance.followUp.heading")}
                   </h3>
                   <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-                    Check-in priorities this week
+                    {t("information.trainingAttendance.followUp.helper")}
                   </p>
                 </div>
                 <ClipboardCheck className="h-5 w-5 text-red-200/75" aria-hidden />
@@ -466,11 +495,17 @@ function TrainingAttendanceSection(): ReactElement {
                         </span>
                         <div className="space-y-2">
                           <p className="text-sm font-semibold text-red-50">
-                            {action.label}
+                            {t(`${action.translationKey}.label`)}
                           </p>
-                          <p className="text-xs text-red-100/80">{action.detail}</p>
+                          <p className="text-xs text-red-100/80">
+                            {t(`${action.translationKey}.detail`, {
+                              count: action.count,
+                            })}
+                          </p>
                           <p className="text-[0.7rem] uppercase tracking-[0.35em] text-red-200/70">
-                            {action.emphasis}
+                            {t(`${action.translationKey}.emphasis`, {
+                              count: action.count,
+                            })}
                           </p>
                         </div>
                       </div>
@@ -489,10 +524,10 @@ function TrainingAttendanceSection(): ReactElement {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h3 className="text-lg font-semibold text-red-50">
-                  Team check-in status
+                  {t("information.trainingAttendance.teamStatus.heading")}
                 </h3>
                 <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-                  Live roster availability
+                  {t("information.trainingAttendance.teamStatus.helper")}
                 </p>
               </div>
               <Users className="h-5 w-5 text-red-200/75" aria-hidden />
@@ -507,10 +542,15 @@ function TrainingAttendanceSection(): ReactElement {
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                        {status.status}
+                        {t(
+                          `information.trainingAttendance.statuses.${status.status}.label`,
+                        )}
                       </p>
                       <p className="text-lg font-semibold text-red-50">
-                        {status.count} athlete{status.count === 1 ? "" : "s"}
+                        {t(
+                          `information.trainingAttendance.statuses.${status.status}.count`,
+                          { count: status.count },
+                        )}
                       </p>
                     </div>
                     <status.SummaryIcon
@@ -528,7 +568,12 @@ function TrainingAttendanceSection(): ReactElement {
                     />
                   </div>
                   <p className="mt-2 text-xs text-red-100/75">
-                    {status.percent}% of roster
+                    {t(
+                      "information.trainingAttendance.statuses.percent",
+                      {
+                        percent: status.percent,
+                      },
+                    )}
                   </p>
                 </RedSurface>
               ))}
@@ -536,25 +581,31 @@ function TrainingAttendanceSection(): ReactElement {
             <ul className="space-y-3">
               {rosterAttendance.map((entry) => (
                 <li
-                  key={entry.athlete}
+                  key={entry.key}
                   className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <p className="text-sm font-semibold text-red-50">
-                        {entry.athlete}
+                        {t(
+                          `information.trainingAttendance.roster.names.${entry.key}`,
+                        )}
                       </p>
                       <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-                        {entry.role}
+                        {t(entry.roleKey)}
                       </p>
                     </div>
                     <span
                       className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] ${statusBadgeStyles[entry.status]}`}
                     >
-                      {entry.status}
+                      {t(
+                        `information.trainingAttendance.statuses.${entry.status}.label`,
+                      )}
                     </span>
                   </div>
-                  <p className="mt-2 text-xs text-red-100/75">{entry.note}</p>
+                  <p className="mt-2 text-xs text-red-100/75">
+                    {t(entry.noteKey)}
+                  </p>
                 </li>
               ))}
             </ul>

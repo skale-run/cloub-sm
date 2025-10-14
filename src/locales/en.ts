@@ -915,4 +915,423 @@ export const en = {
       },
     },
   },
+  information: {
+    academic: {
+      heading: "Academic record",
+      description:
+        "Keep eligibility requirements aligned with your current semester planning.",
+      creditBadge: {
+        label: "Credit pacing",
+        value: "{{current}} / {{target}} credits in progress",
+        helper: "Maintaining eligibility margin",
+      },
+      creditLoad: {
+        heading: "Credit load overview",
+        caption:
+          "of {{target}} target credits confirmed for the current semester",
+        helper:
+          "{{available}} additional credits available for optional sport science electives to maintain eligibility.",
+      },
+      creditDistribution: {
+        coreSciences: {
+          label: "Core sciences",
+          value: "9 credits",
+          context: "Biomechanics, physiology blocks",
+        },
+        performanceLabs: {
+          label: "Performance labs",
+          value: "6 credits",
+          context: "Lab hours logged weekly",
+        },
+        leadershipElectives: {
+          label: "Leadership & electives",
+          value: "3 credits",
+          context: "Sport psych & mentoring",
+        },
+      },
+      programInsights: {
+        heading: "Program insights",
+      },
+      summaryInsights: {
+        currentGpa: {
+          label: "Current GPA",
+          value: "3.82",
+          context: "+0.12 this term",
+        },
+        scholarshipEligibility: {
+          label: "Scholarship eligibility",
+          value: "Secure",
+          context: "Meets 3.5 GPA minimum",
+        },
+        graduationPath: {
+          label: "Graduation path",
+          value: "62 / 90 credits",
+          context: "On schedule — 2 terms remaining",
+        },
+      },
+      modules: {
+        credits: "{{count}} credits",
+        focusCheckpoint: "Focus checkpoint",
+        progress: "{{percent}}% complete",
+        nextEvaluationLabel: "Next evaluation · {{date}}",
+        appliedSportsPsychology: {
+          title: "Applied Sports Psychology",
+          focus: "Mental conditioning focus project",
+          nextEvaluationDate: "May 12",
+        },
+        advancedBiomechanicsLab: {
+          title: "Advanced Biomechanics Lab",
+          focus: "Video gait analysis and report",
+          nextEvaluationDate: "Apr 28",
+        },
+        performanceNutritionStrategies: {
+          title: "Performance Nutrition Strategies",
+          focus: "Team fueling protocols delivered",
+          nextEvaluationDate: "—",
+        },
+      },
+      moduleStatuses: {
+        onTrack: "On track",
+        completed: "Completed",
+        labReportDue: "Lab report due",
+      },
+      upcomingEvaluations: {
+        heading: "Upcoming evaluations",
+        helper: "Next 30 days",
+        dateLabel: "Due {{date}}",
+        appliedSportsPsychology: {
+          module: "Applied Sports Psychology",
+          type: "Midterm reflection",
+          date: "May 12",
+        },
+        advancedBiomechanicsLab: {
+          module: "Advanced Biomechanics Lab",
+          type: "Lab report submission",
+          date: "Apr 28",
+        },
+        performanceNutritionStrategies: {
+          module: "Performance Nutrition Strategies",
+          type: "Capstone workshop",
+          date: "Jun 02",
+        },
+      },
+      checklist: {
+        heading: "Eligibility checklist",
+        helper: "Auto-synced daily",
+        statuses: {
+          onTrack: "On track",
+          reviewNeeded: "Review needed",
+          scheduled: "Scheduled",
+        },
+        items: {
+          ncaaMinimum: {
+            label: "Maintain 12 credit NCAA minimum",
+            detail:
+              "18 credits secured with room for one elective add-on.",
+          },
+          labReport: {
+            label: "Submit biomechanics lab report",
+            detail:
+              "Draft 60% complete — upload by Apr 28 to avoid penalty.",
+          },
+          advisingSession: {
+            label: "Advising session with Coach Rivera",
+            detail:
+              "Career planning touchpoint confirmed for Apr 22.",
+          },
+        },
+      },
+      advisor: {
+        heading: "Advisor guidance",
+        helper: "Last sync Apr 10",
+        notes: {
+          capstoneIntegration: {
+            title: "Capstone integration",
+            description:
+              "Tie performance nutrition deliverables into upcoming sport psychology reflection for a cohesive submission.",
+            action: "Combine artifacts",
+          },
+          scholarshipRenewal: {
+            title: "Scholarship renewal",
+            description:
+              "GPA comfortably above 3.5 threshold — submit renewal paperwork after final spring grades are posted.",
+            action: "Prep documents",
+          },
+          leadershipHours: {
+            title: "Leadership hours",
+            description:
+              "Log final two peer-mentoring sessions to close out leadership elective requirement before finals week.",
+          },
+        },
+      },
+    },
+    billing: {
+      heading: "Billing overview",
+      description:
+        "Keep track of recurring fees, add-ons and outstanding balances in one place.",
+      balanceBadge: {
+        label: "Balance",
+        value: "{{amount}}",
+      },
+      summaryCards: {
+        balance: {
+          label: "Outstanding balance",
+          value: "{{amount}}",
+          helper: "Due Apr 25, 2025",
+        },
+        autopay: {
+          label: "Next auto-pay",
+          value: "May 01, 2025",
+          helper: "Spring membership dues",
+        },
+        lastPayment: {
+          label: "Last payment received",
+          value: "{{amount}}",
+          helper: "Posted Mar 18, 2025",
+        },
+      },
+      invoices: {
+        heading: "Invoices",
+        helper: "Statement history for the past 6 months",
+        download: "Download statement",
+        sendReceipt: "Send receipt",
+        pending: {
+          label: "Pending invoices",
+          count_one: "{{count}} due",
+          count_other: "{{count}} due",
+          total: "{{amount}} outstanding",
+        },
+        paid: {
+          label: "Paid this season",
+          total: "{{amount}}",
+          count_one: "Across {{count}} invoice",
+          count_other: "Across {{count}} invoices",
+        },
+        filters: {
+          label: "Filters",
+          items: {
+            all: "All",
+            pending: "Pending",
+            paid: "Paid",
+          },
+        },
+        table: {
+          invoice: "Invoice",
+          dueDate: "Due date",
+          amount: "Amount",
+          status: "Status",
+        },
+        items: {
+          springMembershipDues: {
+            label: "Spring membership dues",
+            dueDate: {
+              apr252025: "Apr 25, 2025",
+            },
+          },
+          strengthLabAccess: {
+            label: "Strength lab access",
+            dueDate: {
+              mar182025: "Mar 18, 2025",
+            },
+          },
+          travelContribution: {
+            label: "Travel contribution · Indoor finals",
+            dueDate: {
+              feb022025: "Feb 02, 2025",
+            },
+          },
+        },
+        statuses: {
+          pending: "Pending",
+          paid: "Paid",
+        },
+        empty:
+          "No invoices match the selected filter. Try another status to review previous statements.",
+      },
+      autoPay: {
+        heading: "Auto-pay",
+        helper: "Enabled for monthly subscriptions",
+        manage: "Manage",
+      },
+      paymentMethods: {
+        primaryCard: {
+          label: "Primary payment method",
+          detail: "Visa •••• 4298",
+          expires: "Exp. 08/27",
+          status: "Auto-pay enabled",
+        },
+        backupAccount: {
+          label: "Backup payment method",
+          detail: "Checking · First Peninsula Bank",
+          status: "Used for overdue balances",
+        },
+      },
+      upcomingCharges: {
+        heading: "Upcoming charges",
+        helper: "Automatically scheduled through the season",
+        items: {
+          physiotherapyBlock: {
+            label: "Team physiotherapy block",
+            date: {
+              may082025: "May 08, 2025",
+            },
+          },
+          facilityLevy: {
+            label: "Facility upgrade levy",
+            date: {
+              jun122025: "Jun 12, 2025",
+            },
+          },
+          summerTravelFund: {
+            label: "Summer travel fund",
+            date: {
+              jul012025: "Jul 01, 2025",
+            },
+          },
+        },
+      },
+    },
+    trainingAttendance: {
+      heading: "Training attendance",
+      description:
+        "Weekly overview of confirmed check-ins and any notes from the staff desk.",
+      seasonRate: {
+        label: "Season rate",
+        value: "{{percent}}%",
+      },
+      rateDelta: "{{value}}% vs last block",
+      byWeek: {
+        heading: "Attendance by week",
+        summary: "{{attended}} / {{planned}} sessions attended",
+        peak: "Peak execution: {{label}} · {{highlight}}",
+        focus: "Upcoming focus: {{label}} · {{highlight}}",
+        weeklyAttendance: "{{percent}}% attendance",
+        sessions:
+          "{{attended}} of {{planned}} sessions · {{highlight}}",
+        items: {
+          week14: {
+            label: "Week 14",
+            highlight: "Perfect attendance",
+          },
+          week15: {
+            label: "Week 15",
+            highlight: "Missed strength lift · travel delay",
+          },
+          week16: {
+            label: "Week 16",
+            highlight: "Recovery block · cleared by physio",
+          },
+        },
+      },
+      insights: {
+        consistencyStreak: {
+          label: "Consistency streak",
+          value: "6 sessions",
+          detail: "Zero misses since April 2 · new personal best",
+        },
+        availabilityForms: {
+          label: "Availability forms",
+          value: "3 pending",
+          detail: "Travel squad confirmations required before Friday",
+        },
+        readinessIndex: {
+          label: "Readiness index",
+          value: "92%",
+          detail: "Coach feedback + physio clearance trending up",
+        },
+      },
+      upcoming: {
+        heading: "Upcoming check-ins",
+      },
+      followUp: {
+        heading: "Follow-up actions",
+        helper: "Check-in priorities this week",
+        actions: {
+          pending: {
+            label: "Confirm travel arrivals",
+            detail_one:
+              "{{count}} athlete is awaiting travel desk confirmation and location briefing.",
+            detail_other:
+              "{{count}} athletes are awaiting travel desk confirmation and location briefings.",
+            emphasis_one: "Send reminder before Thursday noon logistics call.",
+            emphasis_other:
+              "Send reminders before Thursday noon logistics call.",
+          },
+          medical: {
+            label: "Coordinate medical reviews",
+            detail_one:
+              "{{count}} athlete flagged for clearance needs an updated return timeline.",
+            detail_other:
+              "{{count}} athletes flagged for clearance need updated return timelines.",
+            emphasis_one:
+              "Sync physio notes with coaching staff before Friday block plan.",
+            emphasis_other:
+              "Sync physio notes with coaching staff before Friday block plan.",
+          },
+        },
+      },
+      sessions: {
+        ts1: {
+          focus:
+            "Velocity testing during strength sets—assign check-in tablets near racks.",
+          emphasis:
+            "Wellness survey opens 30 minutes prior; capture RPE after each block.",
+        },
+        ts2: {
+          focus:
+            "Travel squad tune-up with individual mobility protocols staged on arrival.",
+          emphasis:
+            "Ensure hydration scans are logged before main warm-up lap.",
+        },
+        ts3: {
+          focus:
+            "Film room breakdown with positional pairings and leadership huddles.",
+          emphasis:
+            "Circulate remote check-in link for athletes on modified plans.",
+        },
+      },
+      teamStatus: {
+        heading: "Team check-in status",
+        helper: "Live roster availability",
+      },
+      statuses: {
+        confirmed: {
+          label: "Confirmed",
+          count_one: "{{count}} athlete confirmed",
+          count_other: "{{count}} athletes confirmed",
+        },
+        pending: {
+          label: "Pending",
+          count_one: "{{count}} athlete pending",
+          count_other: "{{count}} athletes pending",
+        },
+        medicalHold: {
+          label: "Medical hold",
+          count_one: "{{count}} athlete on medical hold",
+          count_other: "{{count}} athletes on medical hold",
+        },
+        percent: "{{percent}}% of roster",
+      },
+      roster: {
+        names: {
+          linaReyes: "Lina Reyes",
+          noahPetrov: "Noah Petrov",
+          aishaKato: "Aisha Kato",
+          jonahHill: "Jonah Hill",
+        },
+        roles: {
+          linaReyes: "400m hurdles",
+          noahPetrov: "800m",
+          aishaKato: "Relay anchor",
+          jonahHill: "Shot put",
+        },
+        notes: {
+          linaReyes: "Checked in via mobile app · 18:05",
+          noahPetrov: "Flight arrives 14:20 · needs remote warm-up brief",
+          aishaKato: "Clearing return-to-sprint test at Thursday physio",
+          jonahHill: "Strength block moved to 07:30 with Hugo",
+        },
+      },
+    },
+  },
 };
