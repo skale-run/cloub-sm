@@ -1,21 +1,22 @@
-export type TrainingCalendarEvent = {
+export type CalendarCategory = "training" | "competition";
+
+type BaseCalendarEvent = {
   id: string;
-  category: "training";
-  title: string;
-  location: string;
+  category: CalendarCategory;
+  titleKey: string;
+  locationKey: string;
   start: string;
   end: string;
-  coach: string;
 };
 
-export type CompetitionCalendarEvent = {
-  id: string;
+export type TrainingCalendarEvent = BaseCalendarEvent & {
+  category: "training";
+  coachKey: string;
+};
+
+export type CompetitionCalendarEvent = BaseCalendarEvent & {
   category: "competition";
-  title: string;
-  location: string;
-  start: string;
-  end: string;
-  level: "Regional" | "National" | "International";
+  level: "regional" | "national" | "international";
   checkIn: string;
 };
 
@@ -25,58 +26,58 @@ export const calendarEvents: CalendarEvent[] = [
   {
     id: "ts-1",
     category: "training",
-    title: "Explosive Strength & Plyometrics",
-    location: "Arena Studio 2",
+    titleKey: "calendar.events.ts1.title",
+    locationKey: "calendar.events.ts1.location",
     start: "2025-04-14T06:30:00",
     end: "2025-04-14T08:00:00",
-    coach: "Coach Amara Lewis",
+    coachKey: "calendar.events.ts1.coach",
   },
   {
     id: "ts-2",
     category: "training",
-    title: "Technical Drills & Recovery",
-    location: "Track 1",
+    titleKey: "calendar.events.ts2.title",
+    locationKey: "calendar.events.ts2.location",
     start: "2025-04-16T18:00:00",
     end: "2025-04-16T20:00:00",
-    coach: "Coach Hugo Martín",
+    coachKey: "calendar.events.ts2.coach",
   },
   {
     id: "ts-3",
     category: "training",
-    title: "Video Review & Strategy Lab",
-    location: "HQ Briefing Room",
+    titleKey: "calendar.events.ts3.title",
+    locationKey: "calendar.events.ts3.location",
     start: "2025-04-18T11:00:00",
     end: "2025-04-18T12:30:00",
-    coach: "Analyst Team",
+    coachKey: "calendar.events.ts3.coach",
   },
   {
     id: "cc-1",
     category: "competition",
-    title: "Metropolitan Invitational",
-    location: "New Crest Stadium",
+    titleKey: "calendar.events.cc1.title",
+    locationKey: "calendar.events.cc1.location",
     start: "2025-04-26T08:00:00",
     end: "2025-04-26T18:00:00",
-    level: "Regional",
+    level: "regional",
     checkIn: "08:00",
   },
   {
     id: "cc-2",
     category: "competition",
-    title: "Summer National Trials",
-    location: "Capital City Arena",
+    titleKey: "calendar.events.cc2.title",
+    locationKey: "calendar.events.cc2.location",
     start: "2025-05-10T06:30:00",
     end: "2025-05-10T17:00:00",
-    level: "National",
+    level: "national",
     checkIn: "06:30",
   },
   {
     id: "cc-3",
     category: "competition",
-    title: "Continental Grand Prix",
-    location: "Lisbon Athletics Park",
+    titleKey: "calendar.events.cc3.title",
+    locationKey: "calendar.events.cc3.location",
     start: "2025-05-23T07:15:00",
     end: "2025-05-23T20:00:00",
-    level: "International",
+    level: "international",
     checkIn: "07:15",
   },
 ];
