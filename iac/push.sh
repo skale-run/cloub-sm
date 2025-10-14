@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VERSION="${VERSION:-v50}"
 BUILD_OUTPUT_DIR="${BUILD_OUTPUT_DIR:-run}"
-BUILD_DIR="${ROOT_DIR}/${BUILD_OUTPUT_DIR}"
+BUILD_DIR="./${BUILD_OUTPUT_DIR}"
 
 echo $BUILD_OUTPUT_DIR
 echo $BUILD_DIR
