@@ -6,28 +6,30 @@ import { trainingCalendarEvents } from "../calendar/calendarEvents";
 function TrainingSection(): ReactElement {
   const { t, i18n } = useTranslation();
 
+  const locale = i18n.language.startsWith("ar") ? "ar-EG" : "en-US";
+
   const dateFormatter = useMemo(
     () =>
-      new Intl.DateTimeFormat(i18n.language, {
+      new Intl.DateTimeFormat(locale, {
         weekday: "short",
         day: "numeric",
         month: "short",
       }),
-    [i18n.language],
+    [locale],
   );
 
   const timeFormatter = useMemo(
     () =>
-      new Intl.DateTimeFormat(i18n.language, {
+      new Intl.DateTimeFormat(locale, {
         hour: "numeric",
         minute: "2-digit",
       }),
-    [i18n.language],
+    [locale],
   );
 
   const weekNumber = 16;
   const weekLabel = t("training.weekLabel", {
-    week: new Intl.NumberFormat(i18n.language).format(weekNumber),
+    week: new Intl.NumberFormat(locale).format(weekNumber),
   });
 
   const sessions = trainingCalendarEvents.map((session) => {
@@ -36,9 +38,9 @@ function TrainingSection(): ReactElement {
 
     return {
       id: session.id,
-      title: session.title,
-      coach: session.coach,
-      location: session.location,
+      title: t(session.titleKey),
+      coach: t(session.coachKey),
+      location: t(session.locationKey),
       dateLabel: dateFormatter.format(start),
       timeLabel: `${timeFormatter.format(start)} – ${timeFormatter.format(end)}`,
     };
