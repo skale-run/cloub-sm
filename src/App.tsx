@@ -6,7 +6,6 @@ import RedSurface from './components/RedSurface'
 import Sidebar from './components/Sidebar'
 import AccessSection from './features/access/AccessSection'
 import AuthenticationExperienceModal from './features/auth/AuthenticationExperienceModal'
-import { useAthletePortalModal } from './features/auth/AthletePortalModalContext'
 import CalendarSection from './features/calendar/CalendarSection'
 import CoachEvaluationSection from './features/evaluations/CoachEvaluationSection'
 import ProgressOverviewSection from './features/evaluations/ProgressOverviewSection'
@@ -18,14 +17,16 @@ import ProfileSection from './features/profile/ProfileSection'
 import { emptyProfile, type Profile } from './features/profile/profileTypes'
 import { normalizePath, type RoutePath } from './routes'
 
-const DESKTOP_BREAKPOINT = '(min-width: 1024px)'
-
-const getIsDesktop = () => {
-  if (typeof window === 'undefined') {
-    return false
-  }
-
-  return window.matchMedia(DESKTOP_BREAKPOINT).matches
+const pageTitles: Record<RoutePath, string> = {
+  '/calendar': 'Calendar overview',
+  '/academic-record': 'Academic record',
+  '/billing': 'Billing',
+  '/training-attendance': 'Training attendance',
+  '/coach-evaluation': 'Coach evaluation',
+  '/progress-overview': 'Progress overview',
+  '/performance-tracking': 'Performance tracking',
+  '/profile': 'Profile',
+  '/access': 'Access management',
 }
 
 function App() {
@@ -179,8 +180,6 @@ function App() {
     setAchievements((previous) => previous.filter((_, idx) => idx !== index))
   }
 
-  const { open: openAthletePortal } = useAthletePortalModal()
-
   return (
     <>
       <div
@@ -233,8 +232,7 @@ function App() {
             <Header
               isSidebarOpen={sidebarOpen}
               onToggleSidebar={toggleSidebar}
-              savedProfile={savedProfile}
-              onOpenAthletePortal={openAthletePortal}
+              pageTitle={pageTitles[currentPath] ?? 'Overview'}
             />
 
             <main className="relative z-0 flex-1 space-y-10 px-4 pb-14 pt-6 sm:px-8 sm:pb-16 sm:pt-8 lg:px-12">
