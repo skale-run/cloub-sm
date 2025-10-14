@@ -354,7 +354,7 @@ function App() {
                       type="email"
                       value={profileDraft.email}
                       onChange={(event) => handleProfileChange('email', event.target.value)}
-                      placeholder="athlete@clubpulse.io"
+                      placeholder="athlete@Club Section Manager.io"
                     />
                   </label>
                   <label>
