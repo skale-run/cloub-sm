@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { RoutePath } from "../routes";
+import LanguageSwitcher from "./LanguageSwitcher";
 import RedSurface from "./RedSurface";
 
 type NavItem = {
@@ -189,14 +190,17 @@ function Sidebar({
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-red-500/40 text-red-200 transition hover:border-red-400/70 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 lg:hidden"
-            onClick={onToggleSidebar}
-            aria-label={t("common.navigation.close")}
-          >
-            <X className="h-4 w-4" aria-hidden />
-          </button>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+            <button
+              type="button"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-red-500/40 text-red-200 transition hover:border-red-400/70 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 lg:hidden"
+              onClick={onToggleSidebar}
+              aria-label={t("common.navigation.close")}
+            >
+              <X className="h-4 w-4" aria-hidden />
+            </button>
+          </div>
         </div>
 
         <section className="space-y-5" aria-label={t("common.navigation.primary")}>
