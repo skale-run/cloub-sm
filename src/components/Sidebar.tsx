@@ -1,4 +1,5 @@
 import type { MouseEvent } from "react";
+import { useMemo } from "react";
 import {
   Activity,
   CalendarDays,
@@ -12,6 +13,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { RoutePath } from "../routes";
 import RedSurface from "./RedSurface";
 
@@ -27,93 +29,17 @@ type NavSection = {
   items: ReadonlyArray<NavItem>;
 };
 
-const navSections: ReadonlyArray<NavSection> = [
-  {
-    heading: "Calendar",
-    items: [
-      {
-        to: "/calendar",
-        label: "Season calendar",
-        description: "Review meets and key sessions",
-        Icon: CalendarDays,
-      },
-    ],
-  },
-  {
-    heading: "Information",
-    items: [
-      {
-        to: "/academic-record",
-        label: "Academic record",
-        description: "Monitor course eligibility",
-        Icon: GraduationCap,
-      },
-      {
-        to: "/billing",
-        label: "Billing overview",
-        description: "Track invoices & payments",
-        Icon: CreditCard,
-      },
-      {
-        to: "/training-attendance",
-        label: "Training attendance",
-        description: "See check-ins by week",
-        Icon: ClipboardCheck,
-      },
-    ],
-  },
-  {
-    heading: "Evaluations",
-    items: [
-      {
-        to: "/coach-evaluation",
-        label: "Coach evaluation",
-        description: "Latest staff feedback",
-        Icon: Users,
-      },
-      {
-        to: "/progress-overview",
-        label: "Progress insight",
-        description: "Growth trends & alerts",
-        Icon: LineChart,
-      },
-    ],
-  },
-  {
-    heading: "Performance tracking",
-    items: [
-      {
-        to: "/performance-tracking",
-        label: "Performance dashboard",
-        description: "Technical milestones & load",
-        Icon: GaugeCircle,
-      },
-    ],
-  },
-  {
-    heading: "Profile & access",
-    items: [
-      {
-        to: "/profile",
-        label: "Athlete profile",
-        description: "Manage member identity",
-        Icon: UserCircle,
-      },
-      {
-        to: "/access",
-        label: "Digital access",
-        description: "Share membership QR code",
-        Icon: ScanQrCode,
-      },
-    ],
-  },
-];
-
-const readinessHighlights = [
-  { label: "Readiness", value: "82% · Primed" },
-  { label: "Sleep score", value: "7h 10m" },
-  { label: "Hydration", value: "On target" },
-];
+const iconMap: Record<RoutePath, typeof Activity> = {
+  "/calendar": CalendarDays,
+  "/academic-record": GraduationCap,
+  "/billing": CreditCard,
+  "/training-attendance": ClipboardCheck,
+  "/coach-evaluation": Users,
+  "/progress-overview": LineChart,
+  "/performance-tracking": GaugeCircle,
+  "/profile": UserCircle,
+  "/access": ScanQrCode,
+};
 
 type SidebarProfile = {
   fullName: string;
@@ -139,23 +65,74 @@ function Sidebar({
   currentPath,
   savedProfile,
 }: SidebarProps) {
+  const { t } = useTranslation();
+  const brand = t("sidebar.brand", { returnObjects: true }) as {
+    name: string;
+    label: string;
+  };
+
+  const navSections = useMemo<ReadonlyArray<NavSection>>(() => {
+    const sections = t("sidebar.sections", { returnObjects: true }) as Array<{
+      heading: string;
+      items: Array<{ to: RoutePath; label: string; description: string }>;
+    }>;
+
+    return sections.map((section) => ({
+      heading: section.heading,
+      items: section.items.map((item) => ({
+        ...item,
+        Icon: iconMap[item.to] ?? Activity,
+      })),
+    }));
+  }, [t]);
+
+  const readinessHeading = t("sidebar.readinessHeading");
+  const readinessHighlights = t("sidebar.readinessHighlights", {
+    returnObjects: true,
+  }) as Array<{ label: string; value: string }>;
+
+  const memberSnapshot = t("sidebar.memberSnapshot", {
+    returnObjects: true,
+  }) as {
+    heading: string;
+    memberCard: {
+      label: string;
+      status: string;
+      idLabel: string;
+      roleLabel: string;
+      squadLabel: string;
+    };
+    details: {
+      role: { label: string; fallback: string };
+      squad: { label: string; fallback: string };
+      membershipId: { label: string; fallback: string };
+    };
+    complete: string;
+    nextUpdate: string;
+    emptyState: string;
+  };
+
+  const seasonSummary = t("sidebar.seasonSummary", {
+    returnObjects: true,
+  }) as { line1: string; line2: string };
+
   const memberDetails = savedProfile
     ? (
         [
           {
-            label: "Role",
+            label: memberSnapshot.details.role.label,
             value: savedProfile.role,
-            fallback: "Assign a role",
+            fallback: memberSnapshot.details.role.fallback,
           },
           {
-            label: "Squad",
+            label: memberSnapshot.details.squad.label,
             value: savedProfile.squad,
-            fallback: "Update squad to personalise drills",
+            fallback: memberSnapshot.details.squad.fallback,
           },
           {
-            label: "Membership ID",
+            label: memberSnapshot.details.membershipId.label,
             value: savedProfile.membershipId,
-            fallback: "Pending assignment",
+            fallback: memberSnapshot.details.membershipId.fallback,
           },
         ] as const
       )
@@ -197,7 +174,7 @@ function Sidebar({
       className={`fixed inset-y-0 left-0 z-40 flex w-full max-w-sm shrink-0 flex-col overflow-hidden border-r border-red-500/35 bg-red-950/90 shadow-[0_35px_90px_rgba(127,29,29,0.45)] backdrop-blur transition-transform duration-300 ease-out ${
         open ? "translate-x-0" : "-translate-x-full"
       } lg:max-w-none lg:w-80`}
-      aria-label="Primary navigation"
+      aria-label={t("common.navigation.primary")}
     >
       <div className="flex h-full flex-col gap-8 overflow-y-auto p-6">
         <div className="flex items-start justify-between gap-3">
@@ -206,11 +183,9 @@ function Sidebar({
               <Activity className="h-6 w-6" aria-hidden />
             </span>
             <div>
-              <p className="text-sm font-semibold text-red-50">
-                Wydad Taekwondo 
-              </p>
+              <p className="text-sm font-semibold text-red-50">{brand.name}</p>
               <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                Dashboard
+                {brand.label}
               </p>
             </div>
           </div>
@@ -218,13 +193,13 @@ function Sidebar({
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-red-500/40 text-red-200 transition hover:border-red-400/70 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 lg:hidden"
             onClick={onToggleSidebar}
-            aria-label="Close navigation"
+            aria-label={t("common.navigation.close")}
           >
             <X className="h-4 w-4" aria-hidden />
           </button>
         </div>
 
-        <section className="space-y-5" aria-label="Navigation">
+        <section className="space-y-5" aria-label={t("common.navigation.primary")}>
           {navSections.map((section) => (
             <div key={section.heading} className="space-y-2">
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-red-200/70">
@@ -270,7 +245,7 @@ function Sidebar({
 
         <section className="space-y-4" aria-label="Readiness overview">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">
-            Today&apos;s readiness
+            {readinessHeading}
           </p>
           <ul className="grid gap-3">
             {readinessHighlights.map((item) => (
@@ -296,7 +271,7 @@ function Sidebar({
           aria-live="polite"
         >
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">
-            Member snapshot
+            {memberSnapshot.heading}
           </p>
           {savedProfile ? (
             <div className="space-y-4 text-red-50">
@@ -309,7 +284,7 @@ function Sidebar({
                     </span>
                     <div className="flex flex-col">
                       <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-red-200/70">
-                        Member card
+                        {memberSnapshot.memberCard.label}
                       </span>
                       <span className="text-lg font-semibold text-red-50">
                         {savedProfile.fullName}
@@ -317,26 +292,26 @@ function Sidebar({
                     </div>
                   </div>
                   <span className="inline-flex items-center rounded-full border border-red-400/40 bg-red-950/40 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-red-100">
-                    Active
+                    {memberSnapshot.memberCard.status}
                   </span>
                 </div>
                 <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-red-200/70">
                   <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-950/50 px-3 py-1 font-medium text-red-100">
-                    <span className="text-red-200/70">ID</span>
+                    <span className="text-red-200/70">{memberSnapshot.memberCard.idLabel}</span>
                     <span className="tracking-wide text-red-50">
-                      {savedProfile.membershipId || "Pending assignment"}
+                      {savedProfile.membershipId || memberSnapshot.details.membershipId.fallback}
                     </span>
                   </span>
                   <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-950/50 px-3 py-1 text-red-200/80">
-                    <span className="text-red-200/60">Role</span>
+                    <span className="text-red-200/60">{memberSnapshot.memberCard.roleLabel}</span>
                     <span className="font-medium text-red-100">
-                      {savedProfile.role || "Assign a role"}
+                      {savedProfile.role || memberSnapshot.details.role.fallback}
                     </span>
                   </span>
                   <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-950/50 px-3 py-1 text-red-200/80">
-                    <span className="text-red-200/60">Squad</span>
+                    <span className="text-red-200/60">{memberSnapshot.memberCard.squadLabel}</span>
                     <span className="font-medium text-red-100">
-                      {savedProfile.squad || "Update squad"}
+                      {savedProfile.squad || memberSnapshot.details.squad.fallback}
                     </span>
                   </span>
                 </div>
@@ -366,23 +341,24 @@ function Sidebar({
                 <span className="mt-0.5 inline-flex h-2 w-2 flex-none rounded-full bg-red-400/70" />
                 <span>
                   {incompleteDetails.length === 0
-                    ? "Profile complete — coaches can access the latest details."
-                    : `Next update: ${incompleteDetails[0].label.toLowerCase()}.`}
+                    ? memberSnapshot.complete
+                    : memberSnapshot.nextUpdate.replace(
+                        "{{field}}",
+                        incompleteDetails[0].label.toLowerCase(),
+                      )}
                 </span>
               </div>
             </div>
           ) : (
             <p className="text-sm leading-relaxed text-red-100/75">
-              Save your athlete profile to unlock tailored navigation insights.
+              {memberSnapshot.emptyState}
             </p>
           )}
         </RedSurface>
 
         <div className="mt-auto space-y-1 text-xs text-red-200/70">
-          <p>Season 2025 · Wave 2 Squad</p>
-          <p className="font-semibold text-red-100">
-            Next rest day: Sun, 20 Apr
-          </p>
+          <p>{seasonSummary.line1}</p>
+          <p className="font-semibold text-red-100">{seasonSummary.line2}</p>
         </div>
       </div>
     </aside>

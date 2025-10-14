@@ -1,4 +1,6 @@
 import { Menu } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 type HeaderProps = {
   isSidebarOpen: boolean;
@@ -23,6 +25,7 @@ function Header({
   userFullName,
 }: HeaderProps) {
   const userInitials = getInitials(userFullName);
+  const { t } = useTranslation("header");
 
   return (
     <header className="app-header sticky top-0 z-40 border-b border-red-500/40 bg-red-950/80 px-2 backdrop-blur-xl">
@@ -32,7 +35,11 @@ function Header({
             type="button"
             onClick={onToggleSidebar}
             className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-red-500/30 bg-red-950/60 text-red-100 transition hover:border-red-300/60 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 lg:hidden"
-            aria-label={`${isSidebarOpen ? "Close" : "Open"} navigation`}
+            aria-label={
+              isSidebarOpen
+                ? t("aria.toggleNavigation.close")
+                : t("aria.toggleNavigation.open")
+            }
             aria-expanded={isSidebarOpen}
             aria-controls="app-sidebar"
           >
@@ -44,6 +51,7 @@ function Header({
         </div>
 
         <div className="flex flex-none items-center gap-3 text-red-50">
+          <LanguageSwitcher />
           <span className="hidden text-sm font-medium text-red-100/80 sm:inline">
             {userFullName}
           </span>

@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Header from "./components/Header";
 import RedSurface from "./components/RedSurface";
 import Sidebar from "./components/Sidebar";
@@ -130,20 +131,20 @@ const getIsDesktop = () =>
   typeof window !== "undefined" &&
   window.matchMedia(DESKTOP_BREAKPOINT).matches;
 
-const pageTitles: Record<RoutePath, string> = {
-  [landingPath]: "Welcome to Cloub",
-  "/calendar": "Calendar overview",
-  "/academic-record": "Academic record",
-  "/billing": "Billing",
-  "/training-attendance": "Training attendance",
-  "/coach-evaluation": "Coach evaluation",
-  "/progress-overview": "Progress overview",
-  "/performance-tracking": "Performance tracking",
-  "/profile": "Profile",
-  "/access": "Access management",
-};
-
 function App() {
+  const { t } = useTranslation();
+  const pageTitles = useMemo(() => ({
+    [landingPath]: t("app.pageTitles.landing"),
+    "/calendar": t("app.pageTitles.calendar"),
+    "/academic-record": t("app.pageTitles.academicRecord"),
+    "/billing": t("app.pageTitles.billing"),
+    "/training-attendance": t("app.pageTitles.trainingAttendance"),
+    "/coach-evaluation": t("app.pageTitles.coachEvaluation"),
+    "/progress-overview": t("app.pageTitles.progressOverview"),
+    "/performance-tracking": t("app.pageTitles.performanceTracking"),
+    "/profile": t("app.pageTitles.profile"),
+    "/access": t("app.pageTitles.access"),
+  }), [t]);
   const [isDesktop, setIsDesktop] = useState(getIsDesktop);
   const [sidebarOpen, setSidebarOpen] = useState(getIsDesktop);
   const [profileDraft, setProfileDraft] = useState<Profile>(() =>
@@ -294,34 +295,28 @@ function App() {
     event.preventDefault();
 
     if (!profileDraft.fullName || !profileDraft.membershipId) {
-      setStatusMessage(
-        "Please complete at least the full name and membership ID before saving.",
-      );
+      setStatusMessage(t("app.statusMessages.completeRequired"));
       return;
     }
 
     setSavedProfile(profileDraft);
-    setStatusMessage(
-      "Profile saved. QR code refreshed with the latest details.",
-    );
+    setStatusMessage(t("app.statusMessages.saved"));
   };
 
   const handleResetProfile = () => {
     if (savedProfile) {
       setProfileDraft(savedProfile);
-      setStatusMessage("Draft reverted to the last saved profile.");
+      setStatusMessage(t("app.statusMessages.reverted"));
     } else {
       setProfileDraft(emptyProfile);
-      setStatusMessage("Profile draft cleared.");
+      setStatusMessage(t("app.statusMessages.cleared"));
     }
   };
 
   const handleDeleteProfile = () => {
     setSavedProfile(null);
     setProfileDraft(emptyProfile);
-    setStatusMessage(
-      "Profile deleted. Create a new one to generate a QR code.",
-    );
+    setStatusMessage(t("app.statusMessages.deleted"));
   };
 
   const handleAddAchievement = () => {
@@ -340,7 +335,7 @@ function App() {
     const savedName = savedProfile?.fullName?.trim();
     const draftName = profileDraft.fullName.trim();
 
-    return savedName || draftName || "Team member";
+    return savedName || draftName || t("app.defaults.teamMember");
   })();
 
   const handleContactClick = () => {
@@ -377,14 +372,14 @@ function App() {
         <Header
           isSidebarOpen={sidebarOpen}
           onToggleSidebar={toggleSidebar}
-          pageTitle={pageTitles[currentPath] ?? "Overview"}
+          pageTitle={pageTitles[currentPath] ?? t("app.pageTitles.overview")}
           userFullName={connectedUserName}
         />
 
         {sidebarOpen && !isDesktop ? (
           <button
             type="button"
-            aria-label="Close navigation"
+            aria-label={t("common.navigation.close")}
             onClick={handleSidebarNavigate}
             className="fixed inset-0 z-30 bg-red-950/70 backdrop-blur-sm lg:hidden"
           />
@@ -394,7 +389,11 @@ function App() {
           <button
             type="button"
             onClick={toggleSidebar}
-            aria-label={`${sidebarOpen ? "Collapse" : "Expand"} navigation`}
+            aria-label={
+              sidebarOpen
+                ? t("common.navigation.collapse")
+                : t("common.navigation.expand")
+            }
             aria-controls="app-sidebar"
             aria-expanded={sidebarOpen}
             className={`fixed top-6 z-50 hidden h-12 w-12 items-center justify-center rounded-r-2xl border border-red-500/40 bg-red-950/80 text-red-100 shadow-[0_15px_35px_rgba(127,29,29,0.35)] transition hover:border-red-400/70 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 lg:flex ${
