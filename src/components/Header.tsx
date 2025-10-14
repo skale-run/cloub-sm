@@ -73,21 +73,13 @@ function Header({ isSidebarOpen, onToggleSidebar, savedProfile, onOpenAthletePor
           </div>
         </div>
 
-        <div className="flex w-full flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-slate-200/80 shadow-[0_20px_60px_rgba(8,15,35,0.55)] backdrop-blur lg:max-w-sm">
+        {/* <div className="flex w-full flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-slate-200/80 shadow-[0_20px_60px_rgba(8,15,35,0.55)] backdrop-blur lg:max-w-sm">
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-slate-300/70">Today</p>
             <p className="mt-1 text-lg font-semibold text-white">14 April 2025</p>
             <p className="mt-2 text-sm leading-relaxed text-slate-300/90">
               Focus: Speed refinement · Hydration priority
             </p>
-          </div>
-          <div
-            className="flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/40 px-3 py-2 text-xs font-medium uppercase tracking-wider text-slate-200/70"
-            role="status"
-            aria-label={`Dark mode ${mode === 'dark' ? 'enabled' : 'disabled'}`}
-          >
-            <ThemeIcon aria-hidden className="h-4 w-4 text-rose-300" />
-            <span>{mode === 'dark' ? 'Dark mode' : 'Light mode'}</span>
           </div>
           <button
             type="button"
@@ -96,7 +88,7 @@ function Header({ isSidebarOpen, onToggleSidebar, savedProfile, onOpenAthletePor
           >
             Access athlete portal
           </button>
-        </div>
+        </div> */}
       </div>
     </header>
   )
