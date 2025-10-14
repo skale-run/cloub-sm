@@ -64,9 +64,9 @@ export const typographyScale = {
 };
 
 export const fontFamilyTokens = {
-  sans: "'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif",
+  sans: "'Tajawal', 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif",
   display:
-    "'Space Grotesk', 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif",
+    "'Space Grotesk', 'Tajawal', 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif",
   mono: "'JetBrains Mono', 'SFMono-Regular', Consolas, monospace",
 };
 
