@@ -4,7 +4,7 @@ export const ar = {
       languageSwitcher: {
         label: "اختر اللغة",
         languages: {
-          en: "English",
+          en: "الإنجليزية",
           ar: "العربية",
         },
       },
@@ -207,7 +207,7 @@ export const ar = {
         fallback:
           "عدّل عوامل التصفية لإظهار الحصة التدريبية أو المنافسة التالية في الجدول المشترك.",
         coach: "المدرب المسؤول: {{name}}",
-        competitionDetails: "بطولة مستوى {{level}} · تسجيل الوصول {{time}}",
+        competitionDetails: "بطولة مستوى {{level}} · تسجيل الوصول الساعة {{time}}",
       },
       filters: {
         heading: "عوامل التركيز",
@@ -278,7 +278,7 @@ export const ar = {
           other: "{{count}} فعالية",
         },
         coachLabel: "المسؤول · {{name}}",
-        checkIn: "تسجيل الوصول {{time}}",
+        checkIn: "تسجيل الوصول الساعة {{time}}",
       },
       relativeDay: {
         inDays: {
@@ -697,7 +697,7 @@ export const ar = {
       heading: "تقويم البطولات",
       description: "تتبّع خطط السفر واستعد لقوائم مهام يوم السباق.",
       badge: "ذروة الموسم",
-      checkIn: "تسجيل الوصول {{time}}",
+      checkIn: "تسجيل الوصول الساعة {{time}}",
       logistics: "اللوجستيات",
       cta: "موجز السفر",
       levels: {

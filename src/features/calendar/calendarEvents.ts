@@ -58,7 +58,7 @@ export const calendarEvents: CalendarEvent[] = [
     start: "2025-04-26T08:00:00",
     end: "2025-04-26T18:00:00",
     level: "regional",
-    checkIn: "08:00",
+    checkIn: "2025-04-26T08:00:00",
   },
   {
     id: "cc-2",
@@ -68,7 +68,7 @@ export const calendarEvents: CalendarEvent[] = [
     start: "2025-05-10T06:30:00",
     end: "2025-05-10T17:00:00",
     level: "national",
-    checkIn: "06:30",
+    checkIn: "2025-05-10T06:30:00",
   },
   {
     id: "cc-3",
@@ -78,7 +78,7 @@ export const calendarEvents: CalendarEvent[] = [
     start: "2025-05-23T07:15:00",
     end: "2025-05-23T20:00:00",
     level: "international",
-    checkIn: "07:15",
+    checkIn: "2025-05-23T07:15:00",
   },
 ];
 
