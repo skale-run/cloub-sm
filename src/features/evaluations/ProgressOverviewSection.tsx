@@ -37,7 +37,7 @@ function ProgressOverviewSection(): ReactElement {
             <h3 className="text-lg font-semibold text-white">Performance trend</h3>
             <p className="text-xs uppercase tracking-[0.3em] text-slate-400/70">Season rating</p>
           </header>
-          <div className="mt-6 grid grid-cols-4 gap-3">
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {trendPoints.map((point) => (
               <div key={point.label} className="flex flex-col items-center gap-2">
                 <div className="flex h-36 w-full items-end justify-center rounded-2xl border border-white/5 bg-white/5 p-2">
