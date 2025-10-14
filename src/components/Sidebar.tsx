@@ -300,34 +300,47 @@ function Sidebar({
           </p>
           {savedProfile ? (
             <div className="space-y-4 text-red-50">
-              <div className="relative overflow-hidden rounded-3xl border border-red-400/30 bg-gradient-to-br from-red-500/25 via-red-500/10 to-red-950/70 p-5 shadow-[0_18px_45px_rgba(127,29,29,0.35)]">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-950/60 text-red-100">
-                    <UserCircle aria-hidden className="h-6 w-6" />
-                  </span>
-                  <div className="flex flex-col">
-                    <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-red-200/70">
-                      Active member
+              <div className="relative overflow-hidden rounded-3xl border border-red-400/30 bg-gradient-to-br from-red-600/20 via-red-500/10 to-red-950/65 p-5 shadow-[0_18px_45px_rgba(127,29,29,0.35)]">
+                <span className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-red-500/25 blur-3xl" />
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-950/60 text-red-100">
+                      <UserCircle aria-hidden className="h-6 w-6" />
                     </span>
-                    <span className="text-lg font-semibold text-red-50">
-                      {savedProfile.fullName}
-                    </span>
+                    <div className="flex flex-col">
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-red-200/70">
+                        Member card
+                      </span>
+                      <span className="text-lg font-semibold text-red-50">
+                        {savedProfile.fullName}
+                      </span>
+                    </div>
                   </div>
+                  <span className="inline-flex items-center rounded-full border border-red-400/40 bg-red-950/40 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-red-100">
+                    Active
+                  </span>
                 </div>
-                <div className="mt-4 flex flex-wrap gap-2 text-xs text-red-100/85">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-950/50 px-3 py-1 font-medium">
+                <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-red-200/70">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-950/50 px-3 py-1 font-medium text-red-100">
                     <span className="text-red-200/70">ID</span>
                     <span className="tracking-wide text-red-50">
                       {savedProfile.membershipId || "Pending assignment"}
                     </span>
                   </span>
-                  {savedProfile.squad ? (
-                    <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-950/50 px-3 py-1 font-medium text-red-100">
-                      Squad · {savedProfile.squad}
+                  <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-950/50 px-3 py-1 text-red-200/80">
+                    <span className="text-red-200/60">Role</span>
+                    <span className="font-medium text-red-100">
+                      {savedProfile.role || "Assign a role"}
                     </span>
-                  ) : null}
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-950/50 px-3 py-1 text-red-200/80">
+                    <span className="text-red-200/60">Squad</span>
+                    <span className="font-medium text-red-100">
+                      {savedProfile.squad || "Update squad"}
+                    </span>
+                  </span>
                 </div>
-                <dl className="mt-5 grid gap-3 text-sm">
+                <dl className="mt-5 grid gap-3 text-sm text-red-100">
                   {memberDetails.map((detail) => {
                     const hasValue = Boolean(
                       detail.value && detail.value.trim().length > 0,
@@ -341,7 +354,7 @@ function Sidebar({
                         <dt className="text-xs uppercase tracking-wide text-red-200/70">
                           {detail.label}
                         </dt>
-                        <dd className={`text-right ${hasValue ? "text-red-100" : "text-red-200/60"}`}>
+                        <dd className={`text-right ${hasValue ? "text-red-100" : "text-red-200/55"}`}>
                           {hasValue ? detail.value : detail.fallback}
                         </dd>
                       </div>
