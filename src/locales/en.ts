@@ -226,5 +226,19 @@ export const en = {
         },
       },
     },
+    competitions: {
+      heading: "Competition Calendar",
+      description:
+        "Visualise your travel blocks and prepare your race-day checklists.",
+      badge: "Season Peak",
+      checkIn: "Check-in {{time}}",
+      logistics: "Logistics",
+      cta: "Travel briefing",
+      levels: {
+        Regional: "Regional",
+        National: "National",
+        International: "International",
+      },
+    },
   },
 } as const;
