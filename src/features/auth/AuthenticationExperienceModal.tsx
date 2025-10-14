@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import type { FormEvent } from 'react'
 import { Activity, Award, BarChart3, Users, X } from '../../lucide-react'
 import { useAthletePortalModal } from './AthletePortalModalContext'
 
@@ -45,6 +46,10 @@ function AuthenticationExperienceModal() {
   const [mode, setMode] = useState<AuthMode>('login')
   const closeButtonRef = useRef<HTMLButtonElement | null>(null)
   const previouslyFocusedElementRef = useRef<HTMLElement | null>(null)
+
+  const handleAuthSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+  }
 
   useEffect(() => {
     if (!isOpen) {
@@ -147,7 +152,12 @@ function AuthenticationExperienceModal() {
               </div>
 
               {mode === 'login' ? (
-                <form className="space-y-4" aria-label="Log in form">
+                <form
+                  method="post"
+                  onSubmit={handleAuthSubmit}
+                  className="space-y-4"
+                  aria-label="Log in form"
+                >
                   <label className="block text-sm font-medium text-slate-200">
                     Email
                     <input
@@ -179,7 +189,12 @@ function AuthenticationExperienceModal() {
                   <p className="text-center text-xs text-slate-300/80">Forgot password? Contact your coach to reset access.</p>
                 </form>
               ) : (
-                <form className="space-y-4" aria-label="Register form">
+                <form
+                  method="post"
+                  onSubmit={handleAuthSubmit}
+                  className="space-y-4"
+                  aria-label="Register form"
+                >
                   <label className="block text-sm font-medium text-slate-200">
                     Full name
                     <input
