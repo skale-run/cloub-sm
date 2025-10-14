@@ -1,6 +1,12 @@
-import type { ReactElement } from "react";
+import { useMemo, useState, type ReactElement } from "react";
 import RedSurface from "../../components/RedSurface";
 import { CalendarDays, CreditCard } from "../../lucide-react";
+
+const currencyFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2,
+});
 
 const invoices = [
   {
@@ -88,6 +94,50 @@ const paymentMethods = [
 ];
 
 function BillingSection(): ReactElement {
+  const filters: Array<"All" | "Pending" | "Paid"> = [
+    "All",
+    "Pending",
+    "Paid",
+  ];
+
+  const [statusFilter, setStatusFilter] = useState<(typeof filters)[number]>(
+    "All",
+  );
+
+  const totals = useMemo(() => {
+    return invoices.reduce(
+      (acc, invoice) => {
+        const numericAmount = Number(invoice.amount.replace(/[^0-9.-]+/g, ""));
+
+        if (Number.isNaN(numericAmount)) {
+          return acc;
+        }
+
+        if (invoice.status === "Pending") {
+          acc.pendingCount += 1;
+          acc.pendingTotal += numericAmount;
+        }
+
+        if (invoice.status === "Paid") {
+          acc.paidTotal += numericAmount;
+        }
+
+        acc.totalInvoices += 1;
+
+        return acc;
+      },
+      { pendingCount: 0, pendingTotal: 0, paidTotal: 0, totalInvoices: 0 },
+    );
+  }, []);
+
+  const filteredInvoices = useMemo(() => {
+    if (statusFilter === "All") {
+      return invoices;
+    }
+
+    return invoices.filter((invoice) => invoice.status === statusFilter);
+  }, [statusFilter]);
+
   return (
     <section id="billing" className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -150,6 +200,59 @@ function BillingSection(): ReactElement {
             </div>
           </header>
 
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <dl className="grid flex-1 gap-3 rounded-2xl border border-red-500/20 bg-red-950/35 p-4 sm:grid-cols-3">
+              <div className="space-y-1">
+                <dt className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                  Pending invoices
+                </dt>
+                <dd className="text-lg font-semibold text-amber-100">
+                  {totals.pendingCount} due
+                </dd>
+                <dd className="text-xs text-amber-200/70">
+                  {currencyFormatter.format(totals.pendingTotal)} outstanding
+                </dd>
+              </div>
+              <div className="space-y-1">
+                <dt className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                  Paid this season
+                </dt>
+                <dd className="text-lg font-semibold text-red-100">
+                  {currencyFormatter.format(totals.paidTotal)}
+                </dd>
+                <dd className="text-xs text-red-200/70">
+                  Across {totals.totalInvoices - totals.pendingCount} invoices
+                </dd>
+              </div>
+              <div className="space-y-1">
+                <dt className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                  Filters
+                </dt>
+                <dd className="flex flex-wrap gap-2">
+                  {filters.map((filter) => {
+                    const isActive = statusFilter === filter;
+
+                    return (
+                      <button
+                        key={filter}
+                        type="button"
+                        onClick={() => setStatusFilter(filter)}
+                        className={`inline-flex items-center rounded-2xl border px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 ${
+                          isActive
+                            ? "border-red-400/60 bg-red-500/25 text-red-50"
+                            : "border-red-400/25 bg-red-500/10 text-red-100 hover:border-red-400/45 hover:bg-red-400/20 hover:text-white"
+                        }`}
+                        aria-pressed={isActive}
+                      >
+                        {filter}
+                      </button>
+                    );
+                  })}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
           <div className="overflow-hidden rounded-2xl border border-red-500/25">
             <table className="min-w-full divide-y divide-red-500/20 text-left text-sm text-red-50">
               <thead className="bg-red-950/40 text-xs uppercase tracking-[0.3em] text-red-200/70">
@@ -169,30 +272,42 @@ function BillingSection(): ReactElement {
                 </tr>
               </thead>
               <tbody className="divide-y divide-red-500/15 bg-red-950/35">
-                {invoices.map((invoice) => (
-                  <tr key={invoice.id}>
-                    <td className="px-4 py-3 font-semibold text-red-50">
-                      {invoice.label}
-                    </td>
-                    <td className="px-4 py-3 text-red-100/80">
-                      {invoice.dueDate}
-                    </td>
-                    <td className="px-4 py-3 font-medium text-red-100">
-                      {invoice.amount}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${
-                          invoice.status === "Paid"
-                            ? "border-red-400/40 bg-red-500/15 text-red-100"
-                            : "border-amber-400/40 bg-amber-500/15 text-amber-100"
-                        }`}
-                      >
-                        {invoice.status}
-                      </span>
+                {filteredInvoices.length > 0 ? (
+                  filteredInvoices.map((invoice) => (
+                    <tr key={invoice.id}>
+                      <td className="px-4 py-3 font-semibold text-red-50">
+                        {invoice.label}
+                      </td>
+                      <td className="px-4 py-3 text-red-100/80">
+                        {invoice.dueDate}
+                      </td>
+                      <td className="px-4 py-3 font-medium text-red-100">
+                        {invoice.amount}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span
+                          className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${
+                            invoice.status === "Paid"
+                              ? "border-red-400/40 bg-red-500/15 text-red-100"
+                              : "border-amber-400/40 bg-amber-500/15 text-amber-100"
+                          }`}
+                        >
+                          {invoice.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      className="px-4 py-6 text-center text-sm text-red-100/70"
+                      colSpan={4}
+                    >
+                      No invoices match the selected filter. Try another status to
+                      review previous statements.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
