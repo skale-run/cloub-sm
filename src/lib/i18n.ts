@@ -55,7 +55,7 @@ function applyLanguageAttributes(language: string) {
 }
 
 if (typeof document !== "undefined") {
-  applyLanguageAttributes(i18n.language);
+  applyLanguageAttributes(initialLanguage);
 }
 
 i18n.on("languageChanged", (nextLanguage) => {
