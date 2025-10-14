@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react'
+import RedSurface from '../../components/RedSurface'
 import { trainingCalendarEvents } from '../calendar/calendarEvents'
 
 const attendanceByWeek = [
@@ -49,22 +50,22 @@ function TrainingAttendanceSection(): ReactElement {
     <section id="training-attendance" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-white sm:text-2xl">Training attendance</h2>
-          <p className="text-sm text-slate-400/80">
+          <h2 className="text-xl font-semibold text-rose-50 sm:text-2xl">Training attendance</h2>
+          <p className="text-sm text-rose-200/75">
             Weekly overview of confirmed check-ins and any notes from the staff desk.
           </p>
         </div>
-        <span className="inline-flex items-center gap-3 rounded-3xl border border-rose-400/30 bg-rose-500/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-rose-100">
+        <span className="inline-flex items-center gap-3 rounded-3xl border border-rose-400/45 bg-rose-500/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-rose-100">
           <span>Season rate</span>
-          <span className="text-base font-semibold text-white">{attendanceRate}%</span>
+          <span className="text-base font-semibold text-rose-50">{attendanceRate}%</span>
         </span>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.25fr)]">
-        <div className="space-y-4 rounded-3xl border border-white/5 bg-slate-900/60 p-6 shadow-[0_22px_55px_rgba(8,15,35,0.45)]">
+        <RedSurface tone="muted" className="space-y-4 p-6">
           <header className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-white">Attendance by week</h3>
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-400/70">
+            <h3 className="text-lg font-semibold text-rose-50">Attendance by week</h3>
+            <p className="text-xs uppercase tracking-[0.3em] text-rose-200/70">
               {totalAttended} / {totalPlanned} sessions attended
             </p>
           </header>
@@ -72,44 +73,46 @@ function TrainingAttendanceSection(): ReactElement {
             {attendanceByWeek.map((week) => {
               const weeklyRate = Math.round((week.attendedSessions / week.plannedSessions) * 100)
               return (
-                <article
+                <RedSurface
                   key={week.label}
-                  className="rounded-2xl border border-white/5 bg-white/5 p-4 text-slate-200"
+                  as="article"
+                  tone="glass"
+                  className="rounded-2xl p-4 text-rose-50"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3">
-                    <p className="text-sm font-semibold text-white">{week.label}</p>
+                    <p className="text-sm font-semibold text-rose-50">{week.label}</p>
                     <span className="text-xs uppercase tracking-[0.3em] text-rose-200/80">{weeklyRate}% attendance</span>
                   </div>
-                  <p className="mt-2 text-sm text-slate-300/90">
+                  <p className="mt-2 text-sm text-rose-100/80">
                     {week.attendedSessions} of {week.plannedSessions} sessions · {week.highlight}
                   </p>
-                  <div className="mt-3 h-2 rounded-full bg-slate-800/70">
+                  <div className="mt-3 h-2 rounded-full bg-rose-950/45">
                     <div
-                      className="h-full rounded-full bg-rose-400/60"
+                      className="h-full rounded-full bg-rose-400/70"
                       style={{ width: `${weeklyRate}%` }}
                       aria-hidden
                     />
                   </div>
-                </article>
+                </RedSurface>
               )
             })}
           </div>
-        </div>
+        </RedSurface>
 
-        <aside className="flex flex-col gap-4 rounded-3xl border border-white/5 bg-slate-900/60 p-6 text-slate-200">
-          <h3 className="text-lg font-semibold text-white">Upcoming check-ins</h3>
+        <RedSurface as="aside" tone="muted" className="flex flex-col gap-4 p-6 text-rose-50">
+          <h3 className="text-lg font-semibold text-rose-50">Upcoming check-ins</h3>
           <ul className="space-y-3">
             {upcomingSessions.map((session) => (
-              <li key={session.id} className="rounded-2xl border border-white/5 bg-white/5 p-4">
-                <p className="text-sm font-semibold text-white">{session.title}</p>
-                <p className="mt-1 text-xs uppercase tracking-[0.3em] text-slate-400/70">
+              <RedSurface key={session.id} as="li" tone="glass" className="rounded-2xl p-4">
+                <p className="text-sm font-semibold text-rose-50">{session.title}</p>
+                <p className="mt-1 text-xs uppercase tracking-[0.3em] text-rose-200/70">
                   {session.dateLabel} · {session.timeLabel}
                 </p>
-                <p className="mt-1 text-sm text-slate-300/90">Coach {session.coach}</p>
-              </li>
+                <p className="mt-1 text-sm text-rose-100/80">Coach {session.coach}</p>
+              </RedSurface>
             ))}
           </ul>
-        </aside>
+        </RedSurface>
       </div>
     </section>
   )

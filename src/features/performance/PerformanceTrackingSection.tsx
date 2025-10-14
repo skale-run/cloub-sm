@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react'
+import RedSurface from '../../components/RedSurface'
 
 const technicalMilestones = [
   {
@@ -44,106 +45,106 @@ function PerformanceTrackingSection(): ReactElement {
   return (
     <section className="space-y-10">
       <header className="space-y-2">
-        <h2 className="text-xl font-semibold text-white sm:text-2xl">Performance tracking</h2>
-        <p className="text-sm text-slate-400/80">
+        <h2 className="text-xl font-semibold text-rose-50 sm:text-2xl">Performance tracking</h2>
+        <p className="text-sm text-rose-200/75">
           Draft dashboard for monitoring technical progress, presence milestones and competitive readiness.
         </p>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <article id="technical-progress" className="space-y-4 rounded-3xl border border-white/5 bg-slate-900/60 p-6 text-slate-200 shadow-[0_22px_55px_rgba(8,15,35,0.45)]">
+        <RedSurface id="technical-progress" as="article" tone="muted" className="space-y-4 p-6 text-rose-50">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-lg font-semibold text-white">Technical progress</h3>
-            <span className="text-xs uppercase tracking-[0.3em] text-slate-400/70">Last audit · Apr 12</span>
+            <h3 className="text-lg font-semibold text-rose-50">Technical progress</h3>
+            <span className="text-xs uppercase tracking-[0.3em] text-rose-200/70">Last audit · Apr 12</span>
           </div>
           <ul className="space-y-3">
             {technicalMilestones.map((item) => (
-              <li key={item.phase} className="rounded-2xl border border-white/5 bg-white/5 p-4">
-                <p className="text-sm font-semibold text-white">{item.phase}</p>
-                <p className="mt-1 text-sm text-slate-300/90">{item.milestone}</p>
+              <RedSurface key={item.phase} as="li" tone="glass" className="rounded-2xl p-4">
+                <p className="text-sm font-semibold text-rose-50">{item.phase}</p>
+                <p className="mt-1 text-sm text-rose-100/80">{item.milestone}</p>
                 <p className="mt-2 text-xs uppercase tracking-[0.3em] text-rose-200/80">{item.status}</p>
-              </li>
+              </RedSurface>
             ))}
           </ul>
-        </article>
+        </RedSurface>
 
-        <article id="attendance-total" className="space-y-4 rounded-3xl border border-white/5 bg-slate-900/60 p-6 text-slate-200 shadow-[0_22px_55px_rgba(8,15,35,0.45)]">
+        <RedSurface id="attendance-total" as="article" tone="muted" className="space-y-4 p-6 text-rose-50">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-lg font-semibold text-white">Total attendance</h3>
-            <span className="text-xs uppercase tracking-[0.3em] text-slate-400/70">{attendanceSummary.totalSessions} sessions</span>
+            <h3 className="text-lg font-semibold text-rose-50">Total attendance</h3>
+            <span className="text-xs uppercase tracking-[0.3em] text-rose-200/70">{attendanceSummary.totalSessions} sessions</span>
           </div>
           <div className="flex flex-wrap items-center gap-4">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-rose-400/50 bg-slate-950 text-2xl font-semibold text-white">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-rose-400/50 bg-rose-950 text-2xl font-semibold text-rose-50">
               {attendanceRate}%
             </div>
             <dl className="grid flex-1 gap-2 text-sm">
-              <div className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 px-4 py-2">
-                <dt className="text-slate-400/80">Attended</dt>
-                <dd className="font-semibold text-white">{attendanceSummary.attended}</dd>
-              </div>
-              <div className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 px-4 py-2">
-                <dt className="text-slate-400/80">Excused</dt>
-                <dd className="font-semibold text-white">{attendanceSummary.excused}</dd>
-              </div>
-              <div className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 px-4 py-2">
-                <dt className="text-slate-400/80">Unexcused</dt>
-                <dd className="font-semibold text-white">{attendanceSummary.missed}</dd>
-              </div>
+              <RedSurface as="div" tone="glass" className="flex items-center justify-between rounded-2xl px-4 py-2">
+                <dt className="text-rose-200/70">Attended</dt>
+                <dd className="font-semibold text-rose-50">{attendanceSummary.attended}</dd>
+              </RedSurface>
+              <RedSurface as="div" tone="glass" className="flex items-center justify-between rounded-2xl px-4 py-2">
+                <dt className="text-rose-200/70">Excused</dt>
+                <dd className="font-semibold text-rose-50">{attendanceSummary.excused}</dd>
+              </RedSurface>
+              <RedSurface as="div" tone="glass" className="flex items-center justify-between rounded-2xl px-4 py-2">
+                <dt className="text-rose-200/70">Unexcused</dt>
+                <dd className="font-semibold text-rose-50">{attendanceSummary.missed}</dd>
+              </RedSurface>
             </dl>
           </div>
-        </article>
+        </RedSurface>
       </div>
 
-      <article id="training-statistics" className="space-y-4 rounded-3xl border border-white/5 bg-slate-900/60 p-6 text-slate-200 shadow-[0_22px_55px_rgba(8,15,35,0.45)]">
+      <RedSurface id="training-statistics" as="article" tone="muted" className="space-y-4 p-6 text-rose-50">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h3 className="text-lg font-semibold text-white">Training statistics</h3>
-          <span className="text-xs uppercase tracking-[0.3em] text-slate-400/70">Block summary</span>
+          <h3 className="text-lg font-semibold text-rose-50">Training statistics</h3>
+          <span className="text-xs uppercase tracking-[0.3em] text-rose-200/70">Block summary</span>
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
           {trainingStatistics.map((stat) => (
-            <div key={stat.label} className="rounded-2xl border border-white/5 bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-[0.3em] text-slate-400/70">{stat.label}</p>
-              <p className="mt-2 text-xl font-semibold text-white">{stat.value}</p>
+            <RedSurface key={stat.label} tone="glass" className="rounded-2xl p-4">
+              <p className="text-xs uppercase tracking-[0.3em] text-rose-200/70">{stat.label}</p>
+              <p className="mt-2 text-xl font-semibold text-rose-50">{stat.value}</p>
               <p className="mt-1 text-xs uppercase tracking-[0.3em] text-rose-200/80">{stat.trend}</p>
-            </div>
+            </RedSurface>
           ))}
         </div>
-      </article>
+      </RedSurface>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <article id="competition-results" className="space-y-4 rounded-3xl border border-white/5 bg-slate-900/60 p-6 text-slate-200 shadow-[0_22px_55px_rgba(8,15,35,0.45)]">
+        <RedSurface id="competition-results" as="article" tone="muted" className="space-y-4 p-6 text-rose-50">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-lg font-semibold text-white">Competition results</h3>
-            <span className="text-xs uppercase tracking-[0.3em] text-slate-400/70">Season highlights</span>
+            <h3 className="text-lg font-semibold text-rose-50">Competition results</h3>
+            <span className="text-xs uppercase tracking-[0.3em] text-rose-200/70">Season highlights</span>
           </div>
           <ul className="space-y-3">
             {competitionResults.map((meet) => (
-              <li key={meet.event} className="rounded-2xl border border-white/5 bg-white/5 p-4">
-                <p className="text-sm font-semibold text-white">{meet.event}</p>
-                <p className="mt-1 text-sm text-slate-300/90">{meet.result}</p>
+              <RedSurface key={meet.event} as="li" tone="glass" className="rounded-2xl p-4">
+                <p className="text-sm font-semibold text-rose-50">{meet.event}</p>
+                <p className="mt-1 text-sm text-rose-100/80">{meet.result}</p>
                 <p className="mt-1 text-xs uppercase tracking-[0.3em] text-rose-200/80">Placement · {meet.placing}</p>
-              </li>
+              </RedSurface>
             ))}
           </ul>
-        </article>
+        </RedSurface>
 
-        <article id="weight-tracking" className="space-y-4 rounded-3xl border border-white/5 bg-slate-900/60 p-6 text-slate-200 shadow-[0_22px_55px_rgba(8,15,35,0.45)]">
+        <RedSurface id="weight-tracking" as="article" tone="muted" className="space-y-4 p-6 text-rose-50">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-lg font-semibold text-white">Body weight log</h3>
-            <span className="text-xs uppercase tracking-[0.3em] text-slate-400/70">Weekly check-ins</span>
+            <h3 className="text-lg font-semibold text-rose-50">Body weight log</h3>
+            <span className="text-xs uppercase tracking-[0.3em] text-rose-200/70">Weekly check-ins</span>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {weightTrend.map((entry) => (
-              <div key={entry.label} className="rounded-2xl border border-white/5 bg-white/5 p-4">
-                <p className="text-xs uppercase tracking-[0.3em] text-slate-400/70">{entry.label}</p>
-                <p className="mt-2 text-lg font-semibold text-white">{entry.weight}</p>
-              </div>
+              <RedSurface key={entry.label} tone="glass" className="rounded-2xl p-4">
+                <p className="text-xs uppercase tracking-[0.3em] text-rose-200/70">{entry.label}</p>
+                <p className="mt-2 text-lg font-semibold text-rose-50">{entry.weight}</p>
+              </RedSurface>
             ))}
           </div>
-          <p className="text-sm text-slate-300/90">
+          <p className="text-sm text-rose-100/80">
             Range target 77.8 kg – 78.4 kg. Flag a nutrition review if weight drifts outside band for two consecutive weeks.
           </p>
-        </article>
+        </RedSurface>
       </div>
     </section>
   )

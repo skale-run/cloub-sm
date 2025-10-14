@@ -1,6 +1,7 @@
 import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
 import Header from './components/Header'
+import RedSurface from './components/RedSurface'
 import Sidebar from './components/Sidebar'
 import AccessSection from './features/access/AccessSection'
 import AuthenticationExperienceModal from './features/auth/AuthenticationExperienceModal'
@@ -138,13 +139,13 @@ function App() {
 
   return (
     <>
-      <div className="relative min-h-screen overflow-hidden text-slate-100">
+      <div className="relative min-h-screen overflow-hidden text-rose-100">
         {sidebarOpen ? (
           <button
             type="button"
             aria-label="Close navigation"
             onClick={handleSidebarNavigate}
-            className="fixed inset-0 z-30 bg-slate-950/70 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-30 bg-rose-950/70 backdrop-blur-sm lg:hidden"
           />
         ) : null}
 
@@ -158,7 +159,10 @@ function App() {
             savedProfile={savedProfile}
           />
 
-          <div className="flex flex-1 flex-col rounded-3xl border border-white/5 bg-slate-950/60 shadow-[0_35px_120px_rgba(8,15,35,0.55)] backdrop-blur xl:rounded-[32px]">
+          <RedSurface
+            tone="primary"
+            className="flex flex-1 flex-col overflow-hidden xl:rounded-[32px]"
+          >
             <Header
               isSidebarOpen={sidebarOpen}
               onToggleSidebar={toggleSidebar}
@@ -206,7 +210,7 @@ function App() {
                 }
               })()}
             </main>
-          </div>
+          </RedSurface>
         </div>
       </div>
       <AuthenticationExperienceModal />

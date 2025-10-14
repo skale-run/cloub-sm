@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react'
+import RedSurface from '../../components/RedSurface'
 
 const academicModules = [
   {
@@ -29,32 +30,34 @@ function AcademicRecordSection(): ReactElement {
     <section id="academic-record" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-white sm:text-2xl">Academic record</h2>
-          <p className="text-sm text-slate-400/80">
+          <h2 className="text-xl font-semibold text-rose-50 sm:text-2xl">Academic record</h2>
+          <p className="text-sm text-rose-200/75">
             Keep eligibility requirements aligned with your current semester planning.
           </p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-rose-400/30 bg-rose-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-rose-100">
+        <span className="inline-flex items-center gap-2 rounded-full border border-rose-400/50 bg-rose-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-rose-100">
           18 / 24 credits
         </span>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {academicModules.map((module) => (
-          <article
+          <RedSurface
             key={module.code}
-            className="flex h-full flex-col gap-3 rounded-3xl border border-white/5 bg-slate-900/60 p-5 text-slate-200 shadow-[0_22px_55px_rgba(8,15,35,0.45)]"
+            as="article"
+            tone="muted"
+            className="flex h-full flex-col gap-3 p-5 text-rose-50"
           >
-            <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-slate-400/70">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-rose-200/70">
               <span>{module.code}</span>
               <span>{module.credits} credits</span>
             </div>
-            <h3 className="text-lg font-semibold text-white">{module.title}</h3>
-            <p className="text-sm text-slate-300/90">Status · {module.status}</p>
+            <h3 className="text-lg font-semibold text-rose-50">{module.title}</h3>
+            <p className="text-sm text-rose-100/80">Status · {module.status}</p>
             <p className="text-xs uppercase tracking-[0.3em] text-rose-200/80">
               Next evaluation · {module.nextEvaluation}
             </p>
-          </article>
+          </RedSurface>
         ))}
       </div>
     </section>
