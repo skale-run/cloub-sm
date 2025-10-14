@@ -1073,7 +1073,7 @@ function applyGlobalTokens(root) {
 const VALID_THEME_MODES = new Set(["dark"]); // single-mode by design
 const DEFAULT_THEME_MODE = "dark";
 
-export function applyThemeToDocument(mode = "dark", target?) {
+export function applyThemeToDocument(mode = "dark", target) {
   const root =
     target ??
     (typeof document !== "undefined" ? document.documentElement : undefined);
