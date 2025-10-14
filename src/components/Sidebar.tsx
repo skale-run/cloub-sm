@@ -139,6 +139,32 @@ function Sidebar({
   currentPath,
   savedProfile,
 }: SidebarProps) {
+  const memberDetails = savedProfile
+    ? (
+        [
+          {
+            label: "Role",
+            value: savedProfile.role,
+            fallback: "Assign a role",
+          },
+          {
+            label: "Squad",
+            value: savedProfile.squad,
+            fallback: "Update squad to personalise drills",
+          },
+          {
+            label: "Membership ID",
+            value: savedProfile.membershipId,
+            fallback: "Pending assignment",
+          },
+        ] as const
+      )
+    : [];
+
+  const incompleteDetails = memberDetails.filter(
+    (detail) => !detail.value || detail.value.trim().length === 0,
+  );
+
   const handleNavigate = () => {
     if (open) {
       onNavigate?.();
@@ -273,38 +299,65 @@ function Sidebar({
             Member snapshot
           </p>
           {savedProfile ? (
-            <dl className="grid gap-3 text-sm text-red-50">
-              <div className="flex flex-col gap-1">
-                <dt className="text-xs uppercase tracking-wide text-red-200/70">
-                  Member
-                </dt>
-                <dd className="font-semibold text-red-50">
-                  {savedProfile.fullName}
-                </dd>
+            <div className="space-y-4 text-red-50">
+              <div className="relative overflow-hidden rounded-3xl border border-red-400/30 bg-gradient-to-br from-red-500/25 via-red-500/10 to-red-950/70 p-5 shadow-[0_18px_45px_rgba(127,29,29,0.35)]">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-950/60 text-red-100">
+                    <UserCircle aria-hidden className="h-6 w-6" />
+                  </span>
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-red-200/70">
+                      Active member
+                    </span>
+                    <span className="text-lg font-semibold text-red-50">
+                      {savedProfile.fullName}
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2 text-xs text-red-100/85">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-950/50 px-3 py-1 font-medium">
+                    <span className="text-red-200/70">ID</span>
+                    <span className="tracking-wide text-red-50">
+                      {savedProfile.membershipId || "Pending assignment"}
+                    </span>
+                  </span>
+                  {savedProfile.squad ? (
+                    <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-950/50 px-3 py-1 font-medium text-red-100">
+                      Squad · {savedProfile.squad}
+                    </span>
+                  ) : null}
+                </div>
+                <dl className="mt-5 grid gap-3 text-sm">
+                  {memberDetails.map((detail) => {
+                    const hasValue = Boolean(
+                      detail.value && detail.value.trim().length > 0,
+                    );
+
+                    return (
+                      <div
+                        key={detail.label}
+                        className="flex items-center justify-between gap-3 rounded-2xl border border-red-400/20 bg-red-950/45 px-4 py-3"
+                      >
+                        <dt className="text-xs uppercase tracking-wide text-red-200/70">
+                          {detail.label}
+                        </dt>
+                        <dd className={`text-right ${hasValue ? "text-red-100" : "text-red-200/60"}`}>
+                          {hasValue ? detail.value : detail.fallback}
+                        </dd>
+                      </div>
+                    );
+                  })}
+                </dl>
               </div>
-              <div className="flex flex-col gap-1">
-                <dt className="text-xs uppercase tracking-wide text-red-200/70">
-                  Role
-                </dt>
-                <dd>{savedProfile.role || "Assign a role"}</dd>
+              <div className="flex items-start gap-2 rounded-2xl border border-red-400/20 bg-red-950/45 px-4 py-3 text-xs text-red-200/75">
+                <span className="mt-0.5 inline-flex h-2 w-2 flex-none rounded-full bg-red-400/70" />
+                <span>
+                  {incompleteDetails.length === 0
+                    ? "Profile complete — coaches can access the latest details."
+                    : `Next update: ${incompleteDetails[0].label.toLowerCase()}.`}
+                </span>
               </div>
-              <div className="flex flex-col gap-1">
-                <dt className="text-xs uppercase tracking-wide text-red-200/70">
-                  Squad
-                </dt>
-                <dd>
-                  {savedProfile.squad || "Update squad to personalise drills"}
-                </dd>
-              </div>
-              <div className="flex flex-col gap-1">
-                <dt className="text-xs uppercase tracking-wide text-red-200/70">
-                  ID
-                </dt>
-                <dd className="font-medium tracking-wide text-red-200">
-                  {savedProfile.membershipId}
-                </dd>
-              </div>
-            </dl>
+            </div>
           ) : (
             <p className="text-sm leading-relaxed text-red-100/75">
               Save your athlete profile to unlock tailored navigation insights.
