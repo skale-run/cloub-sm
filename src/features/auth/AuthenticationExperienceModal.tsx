@@ -95,16 +95,16 @@ function AuthenticationExperienceModal() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="athlete-auth-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-6 backdrop-blur-lg"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-rose-950/90 p-6 backdrop-blur-lg"
     >
-      <div className="relative flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950/95 via-slate-950/80 to-slate-900/70 shadow-[0_55px_160px_rgba(6,10,25,0.65)]">
+      <div className="relative flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-rose-400/30 bg-gradient-to-br from-rose-950/95 via-rose-950/80 to-rose-900/70 shadow-[0_55px_160px_rgba(136,19,55,0.55)]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(244,63,94,0.18),transparent_55%)]" aria-hidden />
 
         <button
           ref={closeButtonRef}
           type="button"
           onClick={close}
-          className="absolute right-6 top-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white transition hover:border-white/40 hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400"
+          className="absolute right-6 top-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-rose-400/40 bg-rose-950/40 text-rose-100 transition hover:border-rose-300/60 hover:bg-rose-900/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300"
           aria-label="Close authentication modal"
         >
           <X className="h-5 w-5" aria-hidden />
@@ -119,11 +119,11 @@ function AuthenticationExperienceModal() {
               <h2 id="athlete-auth-modal-title" className="text-3xl font-semibold text-white sm:text-4xl">
                 {heading}
               </h2>
-              <p className="max-w-xl text-base text-slate-200/80">{description}</p>
+              <p className="max-w-xl text-base text-rose-100/80">{description}</p>
             </div>
 
             <div className="space-y-6">
-              <div className="inline-flex rounded-full border border-white/10 bg-white/5 p-1 text-sm text-slate-200/80">
+              <div className="inline-flex rounded-full border border-rose-400/35 bg-rose-950/35 p-1 text-sm text-rose-100/85">
                 {(
                   [
                     { label: 'Log in', value: 'login' },
@@ -136,8 +136,8 @@ function AuthenticationExperienceModal() {
                     onClick={() => setMode(option.value)}
                     className={`flex-1 rounded-full px-6 py-2 font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400 ${
                       mode === option.value
-                        ? 'bg-rose-500 text-white shadow-[0_18px_45px_rgba(244,63,94,0.45)]'
-                        : 'text-slate-300 hover:text-white'
+                        ? 'bg-rose-500 text-rose-50 shadow-[0_18px_45px_rgba(244,63,94,0.45)]'
+                        : 'text-rose-200/75 hover:text-rose-100'
                     }`}
                     aria-pressed={mode === option.value}
                   >
@@ -148,24 +148,24 @@ function AuthenticationExperienceModal() {
 
               {mode === 'login' ? (
                 <form className="space-y-4" aria-label="Log in form">
-                  <label className="block text-sm font-medium text-slate-200">
+                  <label className="block text-sm font-medium text-rose-100">
                     Email
                     <input
                       type="email"
                       name="email"
                       autoComplete="email"
-                      className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-base text-white placeholder:text-slate-400 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
+                      className="mt-2 w-full rounded-2xl border border-rose-400/30 bg-rose-950/35 px-4 py-3 text-base text-rose-50 placeholder:text-rose-200/70 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
                       placeholder="you@club.com"
                       required
                     />
                   </label>
-                  <label className="block text-sm font-medium text-slate-200">
+                  <label className="block text-sm font-medium text-rose-100">
                     Password
                     <input
                       type="password"
                       name="password"
                       autoComplete="current-password"
-                      className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-base text-white placeholder:text-slate-400 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
+                      className="mt-2 w-full rounded-2xl border border-rose-400/30 bg-rose-950/35 px-4 py-3 text-base text-rose-50 placeholder:text-rose-200/70 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
                       placeholder="••••••••"
                       required
                     />
@@ -176,39 +176,39 @@ function AuthenticationExperienceModal() {
                   >
                     {cta}
                   </button>
-                  <p className="text-center text-xs text-slate-300/80">Forgot password? Contact your coach to reset access.</p>
+                  <p className="text-center text-xs text-rose-200/75">Forgot password? Contact your coach to reset access.</p>
                 </form>
               ) : (
                 <form className="space-y-4" aria-label="Register form">
-                  <label className="block text-sm font-medium text-slate-200">
+                  <label className="block text-sm font-medium text-rose-100">
                     Full name
                     <input
                       type="text"
                       name="fullName"
                       autoComplete="name"
-                      className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-base text-white placeholder:text-slate-400 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
+                      className="mt-2 w-full rounded-2xl border border-rose-400/30 bg-rose-950/35 px-4 py-3 text-base text-rose-50 placeholder:text-rose-200/70 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
                       placeholder="Jordan Adebayo"
                       required
                     />
                   </label>
-                  <label className="block text-sm font-medium text-slate-200">
+                  <label className="block text-sm font-medium text-rose-100">
                     Email
                     <input
                       type="email"
                       name="email"
                       autoComplete="email"
-                      className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-base text-white placeholder:text-slate-400 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
+                      className="mt-2 w-full rounded-2xl border border-rose-400/30 bg-rose-950/35 px-4 py-3 text-base text-rose-50 placeholder:text-rose-200/70 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
                       placeholder="you@club.com"
                       required
                     />
                   </label>
-                  <label className="block text-sm font-medium text-slate-200">
+                  <label className="block text-sm font-medium text-rose-100">
                     Password
                     <input
                       type="password"
                       name="password"
                       autoComplete="new-password"
-                      className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-base text-white placeholder:text-slate-400 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
+                      className="mt-2 w-full rounded-2xl border border-rose-400/30 bg-rose-950/35 px-4 py-3 text-base text-rose-50 placeholder:text-rose-200/70 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/40"
                       placeholder="Create a secure passphrase"
                       required
                     />
@@ -219,7 +219,7 @@ function AuthenticationExperienceModal() {
                   >
                     {cta}
                   </button>
-                  <p className="text-center text-xs text-slate-300/80">
+                  <p className="text-center text-xs text-rose-200/75">
                     By creating an account you accept the athlete charter and consent to performance tracking.
                   </p>
                 </form>
@@ -227,7 +227,7 @@ function AuthenticationExperienceModal() {
             </div>
           </section>
 
-          <aside className="flex flex-col justify-between gap-8 rounded-3xl border border-white/10 bg-white/5/50 p-8 text-slate-200/80 backdrop-blur">
+          <aside className="flex flex-col justify-between gap-8 rounded-3xl border border-rose-400/35 bg-rose-950/35 p-8 text-rose-100/85 backdrop-blur">
             <div className="space-y-6">
               <p className="text-xs uppercase tracking-[0.35em] text-rose-200/70">Why athletes love it</p>
               <ul className="space-y-4">
@@ -236,14 +236,14 @@ function AuthenticationExperienceModal() {
                   return (
                     <li
                       key={highlight.title}
-                      className="group flex gap-4 rounded-2xl border border-white/5 bg-slate-900/40 p-4 transition hover:border-rose-400/40 hover:bg-rose-500/10"
+                      className="group flex gap-4 rounded-2xl border border-rose-400/35 bg-rose-950/45 p-4 transition hover:border-rose-400/50 hover:bg-rose-500/15"
                     >
                       <span className="mt-1 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-rose-500/15 text-rose-200">
                         <Icon className="h-5 w-5" aria-hidden />
                       </span>
                       <div className="space-y-1">
-                        <p className="font-semibold text-white">{highlight.title}</p>
-                        <p className="text-sm text-slate-300/80">{highlight.description}</p>
+                        <p className="font-semibold text-rose-50">{highlight.title}</p>
+                        <p className="text-sm text-rose-100/80">{highlight.description}</p>
                       </div>
                     </li>
                   )
@@ -251,11 +251,10 @@ function AuthenticationExperienceModal() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-rose-500/15 via-amber-500/5 to-transparent p-6 text-sm text-slate-200/80">
-              <p className="font-semibold text-white">Need help getting started?</p>
-              <p className="mt-2 text-slate-300/80">
-                Drop a note to <span className="font-medium text-rose-200">coach@aerodash.com</span> or chat with your coaching team in the
-                squad channel.
+            <div className="rounded-3xl border border-rose-400/30 bg-gradient-to-br from-rose-500/20 via-amber-500/10 to-transparent p-6 text-sm text-rose-100/85">
+              <p className="font-semibold text-rose-50">Need help getting started?</p>
+              <p className="mt-2 text-rose-200/75">
+                Drop a note to <span className="font-medium text-rose-200">coach@aerodash.com</span> or chat with your coaching team in the squad channel.
               </p>
             </div>
           </aside>

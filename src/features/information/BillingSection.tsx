@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react'
+import RedSurface from '../../components/RedSurface'
 
 const invoices = [
   {
@@ -29,22 +30,22 @@ function BillingSection(): ReactElement {
     <section id="billing" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-white sm:text-2xl">Billing overview</h2>
-          <p className="text-sm text-slate-400/80">
+          <h2 className="text-xl font-semibold text-rose-50 sm:text-2xl">Billing overview</h2>
+          <p className="text-sm text-rose-200/75">
             Keep track of recurring fees, add-ons and outstanding balances in one place.
           </p>
         </div>
-        <div className="flex items-center gap-3 rounded-3xl border border-rose-400/30 bg-rose-500/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-rose-100">
+        <div className="flex items-center gap-3 rounded-3xl border border-rose-400/45 bg-rose-500/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-rose-100">
           <span>Balance</span>
-          <span className="text-sm font-semibold text-white">$180.00</span>
+          <span className="text-sm font-semibold text-rose-50">$180.00</span>
         </div>
       </div>
 
-      <div className="space-y-4 rounded-3xl border border-white/5 bg-slate-900/60 p-6 shadow-[0_22px_55px_rgba(8,15,35,0.45)]">
+      <RedSurface tone="muted" className="space-y-4 p-6">
         <header className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-400/70">Auto-pay</p>
-            <p className="text-sm text-slate-300/90">Enabled for monthly subscriptions</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-rose-200/70">Auto-pay</p>
+            <p className="text-sm text-rose-100/80">Enabled for monthly subscriptions</p>
           </div>
           <button
             type="button"
@@ -54,9 +55,9 @@ function BillingSection(): ReactElement {
           </button>
         </header>
 
-        <div className="overflow-hidden rounded-2xl border border-white/5">
-          <table className="min-w-full divide-y divide-white/5 text-left text-sm text-slate-200">
-            <thead className="bg-white/5 text-xs uppercase tracking-[0.3em] text-slate-400/70">
+        <div className="overflow-hidden rounded-2xl border border-rose-500/25">
+          <table className="min-w-full divide-y divide-rose-500/20 text-left text-sm text-rose-50">
+            <thead className="bg-rose-950/40 text-xs uppercase tracking-[0.3em] text-rose-200/70">
               <tr>
                 <th scope="col" className="px-4 py-3 font-semibold">
                   Invoice
@@ -72,12 +73,12 @@ function BillingSection(): ReactElement {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 bg-slate-950/40">
+            <tbody className="divide-y divide-rose-500/15 bg-rose-950/35">
               {invoices.map((invoice) => (
                 <tr key={invoice.id}>
-                  <td className="px-4 py-3 font-semibold text-white">{invoice.label}</td>
-                  <td className="px-4 py-3 text-slate-300/90">{invoice.dueDate}</td>
-                  <td className="px-4 py-3 font-medium text-slate-200">{invoice.amount}</td>
+                  <td className="px-4 py-3 font-semibold text-rose-50">{invoice.label}</td>
+                  <td className="px-4 py-3 text-rose-100/80">{invoice.dueDate}</td>
+                  <td className="px-4 py-3 font-medium text-rose-100">{invoice.amount}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${
@@ -94,7 +95,7 @@ function BillingSection(): ReactElement {
             </tbody>
           </table>
         </div>
-      </div>
+      </RedSurface>
     </section>
   )
 }

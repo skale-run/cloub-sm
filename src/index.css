@@ -10,12 +10,12 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #020617;
+  background-color: #2d0712;
   background-image:
-    radial-gradient(1200px 600px at 10% -10%, rgba(56, 189, 248, 0.18), transparent 70%),
-    radial-gradient(900px 500px at 90% 0%, rgba(168, 85, 247, 0.16), transparent 75%),
-    linear-gradient(180deg, rgb(2 6 23) 0%, rgb(5 10 25) 45%, rgb(8 15 35) 100%);
-  color: rgb(226 232 240);
+    radial-gradient(1200px 600px at 12% -12%, rgba(244, 63, 94, 0.24), transparent 70%),
+    radial-gradient(900px 500px at 88% 0%, rgba(249, 115, 22, 0.18), transparent 75%),
+    linear-gradient(180deg, rgb(45 7 18) 0%, rgb(58 9 22) 45%, rgb(74 10 27) 100%);
+  color: rgb(255 228 235);
   -webkit-font-smoothing: antialiased;
   font-synthesis: none;
   text-rendering: optimizeLegibility;

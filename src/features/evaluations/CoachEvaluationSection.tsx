@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react'
+import RedSurface from '../../components/RedSurface'
 
 const competencyScores = [
   { label: 'Explosive starts', score: 4.5, note: 'Improved block exit · maintain shin angle drills' },
@@ -12,19 +13,19 @@ function CoachEvaluationSection(): ReactElement {
     <section id="coach-evaluation" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-white sm:text-2xl">Coach evaluation</h2>
-          <p className="text-sm text-slate-400/80">Snapshot from the latest bi-weekly meeting with the coaching staff.</p>
+          <h2 className="text-xl font-semibold text-rose-50 sm:text-2xl">Coach evaluation</h2>
+          <p className="text-sm text-rose-200/75">Snapshot from the latest bi-weekly meeting with the coaching staff.</p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-3xl border border-amber-400/30 bg-amber-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-amber-100">
           Overall · 4.2 / 5
         </span>
       </div>
 
-      <div className="space-y-4 rounded-3xl border border-white/5 bg-slate-900/60 p-6 shadow-[0_22px_55px_rgba(8,15,35,0.45)]">
+      <RedSurface tone="muted" className="space-y-4 p-6 text-rose-50">
         <header className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-400/70">Focus for next review</p>
-            <p className="text-sm text-slate-300/90">Sharpen top-end speed for national trials in May.</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-rose-200/70">Focus for next review</p>
+            <p className="text-sm text-rose-100/80">Sharpen top-end speed for national trials in May.</p>
           </div>
           <button
             type="button"
@@ -36,23 +37,23 @@ function CoachEvaluationSection(): ReactElement {
 
         <ul className="space-y-4">
           {competencyScores.map((competency) => (
-            <li key={competency.label} className="rounded-2xl border border-white/5 bg-white/5 p-4 text-slate-200">
+            <RedSurface key={competency.label} as="li" tone="glass" className="rounded-2xl p-4 text-rose-50">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="text-sm font-semibold text-white">{competency.label}</p>
-                <span className="text-sm font-semibold text-white">{competency.score.toFixed(1)} / 5</span>
+                <p className="text-sm font-semibold text-rose-50">{competency.label}</p>
+                <span className="text-sm font-semibold text-rose-50">{competency.score.toFixed(1)} / 5</span>
               </div>
-              <p className="mt-2 text-sm text-slate-300/90">{competency.note}</p>
-              <div className="mt-3 h-2 rounded-full bg-slate-800/70">
+              <p className="mt-2 text-sm text-rose-100/80">{competency.note}</p>
+              <div className="mt-3 h-2 rounded-full bg-rose-950/45">
                 <div
-                  className="h-full rounded-full bg-amber-400/60"
+                  className="h-full rounded-full bg-amber-400/70"
                   style={{ width: `${(competency.score / 5) * 100}%` }}
                   aria-hidden
                 />
               </div>
-            </li>
+            </RedSurface>
           ))}
         </ul>
-      </div>
+      </RedSurface>
     </section>
   )
 }
