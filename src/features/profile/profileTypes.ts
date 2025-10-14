@@ -5,6 +5,7 @@ export type Profile = {
   email: string;
   emergencyContact: string;
   membershipId: string;
+  profileImage: string;
 };
 
 export const emptyProfile: Profile = {
@@ -14,4 +15,5 @@ export const emptyProfile: Profile = {
   email: "",
   emergencyContact: "",
   membershipId: "",
+  profileImage: "",
 };

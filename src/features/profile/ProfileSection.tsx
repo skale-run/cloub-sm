@@ -1,6 +1,11 @@
-import { CheckCircle2, Circle, X } from "lucide-react";
-import { useMemo } from "react";
-import type { FormEvent } from "react";
+import { CheckCircle2, Circle, Upload, X } from "lucide-react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import type {
+  ChangeEvent,
+  DragEvent,
+  FormEvent,
+  KeyboardEvent,
+} from "react";
 import RedSurface from "../../components/RedSurface";
 import type { Profile } from "./profileTypes";
 
@@ -31,6 +36,10 @@ function ProfileSection({
   onAddAchievement,
   onRemoveAchievement,
 }: ProfileSectionProps) {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+
   const profileFieldConfig = useMemo(
     () =>
       [
@@ -93,6 +102,84 @@ function ProfileSection({
 
   const suggestedNextField = missingFields[0];
 
+  const handleBrowseClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleDropZoneKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleBrowseClick();
+    }
+  };
+
+  const handleImageSelection = useCallback(
+    (files: FileList | null) => {
+      if (!files || files.length === 0) {
+        return;
+      }
+
+      const [file] = files;
+
+      if (!file.type.startsWith("image/")) {
+        setUploadError("Please upload an image file.");
+        return;
+      }
+
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+      if (file.size > MAX_FILE_SIZE) {
+        setUploadError("Please choose an image smaller than 5MB.");
+        return;
+      }
+
+      setUploadError("");
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          onProfileChange("profileImage", reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    },
+    [onProfileChange],
+  );
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    handleImageSelection(event.target.files);
+    event.target.value = "";
+  };
+
+  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.dataTransfer.dropEffect = "copy";
+    if (!isDragging) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.currentTarget.contains(event.relatedTarget as Node)) {
+      return;
+    }
+    setIsDragging(false);
+  };
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+    handleImageSelection(event.dataTransfer.files);
+  };
+
+  const handleRemoveImage = () => {
+    onProfileChange("profileImage", "");
+    setUploadError("");
+  };
+
   return (
     <section id="profile" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -117,6 +204,82 @@ function ProfileSection({
           className="p-6 text-red-50"
           onSubmit={onSaveProfile}
         >
+          <div className="mb-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 className="text-lg font-semibold text-red-50">
+                  Profile photo
+                </h3>
+                <p className="text-sm text-red-200/75">
+                  Drag a clear headshot or browse to upload.
+                </p>
+              </div>
+              {profileDraft.profileImage ? (
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-950/40 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-red-100 transition hover:border-red-400/60 hover:bg-red-500/20 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+                >
+                  Remove
+                </button>
+              ) : null}
+            </div>
+
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={handleBrowseClick}
+              onKeyDown={handleDropZoneKeyDown}
+              onDragEnter={handleDragOver}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={`mt-4 flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-10 text-center transition ${
+                isDragging
+                  ? "border-red-300/80 bg-red-500/10"
+                  : "border-red-400/40 bg-red-950/40 hover:border-red-300/70 hover:bg-red-900/40"
+              }`}
+            >
+              {profileDraft.profileImage ? (
+                <>
+                  <img
+                    src={profileDraft.profileImage}
+                    alt="Uploaded athlete portrait"
+                    className="h-28 w-28 rounded-full border border-red-400/40 object-cover shadow-[0_12px_30px_rgba(127,29,29,0.45)]"
+                  />
+                  <p className="text-sm text-red-200/80">
+                    Drop a new image or press enter to replace your photo.
+                  </p>
+                  <p className="text-xs text-red-200/60">
+                    PNG or JPG up to 5MB.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-red-400/30 bg-red-950/60 text-red-200">
+                    <Upload aria-hidden className="h-6 w-6" />
+                  </span>
+                  <p className="text-sm font-medium text-red-100">
+                    Drag & drop your athlete photo here
+                  </p>
+                  <p className="text-xs text-red-200/65">
+                    PNG or JPG up to 5MB, or click to browse.
+                  </p>
+                </>
+              )}
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleInputChange}
+            />
+            {uploadError ? (
+              <p className="mt-2 text-xs text-red-200/80">{uploadError}</p>
+            ) : null}
+          </div>
+
           <div className="grid gap-4 md:grid-cols-2">
             {profileFieldConfig.map(
               ({ key, label, placeholder, type = "text", required, helperText }) => (
