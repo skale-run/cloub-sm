@@ -322,6 +322,8 @@ export const en = {
           title: "Continental Grand Prix",
           location: "Lisbon Athletics Park",
         },
+      },
+    },
     training: {
       title: "Training Session Calendar",
       description: "Stay aligned with the squad and confirm your availability early.",
