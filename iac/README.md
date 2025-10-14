@@ -30,7 +30,7 @@ This directory contains Terraform configuration to deploy the application to Goo
 | Name | Description | Type | Default |
 | --- | --- | --- | --- |
 | `project_id` | Google Cloud project ID | `string` | n/a |
-| `region` | Deployment region | `string` | `"us-central1"` |
+| `region` | Deployment region | `string` | `"europe-west1"` |
 | `service_name` | Cloud Run service name | `string` | n/a |
 | `container_image` | Container image to deploy | `string` | n/a |
 | `allow_unauthenticated` | Allow unauthenticated access | `bool` | `true` |

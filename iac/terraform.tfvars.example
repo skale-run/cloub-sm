@@ -1,7 +1,7 @@
-project_id            = "your-gcp-project-id"
-region                = "us-central1"
+project_id            = "club-sm"
+region                = "europe-west1"
 service_name          = "cloub-sm"
-container_image       = "us-docker.pkg.dev/your-project/your-repo/your-image:tag"
+container_image       = "europe-west1-docker.pkg.dev/your-project/your-repo/your-image:tag"
 allow_unauthenticated = true
 
 # environment_variables = {
