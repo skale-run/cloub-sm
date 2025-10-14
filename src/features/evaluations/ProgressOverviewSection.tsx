@@ -1,82 +1,63 @@
 import type { ReactElement } from "react";
+import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 
-const summaryMetrics = [
-  {
-    label: "Quarter rating",
-    value: "82",
-    suffix: "/100",
-    change: "+5.4",
-    changeDescriptor: "vs. last quarter",
-  },
-  {
-    label: "Target delta",
-    value: "+3.1%",
-    change: "Ahead",
-    changeDescriptor: "of performance target",
-  },
-  {
-    label: "Sessions completed",
-    value: "47",
-    change: "92%",
-    changeDescriptor: "training adherence",
-  },
-  {
-    label: "Recovery score",
-    value: "86",
-    suffix: "/100",
-    change: "+6",
-    changeDescriptor: "sleep efficiency",
-  },
-];
+type SummaryMetric = {
+  label: string;
+  value: string;
+  suffix?: string;
+  change: string;
+  changeDescriptor: string;
+};
 
-const trendPoints = [
-  { label: "Jan", performance: 72, target: 70 },
-  { label: "Feb", performance: 75, target: 72 },
-  { label: "Mar", performance: 78, target: 75 },
-  { label: "Apr", performance: 82, target: 78 },
-];
+type TrendPoint = {
+  label: string;
+  performance: number;
+  target: number;
+};
 
-const momentumFocus = [
-  {
-    title: "Speed work",
-    detail: "Maintain contrast sprint sequencing 2x weekly.",
-  },
-  {
-    title: "Strength block",
-    detail: "Shift front squat emphasis to high velocity loads.",
-  },
-  {
-    title: "Recovery",
-    detail: "Protect Thursday as full regen + monitoring day.",
-  },
-];
+type FocusItem = {
+  title: string;
+  detail: string;
+};
 
-const alerts = [
-  {
-    title: "Acceleration split",
-    detail: "Average 30m time dropped by 0.11s · keep resisted sprint block.",
-  },
-  {
-    title: "Strength progression",
-    detail: "Back squat at 1.8x BW · maintain 3-week wave loading.",
-  },
-];
+type AlertItem = {
+  title: string;
+  detail: string;
+};
 
 function ProgressOverviewSection(): ReactElement {
+  const { t } = useTranslation();
+
+  const summaryMetrics = t("progressOverview.summaryMetrics", {
+    returnObjects: true,
+  }) as SummaryMetric[];
+
+  const trendPoints = t("progressOverview.performanceTrend.points", {
+    returnObjects: true,
+  }) as TrendPoint[];
+
+  const momentumFocus = t("progressOverview.momentumWatch.items", {
+    returnObjects: true,
+  }) as FocusItem[];
+
+  const alerts = t("progressOverview.coachAlerts.items", {
+    returnObjects: true,
+  }) as AlertItem[];
+
   return (
     <section id="progress-overview" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
-            Progress insight
+            {t("progressOverview.heading")}
           </h2>
           <p className="text-sm text-red-200/75">
-            Quarter-to-date progression towards the season performance targets.
+            {t("progressOverview.description")}
           </p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-3xl border border-red-400/30 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
-          Ahead of plan
+          {t("progressOverview.statusChip")}
         </span>
       </div>
 
@@ -115,17 +96,17 @@ function ProgressOverviewSection(): ReactElement {
           <header className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h3 className="text-lg font-semibold text-red-50">
-                Performance trend
+                {t("progressOverview.performanceTrend.heading")}
               </h3>
               <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-                Season rating · updated weekly
+                {t("progressOverview.performanceTrend.subheading")}
               </p>
             </div>
             <RedSurface
               tone="glass"
               className="rounded-2xl px-3 py-2 text-xs uppercase tracking-[0.25em] text-red-200"
             >
-              Target markers show quarter goals
+              {t("progressOverview.performanceTrend.chip")}
             </RedSurface>
           </header>
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -157,7 +138,10 @@ function ProgressOverviewSection(): ReactElement {
                     {point.label}
                   </p>
                   <p className="mt-1 text-red-100/70">
-                    {point.performance}% performance · {point.target}% target
+                    {t("progressOverview.performanceTrend.pointSummary", {
+                      performance: point.performance,
+                      target: point.target,
+                    })}
                   </p>
                 </div>
               </div>
@@ -165,20 +149,17 @@ function ProgressOverviewSection(): ReactElement {
           </div>
           <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-red-100/80">
-              Sustained improvement over the last four microcycles keeps the squad
-              comfortably ahead of projected development. Maintain current training
-              density, continue sleep tracking, and repeat readiness screening on
-              Monday sessions.
+              {t("progressOverview.performanceTrend.summary")}
             </p>
             <RedSurface
               tone="glass"
               className="inline-flex min-w-[14rem] flex-col gap-1 rounded-2xl px-4 py-3 text-left"
             >
               <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-                Focus next week
+                {t("progressOverview.performanceTrend.focus.label")}
               </p>
               <p className="text-sm font-semibold text-red-50">
-                Reinforce acceleration form during Tuesday and Friday technical blocks.
+                {t("progressOverview.performanceTrend.focus.detail")}
               </p>
             </RedSurface>
           </div>
@@ -190,7 +171,9 @@ function ProgressOverviewSection(): ReactElement {
           className="flex flex-col gap-6 rounded-3xl p-6 text-red-50"
         >
           <div>
-            <h3 className="text-lg font-semibold text-red-50">Momentum watch</h3>
+            <h3 className="text-lg font-semibold text-red-50">
+              {t("progressOverview.momentumWatch.heading")}
+            </h3>
             <ul className="mt-4 space-y-3">
               {momentumFocus.map((focus) => (
                 <RedSurface
@@ -207,7 +190,9 @@ function ProgressOverviewSection(): ReactElement {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-red-50">Coach alerts</h3>
+            <h3 className="text-lg font-semibold text-red-50">
+              {t("progressOverview.coachAlerts.heading")}
+            </h3>
             <ul className="mt-4 space-y-3">
               {alerts.map((alert) => (
                 <RedSurface

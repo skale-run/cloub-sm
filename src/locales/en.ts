@@ -438,6 +438,91 @@ export const en = {
         ],
       },
     },
+    progressOverview: {
+      heading: "Progress insight",
+      description:
+        "Quarter-to-date progression towards the season performance targets.",
+      statusChip: "Ahead of plan",
+      summaryMetrics: [
+        {
+          label: "Quarter rating",
+          value: "82",
+          suffix: "/100",
+          change: "+5.4",
+          changeDescriptor: "vs. last quarter",
+        },
+        {
+          label: "Target delta",
+          value: "+3.1%",
+          change: "Ahead",
+          changeDescriptor: "of performance target",
+        },
+        {
+          label: "Sessions completed",
+          value: "47",
+          change: "92%",
+          changeDescriptor: "training adherence",
+        },
+        {
+          label: "Recovery score",
+          value: "86",
+          suffix: "/100",
+          change: "+6",
+          changeDescriptor: "sleep efficiency",
+        },
+      ],
+      performanceTrend: {
+        heading: "Performance trend",
+        subheading: "Season rating · updated weekly",
+        chip: "Target markers show quarter goals",
+        pointSummary: "{{performance}}% performance · {{target}}% target",
+        points: [
+          { label: "Jan", performance: 72, target: 70 },
+          { label: "Feb", performance: 75, target: 72 },
+          { label: "Mar", performance: 78, target: 75 },
+          { label: "Apr", performance: 82, target: 78 },
+        ],
+        summary:
+          "Sustained improvement over the last four microcycles keeps the squad comfortably ahead of projected development. Maintain current training density, continue sleep tracking, and repeat readiness screening on Monday sessions.",
+        focus: {
+          label: "Focus next week",
+          detail:
+            "Reinforce acceleration form during Tuesday and Friday technical blocks.",
+        },
+      },
+      momentumWatch: {
+        heading: "Momentum watch",
+        items: [
+          {
+            title: "Speed work",
+            detail: "Maintain contrast sprint sequencing 2x weekly.",
+          },
+          {
+            title: "Strength block",
+            detail: "Shift front squat emphasis to high velocity loads.",
+          },
+          {
+            title: "Recovery",
+            detail: "Protect Thursday as full regen + monitoring day.",
+          },
+        ],
+      },
+      coachAlerts: {
+        heading: "Coach alerts",
+        items: [
+          {
+            title: "Acceleration split",
+            detail:
+              "Average 30m time dropped by 0.11s · keep resisted sprint block.",
+          },
+          {
+            title: "Strength progression",
+            detail:
+              "Back squat at 1.8x BW · maintain 3-week wave loading.",
+          },
+        ],
+      },
+    },
     landing: {
       badge: "Cloud-based sports management",
       heroTitle: "Simplify club operations and inspire every athlete",
