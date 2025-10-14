@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import './App.css'
-import { useTheme } from './theme.js'
+import Header from './components/Header'
+import Sidebar from './components/Sidebar'
 
 type TrainingSession = {
   id: string
@@ -135,7 +136,6 @@ const emptyProfile: Profile = {
 }
 
 function App() {
-  const { mode } = useTheme()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [profileDraft, setProfileDraft] = useState<Profile>(emptyProfile)
   const [savedProfile, setSavedProfile] = useState<Profile | null>(null)
@@ -163,6 +163,7 @@ function App() {
   }, [savedProfile])
 
   const toggleSidebar = () => setSidebarOpen((open) => !open)
+  const handleSidebarNavigate = () => setSidebarOpen(false)
 
   const handleProfileChange = (key: keyof Profile, value: string) => {
     setProfileDraft((previous) => ({ ...previous, [key]: value }))
@@ -208,58 +209,19 @@ function App() {
 
   return (
     <div className="app-shell">
-      <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar__brand">
-          <span className="sidebar__logo">🏃‍♂️</span>
-          <div>
-            <p className="sidebar__title">ClubPulse</p>
-            <p className="sidebar__subtitle">Athlete Command Hub</p>
-          </div>
-        </div>
-
-        <nav className="sidebar__nav">
-          <a href="#training">Training Sessions</a>
-          <a href="#competitions">Competitions</a>
-          <a href="#performance">Performance</a>
-          <a href="#profile">My Profile</a>
-          <a href="#access">Club Access</a>
-        </nav>
-
-        <div className="sidebar__footer">
-          <p>Season 2025 · Wave 2 Squad</p>
-          <p className="sidebar__footer-highlight">Next rest day: Sun, 20 Apr</p>
-        </div>
-      </aside>
+      <Sidebar
+        open={sidebarOpen}
+        onToggleSidebar={toggleSidebar}
+        onNavigate={handleSidebarNavigate}
+        savedProfile={savedProfile}
+      />
 
       <div className="content">
-        <header className="topbar">
-          <button className="topbar__menu" onClick={toggleSidebar} aria-label="Toggle navigation">
-            <span />
-            <span />
-            <span />
-          </button>
-
-          <div className="topbar__overview">
-            <div>
-              <h1>Welcome back, {savedProfile?.fullName || 'Athlete'} 👋</h1>
-              <p>Stay on top of your training rhythm and competition milestones.</p>
-            </div>
-            <div className="topbar__overview-right">
-              <div className="topbar__today">
-                <p className="topbar__date">14 April 2025</p>
-                <p className="topbar__status">Focus: Speed refinement · Hydration priority</p>
-              </div>
-              <div
-                className="topbar__theme topbar__theme--static"
-                role="status"
-                aria-label="Dark mode enabled"
-              >
-                <span aria-hidden="true">{mode === 'dark' ? '🌙' : '☀️'}</span>
-                <span className="topbar__theme-label">Dark mode</span>
-              </div>
-            </div>
-          </div>
-        </header>
+        <Header
+          isSidebarOpen={sidebarOpen}
+          onToggleSidebar={toggleSidebar}
+          savedProfile={savedProfile}
+        />
 
         <main className="main">
           <section id="training" className="panel">
