@@ -165,6 +165,12 @@ export const ar = {
         line2: "يوم الراحة التالي: الأحد 20 أبريل",
       },
     },
+    training: {
+      title: "تقويم الحصص التدريبية",
+      description: "ابق متناغمًا مع الفريق وأكد توافرك مبكرًا.",
+      weekLabel: "الأسبوع {{week}}",
+      lead: "المدرب المسؤول · {{coach}}",
+      confirmAvailability: "تأكيد التوفر",
     coachEvaluation: {
       heading: "تقييم المدرب",
       description: "لمحة من أحدث اجتماع نصف شهري مع الجهاز الفني.",

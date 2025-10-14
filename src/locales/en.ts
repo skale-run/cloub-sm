@@ -166,6 +166,12 @@ export const en = {
         line2: "Next rest day: Sun, 20 Apr",
       },
     },
+    training: {
+      title: "Training Session Calendar",
+      description: "Stay aligned with the squad and confirm your availability early.",
+      weekLabel: "Week {{week}}",
+      lead: "Lead · {{coach}}",
+      confirmAvailability: "Confirm availability",
     coachEvaluation: {
       heading: "Coach evaluation",
       description: "Snapshot from the latest bi-weekly meeting with the coaching staff.",
