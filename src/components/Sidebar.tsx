@@ -181,10 +181,10 @@ function Sidebar({
             </span>
             <div>
               <p className="text-sm font-semibold text-red-50">
-                Club Section Manager
+                Wydad Taekwondo 
               </p>
               <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                Athlete Command Hub
+                Dashboard
               </p>
             </div>
           </div>
