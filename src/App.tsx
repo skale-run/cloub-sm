@@ -49,6 +49,34 @@ function getStoredJsonValue<T extends Record<string, unknown>>(
   }
 }
 
+const QUOTA_ERROR_NAMES = new Set([
+  "QuotaExceededError",
+  "NS_ERROR_DOM_QUOTA_REACHED",
+]);
+
+function saveJsonToStorage(key: string, value: unknown) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    if (
+      error instanceof DOMException &&
+      (QUOTA_ERROR_NAMES.has(error.name) || error.code === 22)
+    ) {
+      console.warn(
+        `Skipping persisting "${key}" in localStorage because it exceeds the storage quota.`,
+        error,
+      );
+      return;
+    }
+
+    console.error(`Failed to persist localStorage value for "${key}"`, error);
+  }
+}
+
 function getStoredArrayValue(key: string, fallback: string[]): string[] {
   if (typeof window === "undefined") {
     return fallback;
@@ -235,10 +263,7 @@ function App() {
       return;
     }
 
-    window.localStorage.setItem(
-      PROFILE_DRAFT_STORAGE_KEY,
-      JSON.stringify(profileDraft),
-    );
+    saveJsonToStorage(PROFILE_DRAFT_STORAGE_KEY, profileDraft);
   }, [profileDraft]);
 
   useEffect(() => {
@@ -247,10 +272,7 @@ function App() {
     }
 
     if (savedProfile) {
-      window.localStorage.setItem(
-        SAVED_PROFILE_STORAGE_KEY,
-        JSON.stringify(savedProfile),
-      );
+      saveJsonToStorage(SAVED_PROFILE_STORAGE_KEY, savedProfile);
     } else {
       window.localStorage.removeItem(SAVED_PROFILE_STORAGE_KEY);
     }
@@ -261,10 +283,7 @@ function App() {
       return;
     }
 
-    window.localStorage.setItem(
-      ACHIEVEMENTS_STORAGE_KEY,
-      JSON.stringify(achievements),
-    );
+    saveJsonToStorage(ACHIEVEMENTS_STORAGE_KEY, achievements);
   }, [achievements]);
 
   const handleProfileChange = (key: keyof Profile, value: string) => {
