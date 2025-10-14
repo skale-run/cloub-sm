@@ -67,6 +67,70 @@ export const BarChart3 = createLucideIcon(
   </>,
 )
 
+export const Award = createLucideIcon(
+  <>
+    <circle cx="12" cy="8" r="4" />
+    <path d="M8.5 13 7 22l5-2 5 2-1.5-9" />
+  </>,
+)
+
+export const ClipboardCheck = createLucideIcon(
+  <>
+    <path d="M16 4h1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1" />
+    <path d="M9 4h6v3H9z" />
+    <path d="m9 12 2 2 4-4" />
+  </>,
+)
+
+export const CreditCard = createLucideIcon(
+  <>
+    <rect x="2" y="5" width="20" height="14" rx="2" />
+    <line x1="2" y1="10" x2="22" y2="10" />
+    <line x1="6" y1="16" x2="10" y2="16" />
+  </>,
+)
+
+export const GaugeCircle = createLucideIcon(
+  <>
+    <path d="M12 4a8 8 0 1 0 8 8" />
+    <path d="m12 12 4-4" />
+    <circle cx="12" cy="12" r="2" />
+  </>,
+)
+
+export const GraduationCap = createLucideIcon(
+  <>
+    <path d="M22 7 12 3 2 7l10 4 10-4z" />
+    <path d="M6 10v4a6 6 0 0 0 12 0v-4" />
+    <path d="M18 12h0" />
+  </>,
+)
+
+export const LineChart = createLucideIcon(
+  <>
+    <path d="M3 3v18h18" />
+    <polyline points="7 14 11 9 16 13 21 8" />
+  </>,
+)
+
+export const Scale = createLucideIcon(
+  <>
+    <path d="M6 3h12" />
+    <path d="M12 3v18" />
+    <path d="M3 7h6l-3 9-3-9Z" />
+    <path d="M15 7h6l-3 9-3-9Z" />
+  </>,
+)
+
+export const Users = createLucideIcon(
+  <>
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </>,
+)
+
 export const UserCircle = createLucideIcon(
   <>
     <circle cx="12" cy="12" r="9" />

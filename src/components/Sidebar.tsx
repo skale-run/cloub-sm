@@ -1,4 +1,17 @@
-import { Activity, BarChart3, CalendarDays, Flag, ScanQrCode, UserCircle, X } from 'lucide-react'
+import {
+  Activity,
+  Award,
+  BarChart3,
+  CalendarDays,
+  ClipboardCheck,
+  CreditCard,
+  GaugeCircle,
+  GraduationCap,
+  LineChart,
+  Scale,
+  Users,
+  X,
+} from 'lucide-react'
 
 type NavItem = {
   href: string
@@ -7,36 +20,97 @@ type NavItem = {
   Icon: typeof Activity
 }
 
-const navItems: ReadonlyArray<NavItem> = [
+type NavSection = {
+  heading: string
+  items: ReadonlyArray<NavItem>
+}
+
+const navSections: ReadonlyArray<NavSection> = [
   {
-    href: '#training',
-    label: 'Training Sessions',
-    description: 'Plan & confirm attendance',
-    Icon: CalendarDays,
+    heading: 'Calendar',
+    items: [
+      {
+        href: '#calendar',
+        label: 'Season calendar',
+        description: 'Review meets and key sessions',
+        Icon: CalendarDays,
+      },
+    ],
   },
   {
-    href: '#competitions',
-    label: 'Competitions',
-    description: 'Track meet logistics',
-    Icon: Flag,
+    heading: 'Information',
+    items: [
+      {
+        href: '#academic-record',
+        label: 'Academic record',
+        description: 'Monitor course eligibility',
+        Icon: GraduationCap,
+      },
+      {
+        href: '#billing',
+        label: 'Billing overview',
+        description: 'Track invoices & payments',
+        Icon: CreditCard,
+      },
+      {
+        href: '#training-attendance',
+        label: 'Training attendance',
+        description: 'See check-ins by week',
+        Icon: ClipboardCheck,
+      },
+    ],
   },
   {
-    href: '#performance',
-    label: 'Performance',
-    description: 'Monitor key metrics',
-    Icon: BarChart3,
+    heading: 'Evaluations',
+    items: [
+      {
+        href: '#coach-evaluation',
+        label: 'Coach evaluation',
+        description: 'Latest staff feedback',
+        Icon: Users,
+      },
+      {
+        href: '#progress-overview',
+        label: 'Progress insight',
+        description: 'Growth trends & alerts',
+        Icon: LineChart,
+      },
+    ],
   },
   {
-    href: '#profile',
-    label: 'My Profile',
-    description: 'Update credentials',
-    Icon: UserCircle,
-  },
-  {
-    href: '#access',
-    label: 'Club Access',
-    description: 'Facility QR pass',
-    Icon: ScanQrCode,
+    heading: 'Performance tracking',
+    items: [
+      {
+        href: '#technical-progress',
+        label: 'Technical progress',
+        description: 'Skill milestones by phase',
+        Icon: GaugeCircle,
+      },
+      {
+        href: '#attendance-total',
+        label: 'Total attendance',
+        description: 'Season presence summary',
+        Icon: ClipboardCheck,
+      },
+      {
+        href: '#training-statistics',
+        label: 'Training statistics',
+        description: 'Hours, sessions & load',
+        Icon: BarChart3,
+      },
+      {
+        href: '#competition-results',
+        label: 'Competition results',
+        description: 'Recent podium finishes',
+        Icon: Award,
+      },
+      {
+        href: '#weight-tracking',
+        label: 'Body weight log',
+        description: 'Monitor weight stability',
+        Icon: Scale,
+      },
+    ],
   },
 ]
 
@@ -96,26 +170,32 @@ function Sidebar({ open, onToggleSidebar, onNavigate, savedProfile }: SidebarPro
           </button>
         </div>
 
-        <section className="space-y-4" aria-label="Navigation">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400/70">Navigate</p>
-          <nav className="grid gap-2">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={handleNavigate}
-                className="group flex items-center gap-4 rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-sm text-slate-200 transition hover:border-sky-400/40 hover:bg-slate-900/60 hover:text-white"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900/70 text-sky-200 group-hover:bg-sky-500/15">
-                  <item.Icon className="h-5 w-5" aria-hidden />
-                </span>
-                <span className="flex flex-col">
-                  <span className="font-semibold">{item.label}</span>
-                  <span className="text-xs text-slate-400/80">{item.description}</span>
-                </span>
-              </a>
-            ))}
-          </nav>
+        <section className="space-y-5" aria-label="Navigation">
+          {navSections.map((section) => (
+            <div key={section.heading} className="space-y-2">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400/70">
+                {section.heading}
+              </p>
+              <nav className="grid gap-2">
+                {section.items.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={handleNavigate}
+                    className="group flex items-center gap-4 rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-sm text-slate-200 transition hover:border-sky-400/40 hover:bg-slate-900/60 hover:text-white"
+                  >
+                    <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900/70 text-sky-200 group-hover:bg-sky-500/15">
+                      <item.Icon className="h-5 w-5" aria-hidden />
+                    </span>
+                    <span className="flex flex-col">
+                      <span className="font-semibold">{item.label}</span>
+                      <span className="text-xs text-slate-400/80">{item.description}</span>
+                    </span>
+                  </a>
+                ))}
+              </nav>
+            </div>
+          ))}
         </section>
 
         <section className="space-y-4" aria-label="Readiness overview">
