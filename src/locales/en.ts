@@ -759,6 +759,84 @@ export const en = {
         empty: "No highlights yet. Start by celebrating a recent win.",
       },
     },
+    access: {
+      heading: {
+        title: "Club access QR",
+        description:
+          "Instantly retrieve your smart gate pass once your profile is saved.",
+        badge: "Instant pass",
+      },
+      instructions: {
+        showCode: "Show this code at the smart gate to enter the facility.",
+        profileMissing: "Save your profile to generate a personalised QR code.",
+        profileRequiredBadge: "Profile required",
+        squadFallback: "Assign squad to personalise access",
+      },
+      readiness: {
+        heading: "Access readiness",
+        percentageLabel: "{{percentage}}% access readiness",
+        percentageBadge: "{{percentage}}% ready",
+        status: {
+          setupRequired: "Setup required",
+          ready: "Ready for entry",
+          almost: "Almost ready",
+        },
+        checks: {
+          profile: "Profile saved",
+          membership: "Membership ID active",
+          squad: "Squad assigned",
+          contact: "Emergency contact recorded",
+        },
+        nextStepComplete: "All compliance checks are complete.",
+        checkStatus: {
+          ready: "Ready",
+          pending: "Pending",
+        },
+      },
+      quickActions: {
+        heading: "Access management",
+        download: {
+          label: "Save offline pass",
+          description: {
+            ready: "Add it to your device wallet for match-day entry.",
+            empty: "Save your profile to generate a downloadable pass.",
+          },
+        },
+        share: {
+          label: "Share with guardian",
+          description: {
+            ready: "Send a secure link to parents for pickup coordination.",
+            empty: "Unlock sharing once your profile details are saved.",
+          },
+        },
+        checklist: {
+          label: "Safety compliance check",
+          description: {
+            ready: "Emergency contact on file — review before travel days.",
+            empty: "Add an emergency contact to complete compliance.",
+          },
+        },
+      },
+      tips: {
+        title: "Access tips",
+        items: [
+          "QR refreshes automatically every time you save your profile.",
+          "Keep screen brightness high for the scanners at Gate B.",
+          "Add your emergency contact for compliant access accreditation.",
+        ],
+      },
+      eventChecklist: {
+        title: "Event day checklist",
+        items: [
+          "Arrive 15 minutes before your allocated gate slot.",
+          "Carry a physical ID for manual verification when required.",
+          "Ensure guardians have the latest pick-up instructions.",
+        ],
+      },
+      qr: {
+        alt: "Club access QR code",
+      },
+    },
     performanceTracking: {
       title: "Performance tracking",
       description:

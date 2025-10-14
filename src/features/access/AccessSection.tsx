@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import { cn } from "../../lib/cn";
 import { ClipboardCheck, ScanQrCode, Users } from "../../lucide-react";
@@ -10,6 +11,8 @@ type AccessSectionProps = {
 };
 
 function AccessSection({ savedProfile }: AccessSectionProps) {
+  const { t } = useTranslation();
+
   const qrCodeUrl = useMemo(() => {
     if (!savedProfile) {
       return "";
@@ -28,22 +31,22 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
     const checks = [
       {
         id: "profile",
-        label: "Profile saved",
+        label: t("access.readiness.checks.profile"),
         satisfied: Boolean(savedProfile),
       },
       {
         id: "membership",
-        label: "Membership ID active",
+        label: t("access.readiness.checks.membership"),
         satisfied: Boolean(savedProfile?.membershipId),
       },
       {
         id: "squad",
-        label: "Squad assigned",
+        label: t("access.readiness.checks.squad"),
         satisfied: Boolean(savedProfile?.squad),
       },
       {
         id: "contact",
-        label: "Emergency contact recorded",
+        label: t("access.readiness.checks.contact"),
         satisfied: Boolean(savedProfile?.emergencyContact),
       },
     ];
@@ -51,16 +54,16 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
     const completed = checks.filter((check) => check.satisfied).length;
     const percentage = Math.round((completed / checks.length) * 100);
 
-    let label = "Setup required";
+    let label = t("access.readiness.status.setupRequired");
     if (percentage === 100) {
-      label = "Ready for entry";
+      label = t("access.readiness.status.ready");
     } else if (percentage >= 75) {
-      label = "Almost ready";
+      label = t("access.readiness.status.almost");
     }
 
     const nextStep =
       checks.find((check) => !check.satisfied)?.label ||
-      "All compliance checks are complete.";
+      t("access.readiness.nextStepComplete");
 
     return {
       checks,
@@ -68,7 +71,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
       label,
       nextStep,
     };
-  }, [savedProfile]);
+  }, [savedProfile, t]);
 
   type QuickAction = {
     id: string;
@@ -85,52 +88,66 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
     return [
       {
         id: "download",
-        label: "Save offline pass",
+        label: t("access.quickActions.download.label"),
         description: hasProfile
-          ? "Add it to your device wallet for match-day entry."
-          : "Save your profile to generate a downloadable pass.",
+          ? t("access.quickActions.download.description.ready")
+          : t("access.quickActions.download.description.empty"),
         icon: ScanQrCode,
         disabled: !hasProfile,
       },
       {
         id: "share",
-        label: "Share with guardian",
+        label: t("access.quickActions.share.label"),
         description: hasProfile
-          ? "Send a secure link to parents for pickup coordination."
-          : "Unlock sharing once your profile details are saved.",
+          ? t("access.quickActions.share.description.ready")
+          : t("access.quickActions.share.description.empty"),
         icon: Users,
         disabled: !hasProfile,
       },
       {
         id: "checklist",
-        label: "Safety compliance check",
+        label: t("access.quickActions.checklist.label"),
         description: hasEmergencyContact
-          ? "Emergency contact on file — review before travel days."
-          : "Add an emergency contact to complete compliance.",
+          ? t("access.quickActions.checklist.description.ready")
+          : t("access.quickActions.checklist.description.empty"),
         icon: ClipboardCheck,
         disabled: !hasEmergencyContact,
       },
     ];
-  }, [savedProfile]);
+  }, [savedProfile, t]);
+
+  const accessTips = useMemo(
+    () => t("access.tips.items", { returnObjects: true }) as string[],
+    [t],
+  );
+
+  const eventDayChecklist = useMemo(
+    () => t("access.eventChecklist.items", { returnObjects: true }) as string[],
+    [t],
+  );
 
   return (
     <section id="access" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
-            Club access QR
+            {t("access.heading.title")}
           </h2>
           <p className="text-sm text-red-200/75">
-            Instantly retrieve your smart gate pass once your profile is saved.
+            {t("access.heading.description")}
           </p>
         </div>
         <div className="flex flex-col items-end gap-2 text-right">
           <span className="inline-flex items-center gap-2 rounded-full border border-red-400/50 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
-            Instant pass
+            {t("access.heading.badge")}
           </span>
           <div className="flex flex-col text-[11px] text-red-200/70">
             <span className="font-semibold text-red-100">{accessReadiness.label}</span>
-            <span>{accessReadiness.percentage}% access readiness</span>
+            <span>
+              {t("access.readiness.percentageLabel", {
+                percentage: accessReadiness.percentage,
+              })}
+            </span>
           </div>
         </div>
       </div>
@@ -141,7 +158,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
           className="flex flex-col gap-6 p-6 text-red-50"
         >
           <p className="text-sm text-red-100/80">
-            Show this code at the smart gate to enter the facility.
+            {t("access.instructions.showCode")}
           </p>
           {savedProfile ? (
             <RedSurface
@@ -150,7 +167,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
             >
               <img
                 src={qrCodeUrl}
-                alt="Club access QR code"
+                alt={t("access.qr.alt")}
                 className="h-44 w-44 rounded-3xl border border-red-400/40 bg-red-950/40 p-3"
               />
               <div className="flex flex-col items-center gap-2 text-center sm:items-start sm:text-left">
@@ -161,7 +178,8 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
                   ID · {savedProfile.membershipId}
                 </p>
                 <p className="text-sm text-red-200/70">
-                  {savedProfile.squad || "Assign squad to personalise access"}
+                  {savedProfile.squad ||
+                    t("access.instructions.squadFallback")}
                 </p>
               </div>
             </RedSurface>
@@ -170,9 +188,9 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
               tone="dashed"
               className="flex flex-col items-center justify-center gap-4 p-10 text-center text-sm"
             >
-              <p>Save your profile to generate a personalised QR code.</p>
+              <p>{t("access.instructions.profileMissing")}</p>
               <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-                Profile required
+                {t("access.instructions.profileRequiredBadge")}
               </p>
             </RedSurface>
           )}
@@ -180,11 +198,15 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
           <RedSurface tone="glass" className="flex flex-col gap-4 p-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <p className="text-sm font-semibold text-red-50">Access readiness</p>
+                <p className="text-sm font-semibold text-red-50">
+                  {t("access.readiness.heading")}
+                </p>
                 <p className="text-xs text-red-200/70">{accessReadiness.nextStep}</p>
               </div>
               <span className="inline-flex items-center rounded-full border border-red-400/40 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-100">
-                {accessReadiness.percentage}% ready
+                {t("access.readiness.percentageBadge", {
+                  percentage: accessReadiness.percentage,
+                })}
               </span>
             </div>
             <div className="h-2 w-full rounded-full bg-red-950/60">
@@ -205,7 +227,9 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
                         : "border-red-400/40 bg-red-950/40 text-red-200/70",
                     )}
                   >
-                    {check.satisfied ? "Ready" : "Pending"}
+                    {check.satisfied
+                      ? t("access.readiness.checkStatus.ready")
+                      : t("access.readiness.checkStatus.pending")}
                   </span>
                 </li>
               ))}
@@ -214,7 +238,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
 
           <div className="space-y-3">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-red-200/70">
-              Access management
+              {t("access.quickActions.heading")}
             </p>
             <div className="grid gap-3 sm:grid-cols-2">
               {quickActions.map((action) => (
@@ -253,32 +277,28 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
         <RedSurface as="aside" tone="muted" className="p-6 text-red-50">
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-red-50">Access tips</h3>
+              <h3 className="text-lg font-semibold text-red-50">
+                {t("access.tips.title")}
+              </h3>
               <ul className="mt-4 space-y-3 text-sm text-red-100/85">
-                <RedSurface as="li" tone="glass" className="p-4">
-                  QR refreshes automatically every time you save your profile.
-                </RedSurface>
-                <RedSurface as="li" tone="glass" className="p-4">
-                  Keep screen brightness high for the scanners at Gate B.
-                </RedSurface>
-                <RedSurface as="li" tone="glass" className="p-4">
-                  Add your emergency contact for compliant access accreditation.
-                </RedSurface>
+                {accessTips.map((tip) => (
+                  <RedSurface as="li" tone="glass" className="p-4" key={tip}>
+                    {tip}
+                  </RedSurface>
+                ))}
               </ul>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-red-50">Event day checklist</h3>
+              <h3 className="text-lg font-semibold text-red-50">
+                {t("access.eventChecklist.title")}
+              </h3>
               <ul className="mt-4 space-y-3 text-sm text-red-100/85">
-                <RedSurface as="li" tone="glass" className="p-4">
-                  Arrive 15 minutes before your allocated gate slot.
-                </RedSurface>
-                <RedSurface as="li" tone="glass" className="p-4">
-                  Carry a physical ID for manual verification when required.
-                </RedSurface>
-                <RedSurface as="li" tone="glass" className="p-4">
-                  Ensure guardians have the latest pick-up instructions.
-                </RedSurface>
+                {eventDayChecklist.map((item) => (
+                  <RedSurface as="li" tone="glass" className="p-4" key={item}>
+                    {item}
+                  </RedSurface>
+                ))}
               </ul>
             </div>
           </div>
