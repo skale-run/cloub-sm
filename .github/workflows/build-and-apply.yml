@@ -12,6 +12,7 @@ permissions:
 
 env:
   VERSION: ${{ github.sha }}
+  BUILD_OUTPUT_DIR: run
 
 concurrency:
   group: infrastructure-deploy-${{ github.ref }}
@@ -40,6 +41,10 @@ jobs:
       - name: Build web app
         working-directory: ./
         run: npm run build
+
+      - name: Verify build output directory
+        working-directory: ./
+        run: test -d "${BUILD_OUTPUT_DIR}"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
