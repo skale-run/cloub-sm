@@ -117,6 +117,10 @@ export const GaugeCircle = createLucideIcon(
   </>,
 );
 
+export const Circle = createLucideIcon(
+  <circle cx="12" cy="12" r="10" />,
+);
+
 export const GraduationCap = createLucideIcon(
   <>
     <path d="M22 7 12 3 2 7l10 4 10-4z" />
@@ -199,5 +203,12 @@ export const Menu = createLucideIcon(
     <line x1="4" y1="6" x2="20" y2="6" />
     <line x1="4" y1="12" x2="20" y2="12" />
     <line x1="4" y1="18" x2="20" y2="18" />
+  </>,
+);
+
+export const CheckCircle2 = createLucideIcon(
+  <>
+    <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" />
+    <path d="m9 12 2 2 4-4" />
   </>,
 );
