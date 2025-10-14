@@ -919,34 +919,34 @@ export const en = {
     academic: {
       heading: "Academic record",
       description:
-        "Keep eligibility requirements aligned with your current semester planning.",
+        "Track your eligibility requirements alongside this semester's plan.",
       creditBadge: {
-        label: "Credit pacing",
-        value: "{{current}} / {{target}} credits in progress",
-        helper: "Maintaining eligibility margin",
+        label: "Credit progress",
+        value: "{{current}} / {{target}} credits confirmed",
+        helper: "Eligibility margin secure",
       },
       creditLoad: {
-        heading: "Credit load overview",
+        heading: "Credit load snapshot",
         caption:
-          "of {{target}} target credits confirmed for the current semester",
+          "{{current}} of {{target}} target credits confirmed for this term",
         helper:
-          "{{available}} additional credits available for optional sport science electives to maintain eligibility.",
+          "{{available}} optional credits still available to stay eligible.",
       },
       creditDistribution: {
         coreSciences: {
           label: "Core sciences",
           value: "9 credits",
-          context: "Biomechanics, physiology blocks",
+          context: "Biomechanics and physiology blocks",
         },
         performanceLabs: {
           label: "Performance labs",
           value: "6 credits",
-          context: "Lab hours logged weekly",
+          context: "Weekly lab hours logged",
         },
         leadershipElectives: {
           label: "Leadership & electives",
           value: "3 credits",
-          context: "Sport psych & mentoring",
+          context: "Sport psych and mentoring",
         },
       },
       programInsights: {
@@ -956,7 +956,7 @@ export const en = {
         currentGpa: {
           label: "Current GPA",
           value: "3.82",
-          context: "+0.12 this term",
+          context: "Up 0.12 this term",
         },
         scholarshipEligibility: {
           label: "Scholarship eligibility",
@@ -966,7 +966,7 @@ export const en = {
         graduationPath: {
           label: "Graduation path",
           value: "62 / 90 credits",
-          context: "On schedule — 2 terms remaining",
+          context: "On schedule — two terms remaining",
         },
       },
       modules: {
@@ -976,7 +976,7 @@ export const en = {
         nextEvaluationLabel: "Next evaluation · {{date}}",
         appliedSportsPsychology: {
           title: "Applied Sports Psychology",
-          focus: "Mental conditioning focus project",
+          focus: "Mental conditioning project",
           nextEvaluationDate: "May 12",
         },
         advancedBiomechanicsLab: {
@@ -1017,7 +1017,7 @@ export const en = {
       },
       checklist: {
         heading: "Eligibility checklist",
-        helper: "Auto-synced daily",
+        helper: "Synced automatically each day",
         statuses: {
           onTrack: "On track",
           reviewNeeded: "Review needed",
@@ -1025,9 +1025,8 @@ export const en = {
         },
         items: {
           ncaaMinimum: {
-            label: "Maintain 12 credit NCAA minimum",
-            detail:
-              "18 credits secured with room for one elective add-on.",
+            label: "Maintain 12-credit NCAA minimum",
+            detail: "18 credits secured with room for one elective add-on.",
           },
           labReport: {
             label: "Submit biomechanics lab report",
@@ -1036,14 +1035,13 @@ export const en = {
           },
           advisingSession: {
             label: "Advising session with Coach Rivera",
-            detail:
-              "Career planning touchpoint confirmed for Apr 22.",
+            detail: "Career planning touchpoint confirmed for Apr 22.",
           },
         },
       },
       advisor: {
         heading: "Advisor guidance",
-        helper: "Last sync Apr 10",
+        helper: "Last synced Apr 10",
         notes: {
           capstoneIntegration: {
             title: "Capstone integration",
@@ -1068,7 +1066,7 @@ export const en = {
     billing: {
       heading: "Billing overview",
       description:
-        "Keep track of recurring fees, add-ons and outstanding balances in one place.",
+        "Monitor recurring fees, add-ons, and outstanding balances in one dashboard.",
       balanceBadge: {
         label: "Balance",
         value: "{{amount}}",
@@ -1092,7 +1090,7 @@ export const en = {
       },
       invoices: {
         heading: "Invoices",
-        helper: "Statement history for the past 6 months",
+        helper: "Statement history from the last 6 months",
         download: "Download statement",
         sendReceipt: "Send receipt",
         pending: {
@@ -1194,7 +1192,7 @@ export const en = {
     trainingAttendance: {
       heading: "Training attendance",
       description:
-        "Weekly overview of confirmed check-ins and any notes from the staff desk.",
+        "Weekly overview of confirmed check-ins and key staff notes.",
       seasonRate: {
         label: "Season rate",
         value: "{{percent}}%",
@@ -1202,12 +1200,11 @@ export const en = {
       rateDelta: "{{value}}% vs last block",
       byWeek: {
         heading: "Attendance by week",
-        summary: "{{attended}} / {{planned}} sessions attended",
-        peak: "Peak execution: {{label}} · {{highlight}}",
-        focus: "Upcoming focus: {{label}} · {{highlight}}",
+        summary: "Attended {{attended}} of {{planned}} sessions",
+        peak: "Top week: {{label}} · {{highlight}}",
+        focus: "Focus week: {{label}} · {{highlight}}",
         weeklyAttendance: "{{percent}}% attendance",
-        sessions:
-          "{{attended}} of {{planned}} sessions · {{highlight}}",
+        sessions: "{{attended}} of {{planned}} sessions · {{highlight}}",
         items: {
           week14: {
             label: "Week 14",
@@ -1227,7 +1224,7 @@ export const en = {
         consistencyStreak: {
           label: "Consistency streak",
           value: "6 sessions",
-          detail: "Zero misses since April 2 · new personal best",
+          detail: "Zero misses since Apr 2 · new personal best",
         },
         availabilityForms: {
           label: "Availability forms",
@@ -1237,7 +1234,7 @@ export const en = {
         readinessIndex: {
           label: "Readiness index",
           value: "92%",
-          detail: "Coach feedback + physio clearance trending up",
+          detail: "Coach feedback and physio clearance trending up",
         },
       },
       upcoming: {
