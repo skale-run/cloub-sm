@@ -1,6 +1,5 @@
 import { Menu } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import LanguageSwitcher from "./LanguageSwitcher";
 
 type HeaderProps = {
   isSidebarOpen: boolean;
@@ -51,7 +50,6 @@ function Header({
         </div>
 
         <div className="flex flex-none items-center gap-3 text-red-50">
-          <LanguageSwitcher />
           <span className="hidden text-sm font-medium text-red-100/80 sm:inline">
             {userFullName}
           </span>
