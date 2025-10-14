@@ -1,3 +1,4 @@
+import { Moon, Sun } from 'lucide-react'
 import { useTheme } from '../theme.js'
 
 type HeaderProfile = {
@@ -20,6 +21,7 @@ const focusChips = [
 
 function Header({ isSidebarOpen, onToggleSidebar, savedProfile }: HeaderProps) {
   const { mode } = useTheme()
+  const ThemeIcon = mode === 'dark' ? Moon : Sun
 
   const greeting = savedProfile?.fullName || 'Athlete'
   const profileDetails = savedProfile ? [savedProfile.role, savedProfile.squad].filter(Boolean) : []
@@ -69,7 +71,7 @@ function Header({ isSidebarOpen, onToggleSidebar, savedProfile }: HeaderProps) {
               role="status"
               aria-label={`Dark mode ${mode === 'dark' ? 'enabled' : 'disabled'}`}
             >
-              <span aria-hidden="true">{mode === 'dark' ? '🌙' : '☀️'}</span>
+              <ThemeIcon aria-hidden className="topbar__theme-icon" />
               <span className="topbar__theme-label">{mode === 'dark' ? 'Dark mode' : 'Light mode'}</span>
             </div>
           </div>

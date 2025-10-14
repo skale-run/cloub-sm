@@ -1,35 +1,50 @@
-const navItems = [
+import {
+  Activity,
+  BarChart3,
+  CalendarDays,
+  Flag,
+  ScanQrCode,
+  UserCircle,
+  type LucideIcon,
+} from 'lucide-react'
+
+const navItems: ReadonlyArray<{
+  href: string
+  label: string
+  description: string
+  Icon: LucideIcon
+}> = [
   {
     href: '#training',
     label: 'Training Sessions',
     description: 'Plan & confirm attendance',
-    icon: '📅',
+    Icon: CalendarDays,
   },
   {
     href: '#competitions',
     label: 'Competitions',
     description: 'Track meet logistics',
-    icon: '🏟️',
+    Icon: Flag,
   },
   {
     href: '#performance',
     label: 'Performance',
     description: 'Monitor key metrics',
-    icon: '📊',
+    Icon: BarChart3,
   },
   {
     href: '#profile',
     label: 'My Profile',
     description: 'Update credentials',
-    icon: '🧾',
+    Icon: UserCircle,
   },
   {
     href: '#access',
     label: 'Club Access',
     description: 'Facility QR pass',
-    icon: '🎫',
+    Icon: ScanQrCode,
   },
-] as const
+]
 
 const readinessHighlights = [
   { label: 'Readiness', value: '82% · Primed' },
@@ -71,7 +86,7 @@ function Sidebar({ open, onToggleSidebar, onNavigate, savedProfile }: SidebarPro
 
       <div className="sidebar__brand">
         <span className="sidebar__logo" aria-hidden="true">
-          🏃‍♂️
+          <Activity className="sidebar__logo-icon" />
         </span>
         <div>
           <p className="sidebar__title">ClubPulse</p>
@@ -84,9 +99,7 @@ function Sidebar({ open, onToggleSidebar, onNavigate, savedProfile }: SidebarPro
         <nav className="sidebar__nav">
           {navItems.map((item) => (
             <a key={item.href} href={item.href} className="sidebar__nav-item" onClick={handleNavigate}>
-              <span className="sidebar__nav-icon" aria-hidden="true">
-                {item.icon}
-              </span>
+              <item.Icon className="sidebar__nav-icon" aria-hidden="true" />
               <span className="sidebar__nav-text">
                 <span className="sidebar__nav-label">{item.label}</span>
                 <span className="sidebar__nav-description">{item.description}</span>

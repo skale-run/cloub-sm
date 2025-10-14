@@ -197,7 +197,16 @@
 }
 
 .sidebar__logo {
-  font-size: clamp(2.2rem, 1.8rem + 1vw, 2.75rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar__logo-icon {
+  width: clamp(2.2rem, 1.8rem + 1vw, 2.75rem);
+  height: clamp(2.2rem, 1.8rem + 1vw, 2.75rem);
+  color: var(--color-accent, #06b6d4);
+  stroke-width: 1.6;
 }
 
 .sidebar__title {
@@ -261,9 +270,13 @@
 }
 
 .sidebar__nav-icon {
-  font-size: 1.4rem;
-  line-height: 1;
-  margin-top: 0.1rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  flex-shrink: 0;
+  color: currentColor;
+  stroke-width: 1.8;
+  transition: color var(--motion-duration-short, 0.22s)
+    var(--motion-easing-standard, ease);
 }
 
 .sidebar__nav-text {
@@ -585,6 +598,13 @@
       var(--motion-easing-standard, ease),
     transform var(--motion-duration-short, 0.22s)
       var(--motion-easing-standard, ease);
+}
+
+.topbar__theme-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: currentColor;
+  stroke-width: 1.7;
 }
 
 .topbar__theme--static {
@@ -1103,8 +1123,30 @@ input:focus {
   height: 1.5rem;
   border-radius: 999px;
   cursor: pointer;
-  font-size: 1.1rem;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--motion-duration-short, 0.22s)
+      var(--motion-easing-standard, ease),
+    color var(--motion-duration-short, 0.22s)
+      var(--motion-easing-standard, ease);
+}
+
+.achievements li button:hover,
+.achievements li button:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--color-app-surface, #0b1120) 70%,
+    var(--color-accent, #06b6d4)
+  );
+  color: var(--color-accent, #06b6d4);
+}
+
+.achievements__remove-icon {
+  width: 1rem;
+  height: 1rem;
+  color: currentColor;
+  stroke-width: 1.9;
 }
 
 .access {
