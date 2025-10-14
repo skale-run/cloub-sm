@@ -3,7 +3,8 @@ terraform {
 
 
   backend "gcs" {
-    bucket = "lkany-io-tfstate/club-sm"
+    bucket = "lkany-io-tfstate"
+    prefix = "club-sm"
   }
 
   required_providers {
