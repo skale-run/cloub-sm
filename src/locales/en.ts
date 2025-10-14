@@ -177,10 +177,9 @@ export const en = {
       },
       workload: {
         heading: "Workload snapshot",
-        summary: {
-          one: "{{count}} upcoming team commitment",
-          other: "{{count}} upcoming team commitments",
-        },
+        summary_zero: "No upcoming team commitments",
+        summary_one: "{{count}} upcoming team commitment",
+        summary_other: "{{count}} upcoming team commitments",
         description:
           "Track how training and competition time adds up across the selected focus filters.",
         metrics: {
@@ -242,52 +241,41 @@ export const en = {
         noScheduledDay: "No scheduled activity on this date.",
       },
       monthView: {
-        eventsCount: {
-          one: "{{count}} event",
-          other: "{{count}} events",
-        },
+        eventsCount_zero: "No events",
+        eventsCount_one: "{{count}} event",
+        eventsCount_other: "{{count}} events",
       },
       weekView: {
         weekLabel: "Week of {{start}}",
-        scheduledEvents: {
-          one: "{{count}} scheduled event",
-          other: "{{count}} scheduled events",
-        },
+        scheduledEvents_zero: "No scheduled events",
+        scheduledEvents_one: "{{count}} scheduled event",
+        scheduledEvents_other: "{{count}} scheduled events",
         today: "Today",
       },
       dayView: {
         headerDescription:
           "All training sessions and competition duties for this date.",
-        eventCount: {
-          one: "{{count}} event",
-          other: "{{count}} events",
-        },
+        eventCount_zero: "No events",
+        eventCount_one: "{{count}} event",
+        eventCount_other: "{{count}} events",
         coachLabel: "Lead · {{name}}",
         checkIn: "Check-in {{time}}",
       },
       relativeDay: {
-        inDays: {
-          one: "In {{count}} day",
-          other: "In {{count}} days",
-        },
+        inDays_one: "In {{count}} day",
+        inDays_other: "In {{count}} days",
         tomorrow: "Tomorrow",
         today: "Today",
         yesterday: "Yesterday",
-        daysAgo: {
-          one: "{{count}} day ago",
-          other: "{{count}} days ago",
-        },
+        daysAgo_one: "{{count}} day ago",
+        daysAgo_other: "{{count}} days ago",
       },
       duration: {
         none: "0h",
-        hours: {
-          one: "{{count}}h",
-          other: "{{count}}h",
-        },
-        minutes: {
-          one: "{{count}}m",
-          other: "{{count}}m",
-        },
+        hours_one: "{{count}}h",
+        hours_other: "{{count}}h",
+        minutes_one: "{{count}}m",
+        minutes_other: "{{count}}m",
       },
       levels: {
         regional: "Regional",
@@ -610,7 +598,8 @@ export const en = {
       },
       attendance: {
         title: "Total attendance",
-        totalSessionsLabel: "{{count}} sessions",
+        totalSessionsLabel_one: "{{count}} session",
+        totalSessionsLabel_other: "{{count}} sessions",
         summary: {
           totalSessions: 46,
           attended: 42,
