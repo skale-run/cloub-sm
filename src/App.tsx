@@ -317,6 +317,13 @@ function App() {
 
   const isLandingPage = currentPath === landingPath;
 
+  const connectedUserName = (() => {
+    const savedName = savedProfile?.fullName?.trim();
+    const draftName = profileDraft.fullName.trim();
+
+    return savedName || draftName || "Team member";
+  })();
+
   const handleContactClick = () => {
     if (typeof document === "undefined") {
       return;
@@ -352,6 +359,7 @@ function App() {
           isSidebarOpen={sidebarOpen}
           onToggleSidebar={toggleSidebar}
           pageTitle={pageTitles[currentPath] ?? "Overview"}
+          userFullName={connectedUserName}
         />
 
         {sidebarOpen && !isDesktop ? (
