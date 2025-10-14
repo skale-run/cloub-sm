@@ -1,4 +1,5 @@
-import type { ReactElement } from "react";
+import { useMemo, type ReactElement } from "react";
+import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import type { LucideIcon } from "../../lucide-react";
 import {
@@ -143,6 +144,28 @@ const sessionFocusNotes: Record<
 };
 
 function TrainingAttendanceSection(): ReactElement {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language.startsWith("ar") ? "ar-EG" : "en-US";
+
+  const dateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      }),
+    [locale],
+  );
+
+  const timeFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, {
+        hour: "numeric",
+        minute: "2-digit",
+      }),
+    [locale],
+  );
+
   const totalPlanned = attendanceByWeek.reduce(
     (total, week) => total + week.plannedSessions,
     0,
@@ -161,18 +184,11 @@ function TrainingAttendanceSection(): ReactElement {
     const focus = sessionFocusNotes[session.id];
     return {
       id: session.id,
-      title: session.title,
-      dateLabel: start.toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-      }),
-      timeLabel: start.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-      }),
-      coach: session.coach,
-      location: session.location,
+      title: t(session.titleKey),
+      dateLabel: dateFormatter.format(start),
+      timeLabel: timeFormatter.format(start),
+      coach: t(session.coachKey),
+      location: t(session.locationKey),
       focus: focus?.focus,
       emphasis: focus?.emphasis,
     };
@@ -404,7 +420,7 @@ function TrainingAttendanceSection(): ReactElement {
                     {session.location}
                   </p>
                   <p className="mt-1 text-sm text-red-100/80">
-                    Coach {session.coach}
+                    {t("training.lead", { coach: session.coach })}
                   </p>
                   {session.focus ? (
                     <p className="mt-3 text-xs text-red-100/80">{session.focus}</p>
