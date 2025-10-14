@@ -1,140 +1,14 @@
-import { X } from 'lucide-react'
-import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
+import { useState } from 'react'
 import './App.css'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
-
-type TrainingSession = {
-  id: string
-  title: string
-  coach: string
-  location: string
-  date: string
-  time: string
-}
-
-type CompetitionEvent = {
-  id: string
-  title: string
-  level: 'Regional' | 'National' | 'International'
-  location: string
-  date: string
-  checkIn: string
-}
-
-type PerformanceMetric = {
-  label: string
-  value: number
-  target: number
-  color: string
-}
-
-type Profile = {
-  fullName: string
-  role: string
-  squad: string
-  email: string
-  emergencyContact: string
-  membershipId: string
-}
-
-const trainingSessions: TrainingSession[] = [
-  {
-    id: 'ts-1',
-    title: 'Explosive Strength & Plyometrics',
-    coach: 'Coach Amara Lewis',
-    location: 'Arena Studio 2',
-    date: 'Mon, 14 Apr',
-    time: '06:30 - 08:00',
-  },
-  {
-    id: 'ts-2',
-    title: 'Technical Drills & Recovery',
-    coach: 'Coach Hugo Martín',
-    location: 'Track 1',
-    date: 'Wed, 16 Apr',
-    time: '18:00 - 20:00',
-  },
-  {
-    id: 'ts-3',
-    title: 'Video Review & Strategy Lab',
-    coach: 'Analyst Team',
-    location: 'HQ Briefing Room',
-    date: 'Fri, 18 Apr',
-    time: '11:00 - 12:30',
-  },
-]
-
-const competitionCalendar: CompetitionEvent[] = [
-  {
-    id: 'cc-1',
-    title: 'Metropolitan Invitational',
-    level: 'Regional',
-    location: 'New Crest Stadium',
-    date: 'Sat, 26 Apr',
-    checkIn: '08:00',
-  },
-  {
-    id: 'cc-2',
-    title: 'Summer National Trials',
-    level: 'National',
-    location: 'Capital City Arena',
-    date: 'Sat, 10 May',
-    checkIn: '06:30',
-  },
-  {
-    id: 'cc-3',
-    title: 'Continental Grand Prix',
-    level: 'International',
-    location: 'Lisbon Athletics Park',
-    date: 'Fri, 23 May',
-    checkIn: '07:15',
-  },
-]
-
-const performanceMetrics: PerformanceMetric[] = [
-  { label: 'Speed Index', value: 86, target: 92, color: 'var(--color-primary)' },
-  {
-    label: 'Recovery Quality',
-    value: 74,
-    target: 85,
-    color: 'var(--color-success)',
-  },
-  {
-    label: 'Consistency Score',
-    value: 81,
-    target: 88,
-    color: 'var(--color-warning)',
-  },
-]
-
-const focusAreas = [
-  {
-    title: 'Weekly Mileage',
-    description: 'Target 48 km · Currently at 44 km',
-    trend: '+6% vs last week',
-  },
-  {
-    title: 'Strength Sessions',
-    description: 'Completed 3/4 scheduled lifts',
-    trend: 'Maintain intensity, add mobility finisher',
-  },
-  {
-    title: 'Sleep & Recovery',
-    description: 'Average 7h 10m · Aim for 7h 45m',
-    trend: 'Add pre-sleep routine · Reduce screen time',
-  },
-]
-
-const emptyProfile: Profile = {
-  fullName: '',
-  role: '',
-  squad: '',
-  email: '',
-  emergencyContact: '',
-  membershipId: '',
-}
+import AccessSection from './features/access/AccessSection'
+import CompetitionSection from './features/competitions/CompetitionSection'
+import PerformanceSection from './features/performance/PerformanceSection'
+import ProfileSection from './features/profile/ProfileSection'
+import { emptyProfile, type Profile } from './features/profile/profileTypes'
+import TrainingSection from './features/training/TrainingSection'
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -146,22 +20,6 @@ function App() {
   ])
   const [newAchievement, setNewAchievement] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
-
-  const qrCodeUrl = useMemo(() => {
-    if (!savedProfile) {
-      return ''
-    }
-
-    const payload = JSON.stringify({
-      member: savedProfile.fullName,
-      membershipId: savedProfile.membershipId,
-      squad: savedProfile.squad,
-    })
-
-    return `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(
-      payload,
-    )}`
-  }, [savedProfile])
 
   const toggleSidebar = () => setSidebarOpen((open) => !open)
   const handleSidebarNavigate = () => setSidebarOpen(false)
