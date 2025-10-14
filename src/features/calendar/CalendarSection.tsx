@@ -1,5 +1,7 @@
 import type { ReactElement } from "react";
 import { useEffect, useMemo, useState } from "react";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import { calendarEvents, type CalendarEvent } from "./calendarEvents";
 
@@ -30,69 +32,38 @@ type MonthBucket = {
   events: CalendarEvent[];
 };
 
-const monthFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "long",
-  year: "numeric",
-});
-
-const dayFormatter = new Intl.DateTimeFormat("en-US", {
-  weekday: "short",
-  day: "numeric",
-});
-
-const longDayFormatter = new Intl.DateTimeFormat("en-US", {
-  weekday: "long",
-  month: "long",
-  day: "numeric",
-});
-
-const timeFormatter = new Intl.DateTimeFormat("en-US", {
-  hour: "numeric",
-  minute: "2-digit",
-});
-
-const rangeFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-});
-
 const typeStyles: Record<CalendarEvent["category"], string> = {
   training: "border-red-400/40 bg-red-500/15 text-red-100",
   competition: "border-fuchsia-400/40 bg-fuchsia-500/15 text-fuchsia-100",
 };
 
-function formatDuration(minutes: number): string {
+const categoryAccentMap: Record<CalendarEvent["category"], string> = {
+  training: "bg-red-400",
+  competition: "bg-fuchsia-400",
+};
+
+function formatDuration(
+  minutes: number,
+  t: TFunction<"translation">,
+): string {
   if (minutes <= 0) {
-    return "0h";
+    return t("calendar.duration.none");
   }
 
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
 
   return [
-    hours > 0 ? `${hours}h` : undefined,
-    remainingMinutes > 0 ? `${remainingMinutes}m` : undefined,
+    hours > 0
+      ? t("calendar.duration.hours", { count: hours })
+      : undefined,
+    remainingMinutes > 0
+      ? t("calendar.duration.minutes", { count: remainingMinutes })
+      : undefined,
   ]
     .filter((value): value is string => Boolean(value))
     .join(" ");
 }
-
-const categoryMetadata: Record<
-  CalendarEvent["category"],
-  { label: string; description: string; accent: string }
-> = {
-  training: {
-    label: "Training Sessions",
-    description:
-      "Skill development, conditioning, and video review touchpoints.",
-    accent: "bg-red-400",
-  },
-  competition: {
-    label: "Competition Days",
-    description: "Travel logistics, qualifying rounds, and championship meets.",
-    accent: "bg-fuchsia-400",
-  },
-};
 
 const calendarViewOptions = [
   "month",
@@ -104,7 +75,10 @@ const categoryOrder = [
   "competition",
 ] satisfies readonly CalendarEvent["category"][];
 
-function formatRelativeDay(target: Date): string {
+function formatRelativeDay(
+  target: Date,
+  t: TFunction<"translation">,
+): string {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -116,22 +90,22 @@ function formatRelativeDay(target: Date): string {
   );
 
   if (diffDays > 1) {
-    return `In ${diffDays} days`;
+    return t("calendar.relativeDay.inDays", { count: diffDays });
   }
 
   if (diffDays === 1) {
-    return "Tomorrow";
+    return t("calendar.relativeDay.tomorrow");
   }
 
   if (diffDays === 0) {
-    return "Today";
+    return t("calendar.relativeDay.today");
   }
 
   if (diffDays === -1) {
-    return "Yesterday";
+    return t("calendar.relativeDay.yesterday");
   }
 
-  return `${Math.abs(diffDays)} days ago`;
+  return t("calendar.relativeDay.daysAgo", { count: Math.abs(diffDays) });
 }
 
 function getDateKey(date: Date): string {
@@ -162,6 +136,59 @@ function isSameDay(a: Date, b: Date): boolean {
 }
 
 function CalendarSection(): ReactElement {
+  const { t, i18n } = useTranslation();
+
+  const dateLocale = useMemo(
+    () => (i18n.language.startsWith("ar") ? "ar-EG" : "en-US"),
+    [i18n.language],
+  );
+
+  const monthFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(dateLocale, {
+        month: "long",
+        year: "numeric",
+      }),
+    [dateLocale],
+  );
+
+  const dayFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(dateLocale, {
+        weekday: "short",
+        day: "numeric",
+      }),
+    [dateLocale],
+  );
+
+  const longDayFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(dateLocale, {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+      }),
+    [dateLocale],
+  );
+
+  const timeFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(dateLocale, {
+        hour: "numeric",
+        minute: "2-digit",
+      }),
+    [dateLocale],
+  );
+
+  const rangeFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(dateLocale, {
+        month: "short",
+        day: "numeric",
+      }),
+    [dateLocale],
+  );
+
   const sortedEvents = useMemo(
     () =>
       [...calendarEvents].sort(
@@ -247,7 +274,7 @@ function CalendarSection(): ReactElement {
     });
 
     return Array.from(monthBuckets.values());
-  }, [filteredEvents]);
+  }, [filteredEvents, monthFormatter]);
 
   const weeks = useMemo(() => {
     const weekBuckets = new Map<string, WeekBucket>();
@@ -262,7 +289,9 @@ function CalendarSection(): ReactElement {
 
         weekBuckets.set(weekKey, {
           id: weekKey,
-          label: `Week of ${rangeFormatter.format(weekStart)}`,
+          label: t("calendar.weekView.weekLabel", {
+            start: rangeFormatter.format(weekStart),
+          }),
           range: `${rangeFormatter.format(weekStart)} – ${rangeFormatter.format(weekEnd)}`,
           days: Array.from({ length: 7 }).map((_, index) => {
             const dayDate = new Date(weekStart);
@@ -302,7 +331,7 @@ function CalendarSection(): ReactElement {
         ),
       })),
     }));
-  }, [filteredEvents]);
+  }, [filteredEvents, dayFormatter, rangeFormatter, t]);
 
   const dayOptions = useMemo(() => {
     const seen = new Map<string, DayOption>();
@@ -324,7 +353,7 @@ function CalendarSection(): ReactElement {
     return Array.from(seen.values()).sort(
       (first, second) => first.date.getTime() - second.date.getTime(),
     );
-  }, [filteredEvents]);
+  }, [filteredEvents, dayFormatter, longDayFormatter]);
 
   const [view, setView] = useState<CalendarView>("month");
   const [selectedDayKey, setSelectedDayKey] = useState<string>("");
@@ -391,7 +420,7 @@ function CalendarSection(): ReactElement {
     ? new Date(upcomingEvent.end)
     : undefined;
   const upcomingEventRelativeText = upcomingEventStart
-    ? formatRelativeDay(upcomingEventStart)
+    ? formatRelativeDay(upcomingEventStart, t)
     : "";
 
   return (
@@ -399,11 +428,10 @@ function CalendarSection(): ReactElement {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
-            Integrated Team Calendar
+            {t("calendar.title")}
           </h2>
           <p className="text-sm text-red-200/75">
-            Switch between monthly, weekly, and daily perspectives to coordinate
-            every training session and competition.
+            {t("calendar.description")}
           </p>
         </div>
         <div className="inline-flex rounded-full border border-red-500/35 bg-red-950/60 p-1 text-xs font-semibold text-red-100">
@@ -418,7 +446,7 @@ function CalendarSection(): ReactElement {
                   : "text-red-200/70 hover:text-red-100"
               }`}
             >
-              {option.charAt(0).toUpperCase() + option.slice(1)}
+              {t(`calendar.viewOptions.${option}`)}
             </button>
           ))}
         </div>
@@ -431,57 +459,55 @@ function CalendarSection(): ReactElement {
         >
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-              Workload snapshot
+              {t("calendar.workload.heading")}
             </p>
             <h3 className="mt-1 text-lg font-semibold text-red-50">
-              {workloadSnapshot.totalEvents} upcoming team{" "}
-              {workloadSnapshot.totalEvents === 1
-                ? "commitment"
-                : "commitments"}
+              {t("calendar.workload.summary", {
+                count: workloadSnapshot.totalEvents,
+              })}
             </h3>
             <p className="mt-2 text-sm text-red-200/75">
-              Track how training and competition time adds up across the
-              selected focus filters.
+              {t("calendar.workload.description")}
             </p>
           </div>
           <dl className="grid gap-4 sm:grid-cols-3">
             <div>
               <dt className="text-xs font-semibold uppercase tracking-wide text-red-200/70">
-                All events
+                {t("calendar.workload.metrics.all.label")}
               </dt>
               <dd className="mt-1 text-2xl font-semibold text-red-50">
-                {formatDuration(workloadSnapshot.totalMinutes)}
+                {formatDuration(workloadSnapshot.totalMinutes, t)}
               </dd>
               <dd className="text-xs text-red-200/70">
-                Combined duration
+                {t("calendar.workload.metrics.all.sublabel")}
               </dd>
             </div>
             <div>
               <dt className="text-xs font-semibold uppercase tracking-wide text-red-200/70">
-                Training sessions
+                {t("calendar.workload.metrics.training.label")}
               </dt>
               <dd className="mt-1 text-2xl font-semibold text-red-50">
                 {workloadSnapshot.trainingCount}{" "}
                 <span className="text-sm font-normal text-red-200/70">
-                  · {formatDuration(workloadSnapshot.trainingMinutes)}
+                  · {formatDuration(workloadSnapshot.trainingMinutes, t)}
                 </span>
               </dd>
               <dd className="text-xs text-red-200/70">
-                Active coaching time
+                {t("calendar.workload.metrics.training.sublabel")}
               </dd>
             </div>
             <div>
               <dt className="text-xs font-semibold uppercase tracking-wide text-red-200/70">
-                Competition days
+                {t("calendar.workload.metrics.competition.label")}
               </dt>
               <dd className="mt-1 text-2xl font-semibold text-red-50">
                 {workloadSnapshot.competitionCount}{" "}
                 <span className="text-sm font-normal text-red-200/70">
-                  · {formatDuration(workloadSnapshot.competitionMinutes)}
+                  · {formatDuration(workloadSnapshot.competitionMinutes, t)}
                 </span>
               </dd>
               <dd className="text-xs text-red-200/70">
-                Travel & execution windows
+                {t("calendar.workload.metrics.competition.sublabel")}
               </dd>
             </div>
           </dl>
@@ -496,10 +522,12 @@ function CalendarSection(): ReactElement {
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                Next on the agenda
+                {t("calendar.upcoming.heading")}
               </p>
               <h3 className="mt-1 text-lg font-semibold text-red-50">
-                {upcomingEvent ? upcomingEvent.title : "No visible events"}
+                {upcomingEvent
+                  ? t(upcomingEvent.titleKey)
+                  : t("calendar.upcoming.empty")}
               </h3>
             </div>
             {upcomingEvent ? (
@@ -507,9 +535,9 @@ function CalendarSection(): ReactElement {
                 className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${typeStyles[upcomingEvent.category]}`}
               >
                 <span
-                  className={`h-2.5 w-2.5 rounded-full ${categoryMetadata[upcomingEvent.category].accent}`}
+                  className={`h-2.5 w-2.5 rounded-full ${categoryAccentMap[upcomingEvent.category]}`}
                 />
-                {categoryMetadata[upcomingEvent.category].label}
+                {t(`calendar.categories.${upcomingEvent.category}.label`)}
               </span>
             ) : null}
           </div>
@@ -527,20 +555,26 @@ function CalendarSection(): ReactElement {
               <p>
                 {timeFormatter.format(upcomingEventStart)} –{" "}
                 {timeFormatter.format(upcomingEventEnd)} ·{" "}
-                {upcomingEvent.location}
+                {t(upcomingEvent.locationKey)}
               </p>
               {upcomingEvent.category === "training" ? (
-                <p>Lead coach: {upcomingEvent.coach}</p>
+                <p>
+                  {t("calendar.upcoming.coach", {
+                    name: t(upcomingEvent.coachKey),
+                  })}
+                </p>
               ) : (
                 <p>
-                  {upcomingEvent.level} meet · Check-in {upcomingEvent.checkIn}
+                  {t("calendar.upcoming.competitionDetails", {
+                    level: t(`calendar.levels.${upcomingEvent.level}`),
+                    time: upcomingEvent.checkIn,
+                  })}
                 </p>
               )}
             </div>
           ) : (
             <p className="text-sm text-red-200/70">
-              Adjust the focus filters to surface the next training session or
-              competition on the shared schedule.
+              {t("calendar.upcoming.fallback")}
             </p>
           )}
         </RedSurface>
@@ -551,14 +585,13 @@ function CalendarSection(): ReactElement {
         >
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-              Focus filters
+              {t("calendar.filters.heading")}
             </p>
             <h3 className="mt-1 text-lg font-semibold text-red-50">
-              Highlight the moments that matter
+              {t("calendar.filters.title")}
             </h3>
             <p className="mt-2 text-sm text-red-200/75">
-              Toggle categories to focus on upcoming training preparation or
-              competition execution.
+              {t("calendar.filters.description")}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -575,9 +608,9 @@ function CalendarSection(): ReactElement {
                 }`}
               >
                 <span
-                  className={`h-2.5 w-2.5 rounded-full ${categoryMetadata[category].accent}`}
+                  className={`h-2.5 w-2.5 rounded-full ${categoryAccentMap[category]}`}
                 />
-                {categoryMetadata[category].label}
+                {t(`calendar.categories.${category}.label`)}
               </button>
             ))}
           </div>
@@ -585,24 +618,24 @@ function CalendarSection(): ReactElement {
             {categoryOrder.map((category) => (
               <div key={category} className="flex items-start gap-3">
                 <span
-                  className={`mt-1 h-2.5 w-2.5 rounded-full ${categoryMetadata[category].accent}`}
+                  className={`mt-1 h-2.5 w-2.5 rounded-full ${categoryAccentMap[category]}`}
                   aria-hidden
                 />
                 <div>
                   <p className="font-semibold text-red-50">
-                    {categoryMetadata[category].label}
+                    {t(`calendar.categories.${category}.label`)}
                   </p>
-                  <p>{categoryMetadata[category].description}</p>
+                  <p>{t(`calendar.categories.${category}.description`)}</p>
                 </div>
               </div>
             ))}
           </div>
           <p className="text-xs text-red-200/60">
             {activeCategoryCount === categoryOrder.length
-              ? "Both categories are visible."
+              ? t("calendar.filters.status.all")
               : activeCategoryCount === 1
-                ? "Only one category is active—tap again to bring the full schedule back."
-                : "No categories selected—turn one on to see the upcoming schedule."}
+                ? t("calendar.filters.status.single")
+                : t("calendar.filters.status.none")}
           </p>
         </RedSurface>
       </div>
@@ -612,8 +645,7 @@ function CalendarSection(): ReactElement {
           tone="muted"
           className="rounded-3xl p-6 text-sm text-red-200/80"
         >
-          No events match the current focus filters. Re-enable a category or
-          adjust your selection to view the team schedule again.
+          {t("calendar.states.noEventsFiltered")}
         </RedSurface>
       ) : null}
 
@@ -631,7 +663,9 @@ function CalendarSection(): ReactElement {
                   {month.label}
                 </h3>
                 <span className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                  {month.events.length} events
+                  {t("calendar.monthView.eventsCount", {
+                    count: month.events.length,
+                  })}
                 </span>
               </header>
               <div className="space-y-4">
@@ -657,18 +691,16 @@ function CalendarSection(): ReactElement {
                       <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
                         <div>
                           <p className="text-base font-semibold text-red-50">
-                            {event.title}
+                            {t(event.titleKey)}
                           </p>
                           <p className="text-sm text-red-200/75">
-                            {event.location}
+                            {t(event.locationKey)}
                           </p>
                         </div>
                         <span
                           className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${typeStyles[event.category]}`}
                         >
-                          {event.category === "training"
-                            ? "Training Session"
-                            : "Competition Day"}
+                          {t(`calendar.categories.${event.category}.badge`)}
                         </span>
                       </div>
                     </RedSurface>
@@ -699,11 +731,12 @@ function CalendarSection(): ReactElement {
                   </p>
                 </div>
                 <span className="text-xs text-red-200/70">
-                  {week.days.reduce(
-                    (total, day) => total + day.events.length,
-                    0,
-                  )}{" "}
-                  scheduled events
+                  {t("calendar.weekView.scheduledEvents", {
+                    count: week.days.reduce(
+                      (total, day) => total + day.events.length,
+                      0,
+                    ),
+                  })}
                 </span>
               </header>
               <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-7">
@@ -724,7 +757,7 @@ function CalendarSection(): ReactElement {
                       <span>{day.label}</span>
                       {isSameDay(day.date, today) ? (
                         <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-[10px] font-semibold tracking-[0.2em] text-red-50">
-                          Today
+                          {t("calendar.weekView.today")}
                         </span>
                       ) : null}
                     </div>
@@ -741,28 +774,28 @@ function CalendarSection(): ReactElement {
                               className="rounded-xl p-3"
                             >
                               <p className="text-sm font-semibold text-red-50">
-                                {event.title}
+                                {t(event.titleKey)}
                               </p>
                               <p className="text-xs text-red-200/75">
                                 {timeFormatter.format(startDate)} –{" "}
                                 {timeFormatter.format(endDate)}
                               </p>
                               <p className="mt-1 text-xs text-red-200/70">
-                                {event.location}
+                                {t(event.locationKey)}
                               </p>
                               <span
                                 className={`mt-2 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.25em] ${typeStyles[event.category]}`}
                               >
-                                {event.category === "training"
-                                  ? "Training"
-                                  : "Competition"}
+                                {t(
+                                  `calendar.categories.${event.category}.shortLabel`,
+                                )}
                               </span>
                             </RedSurface>
                           );
                         })
                       ) : (
                         <p className="text-xs text-red-200/60">
-                          No events scheduled
+                          {t("calendar.states.noScheduled")}
                         </p>
                       )}
                     </div>
@@ -795,7 +828,7 @@ function CalendarSection(): ReactElement {
                   <span>{option.shortLabel}</span>
                   {isToday ? (
                     <span className="ml-2 rounded-full bg-red-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-red-50">
-                      Today
+                      {t("calendar.weekView.today")}
                     </span>
                   ) : null}
                 </button>
@@ -807,15 +840,16 @@ function CalendarSection(): ReactElement {
             <header className="flex items-start justify-between gap-3">
               <div>
                 <h3 className="text-lg font-semibold text-red-50">
-                  {selectedDay?.label ?? "No day selected"}
+                  {selectedDay?.label ?? t("calendar.states.noDaySelected")}
                 </h3>
                 <p className="text-sm text-red-200/75">
-                  All training sessions and competition duties for this date.
+                  {t("calendar.dayView.headerDescription")}
                 </p>
               </div>
               <span className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                {eventsOnSelectedDay.length}{" "}
-                {eventsOnSelectedDay.length === 1 ? "event" : "events"}
+                {t("calendar.dayView.eventCount", {
+                  count: eventsOnSelectedDay.length,
+                })}
               </span>
             </header>
 
@@ -839,25 +873,27 @@ function CalendarSection(): ReactElement {
                         <span
                           className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${typeStyles[event.category]}`}
                         >
-                          {event.category === "training"
-                            ? "Training Session"
-                            : "Competition Day"}
+                          {t(`calendar.categories.${event.category}.badge`)}
                         </span>
                       </div>
                       <div className="mt-3 space-y-1">
                         <p className="text-base font-semibold text-red-50">
-                          {event.title}
+                          {t(event.titleKey)}
                         </p>
                         <p className="text-sm text-red-200/75">
-                          {event.location}
+                          {t(event.locationKey)}
                         </p>
                         {event.category === "training" ? (
                           <p className="text-xs text-red-200/70">
-                            Lead · {event.coach}
+                            {t("calendar.dayView.coachLabel", {
+                              name: t(event.coachKey),
+                            })}
                           </p>
                         ) : (
                           <p className="text-xs text-red-200/70">
-                            Check-in {event.checkIn}
+                            {t("calendar.dayView.checkIn", {
+                              time: event.checkIn,
+                            })}
                           </p>
                         )}
                       </div>
@@ -866,7 +902,7 @@ function CalendarSection(): ReactElement {
                 })
               ) : (
                 <p className="text-sm text-red-200/60">
-                  No scheduled activity on this date.
+                  {t("calendar.states.noScheduledDay")}
                 </p>
               )}
             </div>

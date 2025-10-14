@@ -166,6 +166,162 @@ export const en = {
         line2: "Next rest day: Sun, 20 Apr",
       },
     },
+    calendar: {
+      title: "Integrated Team Calendar",
+      description:
+        "Switch between monthly, weekly, and daily perspectives to coordinate every training session and competition.",
+      viewOptions: {
+        month: "Month",
+        week: "Week",
+        day: "Day",
+      },
+      workload: {
+        heading: "Workload snapshot",
+        summary: {
+          one: "{{count}} upcoming team commitment",
+          other: "{{count}} upcoming team commitments",
+        },
+        description:
+          "Track how training and competition time adds up across the selected focus filters.",
+        metrics: {
+          all: {
+            label: "All events",
+            sublabel: "Combined duration",
+          },
+          training: {
+            label: "Training sessions",
+            sublabel: "Active coaching time",
+          },
+          competition: {
+            label: "Competition days",
+            sublabel: "Travel & execution windows",
+          },
+        },
+      },
+      upcoming: {
+        heading: "Next on the agenda",
+        empty: "No visible events",
+        fallback:
+          "Adjust the focus filters to surface the next training session or competition on the shared schedule.",
+        coach: "Lead coach: {{name}}",
+        competitionDetails: "{{level}} meet · Check-in {{time}}",
+      },
+      filters: {
+        heading: "Focus filters",
+        title: "Highlight the moments that matter",
+        description:
+          "Toggle categories to focus on upcoming training preparation or competition execution.",
+        status: {
+          all: "Both categories are visible.",
+          single:
+            "Only one category is active—tap again to bring the full schedule back.",
+          none: "No categories selected—turn one on to see the upcoming schedule.",
+        },
+      },
+      categories: {
+        training: {
+          label: "Training Sessions",
+          description:
+            "Skill development, conditioning, and video review touchpoints.",
+          shortLabel: "Training",
+          badge: "Training Session",
+        },
+        competition: {
+          label: "Competition Days",
+          description:
+            "Travel logistics, qualifying rounds, and championship meets.",
+          shortLabel: "Competition",
+          badge: "Competition Day",
+        },
+      },
+      states: {
+        noEventsFiltered:
+          "No events match the current focus filters. Re-enable a category or adjust your selection to view the team schedule again.",
+        noDaySelected: "No day selected",
+        noScheduled: "No events scheduled",
+        noScheduledDay: "No scheduled activity on this date.",
+      },
+      monthView: {
+        eventsCount: {
+          one: "{{count}} event",
+          other: "{{count}} events",
+        },
+      },
+      weekView: {
+        weekLabel: "Week of {{start}}",
+        scheduledEvents: {
+          one: "{{count}} scheduled event",
+          other: "{{count}} scheduled events",
+        },
+        today: "Today",
+      },
+      dayView: {
+        headerDescription:
+          "All training sessions and competition duties for this date.",
+        eventCount: {
+          one: "{{count}} event",
+          other: "{{count}} events",
+        },
+        coachLabel: "Lead · {{name}}",
+        checkIn: "Check-in {{time}}",
+      },
+      relativeDay: {
+        inDays: {
+          one: "In {{count}} day",
+          other: "In {{count}} days",
+        },
+        tomorrow: "Tomorrow",
+        today: "Today",
+        yesterday: "Yesterday",
+        daysAgo: {
+          one: "{{count}} day ago",
+          other: "{{count}} days ago",
+        },
+      },
+      duration: {
+        none: "0h",
+        hours: {
+          one: "{{count}}h",
+          other: "{{count}}h",
+        },
+        minutes: {
+          one: "{{count}}m",
+          other: "{{count}}m",
+        },
+      },
+      levels: {
+        regional: "Regional",
+        national: "National",
+        international: "International",
+      },
+      events: {
+        ts1: {
+          title: "Explosive Strength & Plyometrics",
+          location: "Arena Studio 2",
+          coach: "Coach Amara Lewis",
+        },
+        ts2: {
+          title: "Technical Drills & Recovery",
+          location: "Track 1",
+          coach: "Coach Hugo Martín",
+        },
+        ts3: {
+          title: "Video Review & Strategy Lab",
+          location: "HQ Briefing Room",
+          coach: "Analyst Team",
+        },
+        cc1: {
+          title: "Metropolitan Invitational",
+          location: "New Crest Stadium",
+        },
+        cc2: {
+          title: "Summer National Trials",
+          location: "Capital City Arena",
+        },
+        cc3: {
+          title: "Continental Grand Prix",
+          location: "Lisbon Athletics Park",
+        },
     training: {
       title: "Training Session Calendar",
       description: "Stay aligned with the squad and confirm your availability early.",
