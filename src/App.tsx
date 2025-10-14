@@ -16,6 +16,8 @@ import PerformanceTrackingSection from "./features/performance/PerformanceTracki
 import ProfileSection from "./features/profile/ProfileSection";
 import { emptyProfile, type Profile } from "./features/profile/profileTypes";
 import { normalizePath, type RoutePath } from "./routes";
+import { cn } from "./lib/cn";
+import "./App.css";
 
 const DESKTOP_BREAKPOINT = "(min-width: 1024px)" as const;
 
@@ -195,9 +197,10 @@ function App() {
   return (
     <>
       <div
-        className={`relative min-h-screen overflow-x-hidden text-red-100 transition-[padding-left] duration-300 ease-out ${
-          sidebarOpen && isDesktop ? "lg:pl-80" : "lg:pl-0"
-        }`}
+        className={cn(
+          "app-shell",
+          sidebarOpen && isDesktop && "app-shell--sidebar-open",
+        )}
       >
         <Header
           isSidebarOpen={sidebarOpen}
@@ -210,7 +213,7 @@ function App() {
             type="button"
             aria-label="Close navigation"
             onClick={handleSidebarNavigate}
-            className="fixed inset-0 z-30 bg-red-950/70 backdrop-blur-sm lg:hidden"
+            className="app-sidebar-overlay"
           />
         ) : null}
 
@@ -221,19 +224,20 @@ function App() {
             aria-label={`${sidebarOpen ? "Collapse" : "Expand"} navigation`}
             aria-controls="app-sidebar"
             aria-expanded={sidebarOpen}
-            className={`fixed top-6 z-50 hidden h-12 w-12 items-center justify-center rounded-r-2xl border border-red-500/40 bg-red-950/80 text-red-100 shadow-[0_15px_35px_rgba(127,29,29,0.35)] transition hover:border-red-400/70 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 lg:flex ${
-              sidebarOpen ? "left-80" : "left-0"
-            }`}
+            className={cn(
+              "app-sidebar-toggle",
+              sidebarOpen && "app-sidebar-toggle--open",
+            )}
           >
             {sidebarOpen ? (
-              <ChevronLeft aria-hidden className="h-5 w-5" />
+              <ChevronLeft aria-hidden size={20} />
             ) : (
-              <ChevronRight aria-hidden className="h-5 w-5" />
+              <ChevronRight aria-hidden size={20} />
             )}
           </button>
         ) : null}
 
-        <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-3 py-5 sm:px-6 sm:py-6 lg:items-start lg:gap-8 lg:px-10 lg:py-10">
+        <div className="app-shell__content">
           <Sidebar
             open={sidebarOpen}
             onToggleSidebar={toggleSidebar}
@@ -243,11 +247,8 @@ function App() {
             savedProfile={savedProfile}
           />
 
-          <RedSurface
-            tone="primary"
-            className="flex flex-1 flex-col overflow-x-hidden xl:rounded-[32px]"
-          >
-            <main className="relative z-0 flex-1 space-y-10 px-4 pb-14 pt-6 sm:px-8 sm:pb-16 sm:pt-8 lg:px-12">
+          <RedSurface tone="primary" className="app-main-surface">
+            <main className="app-main">
               {(() => {
                 switch (currentPath) {
                   case "/calendar":

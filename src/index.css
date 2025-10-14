@@ -1,6 +1,26 @@
 :root {
   color-scheme: dark;
   font-family: "Plus Jakarta Sans", Inter, "Segoe UI", system-ui, sans-serif;
+  --app-text-primary: #ffe8f2;
+  --app-text-muted: rgba(255, 213, 229, 0.72);
+  --app-text-soft: rgba(255, 213, 229, 0.55);
+  --app-accent: #de2f6f;
+  --app-accent-strong: #bf1356;
+  --app-surface: rgba(56, 6, 27, 0.75);
+  --app-surface-muted: rgba(48, 5, 23, 0.6);
+  --app-surface-glass: rgba(30, 2, 18, 0.45);
+  --app-border: rgba(222, 47, 111, 0.32);
+  --app-border-strong: rgba(243, 85, 137, 0.45);
+  --app-border-glass: rgba(255, 182, 205, 0.2);
+  --app-shadow-soft: 0 24px 60px rgba(148, 12, 65, 0.32);
+  --app-shadow-strong: 0 32px 90px rgba(148, 12, 65, 0.38);
+  --app-radius-lg: 28px;
+  --app-radius-md: 22px;
+  --app-radius-sm: 18px;
+  --app-transition: 280ms cubic-bezier(0.32, 0.94, 0.6, 1);
+  --app-sidebar-width: 320px;
+  --app-content-max: min(1100px, 94vw);
+  --app-header-height: clamp(4.5rem, 3.5rem + 2vw, 5.5rem);
 }
 
 html,

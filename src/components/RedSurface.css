@@ -1,0 +1,33 @@
+.red-surface {
+  display: block;
+  border-radius: var(--app-radius-lg);
+  border: 1px solid var(--app-border);
+  background: var(--app-surface);
+  color: var(--app-text-primary);
+  box-shadow: var(--app-shadow-soft);
+  backdrop-filter: blur(18px);
+  transition: background var(--app-transition), border-color var(--app-transition);
+}
+
+.red-surface--primary {
+  background: linear-gradient(135deg, rgba(40, 2, 20, 0.82), rgba(24, 0, 12, 0.88));
+  border-color: rgba(222, 47, 111, 0.38);
+  box-shadow: var(--app-shadow-strong);
+}
+
+.red-surface--muted {
+  background: var(--app-surface-muted);
+  border-color: rgba(222, 47, 111, 0.28);
+}
+
+.red-surface--glass {
+  background: var(--app-surface-glass);
+  border-color: var(--app-border-glass);
+}
+
+.red-surface--dashed {
+  border-style: dashed;
+  border-width: 2px;
+  border-color: rgba(243, 85, 137, 0.6);
+  background: rgba(16, 0, 12, 0.55);
+}
