@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 
 export const typographyScale = {
   50: {
@@ -1054,7 +1054,7 @@ function applyGlobalTokens(root) {
   globalTokensApplied = true
 }
 
-const VALID_THEME_MODES = new Set(['light', 'dark'])
+const VALID_THEME_MODES = new Set(['dark'])
 const DEFAULT_THEME_MODE = 'dark'
 
 export function applyThemeToDocument(mode = 'dark', target) {
@@ -1164,166 +1164,21 @@ function getPreferredColorScheme() {
 }
 
 export function useTheme() {
-  const { initialMode, initialHasExplicit } = useMemo(() => {
-    const stored = readStoredMode()
-    if (stored) {
-      return { initialMode: resolveThemeMode(stored), initialHasExplicit: true }
-    }
-
-    return {
-      initialMode: resolveThemeMode(getPreferredColorScheme()),
-      initialHasExplicit: false,
-    }
+  useEffect(() => {
+    applyThemeToDocument('dark')
   }, [])
 
-  const [mode, setModeState] = useState(initialMode)
-  const [hasExplicitMode, setHasExplicitMode] = useState(initialHasExplicit)
-
-  useEffect(() => {
-    applyThemeToDocument(mode)
-  }, [mode])
-
-  const resolveSystemMode = useCallback(() => {
-    return resolveThemeMode(getPreferredColorScheme())
-  }, [])
-
-  useEffect(() => {
-    if (hasExplicitMode) return undefined
-    setModeState(resolveSystemMode())
-    return undefined
-  }, [hasExplicitMode, resolveSystemMode])
-
-  useEffect(() => {
-    if (hasExplicitMode || typeof window === 'undefined') return undefined
-
-    const media = window.matchMedia?.('(prefers-color-scheme: dark)')
-    if (!media) {
-      return undefined
-    }
-
-    const handleChange = () => {
-      setModeState(resolveSystemMode())
-    }
-
-    media.addEventListener('change', handleChange)
-    return () => {
-      media.removeEventListener('change', handleChange)
-    }
-  }, [hasExplicitMode, resolveSystemMode])
-
-  const persistMode = useCallback((nextMode) => {
-    if (!VALID_THEME_MODES.has(nextMode)) return
-    storeMode(nextMode)
-  }, [])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return undefined
-
-    const bridge = getElectronThemeBridge()
-
-    if (!bridge) {
-      return undefined
-    }
-
-    let disposed = false
-    let initialSync = true
-
-    const applyNativeThemeState = (state) => {
-      if (!state || disposed) return
-
-      const { themeSource } = state
-      const resolvedMode =
-        themeSource === 'system'
-          ? resolveSystemMode()
-          : resolveThemeMode(themeSource)
-
-      setModeState((prev) => (prev === resolvedMode ? prev : resolvedMode))
-
-      if (themeSource === 'system') {
-        if (!initialSync || !initialHasExplicit) {
-          setHasExplicitMode(false)
-          clearStoredMode()
-        }
-      } else if (VALID_THEME_MODES.has(themeSource)) {
-        setHasExplicitMode(true)
-        persistMode(themeSource)
-      }
-
-      initialSync = false
-    }
-
-    const requestNativeThemeState = () => {
-      bridge
-        .get?.()
-        .then((state) => {
-          applyNativeThemeState(state)
-        })
-        .catch(() => {})
-    }
-
-    if (initialHasExplicit && typeof bridge.set === 'function') {
-      try {
-        const result = bridge.set(initialMode)
-        if (result && typeof result.then === 'function') {
-          result
-            .catch(() => {})
-            .finally(() => {
-              requestNativeThemeState()
-            })
-        } else {
-          requestNativeThemeState()
-        }
-      } catch {
-        requestNativeThemeState()
-      }
-    } else {
-      requestNativeThemeState()
-    }
-
-    const unsubscribe = bridge.onChange?.((state) => {
-      applyNativeThemeState(state)
-    })
-
-    return () => {
-      disposed = true
-      if (typeof unsubscribe === 'function') {
-        unsubscribe()
-      }
-    }
-  }, [initialHasExplicit, initialMode, persistMode, resolveSystemMode])
-
-  const setMode = useCallback(
-    (nextMode) => {
-      if (nextMode === 'system') {
-        clearStoredMode()
-        setHasExplicitMode(false)
-        setModeState(resolveSystemMode())
-        setElectronTheme('system')
-        return
-      }
-
-      if (!VALID_THEME_MODES.has(nextMode)) return
-
-      setHasExplicitMode(true)
-      persistMode(nextMode)
-      setModeState((current) => (current === nextMode ? current : nextMode))
-      setElectronTheme(nextMode)
-    },
-    [persistMode, resolveSystemMode],
-  )
-
-  const toggleMode = useCallback(() => {
-    setMode(mode === 'dark' ? 'light' : 'dark')
-  }, [mode, setMode])
+  const setMode = useCallback(() => {}, [])
+  const toggleMode = useCallback(() => {}, [])
 
   return useMemo(
     () => ({
-      mode,
-      isDark: mode === 'dark',
+      mode: 'dark',
+      isDark: true,
       setMode,
       toggleMode,
-      hasExplicitMode,
+      hasExplicitMode: true,
     }),
-    [mode, setMode, toggleMode, hasExplicitMode],
+    [setMode, toggleMode],
   )
 }
