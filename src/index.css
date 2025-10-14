@@ -19,21 +19,21 @@ body {
   padding: 0;
   min-height: 100vh;
   display: flex;
-  background-color: #120108;
+  background-color: #140208;
   background-image:
     radial-gradient(
-      1320px 600px at 12% -14%,
-      rgb(222 47 111 / 34%),
+      1320px 600px at 12% -16%,
+      rgb(232 56 86 / 30%),
       transparent 70%
     ),
     radial-gradient(
       1120px 660px at 86% -10%,
-      rgb(191 19 84 / 30%),
+      rgb(200 24 58 / 26%),
       transparent 74%
     ),
-    linear-gradient(180deg, #10000a 0%, #180010 42%, #270418 100%);
-  color: rgb(255 218 232);
-  accent-color: #bf1356;
+    linear-gradient(180deg, #140208 0%, #1f0410 42%, #31081b 100%);
+  color: rgb(255 227 231);
+  accent-color: #c8183a;
   -webkit-font-smoothing: antialiased;
   font-synthesis: none;
   text-rendering: optimizelegibility;
@@ -46,8 +46,8 @@ body {
 }
 
 ::selection {
-  background: rgb(222 47 111 / 60%);
-  color: #fff7fb;
+  background: rgb(232 56 86 / 62%);
+  color: #fff9fb;
 }
 
 a {
