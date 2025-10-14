@@ -13,45 +13,45 @@
       "primary": {
         "50": {
           "$type": "color",
-          "$value": "#EFF6FF"
+          "$value": "#FFF1F2"
         },
         "100": {
           "$type": "color",
-          "$value": "#DBEAFE"
+          "$value": "#FFE4E6"
         },
         "200": {
           "$type": "color",
-          "$value": "#BFDBFE"
+          "$value": "#FECDD3"
         },
         "300": {
           "$type": "color",
-          "$value": "#93C5FD"
+          "$value": "#FDA4AF"
         },
         "400": {
           "$type": "color",
-          "$value": "#60A5FA"
+          "$value": "#FB7185"
         },
         "500": {
           "$type": "color",
-          "$value": "#3B82F6"
+          "$value": "#F43F5E"
         },
         "600": {
           "$type": "color",
-          "$value": "#2563EB"
+          "$value": "#E11D48"
         },
         "700": {
           "$type": "color",
-          "$value": "#1D4ED8"
+          "$value": "#BE123C"
         },
         "800": {
           "$type": "color",
-          "$value": "#1E40AF"
+          "$value": "#9F1239"
         },
         "900": {
           "$type": "color",
-          "$value": "#1E3A8A"
+          "$value": "#881337"
         },
-        "$description": "Brand blues used for primary actions and key highlights."
+        "$description": "Brand reds used for primary actions and key highlights."
       },
       "accent": {
         "50": {
@@ -317,7 +317,7 @@
         },
         "primarySoft": {
           "$type": "color",
-          "$value": "rgba(37, 99, 235, 0.14)"
+          "$value": "rgba(225, 29, 72, 0.14)"
         },
         "secondary": {
           "$type": "color",
@@ -361,7 +361,7 @@
         },
         "ring": {
           "$type": "color",
-          "$value": "rgba(59, 130, 246, 0.45)"
+          "$value": "rgba(244, 63, 94, 0.45)"
         },
         "overlay": {
           "$type": "color",
@@ -424,7 +424,7 @@
         },
         "primarySoft": {
           "$type": "color",
-          "$value": "rgba(96, 165, 250, 0.14)"
+          "$value": "rgba(244, 63, 94, 0.18)"
         },
         "secondary": {
           "$type": "color",
@@ -468,7 +468,7 @@
         },
         "ring": {
           "$type": "color",
-          "$value": "rgba(56, 189, 248, 0.65)"
+          "$value": "rgba(244, 63, 94, 0.6)"
         },
         "overlay": {
           "$type": "color",
@@ -511,11 +511,11 @@
             },
             "shadow": {
               "$type": "shadow",
-              "$value": "0 12px 32px rgba(37, 99, 235, 0.22)"
+              "$value": "0 12px 32px rgba(225, 29, 72, 0.22)"
             },
             "hoverShadow": {
               "$type": "shadow",
-              "$value": "0 16px 36px rgba(37, 99, 235, 0.28)"
+              "$value": "0 16px 36px rgba(225, 29, 72, 0.28)"
             },
             "spinner": {
               "$type": "color",
@@ -545,7 +545,7 @@
             },
             "hoverBorder": {
               "$type": "color",
-              "$value": "rgba(96, 165, 250, 0.55)"
+              "$value": "rgba(244, 63, 94, 0.55)"
             },
             "shadow": {
               "$type": "shadow",
@@ -571,15 +571,15 @@
             },
             "border": {
               "$type": "color",
-              "$value": "rgba(96, 165, 250, 0.35)"
+              "$value": "rgba(244, 63, 94, 0.35)"
             },
             "hoverBg": {
               "$type": "color",
-              "$value": "rgba(37, 99, 235, 0.22)"
+              "$value": "rgba(225, 29, 72, 0.22)"
             },
             "hoverBorder": {
               "$type": "color",
-              "$value": "rgba(96, 165, 250, 0.55)"
+              "$value": "rgba(244, 63, 94, 0.55)"
             },
             "hoverFg": {
               "$type": "color",
@@ -591,7 +591,7 @@
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(37, 99, 235, 0.75)"
+              "$value": "rgba(225, 29, 72, 0.75)"
             },
             "hoverShadow": {
               "$type": "shadow",
@@ -933,11 +933,11 @@
             },
             "shadow": {
               "$type": "shadow",
-              "$value": "0 12px 32px rgba(37, 99, 235, 0.28)"
+              "$value": "0 12px 32px rgba(225, 29, 72, 0.28)"
             },
             "hoverShadow": {
               "$type": "shadow",
-              "$value": "0 16px 36px rgba(37, 99, 235, 0.35)"
+              "$value": "0 16px 36px rgba(225, 29, 72, 0.35)"
             },
             "spinner": {
               "$type": "color",
@@ -967,7 +967,7 @@
             },
             "hoverBorder": {
               "$type": "color",
-              "$value": "rgba(96, 165, 250, 0.45)"
+              "$value": "rgba(244, 63, 94, 0.45)"
             },
             "shadow": {
               "$type": "shadow",
@@ -993,11 +993,11 @@
             },
             "border": {
               "$type": "color",
-              "$value": "rgba(96, 165, 250, 0.35)"
+              "$value": "rgba(244, 63, 94, 0.35)"
             },
             "hoverBg": {
               "$type": "color",
-              "$value": "rgba(37, 99, 235, 0.18)"
+              "$value": "rgba(225, 29, 72, 0.18)"
             },
             "hoverFg": {
               "$type": "color",
@@ -1005,7 +1005,7 @@
             },
             "hoverBorder": {
               "$type": "color",
-              "$value": "rgba(96, 165, 250, 0.55)"
+              "$value": "rgba(244, 63, 94, 0.55)"
             },
             "shadow": {
               "$type": "shadow",
@@ -1013,7 +1013,7 @@
             },
             "spinner": {
               "$type": "color",
-              "$value": "rgba(59, 130, 246, 0.75)"
+              "$value": "rgba(244, 63, 94, 0.75)"
             },
             "hoverShadow": {
               "$type": "shadow",
@@ -1378,11 +1378,11 @@
             "soft": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(37, 99, 235, 0.12)"
+                "$value": "rgba(244, 63, 94, 0.12)"
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(96, 165, 250, 0.32)"
+                "$value": "rgba(244, 63, 94, 0.32)"
               },
               "fg": {
                 "$type": "color",
@@ -1410,7 +1410,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(96, 165, 250, 0.45)"
+                "$value": "rgba(244, 63, 94, 0.45)"
               },
               "fg": {
                 "$type": "color",
@@ -1688,11 +1688,11 @@
             "soft": {
               "bg": {
                 "$type": "color",
-                "$value": "rgba(37, 99, 235, 0.12)"
+                "$value": "rgba(244, 63, 94, 0.12)"
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(96, 165, 250, 0.32)"
+                "$value": "rgba(244, 63, 94, 0.32)"
               },
               "fg": {
                 "$type": "color",
@@ -1720,7 +1720,7 @@
               },
               "border": {
                 "$type": "color",
-                "$value": "rgba(96, 165, 250, 0.45)"
+                "$value": "rgba(244, 63, 94, 0.45)"
               },
               "fg": {
                 "$type": "color",

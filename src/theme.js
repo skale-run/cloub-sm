@@ -146,16 +146,16 @@ export const shadowTokens = {
 
 const colorRamps = {
   primary: {
-    50: '#EFF6FF',
-    100: '#DBEAFE',
-    200: '#BFDBFE',
-    300: '#93C5FD',
-    400: '#60A5FA',
-    500: '#3B82F6',
-    600: '#2563EB',
-    700: '#1D4ED8',
-    800: '#1E40AF',
-    900: '#1E3A8A',
+    50: '#FFF1F2',
+    100: '#FFE4E6',
+    200: '#FECDD3',
+    300: '#FDA4AF',
+    400: '#FB7185',
+    500: '#F43F5E',
+    600: '#E11D48',
+    700: '#BE123C',
+    800: '#9F1239',
+    900: '#881337',
   },
   accent: {
     50: '#ECFEFF',
@@ -232,7 +232,7 @@ const lightTheme = {
   buttonText: '#0F172A',
   primary: colorRamps.primary[600],
   primaryContrast: '#FFFFFF',
-  primarySoft: 'rgba(37, 99, 235, 0.14)',
+  primarySoft: 'rgba(225, 29, 72, 0.14)',
   secondary: '#7C3AED',
   accent: colorRamps.accent[600],
   success: colorRamps.success[500],
@@ -243,7 +243,7 @@ const lightTheme = {
   borderMuted: 'rgba(148, 163, 184, 0.18)',
   borderStrong: 'rgba(15, 23, 42, 0.32)',
   muted: 'rgba(15, 23, 42, 0.06)',
-  ring: 'rgba(59, 130, 246, 0.45)',
+  ring: 'rgba(244, 63, 94, 0.45)',
   overlay: 'rgba(15, 23, 42, 0.55)',
   scrim: 'rgba(15, 23, 42, 0.38)',
 }
@@ -261,7 +261,7 @@ const darkTheme = {
   buttonText: '#0B1120',
   primary: colorRamps.primary[300],
   primaryContrast: '#020617',
-  primarySoft: 'rgba(96, 165, 250, 0.14)',
+  primarySoft: 'rgba(244, 63, 94, 0.18)',
   secondary: '#A855F7',
   accent: colorRamps.accent[300],
   success: colorRamps.success[300],
@@ -272,7 +272,7 @@ const darkTheme = {
   borderMuted: 'rgba(148, 163, 184, 0.16)',
   borderStrong: 'rgba(148, 163, 184, 0.32)',
   muted: 'rgba(148, 163, 184, 0.12)',
-  ring: 'rgba(56, 189, 248, 0.65)',
+  ring: 'rgba(244, 63, 94, 0.6)',
   overlay: 'rgba(2, 6, 23, 0.68)',
   scrim: 'rgba(2, 6, 23, 0.5)',
 }
@@ -285,8 +285,8 @@ const componentButtonTokensLight = {
     hoverBg: colorRamps.primary[500],
     hoverFg: lightTheme.primaryContrast,
     hoverBorder: 'transparent',
-    shadow: '0 12px 32px rgba(37, 99, 235, 0.22)',
-    hoverShadow: '0 16px 36px rgba(37, 99, 235, 0.28)',
+    shadow: '0 12px 32px rgba(225, 29, 72, 0.22)',
+    hoverShadow: '0 16px 36px rgba(225, 29, 72, 0.28)',
     spinner: 'rgba(255, 255, 255, 0.7)',
   },
   secondary: {
@@ -295,7 +295,7 @@ const componentButtonTokensLight = {
     border: 'rgba(148, 163, 184, 0.45)',
     hoverBg: lightTheme.surface,
     hoverFg: lightTheme.primary,
-    hoverBorder: 'rgba(96, 165, 250, 0.55)',
+    hoverBorder: 'rgba(244, 63, 94, 0.55)',
     shadow: '0 6px 18px rgba(148, 163, 184, 0.18)',
     hoverShadow: '0 8px 20px rgba(148, 163, 184, 0.26)',
     spinner: 'rgba(15, 23, 42, 0.55)',
@@ -303,13 +303,13 @@ const componentButtonTokensLight = {
   subtle: {
     bg: lightTheme.primarySoft,
     fg: lightTheme.primary,
-    border: 'rgba(96, 165, 250, 0.35)',
-    hoverBg: 'rgba(37, 99, 235, 0.22)',
+    border: 'rgba(244, 63, 94, 0.35)',
+    hoverBg: 'rgba(225, 29, 72, 0.22)',
     hoverFg: lightTheme.primary,
-    hoverBorder: 'rgba(96, 165, 250, 0.55)',
+    hoverBorder: 'rgba(244, 63, 94, 0.55)',
     shadow: 'none',
     hoverShadow: 'none',
-    spinner: 'rgba(37, 99, 235, 0.75)',
+    spinner: 'rgba(225, 29, 72, 0.75)',
   },
   ghost: {
     bg: 'transparent',
@@ -411,8 +411,8 @@ const componentButtonTokensDark = {
     hoverBg: colorRamps.primary[400],
     hoverFg: darkTheme.primaryContrast,
     hoverBorder: 'transparent',
-    shadow: '0 12px 32px rgba(37, 99, 235, 0.28)',
-    hoverShadow: '0 16px 36px rgba(37, 99, 235, 0.35)',
+    shadow: '0 12px 32px rgba(225, 29, 72, 0.28)',
+    hoverShadow: '0 16px 36px rgba(225, 29, 72, 0.35)',
     spinner: 'rgba(255, 255, 255, 0.65)',
   },
   secondary: {
@@ -421,7 +421,7 @@ const componentButtonTokensDark = {
     border: 'rgba(148, 163, 184, 0.35)',
     hoverBg: darkTheme.surface,
     hoverFg: darkTheme.primary,
-    hoverBorder: 'rgba(96, 165, 250, 0.45)',
+    hoverBorder: 'rgba(244, 63, 94, 0.45)',
     shadow: '0 8px 24px rgba(2, 6, 23, 0.35)',
     hoverShadow: '0 10px 26px rgba(2, 6, 23, 0.42)',
     spinner: 'rgba(148, 163, 184, 0.6)',
@@ -429,13 +429,13 @@ const componentButtonTokensDark = {
   subtle: {
     bg: darkTheme.primarySoft,
     fg: darkTheme.primary,
-    border: 'rgba(96, 165, 250, 0.35)',
-    hoverBg: 'rgba(37, 99, 235, 0.18)',
+    border: 'rgba(244, 63, 94, 0.35)',
+    hoverBg: 'rgba(225, 29, 72, 0.18)',
     hoverFg: darkTheme.primary,
-    hoverBorder: 'rgba(96, 165, 250, 0.55)',
+    hoverBorder: 'rgba(244, 63, 94, 0.55)',
     shadow: 'none',
     hoverShadow: 'none',
-    spinner: 'rgba(59, 130, 246, 0.75)',
+    spinner: 'rgba(244, 63, 94, 0.75)',
   },
   ghost: {
     bg: 'transparent',
@@ -549,8 +549,8 @@ const componentBadgeTokensLight = {
   },
   primary: {
     soft: {
-      bg: 'rgba(37, 99, 235, 0.12)',
-      border: 'rgba(96, 165, 250, 0.32)',
+      bg: 'rgba(244, 63, 94, 0.12)',
+      border: 'rgba(244, 63, 94, 0.32)',
       fg: lightTheme.primary,
     },
     solid: {
@@ -560,7 +560,7 @@ const componentBadgeTokensLight = {
     },
     outline: {
       bg: 'transparent',
-      border: 'rgba(96, 165, 250, 0.45)',
+      border: 'rgba(244, 63, 94, 0.45)',
       fg: lightTheme.primary,
     },
   },
@@ -671,8 +671,8 @@ const componentBadgeTokensDark = {
   },
   primary: {
     soft: {
-      bg: 'rgba(37, 99, 235, 0.12)',
-      border: 'rgba(96, 165, 250, 0.32)',
+      bg: 'rgba(244, 63, 94, 0.12)',
+      border: 'rgba(244, 63, 94, 0.32)',
       fg: darkTheme.primary,
     },
     solid: {
@@ -682,7 +682,7 @@ const componentBadgeTokensDark = {
     },
     outline: {
       bg: 'transparent',
-      border: 'rgba(96, 165, 250, 0.45)',
+      border: 'rgba(244, 63, 94, 0.45)',
       fg: darkTheme.primary,
     },
   },
