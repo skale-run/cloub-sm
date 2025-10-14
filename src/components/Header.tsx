@@ -20,8 +20,8 @@ type HeaderProps = {
 
 function Header({ isSidebarOpen, onToggleSidebar, pageTitle }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-20 border-b border-red-500/40 bg-red-950/90 px-4 py-4 backdrop-blur-sm sm:px-8">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <header className="sticky top-0 z-40 border-b border-red-500/40 bg-red-950/90 backdrop-blur-sm">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 sm:py-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
         <div className="flex items-center gap-3">
           <button
             type="button"

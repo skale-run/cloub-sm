@@ -192,6 +192,12 @@ function App() {
           sidebarOpen && isDesktop ? 'lg:pl-80' : 'lg:pl-0'
         }`}
       >
+        <Header
+          isSidebarOpen={sidebarOpen}
+          onToggleSidebar={toggleSidebar}
+          pageTitle={pageTitles[currentPath] ?? 'Overview'}
+        />
+
         {sidebarOpen && !isDesktop ? (
           <button
             type="button"
@@ -234,12 +240,6 @@ function App() {
             tone="primary"
             className="flex flex-1 flex-col overflow-x-hidden xl:rounded-[32px]"
           >
-            <Header
-              isSidebarOpen={sidebarOpen}
-              onToggleSidebar={toggleSidebar}
-              pageTitle={pageTitles[currentPath] ?? 'Overview'}
-            />
-
             <main className="relative z-0 flex-1 space-y-10 px-4 pb-14 pt-6 sm:px-8 sm:pb-16 sm:pt-8 lg:px-12">
               {(() => {
                 switch (currentPath) {
