@@ -1,6 +1,6 @@
 :root {
   color-scheme: dark;
-  font-family: 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans", Inter, "Segoe UI", system-ui, sans-serif;
 }
 
 html,
@@ -21,14 +21,22 @@ body {
   display: flex;
   background-color: #120108;
   background-image:
-    radial-gradient(1320px 600px at 12% -14%, rgba(222, 47, 111, 0.34), transparent 70%),
-    radial-gradient(1120px 660px at 86% -10%, rgba(191, 19, 84, 0.3), transparent 74%),
+    radial-gradient(
+      1320px 600px at 12% -14%,
+      rgb(222 47 111 / 34%),
+      transparent 70%
+    ),
+    radial-gradient(
+      1120px 660px at 86% -10%,
+      rgb(191 19 84 / 30%),
+      transparent 74%
+    ),
     linear-gradient(180deg, #10000a 0%, #180010 42%, #270418 100%);
   color: rgb(255 218 232);
   accent-color: #bf1356;
   -webkit-font-smoothing: antialiased;
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizelegibility;
 }
 
 #root,
@@ -38,7 +46,7 @@ body {
 }
 
 ::selection {
-  background: rgba(222, 47, 111, 0.6);
+  background: rgb(222 47 111 / 60%);
   color: #fff7fb;
 }
 
@@ -63,4 +71,3 @@ img {
   max-width: 100%;
   display: block;
 }
-

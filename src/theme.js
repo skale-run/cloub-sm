@@ -251,7 +251,6 @@ const lightTheme = {
   backgroundImage: `radial-gradient(1240px 620px at 12% -14%, rgba(222, 47, 111, 0.18), transparent 72%), radial-gradient(920px 520px at 88% -6%, rgba(191, 19, 84, 0.12), transparent 78%)`,
 };
 
-
 const darkTheme = {
   name: "Dark+",
   bg: "#11000A",
@@ -283,7 +282,6 @@ const darkTheme = {
   // Deep crimson gradient for dark mode
   backgroundImage: `radial-gradient(1320px 600px at 12% -16%, rgba(222, 47, 111, 0.32), transparent 72%), radial-gradient(1000px 600px at 84% -8%, rgba(191, 19, 84, 0.26), transparent 76%), linear-gradient(180deg, #11000A 0%, #1B0210 46%, #2C051A 100%)`,
 };
-
 
 const componentButtonTokensLight = {
   primary: {
@@ -411,7 +409,6 @@ const componentButtonTokensLight = {
   },
 };
 
-
 const componentButtonTokensDark = {
   primary: {
     bg: darkTheme.primary,
@@ -538,7 +535,6 @@ const componentButtonTokensDark = {
   },
 };
 
-
 const componentBadgeTokensLight = {
   neutral: {
     soft: {
@@ -660,7 +656,6 @@ const componentBadgeTokensLight = {
     },
   },
 };
-
 
 const componentBadgeTokensDark = {
   neutral: {
@@ -784,7 +779,6 @@ const componentBadgeTokensDark = {
   },
 };
 
-
 const semanticColorTokens = {
   light: {
     ...lightTheme,
@@ -863,9 +857,8 @@ const cssAliasBlueprint = {
 Object.entries(colorRamps).forEach(([rampName, rampValues]) => {
   Object.entries(rampValues).forEach(([step]) => {
     if (step.startsWith("$")) return;
-    cssAliasBlueprint[
-      `--color-${rampName}-${step}`
-    ] = `color.ramps.${rampName}.${step}`;
+    cssAliasBlueprint[`--color-${rampName}-${step}`] =
+      `color.ramps.${rampName}.${step}`;
   });
 });
 
@@ -890,9 +883,8 @@ const buttonProps = [
 
 buttonVariants.forEach((variant) => {
   buttonProps.forEach((prop) => {
-    cssAliasBlueprint[
-      `--lk-button-${variant}-${prop}`
-    ] = `components.button.${variant}.${prop}`;
+    cssAliasBlueprint[`--lk-button-${variant}-${prop}`] =
+      `components.button.${variant}.${prop}`;
   });
 });
 
@@ -917,9 +909,8 @@ const buttonTones = [
 ];
 buttonTones.forEach((tone) => {
   toneProps.forEach((prop) => {
-    cssAliasBlueprint[
-      `--lk-button-${tone}-${prop}`
-    ] = `components.button.tone.${tone}.${prop}`;
+    cssAliasBlueprint[`--lk-button-${tone}-${prop}`] =
+      `components.button.tone.${tone}.${prop}`;
   });
 });
 
@@ -936,9 +927,8 @@ const badgeVariants = ["soft", "solid", "outline"];
 badgeTones.forEach((tone) => {
   badgeVariants.forEach((variant) => {
     ["bg", "border", "fg"].forEach((prop) => {
-      cssAliasBlueprint[
-        `--lk-badge-${tone}-${variant}-${prop}`
-      ] = `components.badge.${tone}.${variant}.${prop}`;
+      cssAliasBlueprint[`--lk-badge-${tone}-${variant}-${prop}`] =
+        `components.badge.${tone}.${variant}.${prop}`;
     });
   });
 });
@@ -965,7 +955,7 @@ function buildCssAliasMap(tokens) {
         getTokenValue(tokens, tokenPath) ??
         getTokenValue(aliasFallbackTokens, tokenPath);
       return [cssVariable, value ?? ""];
-    })
+    }),
   );
 }
 
@@ -973,7 +963,7 @@ const themeAliasTokens = Object.fromEntries(
   Object.entries(semanticColorTokens).map(([mode, tokens]) => [
     mode,
     buildCssAliasMap(tokens),
-  ])
+  ]),
 );
 
 export const themeTokens = semanticColorTokens;
@@ -1042,7 +1032,7 @@ function applyGlobalTokens(root) {
     root.style.setProperty(`--line-height-${token}`, definition.lineHeight);
     root.style.setProperty(
       `--letter-spacing-${token}`,
-      definition.letterSpacing
+      definition.letterSpacing,
     );
   });
 
@@ -1195,6 +1185,6 @@ export function useTheme() {
       toggleMode,
       hasExplicitMode: true,
     }),
-    [setMode, toggleMode]
+    [setMode, toggleMode],
   );
 }

@@ -1,4 +1,4 @@
-import type { MouseEvent } from 'react'
+import type { MouseEvent } from "react";
 import {
   Activity,
   CalendarDays,
@@ -11,148 +11,165 @@ import {
   UserCircle,
   Users,
   X,
-} from 'lucide-react'
-import type { RoutePath } from '../routes'
-import RedSurface from './RedSurface'
+} from "lucide-react";
+import type { RoutePath } from "../routes";
+import RedSurface from "./RedSurface";
 
 type NavItem = {
-  to: RoutePath
-  label: string
-  description: string
-  Icon: typeof Activity
-}
+  to: RoutePath;
+  label: string;
+  description: string;
+  Icon: typeof Activity;
+};
 
 type NavSection = {
-  heading: string
-  items: ReadonlyArray<NavItem>
-}
+  heading: string;
+  items: ReadonlyArray<NavItem>;
+};
 
 const navSections: ReadonlyArray<NavSection> = [
   {
-    heading: 'Calendar',
+    heading: "Calendar",
     items: [
       {
-        to: '/calendar',
-        label: 'Season calendar',
-        description: 'Review meets and key sessions',
+        to: "/calendar",
+        label: "Season calendar",
+        description: "Review meets and key sessions",
         Icon: CalendarDays,
       },
     ],
   },
   {
-    heading: 'Information',
+    heading: "Information",
     items: [
       {
-        to: '/academic-record',
-        label: 'Academic record',
-        description: 'Monitor course eligibility',
+        to: "/academic-record",
+        label: "Academic record",
+        description: "Monitor course eligibility",
         Icon: GraduationCap,
       },
       {
-        to: '/billing',
-        label: 'Billing overview',
-        description: 'Track invoices & payments',
+        to: "/billing",
+        label: "Billing overview",
+        description: "Track invoices & payments",
         Icon: CreditCard,
       },
       {
-        to: '/training-attendance',
-        label: 'Training attendance',
-        description: 'See check-ins by week',
+        to: "/training-attendance",
+        label: "Training attendance",
+        description: "See check-ins by week",
         Icon: ClipboardCheck,
       },
     ],
   },
   {
-    heading: 'Evaluations',
+    heading: "Evaluations",
     items: [
       {
-        to: '/coach-evaluation',
-        label: 'Coach evaluation',
-        description: 'Latest staff feedback',
+        to: "/coach-evaluation",
+        label: "Coach evaluation",
+        description: "Latest staff feedback",
         Icon: Users,
       },
       {
-        to: '/progress-overview',
-        label: 'Progress insight',
-        description: 'Growth trends & alerts',
+        to: "/progress-overview",
+        label: "Progress insight",
+        description: "Growth trends & alerts",
         Icon: LineChart,
       },
     ],
   },
   {
-    heading: 'Performance tracking',
+    heading: "Performance tracking",
     items: [
       {
-        to: '/performance-tracking',
-        label: 'Performance dashboard',
-        description: 'Technical milestones & load',
+        to: "/performance-tracking",
+        label: "Performance dashboard",
+        description: "Technical milestones & load",
         Icon: GaugeCircle,
       },
     ],
   },
   {
-    heading: 'Profile & access',
+    heading: "Profile & access",
     items: [
       {
-        to: '/profile',
-        label: 'Athlete profile',
-        description: 'Manage member identity',
+        to: "/profile",
+        label: "Athlete profile",
+        description: "Manage member identity",
         Icon: UserCircle,
       },
       {
-        to: '/access',
-        label: 'Digital access',
-        description: 'Share membership QR code',
+        to: "/access",
+        label: "Digital access",
+        description: "Share membership QR code",
         Icon: ScanQrCode,
       },
     ],
   },
-]
+];
 
 const readinessHighlights = [
-  { label: 'Readiness', value: '82% · Primed' },
-  { label: 'Sleep score', value: '7h 10m' },
-  { label: 'Hydration', value: 'On target' },
-]
+  { label: "Readiness", value: "82% · Primed" },
+  { label: "Sleep score", value: "7h 10m" },
+  { label: "Hydration", value: "On target" },
+];
 
 type SidebarProfile = {
-  fullName: string
-  role: string
-  squad: string
-  membershipId: string
-}
+  fullName: string;
+  role: string;
+  squad: string;
+  membershipId: string;
+};
 
 type SidebarProps = {
-  open: boolean
-  onToggleSidebar: () => void
-  onNavigate?: () => void
-  onNavigateTo: (path: RoutePath) => void
-  currentPath: RoutePath
-  savedProfile: SidebarProfile | null
-}
+  open: boolean;
+  onToggleSidebar: () => void;
+  onNavigate?: () => void;
+  onNavigateTo: (path: RoutePath) => void;
+  currentPath: RoutePath;
+  savedProfile: SidebarProfile | null;
+};
 
-function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath, savedProfile }: SidebarProps) {
+function Sidebar({
+  open,
+  onToggleSidebar,
+  onNavigate,
+  onNavigateTo,
+  currentPath,
+  savedProfile,
+}: SidebarProps) {
   const handleNavigate = () => {
     if (open) {
-      onNavigate?.()
+      onNavigate?.();
     }
-  }
+  };
 
-  const handleItemClick = (event: MouseEvent<HTMLAnchorElement>, path: RoutePath) => {
-    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
-      return
+  const handleItemClick = (
+    event: MouseEvent<HTMLAnchorElement>,
+    path: RoutePath,
+  ) => {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.altKey ||
+      event.shiftKey
+    ) {
+      return;
     }
 
-    event.preventDefault()
-    onNavigateTo(path)
-    handleNavigate()
-  }
+    event.preventDefault();
+    onNavigateTo(path);
+    handleNavigate();
+  };
 
   return (
     <aside
       id="app-sidebar"
       className={`fixed inset-y-0 left-0 z-40 flex w-full max-w-sm shrink-0 flex-col overflow-hidden border-r border-red-500/35 bg-red-950/90 shadow-[0_35px_90px_rgba(127,29,29,0.45)] backdrop-blur transition-transform duration-300 ease-out ${
-        open ? 'translate-x-0' : '-translate-x-full'
+        open ? "translate-x-0" : "-translate-x-full"
       } lg:max-w-none lg:w-80`}
       aria-label="Primary navigation"
     >
@@ -163,8 +180,12 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
               <Activity className="h-6 w-6" aria-hidden />
             </span>
             <div>
-              <p className="text-sm font-semibold text-red-50">Club Section Manager</p>
-              <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">Athlete Command Hub</p>
+              <p className="text-sm font-semibold text-red-50">
+                Club Section Manager
+              </p>
+              <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
+                Athlete Command Hub
+              </p>
             </div>
           </div>
           <button
@@ -185,32 +206,36 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
               </p>
               <nav className="grid gap-2">
                 {section.items.map((item) => {
-                  const isActive = currentPath === item.to
+                  const isActive = currentPath === item.to;
                   return (
                     <a
                       key={item.to}
                       href={item.to}
                       onClick={(event) => handleItemClick(event, item.to)}
-                      aria-current={isActive ? 'page' : undefined}
+                      aria-current={isActive ? "page" : undefined}
                       className={`group flex items-center gap-4 rounded-2xl border px-4 py-3 text-sm transition hover:border-red-400/50 hover:bg-red-950/55 hover:text-red-50 ${
                         isActive
-                          ? 'border-red-400/70 bg-red-950/60 text-red-50'
-                          : 'border-red-500/25 bg-red-950/35 text-red-100/85'
+                          ? "border-red-400/70 bg-red-950/60 text-red-50"
+                          : "border-red-500/25 bg-red-950/35 text-red-100/85"
                       }`}
                     >
                       <span
                         className={`flex h-10 w-10 items-center justify-center rounded-2xl text-red-200 transition-colors group-hover:bg-red-500/15 ${
-                          isActive ? 'bg-red-500/20 text-red-100' : 'bg-red-950/55'
+                          isActive
+                            ? "bg-red-500/20 text-red-100"
+                            : "bg-red-950/55"
                         }`}
                       >
                         <item.Icon className="h-5 w-5" aria-hidden />
                       </span>
                       <span className="flex flex-col">
                         <span className="font-semibold">{item.label}</span>
-                        <span className="text-xs text-red-200/70">{item.description}</span>
+                        <span className="text-xs text-red-200/70">
+                          {item.description}
+                        </span>
                       </span>
                     </a>
-                  )
+                  );
                 })}
               </nav>
             </div>
@@ -218,7 +243,9 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
         </section>
 
         <section className="space-y-4" aria-label="Readiness overview">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">Today&apos;s readiness</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">
+            Today&apos;s readiness
+          </p>
           <ul className="grid gap-3">
             {readinessHighlights.map((item) => (
               <RedSurface
@@ -227,32 +254,55 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
                 key={item.label}
                 className="flex items-center justify-between rounded-2xl px-4 py-3 text-sm text-red-50"
               >
-                <span className="text-xs uppercase tracking-wide text-red-200/70">{item.label}</span>
+                <span className="text-xs uppercase tracking-wide text-red-200/70">
+                  {item.label}
+                </span>
                 <span className="font-semibold text-red-50">{item.value}</span>
               </RedSurface>
             ))}
           </ul>
         </section>
 
-        <RedSurface as="section" tone="muted" className="space-y-4 p-5" aria-live="polite">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">Member snapshot</p>
+        <RedSurface
+          as="section"
+          tone="muted"
+          className="space-y-4 p-5"
+          aria-live="polite"
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">
+            Member snapshot
+          </p>
           {savedProfile ? (
             <dl className="grid gap-3 text-sm text-red-50">
               <div className="flex flex-col gap-1">
-                <dt className="text-xs uppercase tracking-wide text-red-200/70">Member</dt>
-                <dd className="font-semibold text-red-50">{savedProfile.fullName}</dd>
+                <dt className="text-xs uppercase tracking-wide text-red-200/70">
+                  Member
+                </dt>
+                <dd className="font-semibold text-red-50">
+                  {savedProfile.fullName}
+                </dd>
               </div>
               <div className="flex flex-col gap-1">
-                <dt className="text-xs uppercase tracking-wide text-red-200/70">Role</dt>
-                <dd>{savedProfile.role || 'Assign a role'}</dd>
+                <dt className="text-xs uppercase tracking-wide text-red-200/70">
+                  Role
+                </dt>
+                <dd>{savedProfile.role || "Assign a role"}</dd>
               </div>
               <div className="flex flex-col gap-1">
-                <dt className="text-xs uppercase tracking-wide text-red-200/70">Squad</dt>
-                <dd>{savedProfile.squad || 'Update squad to personalise drills'}</dd>
+                <dt className="text-xs uppercase tracking-wide text-red-200/70">
+                  Squad
+                </dt>
+                <dd>
+                  {savedProfile.squad || "Update squad to personalise drills"}
+                </dd>
               </div>
               <div className="flex flex-col gap-1">
-                <dt className="text-xs uppercase tracking-wide text-red-200/70">ID</dt>
-                <dd className="font-medium tracking-wide text-red-200">{savedProfile.membershipId}</dd>
+                <dt className="text-xs uppercase tracking-wide text-red-200/70">
+                  ID
+                </dt>
+                <dd className="font-medium tracking-wide text-red-200">
+                  {savedProfile.membershipId}
+                </dd>
               </div>
             </dl>
           ) : (
@@ -264,11 +314,13 @@ function Sidebar({ open, onToggleSidebar, onNavigate, onNavigateTo, currentPath,
 
         <div className="mt-auto space-y-1 text-xs text-red-200/70">
           <p>Season 2025 · Wave 2 Squad</p>
-          <p className="font-semibold text-red-100">Next rest day: Sun, 20 Apr</p>
+          <p className="font-semibold text-red-100">
+            Next rest day: Sun, 20 Apr
+          </p>
         </div>
       </div>
     </aside>
-  )
+  );
 }
 
-export default Sidebar
+export default Sidebar;

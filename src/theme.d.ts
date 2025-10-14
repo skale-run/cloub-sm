@@ -1,18 +1,18 @@
-export type ThemeMode = 'dark'
+export type ThemeMode = "dark";
 
-type ThemeTarget = HTMLElement | Document | null | undefined
+type ThemeTarget = HTMLElement | Document | null | undefined;
 
 export interface ThemeController {
-  mode: ThemeMode
-  isDark: true
-  setMode: (mode: ThemeMode) => void
-  toggleMode: () => void
-  hasExplicitMode: true
+  mode: ThemeMode;
+  isDark: true;
+  setMode: (mode: ThemeMode) => void;
+  toggleMode: () => void;
+  hasExplicitMode: true;
 }
 
 export declare function applyThemeToDocument(
   mode?: ThemeMode,
   target?: ThemeTarget,
-): void
+): void;
 
-export declare function useTheme(): ThemeController
+export declare function useTheme(): ThemeController;

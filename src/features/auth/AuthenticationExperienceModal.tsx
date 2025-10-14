@@ -1,93 +1,103 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Activity, Award, BarChart3, Users, X } from '../../lucide-react'
-import { useAthletePortalModal } from './AthletePortalModalContext'
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Activity, Award, BarChart3, Users, X } from "../../lucide-react";
+import { useAthletePortalModal } from "./AthletePortalModalContext";
 
 const highlights = [
   {
-    title: 'Elite training blueprints',
-    description: 'Unlock coach-curated weekly blocks personalised to your season arc.',
+    title: "Elite training blueprints",
+    description:
+      "Unlock coach-curated weekly blocks personalised to your season arc.",
     icon: Activity,
   },
   {
-    title: 'Performance intelligence',
-    description: 'Track velocity, recovery, and readiness trends with adaptive insights.',
+    title: "Performance intelligence",
+    description:
+      "Track velocity, recovery, and readiness trends with adaptive insights.",
     icon: BarChart3,
   },
   {
-    title: 'Community recognition',
-    description: 'Share milestones, capture badges, and climb the squad leaderboard.',
+    title: "Community recognition",
+    description:
+      "Share milestones, capture badges, and climb the squad leaderboard.",
     icon: Award,
   },
   {
-    title: 'All-access support crew',
-    description: 'Coordinate with physio, nutrition, and mentors from a single hub.',
+    title: "All-access support crew",
+    description:
+      "Coordinate with physio, nutrition, and mentors from a single hub.",
     icon: Users,
   },
-]
+];
 
-type AuthMode = 'login' | 'register'
+type AuthMode = "login" | "register";
 
-const authCopy: Record<AuthMode, { heading: string; cta: string; description: string }> = {
+const authCopy: Record<
+  AuthMode,
+  { heading: string; cta: string; description: string }
+> = {
   login: {
-    heading: 'Log in to your athlete HQ',
-    description: 'Jump back into your performance cockpit and sync with today’s focus.',
-    cta: 'Sign in',
+    heading: "Log in to your athlete HQ",
+    description:
+      "Jump back into your performance cockpit and sync with today’s focus.",
+    cta: "Sign in",
   },
   register: {
-    heading: 'Activate your athlete passport',
-    description: 'Create your credentials to unlock tailored sessions and squad support.',
-    cta: 'Create account',
+    heading: "Activate your athlete passport",
+    description:
+      "Create your credentials to unlock tailored sessions and squad support.",
+    cta: "Create account",
   },
-}
+};
 
 function AuthenticationExperienceModal() {
-  const { isOpen, close } = useAthletePortalModal()
-  const [mode, setMode] = useState<AuthMode>('login')
-  const closeButtonRef = useRef<HTMLButtonElement | null>(null)
-  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null)
+  const { isOpen, close } = useAthletePortalModal();
+  const [mode, setMode] = useState<AuthMode>("login");
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
-      return
+      return;
     }
 
-    previouslyFocusedElementRef.current = document.activeElement as HTMLElement | null
+    previouslyFocusedElementRef.current =
+      document.activeElement as HTMLElement | null;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        close()
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
       }
-    }
+    };
 
-    const { style } = document.body
-    const originalOverflow = style.overflow
-    style.overflow = 'hidden'
+    const { style } = document.body;
+    const originalOverflow = style.overflow;
+    style.overflow = "hidden";
 
-    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener("keydown", handleKeyDown);
 
     const timer = window.setTimeout(() => {
-      closeButtonRef.current?.focus({ preventScroll: true })
-    }, 0)
+      closeButtonRef.current?.focus({ preventScroll: true });
+    }, 0);
 
     return () => {
-      window.clearTimeout(timer)
-      window.removeEventListener('keydown', handleKeyDown)
-      style.overflow = originalOverflow
-      previouslyFocusedElementRef.current?.focus({ preventScroll: true })
-    }
-  }, [close, isOpen])
+      window.clearTimeout(timer);
+      window.removeEventListener("keydown", handleKeyDown);
+      style.overflow = originalOverflow;
+      previouslyFocusedElementRef.current?.focus({ preventScroll: true });
+    };
+  }, [close, isOpen]);
 
   useEffect(() => {
     if (!isOpen) {
-      setMode('login')
+      setMode("login");
     }
-  }, [isOpen])
+  }, [isOpen]);
 
-  const { heading, description, cta } = useMemo(() => authCopy[mode], [mode])
+  const { heading, description, cta } = useMemo(() => authCopy[mode], [mode]);
 
   if (!isOpen) {
-    return null
+    return null;
   }
 
   return (
@@ -98,7 +108,10 @@ function AuthenticationExperienceModal() {
       className="fixed inset-0 z-50 flex items-center justify-center bg-red-950/90 p-6 backdrop-blur-lg"
     >
       <div className="relative flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-red-400/30 bg-gradient-to-br from-red-950/95 via-red-950/80 to-red-900/70 shadow-[0_55px_160px_rgba(127,29,29,0.55)]">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.18),transparent_55%)]" aria-hidden />
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.18),transparent_55%)]"
+          aria-hidden
+        />
 
         <button
           ref={closeButtonRef}
@@ -116,18 +129,23 @@ function AuthenticationExperienceModal() {
               <p className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-500/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-red-200/80">
                 Athlete portal
               </p>
-              <h2 id="athlete-auth-modal-title" className="text-3xl font-semibold text-white sm:text-4xl">
+              <h2
+                id="athlete-auth-modal-title"
+                className="text-3xl font-semibold text-white sm:text-4xl"
+              >
                 {heading}
               </h2>
-              <p className="max-w-xl text-base text-red-100/80">{description}</p>
+              <p className="max-w-xl text-base text-red-100/80">
+                {description}
+              </p>
             </div>
 
             <div className="space-y-6">
               <div className="inline-flex rounded-full border border-red-400/35 bg-red-950/35 p-1 text-sm text-red-100/85">
                 {(
                   [
-                    { label: 'Log in', value: 'login' },
-                    { label: 'Register', value: 'register' },
+                    { label: "Log in", value: "login" },
+                    { label: "Register", value: "register" },
                   ] as const
                 ).map((option) => (
                   <button
@@ -136,8 +154,8 @@ function AuthenticationExperienceModal() {
                     onClick={() => setMode(option.value)}
                     className={`flex-1 rounded-full px-6 py-2 font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400 ${
                       mode === option.value
-                        ? 'bg-red-500 text-red-50 shadow-[0_18px_45px_rgba(220,38,38,0.45)]'
-                        : 'text-red-200/75 hover:text-red-100'
+                        ? "bg-red-500 text-red-50 shadow-[0_18px_45px_rgba(220,38,38,0.45)]"
+                        : "text-red-200/75 hover:text-red-100"
                     }`}
                     aria-pressed={mode === option.value}
                   >
@@ -146,7 +164,7 @@ function AuthenticationExperienceModal() {
                 ))}
               </div>
 
-              {mode === 'login' ? (
+              {mode === "login" ? (
                 <form className="space-y-4" aria-label="Log in form">
                   <label className="block text-sm font-medium text-red-100">
                     Email
@@ -176,7 +194,9 @@ function AuthenticationExperienceModal() {
                   >
                     {cta}
                   </button>
-                  <p className="text-center text-xs text-red-200/75">Forgot password? Contact your coach to reset access.</p>
+                  <p className="text-center text-xs text-red-200/75">
+                    Forgot password? Contact your coach to reset access.
+                  </p>
                 </form>
               ) : (
                 <form className="space-y-4" aria-label="Register form">
@@ -220,7 +240,8 @@ function AuthenticationExperienceModal() {
                     {cta}
                   </button>
                   <p className="text-center text-xs text-red-200/75">
-                    By creating an account you accept the athlete charter and consent to performance tracking.
+                    By creating an account you accept the athlete charter and
+                    consent to performance tracking.
                   </p>
                 </form>
               )}
@@ -229,10 +250,12 @@ function AuthenticationExperienceModal() {
 
           <aside className="flex flex-col justify-between gap-8 rounded-3xl border border-red-400/35 bg-red-950/35 p-8 text-red-100/85 backdrop-blur">
             <div className="space-y-6">
-              <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">Why athletes love it</p>
+              <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
+                Why athletes love it
+              </p>
               <ul className="space-y-4">
                 {highlights.map((highlight) => {
-                  const Icon = highlight.icon
+                  const Icon = highlight.icon;
                   return (
                     <li
                       key={highlight.title}
@@ -242,27 +265,36 @@ function AuthenticationExperienceModal() {
                         <Icon className="h-5 w-5" aria-hidden />
                       </span>
                       <div className="space-y-1">
-                        <p className="font-semibold text-red-50">{highlight.title}</p>
-                        <p className="text-sm text-red-100/80">{highlight.description}</p>
+                        <p className="font-semibold text-red-50">
+                          {highlight.title}
+                        </p>
+                        <p className="text-sm text-red-100/80">
+                          {highlight.description}
+                        </p>
                       </div>
                     </li>
-                  )
+                  );
                 })}
               </ul>
             </div>
 
             <div className="rounded-3xl border border-red-400/30 bg-gradient-to-br from-red-500/20 via-amber-500/10 to-transparent p-6 text-sm text-red-100/85">
-              <p className="font-semibold text-red-50">Need help getting started?</p>
+              <p className="font-semibold text-red-50">
+                Need help getting started?
+              </p>
               <p className="mt-2 text-red-200/75">
-                Drop a note to <span className="font-medium text-red-200">coach@aerodash.com</span> or chat with your coaching team in the squad channel.
+                Drop a note to{" "}
+                <span className="font-medium text-red-200">
+                  coach@aerodash.com
+                </span>{" "}
+                or chat with your coaching team in the squad channel.
               </p>
             </div>
           </aside>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default AuthenticationExperienceModal
-
+export default AuthenticationExperienceModal;

@@ -1,18 +1,18 @@
-import type { ReactElement } from 'react'
-import RedSurface from '../../components/RedSurface'
-import { competitionCalendarEvents } from '../calendar/calendarEvents'
+import type { ReactElement } from "react";
+import RedSurface from "../../components/RedSurface";
+import { competitionCalendarEvents } from "../calendar/calendarEvents";
 
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  weekday: 'short',
-  day: 'numeric',
-  month: 'short',
-})
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+});
 
-const levelColors: Record<'Regional' | 'National' | 'International', string> = {
-  Regional: 'from-amber-500/30 to-amber-400/40 text-amber-100',
-  National: 'from-red-500/30 to-red-400/40 text-red-100',
-  International: 'from-fuchsia-500/30 to-fuchsia-400/40 text-fuchsia-100',
-}
+const levelColors: Record<"Regional" | "National" | "International", string> = {
+  Regional: "from-amber-500/30 to-amber-400/40 text-amber-100",
+  National: "from-red-500/30 to-red-400/40 text-red-100",
+  International: "from-fuchsia-500/30 to-fuchsia-400/40 text-fuchsia-100",
+};
 
 function CompetitionSection(): ReactElement {
   const events = competitionCalendarEvents.map((event) => ({
@@ -22,14 +22,18 @@ function CompetitionSection(): ReactElement {
     location: event.location,
     dateLabel: dateFormatter.format(new Date(event.start)),
     checkIn: event.checkIn,
-  }))
+  }));
 
   return (
     <section id="competitions" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">Competition Calendar</h2>
-          <p className="text-sm text-red-200/75">Visualise your travel blocks and prepare your race-day checklists.</p>
+          <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
+            Competition Calendar
+          </h2>
+          <p className="text-sm text-red-200/75">
+            Visualise your travel blocks and prepare your race-day checklists.
+          </p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full border border-red-400/40 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
           Season Peak
@@ -49,15 +53,21 @@ function CompetitionSection(): ReactElement {
               >
                 {event.level}
               </span>
-              <span className="text-xs uppercase tracking-wide text-red-200/70">Check-in {event.checkIn}</span>
+              <span className="text-xs uppercase tracking-wide text-red-200/70">
+                Check-in {event.checkIn}
+              </span>
             </div>
             <div className="mt-4 space-y-3">
-              <h3 className="text-lg font-semibold text-red-50">{event.title}</h3>
+              <h3 className="text-lg font-semibold text-red-50">
+                {event.title}
+              </h3>
               <p className="text-sm text-red-100/80">{event.dateLabel}</p>
               <p className="text-sm text-red-200/75">{event.location}</p>
             </div>
             <div className="mt-6 flex items-center justify-between gap-3">
-              <span className="text-xs uppercase tracking-[0.35em] text-red-200/70">Logistics</span>
+              <span className="text-xs uppercase tracking-[0.35em] text-red-200/70">
+                Logistics
+              </span>
               <button
                 type="button"
                 className="inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
@@ -69,7 +79,7 @@ function CompetitionSection(): ReactElement {
         ))}
       </div>
     </section>
-  )
+  );
 }
 
-export default CompetitionSection
+export default CompetitionSection;

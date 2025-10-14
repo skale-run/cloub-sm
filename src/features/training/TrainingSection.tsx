@@ -1,22 +1,22 @@
-import type { ReactElement } from 'react'
-import RedSurface from '../../components/RedSurface'
-import { trainingCalendarEvents } from '../calendar/calendarEvents'
+import type { ReactElement } from "react";
+import RedSurface from "../../components/RedSurface";
+import { trainingCalendarEvents } from "../calendar/calendarEvents";
 
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  weekday: 'short',
-  day: 'numeric',
-  month: 'short',
-})
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+});
 
-const timeFormatter = new Intl.DateTimeFormat('en-US', {
-  hour: 'numeric',
-  minute: '2-digit',
-})
+const timeFormatter = new Intl.DateTimeFormat("en-US", {
+  hour: "numeric",
+  minute: "2-digit",
+});
 
 function TrainingSection(): ReactElement {
   const sessions = trainingCalendarEvents.map((session) => {
-    const start = new Date(session.start)
-    const end = new Date(session.end)
+    const start = new Date(session.start);
+    const end = new Date(session.end);
 
     return {
       id: session.id,
@@ -25,15 +25,19 @@ function TrainingSection(): ReactElement {
       location: session.location,
       dateLabel: dateFormatter.format(start),
       timeLabel: `${timeFormatter.format(start)} – ${timeFormatter.format(end)}`,
-    }
-  })
+    };
+  });
 
   return (
     <section id="training" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">Training Session Calendar</h2>
-          <p className="text-sm text-red-200/75">Stay aligned with the squad and confirm your availability early.</p>
+          <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
+            Training Session Calendar
+          </h2>
+          <p className="text-sm text-red-200/75">
+            Stay aligned with the squad and confirm your availability early.
+          </p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
           Week 16
@@ -52,7 +56,9 @@ function TrainingSection(): ReactElement {
               <span>{session.timeLabel}</span>
             </div>
             <div className="mt-4 space-y-3">
-              <h3 className="text-lg font-semibold text-red-50">{session.title}</h3>
+              <h3 className="text-lg font-semibold text-red-50">
+                {session.title}
+              </h3>
               <p className="text-sm text-red-100/80">{session.location}</p>
               <p className="text-sm text-red-200/75">Lead · {session.coach}</p>
             </div>
@@ -70,7 +76,7 @@ function TrainingSection(): ReactElement {
         ))}
       </div>
     </section>
-  )
+  );
 }
 
-export default TrainingSection
+export default TrainingSection;
