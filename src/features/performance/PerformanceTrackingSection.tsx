@@ -1,66 +1,104 @@
 import type { ReactElement } from "react";
+import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 
-const technicalMilestones = [
-  {
-    phase: "Block phase",
-    milestone: "Shin angles within 45° for first three steps",
-    status: "Verified on Apr 12 video review",
-  },
-  {
-    phase: "Acceleration",
-    milestone: "Maintain horizontal force through 30m mark",
-    status: "Needs second cue · schedule sled sprints",
-  },
-];
-
-const attendanceSummary = {
-  totalSessions: 46,
-  attended: 42,
-  excused: 3,
-  missed: 1,
+type TechnicalMilestone = {
+  phase: string;
+  milestone: string;
+  status: string;
 };
 
-const trainingStatistics = [
-  { label: "Total hours", value: "118h", trend: "+6% vs last block" },
-  { label: "Sessions logged", value: "64", trend: "Target: 72 sessions" },
-  { label: "Load score", value: "Moderate", trend: "Maintain during taper" },
-];
+type AttendanceSummary = {
+  totalSessions: number;
+  attended: number;
+  excused: number;
+  unexcused: number;
+};
 
-const competitionResults = [
-  {
-    event: "Metropolitan Invitational",
-    result: "400m · 49.20s",
-    placing: "Bronze",
-  },
-  {
-    event: "State Indoor Championships",
-    result: "200m · 21.80s",
-    placing: "Finalist",
-  },
-];
+type TrainingStatistic = {
+  label: string;
+  value: string;
+  trend: string;
+};
 
-const weightTrend = [
-  { label: "Week 13", weight: "78.4 kg" },
-  { label: "Week 14", weight: "78.1 kg" },
-  { label: "Week 15", weight: "77.9 kg" },
-  { label: "Week 16", weight: "78.0 kg" },
-];
+type CompetitionResult = {
+  event: string;
+  result: string;
+  placing: string;
+};
+
+type WeightEntry = {
+  label: string;
+  weight: string;
+};
 
 function PerformanceTrackingSection(): ReactElement {
+  const { t } = useTranslation();
+
+  const technicalProgress = t("performanceTracking.technicalProgress", {
+    returnObjects: true,
+  }) as {
+    title: string;
+    lastAudit: string;
+    milestones: TechnicalMilestone[];
+  };
+
+  const attendance = t("performanceTracking.attendance", {
+    returnObjects: true,
+  }) as {
+    title: string;
+    summary: AttendanceSummary;
+    labels: {
+      attended: string;
+      excused: string;
+      unexcused: string;
+    };
+  };
+
+  const trainingStats = t("performanceTracking.trainingStatistics", {
+    returnObjects: true,
+  }) as {
+    title: string;
+    subtitle: string;
+    items: TrainingStatistic[];
+  };
+
+  const competition = t("performanceTracking.competitionResults", {
+    returnObjects: true,
+  }) as {
+    title: string;
+    subtitle: string;
+    items: CompetitionResult[];
+  };
+
+  const weightTracking = t("performanceTracking.weightTracking", {
+    returnObjects: true,
+  }) as {
+    title: string;
+    subtitle: string;
+    entries: WeightEntry[];
+    rangeNote: string;
+  };
+
   const attendanceRate = Math.round(
-    (attendanceSummary.attended / attendanceSummary.totalSessions) * 100,
+    (attendance.summary.attended / attendance.summary.totalSessions) * 100,
+  );
+
+  const totalSessionsLabel = t(
+    "performanceTracking.attendance.totalSessionsLabel",
+    {
+      count: attendance.summary.totalSessions,
+    },
   );
 
   return (
     <section className="space-y-10">
       <header className="space-y-2">
         <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
-          Performance tracking
+          {t("performanceTracking.title")}
         </h2>
         <p className="text-sm text-red-200/75">
-          Draft dashboard for monitoring technical progress, presence milestones
-          and competitive readiness.
+          {t("performanceTracking.description")}
         </p>
       </header>
 
@@ -73,14 +111,14 @@ function PerformanceTrackingSection(): ReactElement {
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h3 className="text-lg font-semibold text-red-50">
-              Technical progress
+              {technicalProgress.title}
             </h3>
             <span className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-              Last audit · Apr 12
+              {technicalProgress.lastAudit}
             </span>
           </div>
           <ul className="space-y-3">
-            {technicalMilestones.map((item) => (
+            {technicalProgress.milestones.map((item) => (
               <RedSurface
                 key={item.phase}
                 as="li"
@@ -107,10 +145,10 @@ function PerformanceTrackingSection(): ReactElement {
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h3 className="text-lg font-semibold text-red-50">
-              Total attendance
+              {attendance.title}
             </h3>
             <span className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-              {attendanceSummary.totalSessions} sessions
+              {totalSessionsLabel}
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-4">
@@ -123,9 +161,9 @@ function PerformanceTrackingSection(): ReactElement {
                 tone="glass"
                 className="flex items-center justify-between rounded-2xl px-4 py-2"
               >
-                <dt className="text-red-200/70">Attended</dt>
+                <dt className="text-red-200/70">{attendance.labels.attended}</dt>
                 <dd className="font-semibold text-red-50">
-                  {attendanceSummary.attended}
+                  {attendance.summary.attended}
                 </dd>
               </RedSurface>
               <RedSurface
@@ -133,9 +171,9 @@ function PerformanceTrackingSection(): ReactElement {
                 tone="glass"
                 className="flex items-center justify-between rounded-2xl px-4 py-2"
               >
-                <dt className="text-red-200/70">Excused</dt>
+                <dt className="text-red-200/70">{attendance.labels.excused}</dt>
                 <dd className="font-semibold text-red-50">
-                  {attendanceSummary.excused}
+                  {attendance.summary.excused}
                 </dd>
               </RedSurface>
               <RedSurface
@@ -143,9 +181,9 @@ function PerformanceTrackingSection(): ReactElement {
                 tone="glass"
                 className="flex items-center justify-between rounded-2xl px-4 py-2"
               >
-                <dt className="text-red-200/70">Unexcused</dt>
+                <dt className="text-red-200/70">{attendance.labels.unexcused}</dt>
                 <dd className="font-semibold text-red-50">
-                  {attendanceSummary.missed}
+                  {attendance.summary.unexcused}
                 </dd>
               </RedSurface>
             </dl>
@@ -161,14 +199,14 @@ function PerformanceTrackingSection(): ReactElement {
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h3 className="text-lg font-semibold text-red-50">
-            Training statistics
+            {trainingStats.title}
           </h3>
           <span className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-            Block summary
+            {trainingStats.subtitle}
           </span>
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
-          {trainingStatistics.map((stat) => (
+          {trainingStats.items.map((stat) => (
             <RedSurface
               key={stat.label}
               tone="glass"
@@ -197,14 +235,14 @@ function PerformanceTrackingSection(): ReactElement {
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h3 className="text-lg font-semibold text-red-50">
-              Competition results
+              {competition.title}
             </h3>
             <span className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-              Season highlights
+              {competition.subtitle}
             </span>
           </div>
           <ul className="space-y-3">
-            {competitionResults.map((meet) => (
+            {competition.items.map((meet) => (
               <RedSurface
                 key={meet.event}
                 as="li"
@@ -216,7 +254,9 @@ function PerformanceTrackingSection(): ReactElement {
                 </p>
                 <p className="mt-1 text-sm text-red-100/80">{meet.result}</p>
                 <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-200/80">
-                  Placement · {meet.placing}
+                  {t("performanceTracking.competitionResults.placementFormat", {
+                    placement: meet.placing,
+                  })}
                 </p>
               </RedSurface>
             ))}
@@ -231,14 +271,14 @@ function PerformanceTrackingSection(): ReactElement {
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h3 className="text-lg font-semibold text-red-50">
-              Body weight log
+              {weightTracking.title}
             </h3>
             <span className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-              Weekly check-ins
+              {weightTracking.subtitle}
             </span>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
-            {weightTrend.map((entry) => (
+            {weightTracking.entries.map((entry) => (
               <RedSurface
                 key={entry.label}
                 tone="glass"
@@ -254,8 +294,7 @@ function PerformanceTrackingSection(): ReactElement {
             ))}
           </div>
           <p className="text-sm text-red-100/80">
-            Range target 77.8 kg – 78.4 kg. Flag a nutrition review if weight
-            drifts outside band for two consecutive weeks.
+            {weightTracking.rangeNote}
           </p>
         </RedSurface>
       </div>

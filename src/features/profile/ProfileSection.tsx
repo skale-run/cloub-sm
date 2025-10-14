@@ -1,5 +1,6 @@
 import { CheckCircle2, Circle, Upload, X } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type {
   ChangeEvent,
   DragEvent,
@@ -39,46 +40,53 @@ function ProfileSection({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [uploadError, setUploadError] = useState("");
+  const { t } = useTranslation();
 
   const profileFieldConfig = useMemo(
     () =>
       [
         {
           key: "fullName" as const,
-          label: "Full name",
-          placeholder: "e.g. Lina Carter",
+          label: t("profile.fields.fullName.label"),
+          placeholder: t("profile.fields.fullName.placeholder"),
           required: true,
+          readinessLabel: t("profile.fields.fullName.readinessLabel"),
         },
         {
           key: "role" as const,
-          label: "Role",
-          placeholder: "Sprinter / Mid-distance",
+          label: t("profile.fields.role.label"),
+          placeholder: t("profile.fields.role.placeholder"),
+          readinessLabel: t("profile.fields.role.readinessLabel"),
         },
         {
           key: "squad" as const,
-          label: "Squad / Tier",
-          placeholder: "Elite Performance Squad",
+          label: t("profile.fields.squad.label"),
+          placeholder: t("profile.fields.squad.placeholder"),
+          readinessLabel: t("profile.fields.squad.readinessLabel"),
         },
         {
           key: "email" as const,
-          label: "Email",
+          label: t("profile.fields.email.label"),
           type: "email",
-          placeholder: "athlete@clubpulse.io",
+          placeholder: t("profile.fields.email.placeholder"),
+          readinessLabel: t("profile.fields.email.readinessLabel"),
         },
         {
           key: "emergencyContact" as const,
-          label: "Emergency contact",
-          placeholder: "Jordan Carter · +44 7700 000000",
+          label: t("profile.fields.emergencyContact.label"),
+          placeholder: t("profile.fields.emergencyContact.placeholder"),
+          readinessLabel: t("profile.fields.emergencyContact.readinessLabel"),
         },
         {
           key: "membershipId" as const,
-          label: "Membership ID",
-          placeholder: "CP-2025-184",
+          label: t("profile.fields.membershipId.label"),
+          placeholder: t("profile.fields.membershipId.placeholder"),
           required: true,
-          helperText: "Used to verify entry and sync wearable data.",
+          helperText: t("profile.fields.membershipId.helperText"),
+          readinessLabel: t("profile.fields.membershipId.readinessLabel"),
         },
       ],
-    [],
+    [t],
   );
 
   const { completionPercentage, completedFields, missingFields } = useMemo(() => {
@@ -122,14 +130,16 @@ function ProfileSection({
       const [file] = files;
 
       if (!file.type.startsWith("image/")) {
-        setUploadError("Please upload an image file.");
+        setUploadError(t("profile.photo.errors.invalidType"));
         return;
       }
 
       const MAX_FILE_SIZE_MB = 3.5;
       const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024; // Keep base64 under ~5 MB localStorage limit
       if (file.size > MAX_FILE_SIZE) {
-        setUploadError(`Please choose an image smaller than ${MAX_FILE_SIZE_MB}MB.`);
+        setUploadError(
+          t("profile.photo.errors.fileTooLarge", { size: MAX_FILE_SIZE_MB }),
+        );
         return;
       }
 
@@ -143,7 +153,7 @@ function ProfileSection({
       };
       reader.readAsDataURL(file);
     },
-    [onProfileChange],
+    [onProfileChange, t],
   );
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -186,15 +196,14 @@ function ProfileSection({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
-            My athlete profile
+            {t("profile.heading.title")}
           </h2>
           <p className="text-sm text-red-200/75">
-            Keep your credentials current to unlock personalised drills and
-            access.
+            {t("profile.heading.description")}
           </p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full border border-red-400/50 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
-          Manage & update
+          {t("profile.heading.badge")}
         </span>
       </div>
 
@@ -209,10 +218,10 @@ function ProfileSection({
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h3 className="text-lg font-semibold text-red-50">
-                  Profile photo
+                  {t("profile.photo.title")}
                 </h3>
                 <p className="text-sm text-red-200/75">
-                  Drag a clear headshot or browse to upload.
+                  {t("profile.photo.description")}
                 </p>
               </div>
               {profileDraft.profileImage ? (
@@ -221,7 +230,7 @@ function ProfileSection({
                   onClick={handleRemoveImage}
                   className="inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-950/40 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-red-100 transition hover:border-red-400/60 hover:bg-red-500/20 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
                 >
-                  Remove
+                  {t("profile.actions.remove")}
                 </button>
               ) : null}
             </div>
@@ -245,14 +254,14 @@ function ProfileSection({
                 <>
                   <img
                     src={profileDraft.profileImage}
-                    alt="Uploaded athlete portrait"
+                    alt={t("profile.photo.uploadedAlt")}
                     className="h-28 w-28 rounded-full border border-red-400/40 object-cover shadow-[0_12px_30px_rgba(127,29,29,0.45)]"
                   />
                   <p className="text-sm text-red-200/80">
-                    Drop a new image or press enter to replace your photo.
+                    {t("profile.photo.uploaded.hint")}
                   </p>
                   <p className="text-xs text-red-200/60">
-                    PNG or JPG up to 5MB.
+                    {t("profile.photo.uploaded.note")}
                   </p>
                 </>
               ) : (
@@ -261,10 +270,10 @@ function ProfileSection({
                     <Upload aria-hidden className="h-6 w-6" />
                   </span>
                   <p className="text-sm font-medium text-red-100">
-                    Drag & drop your athlete photo here
+                    {t("profile.photo.empty.heading")}
                   </p>
                   <p className="text-xs text-red-200/65">
-                    PNG or JPG up to 5MB, or click to browse.
+                    {t("profile.photo.empty.note")}
                   </p>
                 </>
               )}
@@ -309,21 +318,21 @@ function ProfileSection({
               type="submit"
               className="inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-500/20 px-5 py-2.5 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
             >
-              Save profile
+              {t("profile.actions.save")}
             </button>
             <button
               type="button"
               onClick={onResetProfile}
               className="inline-flex items-center justify-center rounded-2xl border border-red-400/35 bg-red-950/40 px-5 py-2.5 text-sm font-semibold text-red-100 transition hover:border-red-400/55 hover:bg-red-900/50 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
             >
-              Reset draft
+              {t("profile.actions.reset")}
             </button>
             <button
               type="button"
               onClick={onDeleteProfile}
               className="inline-flex items-center justify-center rounded-2xl border border-red-400/50 bg-red-500/15 px-5 py-2.5 text-sm font-semibold text-red-200 transition hover:border-red-400/70 hover:bg-red-500/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
             >
-              Delete profile
+              {t("profile.actions.delete")}
             </button>
           </div>
 
@@ -343,15 +352,15 @@ function ProfileSection({
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-200/70">
-                  Profile readiness
+                  {t("profile.readiness.heading")}
                 </p>
                 <p className="mt-2 text-3xl font-semibold text-red-50">
                   {completionPercentage}%
                 </p>
                 <p className="mt-1 text-sm text-red-200/80">
                   {completionPercentage === 100
-                    ? "Every detail is in place."
-                    : "Complete the profile to unlock the full experience."}
+                    ? t("profile.readiness.completeDescription")
+                    : t("profile.readiness.incompleteDescription")}
                 </p>
               </div>
               <div className="flex h-16 w-16 items-center justify-center rounded-full border border-red-400/40 bg-red-950/60">
@@ -375,10 +384,12 @@ function ProfileSection({
                 )}
                 <span>
                   {missingFields.length === 0
-                    ? "You're ready to share this profile with coaches."
+                    ? t("profile.readiness.readyMessage")
                     : suggestedNextField
-                        ? `Next up: add ${suggestedNextField.label.toLowerCase()}.`
-                        : "Add the remaining details to finish your profile."}
+                        ? t("profile.readiness.nextField", {
+                            field: suggestedNextField.readinessLabel,
+                          })
+                        : t("profile.readiness.remaining")}
                 </span>
               </div>
               {missingFields.length > 0 ? (
@@ -395,29 +406,31 @@ function ProfileSection({
             <RedSurface tone="glass" className="space-y-3 p-4 text-sm">
               <div>
                 <p className="text-xs uppercase tracking-[0.25em] text-red-200/60">
-                  Membership snapshot
+                  {t("profile.summary.heading")}
                 </p>
                 <p className="mt-1 text-lg font-semibold text-red-50">
-                  {profileDraft.fullName || "Awaiting athlete details"}
+                  {profileDraft.fullName || t("profile.summary.fallbackName")}
                 </p>
               </div>
               <dl className="grid gap-2 text-xs text-red-200/70">
                 <div className="flex items-center justify-between gap-2">
-                  <dt>Membership ID</dt>
+                  <dt>{t("profile.summary.membershipIdLabel")}</dt>
                   <dd className="font-medium text-red-100">
-                    {profileDraft.membershipId || "Pending assignment"}
+                    {profileDraft.membershipId ||
+                      t("profile.summary.membershipIdFallback")}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between gap-2">
-                  <dt>Role</dt>
+                  <dt>{t("profile.summary.roleLabel")}</dt>
                   <dd className="font-medium text-red-100">
-                    {profileDraft.role || "Define your training focus"}
+                    {profileDraft.role || t("profile.summary.roleFallback")}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between gap-2">
-                  <dt>Squad</dt>
+                  <dt>{t("profile.summary.squadLabel")}</dt>
                   <dd className="font-medium text-red-100">
-                    {profileDraft.squad || "Assign a squad for tailored drills"}
+                    {profileDraft.squad ||
+                      t("profile.summary.squadFallback")}
                   </dd>
                 </div>
               </dl>
@@ -431,10 +444,10 @@ function ProfileSection({
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <h3 className="text-lg font-semibold text-red-50">
-                  Highlights & achievements
+                  {t("profile.achievements.heading")}
                 </h3>
                 <p className="text-sm text-red-200/75">
-                  Capture season wins to keep your motivation board updated.
+                  {t("profile.achievements.description")}
                 </p>
               </div>
               <RedSurface
@@ -444,7 +457,7 @@ function ProfileSection({
                 <input
                   value={newAchievement}
                   onChange={(event) => onNewAchievementChange(event.target.value)}
-                  placeholder="Add new highlight"
+                  placeholder={t("profile.achievements.placeholder")}
                   className="flex-1 rounded-xl border border-transparent bg-transparent px-3 py-2 text-sm text-red-50 placeholder:text-red-200/70 focus:border-red-400/60 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                 />
                 <button
@@ -452,7 +465,7 @@ function ProfileSection({
                   onClick={onAddAchievement}
                   className="inline-flex items-center justify-center rounded-xl bg-red-500/20 px-4 py-2 text-sm font-semibold text-red-100 transition hover:bg-red-400/30 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
                 >
-                  Add
+                  {t("profile.actions.add")}
                 </button>
               </RedSurface>
             </div>
@@ -468,7 +481,7 @@ function ProfileSection({
                     <button
                       type="button"
                       onClick={() => onRemoveAchievement(index)}
-                      aria-label="Remove"
+                      aria-label={t("profile.achievements.removeAria")}
                       className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-red-400/35 bg-red-950/50 text-red-200 transition hover:border-red-400/60 hover:bg-red-500/20 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
                     >
                       <X aria-hidden className="h-4 w-4" />
@@ -477,7 +490,7 @@ function ProfileSection({
                 ))
               ) : (
                 <li className="flex items-center justify-between gap-3 rounded-2xl border border-red-400/20 bg-red-950/35 px-4 py-3 text-sm text-red-200/70">
-                  <span>No highlights yet. Start by celebrating a recent win.</span>
+                  <span>{t("profile.achievements.empty")}</span>
                 </li>
               )}
             </ul>
