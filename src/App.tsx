@@ -17,6 +17,11 @@ import ProfileSection from './features/profile/ProfileSection'
 import { emptyProfile, type Profile } from './features/profile/profileTypes'
 import { normalizePath, type RoutePath } from './routes'
 
+const DESKTOP_BREAKPOINT = '(min-width: 1024px)' as const
+
+const getIsDesktop = () =>
+  typeof window !== 'undefined' && window.matchMedia(DESKTOP_BREAKPOINT).matches
+
 const pageTitles: Record<RoutePath, string> = {
   '/calendar': 'Calendar overview',
   '/academic-record': 'Academic record',
