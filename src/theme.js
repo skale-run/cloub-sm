@@ -64,8 +64,9 @@ export const typographyScale = {
 }
 
 export const fontFamilyTokens = {
-  sans: "'Inter', 'Segoe UI', system-ui, sans-serif",
-  display: "'Satoshi', 'Inter', 'Segoe UI', system-ui, sans-serif",
+  sans: "'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif",
+  display:
+    "'Space Grotesk', 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif",
   mono: "'JetBrains Mono', 'SFMono-Regular', Consolas, monospace",
 }
 

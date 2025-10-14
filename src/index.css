@@ -1,6 +1,7 @@
 :root {
   font-family: var(
       --font-family-sans,
+      'Plus Jakarta Sans',
       'Inter',
       'SF Pro Display',
       system-ui,
@@ -23,6 +24,15 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family-display, var(--font-family-sans));
 }
 
 body {

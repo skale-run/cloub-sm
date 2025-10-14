@@ -5,6 +5,7 @@
 :root {
   font-family: var(
     --font-family-sans,
+    'Plus Jakarta Sans',
     'Inter',
     'Segoe UI',
     system-ui,
@@ -60,6 +61,7 @@ body {
   margin: 0;
   font-family: var(
     --font-family-sans,
+    'Plus Jakarta Sans',
     'Inter',
     'Segoe UI',
     system-ui,
@@ -81,6 +83,15 @@ body {
       var(--safe-area-top, 0px)
   );
   -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family-display, var(--font-family-sans));
 }
 
 .modal-overlay {

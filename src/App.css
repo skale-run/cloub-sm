@@ -213,6 +213,7 @@
   margin: 0;
   font-size: var(--font-size-400, 1.05rem);
   font-weight: var(--font-weight-semibold, 600);
+  font-family: var(--font-family-display, var(--font-family-sans));
 }
 
 .sidebar__subtitle {
@@ -910,6 +911,7 @@
 .focus-area__title {
   font-weight: var(--font-weight-semibold, 600);
   margin: 0 0 0.35rem;
+  font-family: var(--font-family-display, var(--font-family-sans));
 }
 
 .focus-area__description {
