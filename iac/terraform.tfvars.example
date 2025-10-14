@@ -1,0 +1,9 @@
+project_id            = "club-sm"
+region                = "europe-west1"
+service_name          = "cloub-sm"
+container_image       = "europe-west1-docker.pkg.dev/your-project/your-repo/your-image:tag"
+allow_unauthenticated = true
+
+# environment_variables = {
+#   NODE_ENV = "production"
+# }
