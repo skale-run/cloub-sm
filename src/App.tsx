@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
 import AccessSection from './features/access/AccessSection'
@@ -12,6 +12,7 @@ import TrainingAttendanceSection from './features/information/TrainingAttendance
 import PerformanceTrackingSection from './features/performance/PerformanceTrackingSection'
 import ProfileSection from './features/profile/ProfileSection'
 import { emptyProfile, type Profile } from './features/profile/profileTypes'
+import { normalizePath, type RoutePath } from './routes'
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -23,6 +24,50 @@ function App() {
   ])
   const [newAchievement, setNewAchievement] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
+
+  const [currentPath, setCurrentPath] = useState<RoutePath>(() => {
+    const { pathname } = window.location
+    const normalized = normalizePath(pathname)
+
+    return normalized
+  })
+
+  useEffect(() => {
+    const { pathname } = window.location
+    const normalized = normalizePath(pathname)
+
+    if (normalized !== pathname) {
+      window.history.replaceState(null, '', normalized)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const normalized = normalizePath(window.location.pathname)
+
+      if (normalized !== window.location.pathname) {
+        window.history.replaceState(null, '', normalized)
+      }
+
+      setCurrentPath(normalized)
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [])
+
+  const navigateTo = (path: RoutePath) => {
+    const normalized = normalizePath(path)
+
+    if (window.location.pathname !== normalized) {
+      window.history.pushState(null, '', normalized)
+    }
+
+    setCurrentPath(normalized)
+  }
 
   const toggleSidebar = () => setSidebarOpen((open) => !open)
   const handleSidebarNavigate = () => setSidebarOpen(false)
@@ -85,6 +130,8 @@ function App() {
           open={sidebarOpen}
           onToggleSidebar={toggleSidebar}
           onNavigate={handleSidebarNavigate}
+          onNavigateTo={navigateTo}
+          currentPath={currentPath}
           savedProfile={savedProfile}
         />
 
@@ -92,27 +139,44 @@ function App() {
           <Header isSidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} savedProfile={savedProfile} />
 
           <main className="relative z-0 flex-1 space-y-12 px-4 pb-16 pt-6 sm:px-8 lg:px-12">
-            <CalendarSection />
-            <AcademicRecordSection />
-            <BillingSection />
-            <TrainingAttendanceSection />
-            <CoachEvaluationSection />
-            <ProgressOverviewSection />
-            <PerformanceTrackingSection />
-            <ProfileSection
-              profileDraft={profileDraft}
-              onProfileChange={handleProfileChange}
-              onSaveProfile={handleSaveProfile}
-              onResetProfile={handleResetProfile}
-              onDeleteProfile={handleDeleteProfile}
-              statusMessage={statusMessage}
-              achievements={achievements}
-              newAchievement={newAchievement}
-              onNewAchievementChange={setNewAchievement}
-              onAddAchievement={handleAddAchievement}
-              onRemoveAchievement={handleRemoveAchievement}
-            />
-            <AccessSection savedProfile={savedProfile} />
+            {(() => {
+              switch (currentPath) {
+                case '/calendar':
+                  return <CalendarSection />
+                case '/academic-record':
+                  return <AcademicRecordSection />
+                case '/billing':
+                  return <BillingSection />
+                case '/training-attendance':
+                  return <TrainingAttendanceSection />
+                case '/coach-evaluation':
+                  return <CoachEvaluationSection />
+                case '/progress-overview':
+                  return <ProgressOverviewSection />
+                case '/performance-tracking':
+                  return <PerformanceTrackingSection />
+                case '/profile':
+                  return (
+                    <ProfileSection
+                      profileDraft={profileDraft}
+                      onProfileChange={handleProfileChange}
+                      onSaveProfile={handleSaveProfile}
+                      onResetProfile={handleResetProfile}
+                      onDeleteProfile={handleDeleteProfile}
+                      statusMessage={statusMessage}
+                      achievements={achievements}
+                      newAchievement={newAchievement}
+                      onNewAchievementChange={setNewAchievement}
+                      onAddAchievement={handleAddAchievement}
+                      onRemoveAchievement={handleRemoveAchievement}
+                    />
+                  )
+                case '/access':
+                  return <AccessSection savedProfile={savedProfile} />
+                default:
+                  return <CalendarSection />
+              }
+            })()}
           </main>
         </div>
       </div>
