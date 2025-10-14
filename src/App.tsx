@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import './App.css'
+import { useTheme } from './theme.js'
 
 type TrainingSession = {
   id: string
@@ -91,9 +92,19 @@ const competitionCalendar: CompetitionEvent[] = [
 ]
 
 const performanceMetrics: PerformanceMetric[] = [
-  { label: 'Speed Index', value: 86, target: 92, color: '#2563eb' },
-  { label: 'Recovery Quality', value: 74, target: 85, color: '#10b981' },
-  { label: 'Consistency Score', value: 81, target: 88, color: '#f97316' },
+  { label: 'Speed Index', value: 86, target: 92, color: 'var(--color-primary)' },
+  {
+    label: 'Recovery Quality',
+    value: 74,
+    target: 85,
+    color: 'var(--color-success)',
+  },
+  {
+    label: 'Consistency Score',
+    value: 81,
+    target: 88,
+    color: 'var(--color-warning)',
+  },
 ]
 
 const focusAreas = [
@@ -124,6 +135,7 @@ const emptyProfile: Profile = {
 }
 
 function App() {
+  const { toggleMode, isDark } = useTheme()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [profileDraft, setProfileDraft] = useState<Profile>(emptyProfile)
   const [savedProfile, setSavedProfile] = useState<Profile | null>(null)
@@ -232,9 +244,22 @@ function App() {
               <h1>Welcome back, {savedProfile?.fullName || 'Athlete'} 👋</h1>
               <p>Stay on top of your training rhythm and competition milestones.</p>
             </div>
-            <div className="topbar__today">
-              <p className="topbar__date">14 April 2025</p>
-              <p className="topbar__status">Focus: Speed refinement · Hydration priority</p>
+            <div className="topbar__overview-right">
+              <div className="topbar__today">
+                <p className="topbar__date">14 April 2025</p>
+                <p className="topbar__status">Focus: Speed refinement · Hydration priority</p>
+              </div>
+              <button
+                type="button"
+                className="topbar__theme"
+                onClick={toggleMode}
+                aria-label={`Switch to ${isDark ? 'light' : 'dark'} theme`}
+              >
+                <span aria-hidden="true">{isDark ? '🌙' : '☀️'}</span>
+                <span className="topbar__theme-label">
+                  {isDark ? 'Dark mode' : 'Light mode'}
+                </span>
+              </button>
             </div>
           </div>
         </header>

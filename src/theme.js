@@ -1054,7 +1054,7 @@ function applyGlobalTokens(root) {
   globalTokensApplied = true
 }
 
-const VALID_THEME_MODES = new Set(['dark'])
+const VALID_THEME_MODES = new Set(['light', 'dark'])
 const DEFAULT_THEME_MODE = 'dark'
 
 export function applyThemeToDocument(mode = 'dark', target) {
@@ -1129,7 +1129,7 @@ function readStoredMode() {
 function storeMode(mode) {
   if (typeof window === 'undefined') return
   try {
-    if (mode === 'dark') {
+    if (VALID_THEME_MODES.has(mode)) {
       window.localStorage?.setItem(THEME_STORAGE_KEY, mode)
     } else {
       window.localStorage?.removeItem(THEME_STORAGE_KEY)
@@ -1149,7 +1149,18 @@ function clearStoredMode() {
 }
 
 function getPreferredColorScheme() {
-  return DEFAULT_THEME_MODE
+  if (typeof window === 'undefined') return DEFAULT_THEME_MODE
+
+  try {
+    const media = window.matchMedia?.('(prefers-color-scheme: dark)')
+    if (!media) {
+      return DEFAULT_THEME_MODE
+    }
+
+    return media.matches ? 'dark' : 'light'
+  } catch {
+    return DEFAULT_THEME_MODE
+  }
 }
 
 export function useTheme() {
@@ -1172,11 +1183,33 @@ export function useTheme() {
     applyThemeToDocument(mode)
   }, [mode])
 
+  const resolveSystemMode = useCallback(() => {
+    return resolveThemeMode(getPreferredColorScheme())
+  }, [])
+
   useEffect(() => {
     if (hasExplicitMode) return undefined
-    setModeState(DEFAULT_THEME_MODE)
+    setModeState(resolveSystemMode())
     return undefined
-  }, [hasExplicitMode])
+  }, [hasExplicitMode, resolveSystemMode])
+
+  useEffect(() => {
+    if (hasExplicitMode || typeof window === 'undefined') return undefined
+
+    const media = window.matchMedia?.('(prefers-color-scheme: dark)')
+    if (!media) {
+      return undefined
+    }
+
+    const handleChange = () => {
+      setModeState(resolveSystemMode())
+    }
+
+    media.addEventListener('change', handleChange)
+    return () => {
+      media.removeEventListener('change', handleChange)
+    }
+  }, [hasExplicitMode, resolveSystemMode])
 
   const persistMode = useCallback((nextMode) => {
     if (!VALID_THEME_MODES.has(nextMode)) return
@@ -1199,7 +1232,10 @@ export function useTheme() {
       if (!state || disposed) return
 
       const { themeSource } = state
-      const resolvedMode = 'dark'
+      const resolvedMode =
+        themeSource === 'system'
+          ? resolveSystemMode()
+          : resolveThemeMode(themeSource)
 
       setModeState((prev) => (prev === resolvedMode ? prev : resolvedMode))
 
@@ -1254,11 +1290,7 @@ export function useTheme() {
         unsubscribe()
       }
     }
-  }, [initialHasExplicit, initialMode, persistMode])
-
-  const resolveSystemMode = useCallback(() => {
-    return DEFAULT_THEME_MODE
-  }, [])
+  }, [initialHasExplicit, initialMode, persistMode, resolveSystemMode])
 
   const setMode = useCallback(
     (nextMode) => {
@@ -1281,8 +1313,8 @@ export function useTheme() {
   )
 
   const toggleMode = useCallback(() => {
-    setMode('dark')
-  }, [setMode])
+    setMode(mode === 'dark' ? 'light' : 'dark')
+  }, [mode, setMode])
 
   return useMemo(
     () => ({

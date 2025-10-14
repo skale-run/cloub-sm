@@ -1,13 +1,35 @@
 :root {
-  font-family: 'Inter', 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  line-height: 1.6;
-  font-weight: 400;
-  color: #0f172a;
-  background-color: #e0e7ff;
+  font-family: var(
+      --font-family-sans,
+      'Inter',
+      'SF Pro Display',
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      sans-serif
+    );
+  line-height: var(--line-height-500, 1.6);
+  font-weight: var(--font-weight-regular, 400);
+  color: var(--color-text-primary, #f8fafc);
+  background-color: var(--color-app-background, #050a18);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--app-background-gradient);
+  color: inherit;
 }
 
 a {
@@ -15,30 +37,14 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+a:hover,
+a:focus-visible {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(180deg, #e0e7ff 0%, #f8fafc 100%);
-}
-
 button,
-input {
+input,
+select,
+textarea {
   font-family: inherit;
-}
-
-main,
-section,
-article,
-header,
-nav,
-aside {
-  position: relative;
 }
