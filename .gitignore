@@ -6,6 +6,9 @@ pnpm-lock.yaml
 
 # Build output
 dist/
+run/assets/
+run/index.html
+run/vite.svg
 
 # Environment files
 .env
