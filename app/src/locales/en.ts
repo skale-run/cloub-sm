@@ -90,13 +90,38 @@ export const en = {
             "Forgot password? Contact your master or administrator to reset access.",
         },
         registerForm: {
+          profilePhoto: {
+            label: "Profile photo",
+            dropLabel: "Drag & drop your practitioner photo here",
+            helpText: "PNG or JPG up to 5MB, or click to browse.",
+            uploadButton: "Upload photo",
+            changeButton: "Change photo",
+            removeButton: "Remove photo",
+            previewAlt: "Selected profile photo preview",
+          },
           fullName: {
             label: "Full name",
             placeholder: "Jordan Adebayo",
           },
+          role: {
+            label: "Role",
+            placeholder: "Athlete",
+          },
+          squadTier: {
+            label: "Squad / Tier",
+            placeholder: "Elite sparring squad",
+          },
           email: {
             label: "Email",
             placeholder: "you@club.com",
+          },
+          emergencyContact: {
+            label: "Emergency contact",
+            placeholder: "+212 676 005 071",
+          },
+          membershipId: {
+            label: "Membership ID",
+            placeholder: "CP-E43-K4",
           },
           password: {
             label: "Password",

@@ -9,6 +9,11 @@ function formatMember(row) {
     id: row.id,
     fullName: row.full_name,
     email: row.email,
+    role: row.role,
+    squadTier: row.squad_tier,
+    emergencyContact: row.emergency_contact,
+    membershipId: row.membership_id,
+    profilePhotoUrl: row.profile_photo_url,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -21,7 +26,7 @@ function isValidUuid(value) {
 router.get("/", async (req, res, next) => {
   try {
     const result = await query(
-      `SELECT id, full_name, email, created_at, updated_at
+      `SELECT id, full_name, email, role, squad_tier, emergency_contact, membership_id, profile_photo_url, created_at, updated_at
        FROM members
        ORDER BY created_at DESC`,
     );
@@ -33,14 +38,32 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { fullName, email, password } = req.body ?? {};
+  const {
+    fullName,
+    email,
+    password,
+    role,
+    squadTier,
+    emergencyContact,
+    membershipId,
+    profilePhotoUrl,
+  } = req.body ?? {};
 
-  if (!fullName || !email || !password) {
-    return res.status(400).json({ error: "Full name, email, and password are required." });
+  if (!fullName || !email || !password || !membershipId) {
+    return res
+      .status(400)
+      .json({ error: "Full name, email, password, and membership ID are required." });
   }
 
   const normalizedFullName = fullName.trim();
   const normalizedEmail = email.trim().toLowerCase();
+  const normalizedRole = typeof role === "string" ? role.trim() : "";
+  const normalizedSquadTier = typeof squadTier === "string" ? squadTier.trim() : "";
+  const normalizedEmergencyContact =
+    typeof emergencyContact === "string" ? emergencyContact.trim() : "";
+  const normalizedMembershipId = membershipId.trim();
+  const normalizedProfilePhotoUrl =
+    typeof profilePhotoUrl === "string" ? profilePhotoUrl.trim() : "";
 
   if (!normalizedFullName) {
     return res.status(400).json({ error: "Full name is required." });
@@ -48,6 +71,10 @@ router.post("/", async (req, res, next) => {
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
     return res.status(400).json({ error: "A valid email address is required." });
+  }
+
+  if (!normalizedMembershipId) {
+    return res.status(400).json({ error: "Membership ID is required." });
   }
 
   if (password.length < 8) {
@@ -60,10 +87,19 @@ router.post("/", async (req, res, next) => {
     const passwordHash = await bcrypt.hash(password, 10);
 
     const result = await query(
-      `INSERT INTO members (full_name, email, password_hash)
-       VALUES ($1, $2, $3)
-       RETURNING id, full_name, email, created_at, updated_at`,
-      [normalizedFullName, normalizedEmail, passwordHash],
+      `INSERT INTO members (full_name, email, password_hash, role, squad_tier, emergency_contact, membership_id, profile_photo_url)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING id, full_name, email, role, squad_tier, emergency_contact, membership_id, profile_photo_url, created_at, updated_at`,
+      [
+        normalizedFullName,
+        normalizedEmail,
+        passwordHash,
+        normalizedRole || null,
+        normalizedSquadTier || null,
+        normalizedEmergencyContact || null,
+        normalizedMembershipId,
+        normalizedProfilePhotoUrl || null,
+      ],
     );
 
     res.status(201).json({ member: formatMember(result.rows[0]) });
@@ -86,7 +122,7 @@ router.post("/login", async (req, res, next) => {
 
   try {
     const result = await query(
-      `SELECT id, full_name, email, password_hash, created_at, updated_at
+      `SELECT id, full_name, email, password_hash, role, squad_tier, emergency_contact, membership_id, profile_photo_url, created_at, updated_at
        FROM members
        WHERE LOWER(email) = LOWER($1)`,
       [email.trim()],
@@ -118,7 +154,7 @@ router.get("/:id", async (req, res, next) => {
 
   try {
     const result = await query(
-      `SELECT id, full_name, email, created_at, updated_at
+      `SELECT id, full_name, email, role, squad_tier, emergency_contact, membership_id, profile_photo_url, created_at, updated_at
        FROM members
        WHERE id = $1`,
       [id],
@@ -136,7 +172,16 @@ router.get("/:id", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   const { id } = req.params;
-  const { fullName, email, password } = req.body ?? {};
+  const {
+    fullName,
+    email,
+    password,
+    role,
+    squadTier,
+    emergencyContact,
+    membershipId,
+    profilePhotoUrl,
+  } = req.body ?? {};
 
   if (!isValidUuid(id)) {
     return res.status(400).json({ error: "Invalid member id." });
@@ -159,6 +204,41 @@ router.put("/:id", async (req, res, next) => {
 
     values.push(normalizedEmail);
     updates.push(`email = $${values.length}`);
+  }
+
+  if (typeof role === "string") {
+    const normalizedRole = role.trim();
+    values.push(normalizedRole || null);
+    updates.push(`role = $${values.length}`);
+  }
+
+  if (typeof squadTier === "string") {
+    const normalizedSquadTier = squadTier.trim();
+    values.push(normalizedSquadTier || null);
+    updates.push(`squad_tier = $${values.length}`);
+  }
+
+  if (typeof emergencyContact === "string") {
+    const normalizedEmergencyContact = emergencyContact.trim();
+    values.push(normalizedEmergencyContact || null);
+    updates.push(`emergency_contact = $${values.length}`);
+  }
+
+  if (typeof membershipId === "string") {
+    const normalizedMembershipId = membershipId.trim();
+
+    if (!normalizedMembershipId) {
+      return res.status(400).json({ error: "Membership ID cannot be empty." });
+    }
+
+    values.push(normalizedMembershipId);
+    updates.push(`membership_id = $${values.length}`);
+  }
+
+  if (typeof profilePhotoUrl === "string") {
+    const normalizedProfilePhotoUrl = profilePhotoUrl.trim();
+    values.push(normalizedProfilePhotoUrl || null);
+    updates.push(`profile_photo_url = $${values.length}`);
   }
 
   if (typeof password === "string" && password) {
@@ -190,7 +270,7 @@ router.put("/:id", async (req, res, next) => {
       `UPDATE members
        SET ${updates.join(", ")}
        WHERE id = $${values.length}
-       RETURNING id, full_name, email, created_at, updated_at`,
+       RETURNING id, full_name, email, role, squad_tier, emergency_contact, membership_id, profile_photo_url, created_at, updated_at`,
       values,
     );
 

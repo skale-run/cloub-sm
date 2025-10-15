@@ -90,13 +90,38 @@ export const ar = {
             "هل نسيت كلمة المرور؟ تواصل مع الماستر أو المشرف لإعادة ضبط الوصول.",
         },
         registerForm: {
+          profilePhoto: {
+            label: "صورة الملف الشخصي",
+            dropLabel: "اسحب وأفلت صورة الممارس هنا",
+            helpText: "ملف PNG أو JPG حتى 5 ميغابايت، أو انقر للاستعراض.",
+            uploadButton: "تحميل صورة",
+            changeButton: "تغيير الصورة",
+            removeButton: "إزالة الصورة",
+            previewAlt: "معاينة صورة الملف المختارة",
+          },
           fullName: {
             label: "الاسم الكامل",
             placeholder: "Jordan Adebayo",
           },
+          role: {
+            label: "الدور",
+            placeholder: "رياضي",
+          },
+          squadTier: {
+            label: "الفريق / المستوى",
+            placeholder: "فريق السبارينغ النخبوي",
+          },
           email: {
             label: "البريد الإلكتروني",
             placeholder: "you@club.com",
+          },
+          emergencyContact: {
+            label: "جهة الاتصال للطوارئ",
+            placeholder: "+212 676 005 071",
+          },
+          membershipId: {
+            label: "رقم العضوية",
+            placeholder: "CP-E43-K4",
           },
           password: {
             label: "كلمة المرور",
