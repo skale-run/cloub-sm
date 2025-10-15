@@ -45,6 +45,20 @@ function ProgressOverviewSection(): ReactElement {
     returnObjects: true,
   }) as AlertItem[];
 
+  const getChangeTone = (change: string): string => {
+    const normalized = change.trim();
+
+    if (normalized.startsWith("-")) {
+      return "text-rose-200";
+    }
+
+    if (normalized.startsWith("+")) {
+      return "text-emerald-200";
+    }
+
+    return "text-amber-200";
+  };
+
   return (
     <section id="progress-overview" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -56,7 +70,7 @@ function ProgressOverviewSection(): ReactElement {
             {t("progressOverview.description")}
           </p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-3xl border border-red-400/30 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
+        <span className="inline-flex items-center gap-2 rounded-full border border-red-400/35 bg-gradient-to-r from-red-500/20 via-red-500/10 to-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100 shadow-[0_12px_35px_rgba(248,113,113,0.25)]">
           {t("progressOverview.statusChip")}
         </span>
       </div>
@@ -65,30 +79,38 @@ function ProgressOverviewSection(): ReactElement {
         tone="muted"
         className="grid gap-4 rounded-3xl p-6 text-red-50 sm:grid-cols-2 lg:grid-cols-4"
       >
-        {summaryMetrics.map((metric) => (
-          <RedSurface
-            key={metric.label}
-            tone="glass"
-            className="flex flex-col gap-2 rounded-2xl p-4"
-            role="presentation"
-          >
-            <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-              {metric.label}
-            </p>
-            <p className="text-3xl font-semibold text-red-50">
-              {metric.value}
-              {metric.suffix ? (
-                <span className="text-base font-normal text-red-200/70">
-                  {metric.suffix}
+        {summaryMetrics.map((metric) => {
+          const changeTone = getChangeTone(metric.change);
+
+          return (
+            <RedSurface
+              key={metric.label}
+              tone="glass"
+              className="flex flex-col gap-3 rounded-2xl p-4 shadow-[0_18px_55px_rgba(127,29,29,0.3)]"
+              role="presentation"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                  {metric.label}
+                </p>
+              </div>
+              <div className="flex items-end gap-2">
+                <span className="text-4xl font-semibold text-red-50">
+                  {metric.value}
                 </span>
-              ) : null}
-            </p>
-            <p className="text-xs text-red-200/70">
-              <span className="font-semibold text-red-100">{metric.change}</span>{" "}
-              {metric.changeDescriptor}
-            </p>
-          </RedSurface>
-        ))}
+                {metric.suffix ? (
+                  <span className="text-base font-medium text-red-200/70">
+                    {metric.suffix}
+                  </span>
+                ) : null}
+              </div>
+              <div className="flex flex-wrap items-center gap-2 text-xs text-red-200/70">
+                <span className={`font-semibold ${changeTone}`}>{metric.change}</span>
+                <span>{metric.changeDescriptor}</span>
+              </div>
+            </RedSurface>
+          );
+        })}
       </RedSurface>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
@@ -110,42 +132,52 @@ function ProgressOverviewSection(): ReactElement {
             </RedSurface>
           </header>
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {trendPoints.map((point) => (
-              <div
-                key={point.label}
-                className="flex flex-col items-center gap-3"
-              >
+            {trendPoints.map((point) => {
+              const performanceHeight = Math.max(0, Math.min(point.performance, 100));
+              const targetHeight = Math.max(0, Math.min(point.target, 100));
+
+              return (
                 <RedSurface
+                  key={point.label}
                   tone="glass"
-                  className="relative flex h-40 w-full items-end justify-center overflow-hidden rounded-2xl p-3"
+                  className="flex h-full flex-col items-center gap-3 rounded-2xl p-4 text-center"
                 >
-                  <div className="absolute inset-x-3 bottom-12 h-px bg-gradient-to-r from-red-500/20 via-red-400/40 to-red-500/20" />
-                  <div className="relative flex h-full w-10 flex-col justify-end">
-                    <div
-                      className="rounded-t-lg bg-gradient-to-t from-red-500/70 via-red-400/70 to-red-300/70"
-                      style={{ height: `${point.performance}%` }}
-                      aria-hidden
-                    />
-                    <div
-                      className="absolute -top-1 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-red-200/70 bg-red-950 shadow-[0_0_0_4px_rgba(248,113,113,0.1)]"
-                      style={{ bottom: `calc(100% - ${point.target}%)` }}
-                      aria-hidden
-                    />
+                  <div className="relative flex h-40 w-full items-end justify-center overflow-hidden rounded-2xl border border-red-400/20 bg-red-950/40">
+                    <div className="absolute inset-x-4 bottom-12 h-px bg-gradient-to-r from-red-500/20 via-red-400/40 to-red-500/20" />
+                    <div className="relative flex h-full w-12 flex-col justify-end">
+                      <div
+                        role="progressbar"
+                        aria-label={t("progressOverview.performanceTrend.pointSummary", {
+                          performance: point.performance,
+                          target: point.target,
+                        })}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-valuenow={performanceHeight}
+                        className="rounded-t-xl bg-gradient-to-t from-red-500/75 via-red-400/75 to-red-300/75"
+                        style={{ height: `${performanceHeight}%` }}
+                      />
+                      <div
+                        className="absolute left-1/2 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-red-200/70 bg-red-950 shadow-[0_0_0_4px_rgba(248,113,113,0.1)]"
+                        style={{ bottom: `${targetHeight}%` }}
+                        aria-hidden
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center text-xs text-red-100/80">
+                    <p className="font-semibold uppercase tracking-[0.3em] text-red-200/70">
+                      {point.label}
+                    </p>
+                    <p className="mt-1 text-red-100/70">
+                      {t("progressOverview.performanceTrend.pointSummary", {
+                        performance: point.performance,
+                        target: point.target,
+                      })}
+                    </p>
                   </div>
                 </RedSurface>
-                <div className="flex flex-col items-center text-center text-xs text-red-100/80">
-                  <p className="font-semibold uppercase tracking-[0.3em] text-red-200/70">
-                    {point.label}
-                  </p>
-                  <p className="mt-1 text-red-100/70">
-                    {t("progressOverview.performanceTrend.pointSummary", {
-                      performance: point.performance,
-                      target: point.target,
-                    })}
-                  </p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-red-100/80">
@@ -180,7 +212,7 @@ function ProgressOverviewSection(): ReactElement {
                   key={focus.title}
                   as="li"
                   tone="glass"
-                  className="rounded-2xl p-4"
+                  className="rounded-2xl border border-red-400/20 bg-red-950/45 p-4"
                 >
                   <p className="text-sm font-semibold text-red-50">{focus.title}</p>
                   <p className="mt-1 text-sm text-red-100/80">{focus.detail}</p>
@@ -199,7 +231,7 @@ function ProgressOverviewSection(): ReactElement {
                   key={alert.title}
                   as="li"
                   tone="glass"
-                  className="rounded-2xl p-4"
+                  className="rounded-2xl border border-red-400/20 bg-red-950/45 p-4"
                 >
                   <p className="text-sm font-semibold text-red-50">{alert.title}</p>
                   <p className="mt-1 text-sm text-red-100/80">{alert.detail}</p>
