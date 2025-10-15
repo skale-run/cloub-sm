@@ -129,7 +129,7 @@ function Sidebar({
     <aside
       id="app-sidebar"
       className={cn(
-        "fixed inset-y-0 z-40 flex w-full max-w-sm shrink-0 flex-col overflow-hidden bg-red-950/90 shadow-[0_35px_90px_rgba(127,29,29,0.45)] backdrop-blur transition-transform duration-300 ease-out lg:max-w-none lg:w-80",
+        "fixed inset-y-0 z-50 lg:z-40 flex w-full max-w-sm shrink-0 flex-col overflow-hidden bg-red-950/90 shadow-[0_35px_90px_rgba(127,29,29,0.45)] backdrop-blur transition-transform duration-300 ease-out lg:max-w-none lg:w-80",
         isRTL ? "right-0 border-l border-red-500/35" : "left-0 border-r border-red-500/35",
         open ? "translate-x-0" : isRTL ? "translate-x-full" : "-translate-x-full",
       )}
