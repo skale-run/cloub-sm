@@ -15,8 +15,21 @@ variable "service_name" {
 }
 
 variable "container_image" {
-  description = "The container image to deploy, for example gcr.io/project/image:tag."
+  description = "Fully qualified container image to deploy, for example gcr.io/project/image:tag. If unset, provide container_image_repository and image_version instead."
   type        = string
+  default     = null
+}
+
+variable "container_image_repository" {
+  description = "Container repository without a tag, for example europe-west1-docker.pkg.dev/project/repository/image. Used together with image_version when container_image is not provided."
+  type        = string
+  default     = null
+}
+
+variable "image_version" {
+  description = "Image tag appended to container_image_repository when container_image is not set."
+  type        = string
+  default     = null
 }
 
 variable "allow_unauthenticated" {

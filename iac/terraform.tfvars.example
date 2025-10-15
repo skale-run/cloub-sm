@@ -1,8 +1,10 @@
-project_id            = "club-sm"
-region                = "europe-west1"
-service_name          = "cloub-sm"
-container_image       = "europe-west1-docker.pkg.dev/your-project/your-repo/your-image:tag"
-allow_unauthenticated = true
+project_id                 = "club-sm"
+region                     = "europe-west1"
+service_name               = "cloub-sm"
+container_image_repository = "europe-west1-docker.pkg.dev/your-project/your-repo/your-image"
+# image_version can be provided to override the deployed tag when running terraform manually.
+# image_version            = "v1.0.0"
+allow_unauthenticated      = true
 
 # environment_variables = {
 #   NODE_ENV = "production"
