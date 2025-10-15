@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VERSION="${VERSION:-v50}"
 BUILD_OUTPUT_DIR="${BUILD_OUTPUT_DIR:-run}"
-BUILD_DIR="./${BUILD_OUTPUT_DIR}"
+BUILD_DIR="./app/${BUILD_OUTPUT_DIR}"
 IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-europe-west1-docker.pkg.dev/lkany-io/lkany/club-sm}"
 
 if [[ ! -d "${BUILD_DIR}" ]]; then
