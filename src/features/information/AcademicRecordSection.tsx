@@ -24,9 +24,9 @@ const creditDistribution = [
 ] as const;
 
 const upcomingEvaluations = [
-  { key: "appliedSportsPsychology" },
-  { key: "advancedBiomechanicsLab" },
-  { key: "performanceNutritionStrategies" },
+  { key: "elitePoomsaeAnalytics" },
+  { key: "kyorugiStrategyLab" },
+  { key: "recoveryFuelSystems" },
 ] as const;
 
 type ModuleStatus = "onTrack" | "completed" | "labReportDue";
@@ -34,9 +34,9 @@ type ModuleStatus = "onTrack" | "completed" | "labReportDue";
 type ModuleConfig = {
   code: string;
   translationKey:
-    | "appliedSportsPsychology"
-    | "advancedBiomechanicsLab"
-    | "performanceNutritionStrategies";
+    | "elitePoomsaeAnalytics"
+    | "kyorugiStrategyLab"
+    | "recoveryFuelSystems";
   credits: number;
   status: ModuleStatus;
   grade: string;
@@ -45,25 +45,25 @@ type ModuleConfig = {
 
 const academicModules: ModuleConfig[] = [
   {
-    code: "SPRT201",
-    translationKey: "appliedSportsPsychology",
-    credits: 3,
+    code: "TKD321",
+    translationKey: "elitePoomsaeAnalytics",
+    credits: 6,
     status: "onTrack",
     grade: "A-",
     progress: 78,
   },
   {
-    code: "BIO305",
-    translationKey: "advancedBiomechanicsLab",
-    credits: 4,
+    code: "TKD412",
+    translationKey: "kyorugiStrategyLab",
+    credits: 5,
     status: "labReportDue",
     grade: "B+",
     progress: 54,
   },
   {
-    code: "NUT210",
-    translationKey: "performanceNutritionStrategies",
-    credits: 2,
+    code: "TKD275",
+    translationKey: "recoveryFuelSystems",
+    credits: 3,
     status: "completed",
     grade: "A",
     progress: 100,
@@ -103,15 +103,15 @@ const checklistStatusStyles: Record<
 };
 
 const eligibilityChecklist = [
-  { key: "ncaaMinimum", status: "onTrack" as const },
-  { key: "labReport", status: "reviewNeeded" as const },
-  { key: "advisingSession", status: "scheduled" as const },
+  { key: "wtLicense", status: "onTrack" as const },
+  { key: "weightCertification", status: "reviewNeeded" as const },
+  { key: "cornerBriefing", status: "scheduled" as const },
 ];
 
 const advisorNotes = [
-  { key: "capstoneIntegration", hasAction: true },
-  { key: "scholarshipRenewal", hasAction: true },
-  { key: "leadershipHours", hasAction: false },
+  { key: "internationalCircuit", hasAction: true },
+  { key: "wtRanking", hasAction: true },
+  { key: "communityOutreach", hasAction: false },
 ] as const;
 
 function AcademicRecordSection(): ReactElement {

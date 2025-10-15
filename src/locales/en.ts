@@ -786,7 +786,7 @@ export const en = {
         download: {
           label: "Save offline pass",
           description: {
-            ready: "Add it to your device wallet for match-day entry.",
+            ready: "Add it to your device wallet for ring-day entry.",
             empty: "Save your profile to generate a downloadable pass.",
           },
         },
@@ -917,36 +917,36 @@ export const en = {
   },
   information: {
     academic: {
-      heading: "Academic record",
+      heading: "Taekwondo curriculum progression",
       description:
-        "Track your eligibility requirements alongside this semester's plan.",
+        "Track Kukkiwon coursework, performance labs, and leadership requirements alongside the season plan.",
       creditBadge: {
-        label: "Credit progress",
-        value: "{{current}} / {{target}} credits confirmed",
-        helper: "Eligibility margin secure",
+        label: "Curriculum hours",
+        value: "{{current}} / {{target}} hours logged",
+        helper: "Ready for Kukkiwon submission",
       },
       creditLoad: {
-        heading: "Credit load snapshot",
+        heading: "Curriculum load snapshot",
         caption:
-          "{{current}} of {{target}} target credits confirmed for this term",
+          "{{current}} of {{target}} targeted hours confirmed for this term",
         helper:
-          "{{available}} optional credits still available to stay eligible.",
+          "{{available}} elective hours available to tailor specialization blocks.",
       },
       creditDistribution: {
         coreSciences: {
-          label: "Core sciences",
-          value: "9 credits",
-          context: "Biomechanics and physiology blocks",
+          label: "Technical curriculum",
+          value: "12 hours",
+          context: "Dan theory and poomsae breakdowns",
         },
         performanceLabs: {
           label: "Performance labs",
-          value: "6 credits",
-          context: "Weekly lab hours logged",
+          value: "8 hours",
+          context: "Kyorugi video review & sparring analytics",
         },
         leadershipElectives: {
-          label: "Leadership & electives",
-          value: "3 credits",
-          context: "Sport psych and mentoring",
+          label: "Leadership & officiating",
+          value: "4 hours",
+          context: "Corner coaching + WT rule clinics",
         },
       },
       programInsights: {
@@ -954,39 +954,41 @@ export const en = {
       },
       summaryInsights: {
         currentGpa: {
-          label: "Current GPA",
-          value: "3.82",
-          context: "Up 0.12 this term",
+          label: "Kukkiwon coursework score",
+          value: "91%",
+          context: "Averaged across spring theory modules",
         },
         scholarshipEligibility: {
-          label: "Scholarship eligibility",
-          value: "Secure",
-          context: "Meets 3.5 GPA minimum",
+          label: "WT licence status",
+          value: "Approved",
+          context: "2025 federation licence on file",
         },
         graduationPath: {
-          label: "Graduation path",
-          value: "62 / 90 credits",
-          context: "On schedule — two terms remaining",
+          label: "Dan progression",
+          value: "3rd Dan candidate",
+          context: "Prerequisites aligned for Oct grading",
         },
       },
       modules: {
-        credits: "{{count}} credits",
+        credits: "{{count}} hours",
         focusCheckpoint: "Focus checkpoint",
         progress: "{{percent}}% complete",
         nextEvaluationLabel: "Next evaluation · {{date}}",
-        appliedSportsPsychology: {
-          title: "Applied Sports Psychology",
-          focus: "Mental conditioning project",
-          nextEvaluationDate: "May 12",
+        elitePoomsaeAnalytics: {
+          title: "Elite Poomsae Analytics",
+          focus:
+            "Refine Taegeuk 6 scoring cues and rhythm mapping for national judges.",
+          nextEvaluationDate: "May 05",
         },
-        advancedBiomechanicsLab: {
-          title: "Advanced Biomechanics Lab",
-          focus: "Video gait analysis and report",
+        kyorugiStrategyLab: {
+          title: "Kyorugi Strategy Lab",
+          focus:
+            "Build counter-attack decision trees for southpaw opponents.",
           nextEvaluationDate: "Apr 28",
         },
-        performanceNutritionStrategies: {
-          title: "Performance Nutrition Strategies",
-          focus: "Team fueling protocols delivered",
+        recoveryFuelSystems: {
+          title: "Recovery & Fuel Systems",
+          focus: "Deliver individualized cutting-phase fueling protocols.",
           nextEvaluationDate: "—",
         },
       },
@@ -999,20 +1001,20 @@ export const en = {
         heading: "Upcoming evaluations",
         helper: "Next 30 days",
         dateLabel: "Due {{date}}",
-        appliedSportsPsychology: {
-          module: "Applied Sports Psychology",
-          type: "Midterm reflection",
-          date: "May 12",
+        elitePoomsaeAnalytics: {
+          module: "Elite Poomsae Analytics",
+          type: "Video adjudication review",
+          date: "May 05",
         },
-        advancedBiomechanicsLab: {
-          module: "Advanced Biomechanics Lab",
-          type: "Lab report submission",
+        kyorugiStrategyLab: {
+          module: "Kyorugi Strategy Lab",
+          type: "Scenario sparring audit",
           date: "Apr 28",
         },
-        performanceNutritionStrategies: {
-          module: "Performance Nutrition Strategies",
-          type: "Capstone workshop",
-          date: "Jun 02",
+        recoveryFuelSystems: {
+          module: "Recovery & Fuel Systems",
+          type: "Nutrition consult submission",
+          date: "May 30",
         },
       },
       checklist: {
@@ -1024,18 +1026,20 @@ export const en = {
           scheduled: "Scheduled",
         },
         items: {
-          ncaaMinimum: {
-            label: "Maintain 12-credit NCAA minimum",
-            detail: "18 credits secured with room for one elective add-on.",
-          },
-          labReport: {
-            label: "Submit biomechanics lab report",
+          wtLicense: {
+            label: "Maintain World Taekwondo athlete licence",
             detail:
-              "Draft 60% complete — upload by Apr 28 to avoid penalty.",
+              "Renewal paperwork approved — upload confirmation to the athlete portal.",
           },
-          advisingSession: {
-            label: "Advising session with Coach Rivera",
-            detail: "Career planning touchpoint confirmed for Apr 22.",
+          weightCertification: {
+            label: "Submit weight certification",
+            detail:
+              "Awaiting updated -80 kg verification from sports science team.",
+          },
+          cornerBriefing: {
+            label: "Schedule corner briefing",
+            detail:
+              "Coordinate tactics walkthrough with Master Rivera before Seoul Open.",
           },
         },
       },
@@ -1043,22 +1047,22 @@ export const en = {
         heading: "Advisor guidance",
         helper: "Last synced Apr 10",
         notes: {
-          capstoneIntegration: {
-            title: "Capstone integration",
+          internationalCircuit: {
+            title: "International circuit planning",
             description:
-              "Tie performance nutrition deliverables into upcoming sport psychology reflection for a cohesive submission.",
-            action: "Combine artifacts",
+              "Align travel blocks with WT ranking events and recovery windows.",
+            action: "Confirm itinerary",
           },
-          scholarshipRenewal: {
-            title: "Scholarship renewal",
+          wtRanking: {
+            title: "WT ranking submission",
             description:
-              "GPA comfortably above 3.5 threshold — submit renewal paperwork after final spring grades are posted.",
-            action: "Prep documents",
+              "Compile latest podium results and upload dossier by May 1.",
+            action: "Prepare dossier",
           },
-          leadershipHours: {
-            title: "Leadership hours",
+          communityOutreach: {
+            title: "Community outreach hours",
             description:
-              "Log final two peer-mentoring sessions to close out leadership elective requirement before finals week.",
+              "Log mentorship workshops to satisfy federation service requirements.",
           },
         },
       },
@@ -1066,7 +1070,7 @@ export const en = {
     billing: {
       heading: "Billing overview",
       description:
-        "Monitor recurring fees, add-ons, and outstanding balances in one dashboard.",
+        "Monitor dojang dues, travel levies, and service add-ons in one taekwondo finance dashboard.",
       balanceBadge: {
         label: "Balance",
         value: "{{amount}}",
@@ -1075,22 +1079,22 @@ export const en = {
         balance: {
           label: "Outstanding balance",
           value: "{{amount}}",
-          helper: "Due Apr 25, 2025",
+          helper: "WT Grand Prix travel support · Due Apr 25, 2025",
         },
         autopay: {
           label: "Next auto-pay",
           value: "May 01, 2025",
-          helper: "Spring membership dues",
+          helper: "National team residency dues",
         },
         lastPayment: {
           label: "Last payment received",
           value: "{{amount}}",
-          helper: "Posted Mar 18, 2025",
+          helper: "Elite sparring camp · Posted Mar 18, 2025",
         },
       },
       invoices: {
         heading: "Invoices",
-        helper: "Statement history from the last 6 months",
+        helper: "Statement history for the current taekwondo season",
         download: "Download statement",
         sendReceipt: "Send receipt",
         pending: {
@@ -1121,19 +1125,19 @@ export const en = {
         },
         items: {
           springMembershipDues: {
-            label: "Spring membership dues",
+            label: "Spring dojang membership",
             dueDate: {
               apr252025: "Apr 25, 2025",
             },
           },
           strengthLabAccess: {
-            label: "Strength lab access",
+            label: "High-performance kicking lab access",
             dueDate: {
               mar182025: "Mar 18, 2025",
             },
           },
           travelContribution: {
-            label: "Travel contribution · Indoor finals",
+            label: "World Taekwondo Grand Prix travel contribution",
             dueDate: {
               feb022025: "Feb 02, 2025",
             },
@@ -1144,11 +1148,11 @@ export const en = {
           paid: "Paid",
         },
         empty:
-          "No invoices match the selected filter. Try another status to review previous statements.",
+          "No invoices match the selected filter. Try another status to review prior taekwondo statements.",
       },
       autoPay: {
         heading: "Auto-pay",
-        helper: "Enabled for monthly subscriptions",
+        helper: "Enabled for monthly taekwondo subscriptions",
         manage: "Manage",
       },
       paymentMethods: {
@@ -1161,27 +1165,27 @@ export const en = {
         backupAccount: {
           label: "Backup payment method",
           detail: "Checking · First Peninsula Bank",
-          status: "Used for overdue balances",
+          status: "Used for championship travel charges",
         },
       },
       upcomingCharges: {
         heading: "Upcoming charges",
-        helper: "Automatically scheduled through the season",
+        helper: "Scheduled across the championship season",
         items: {
           physiotherapyBlock: {
-            label: "Team physiotherapy block",
+            label: "Post-tournament physiotherapy block",
             date: {
               may082025: "May 08, 2025",
             },
           },
           facilityLevy: {
-            label: "Facility upgrade levy",
+            label: "Electronic hogu maintenance levy",
             date: {
               jun122025: "Jun 12, 2025",
             },
           },
           summerTravelFund: {
-            label: "Summer travel fund",
+            label: "International circuit travel fund",
             date: {
               jul012025: "Jul 01, 2025",
             },
