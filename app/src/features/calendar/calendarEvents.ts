@@ -22,6 +22,57 @@ export type CompetitionCalendarEvent = BaseCalendarEvent & {
 
 export type CalendarEvent = TrainingCalendarEvent | CompetitionCalendarEvent;
 
+export type CalendarCategoryTheme = {
+  accentColor: string;
+  softAccentColor: string;
+  badge: {
+    background: string;
+    borderColor: string;
+    color: string;
+    shadow: string;
+  };
+};
+
+export const calendarCategoryTheme: Record<
+  CalendarCategory,
+  CalendarCategoryTheme
+> = {
+  training: {
+    accentColor: "var(--color-primary-400, #f85a73)",
+    softAccentColor:
+      "color-mix(in srgb, var(--color-primary-900, #39040f) 60%, transparent)",
+    badge: {
+      background:
+        "color-mix(in srgb, var(--color-primary-500, #e83856) 20%, transparent)",
+      borderColor:
+        "color-mix(in srgb, var(--color-primary-400, #f85a73) 55%, transparent)",
+      color: "var(--color-primary-50, #fff3f5)",
+      shadow:
+        "0 0 0 1px color-mix(in srgb, var(--color-primary-500, #e83856) 35%, transparent)",
+    },
+  },
+  competition: {
+    accentColor: "var(--color-accent-400, #ff905c)",
+    softAccentColor:
+      "color-mix(in srgb, var(--color-accent-900, #3a1409) 58%, transparent)",
+    badge: {
+      background:
+        "color-mix(in srgb, var(--color-accent-500, #f26f3e) 20%, transparent)",
+      borderColor:
+        "color-mix(in srgb, var(--color-accent-400, #ff905c) 55%, transparent)",
+      color: "var(--color-accent-50, #fff6f1)",
+      shadow:
+        "0 0 0 1px color-mix(in srgb, var(--color-accent-500, #f26f3e) 35%, transparent)",
+    },
+  },
+};
+
+export function getCalendarCategoryTheme(
+  category: CalendarCategory,
+): CalendarCategoryTheme {
+  return calendarCategoryTheme[category];
+}
+
 export const calendarEvents: CalendarEvent[] = [
   {
     id: "ts-1",
