@@ -18,15 +18,15 @@ export const en = {
     },
     app: {
       pageTitles: {
-        landing: "Welcome to Cloub",
-        calendar: "Calendar overview",
+        landing: "Welcome to Cloub Dojang",
+        calendar: "Training & tournament calendar",
         academicRecord: "Academic record",
         billing: "Billing",
-        trainingAttendance: "Training attendance",
-        coachEvaluation: "Coach evaluation",
+        trainingAttendance: "Dojang attendance",
+        coachEvaluation: "Master evaluation",
         progressOverview: "Progress overview",
-        performanceTracking: "Performance tracking",
-        profile: "Profile",
+        performanceTracking: "Taekwondo performance tracking",
+        profile: "Practitioner profile",
         access: "Access management",
         overview: "Overview",
       },
@@ -39,7 +39,7 @@ export const en = {
         deleted: "Profile deleted. Create a new one to generate a QR code.",
       },
       defaults: {
-        teamMember: "Team member",
+        teamMember: "Taekwondo practitioner",
       },
     },
     header: {
@@ -57,22 +57,22 @@ export const en = {
           loginForm: "Log in form",
           registerForm: "Register form",
         },
-        badge: "Athlete portal",
+        badge: "Taekwondo athlete portal",
         modes: {
           login: "Log in",
           register: "Register",
         },
         copy: {
           login: {
-            heading: "Log in to your athlete HQ",
+            heading: "Log in to your dojang HQ",
             description:
-              "Jump back into your performance cockpit and sync with today’s focus.",
+              "Step back into your Taekwondo command center and sync with today’s focus.",
             cta: "Sign in",
           },
           register: {
-            heading: "Activate your athlete passport",
+            heading: "Activate your Taekwondo passport",
             description:
-              "Create your credentials to unlock tailored sessions and squad support.",
+              "Create your credentials to unlock tailored poomsae sessions and squad support.",
             cta: "Create account",
           },
         },
@@ -86,7 +86,7 @@ export const en = {
             placeholder: "••••••••",
           },
           forgotPassword:
-            "Forgot password? Contact your coach to reset access.",
+            "Forgot password? Contact your master or administrator to reset access.",
         },
         registerForm: {
           fullName: {
@@ -102,30 +102,30 @@ export const en = {
             placeholder: "Create a secure passphrase",
           },
           disclaimer:
-            "By creating an account you accept the athlete charter and consent to performance tracking.",
+            "By creating an account you accept the dojang charter and consent to performance tracking.",
         },
         highlights: {
           heading: "Why athletes love it",
           items: {
             eliteTraining: {
-              title: "Elite training blueprints",
+              title: "Dojo training blueprints",
               description:
-                "Unlock coach-curated weekly blocks personalised to your season arc.",
+                "Unlock master-curated weekly sparring and poomsae blocks tailored to your belt journey.",
             },
             performanceIntelligence: {
               title: "Performance intelligence",
               description:
-                "Track velocity, recovery, and readiness trends with adaptive insights.",
+                "Track kick speed, recovery, and ring-readiness trends with adaptive insights.",
             },
             communityRecognition: {
               title: "Community recognition",
               description:
-                "Share milestones, capture badges, and climb the squad leaderboard.",
+                "Share belt milestones, capture tournament badges, and climb the squad leaderboard.",
             },
             supportCrew: {
-              title: "All-access support crew",
+              title: "All-access support corner",
               description:
-                "Coordinate with physio, nutrition, and mentors from a single hub.",
+                "Coordinate with masters, physiotherapists, and mentors from a single hub.",
             },
           },
         },
@@ -148,7 +148,7 @@ export const en = {
             {
               to: "/calendar",
               label: "Season calendar",
-              description: "Review meets and key sessions",
+              description: "Review tournaments and key dojang sessions",
             },
           ],
         },
@@ -168,7 +168,7 @@ export const en = {
             {
               to: "/training-attendance",
               label: "Training attendance",
-              description: "See check-ins by week",
+              description: "See dojang check-ins by week",
             },
           ],
         },
@@ -177,13 +177,13 @@ export const en = {
           items: [
             {
               to: "/coach-evaluation",
-              label: "Coach evaluation",
-              description: "Latest staff feedback",
+              label: "Master evaluation",
+              description: "Latest master feedback",
             },
             {
               to: "/progress-overview",
               label: "Progress insight",
-              description: "Growth trends & alerts",
+              description: "Growth trends & belt alerts",
             },
           ],
         },
@@ -193,7 +193,7 @@ export const en = {
             {
               to: "/performance-tracking",
               label: "Performance dashboard",
-              description: "Technical milestones & load",
+              description: "Technical milestones & sparring load",
             },
           ],
         },
@@ -202,12 +202,12 @@ export const en = {
           items: [
             {
               to: "/profile",
-              label: "Athlete profile",
-              description: "Manage member identity",
+              label: "Taekwondo profile",
+              description: "Manage practitioner identity",
             },
             {
               to: "/access",
-              label: "Digital access",
+              label: "Dojang access",
               description: "Share membership QR code",
             },
           ],
@@ -242,20 +242,20 @@ export const en = {
             fallback: "Pending assignment",
           },
         },
-        complete: "Profile complete — coaches can access the latest details.",
+        complete: "Profile complete — masters can access the latest details.",
         nextUpdate: "Next update: {{field}}.",
         emptyState:
           "Save your athlete profile to unlock tailored navigation insights.",
       },
       seasonSummary: {
-        line1: "Season 2025 · Wave 2 Squad",
+        line1: "Season 2025 · Elite Dan Team",
         line2: "Next rest day: Sun, 20 Apr",
       },
     },
     calendar: {
-      title: "Integrated Team Calendar",
+      title: "Integrated Dojang Calendar",
       description:
-        "Switch between monthly, weekly, and daily perspectives to coordinate every training session and competition.",
+        "Switch between monthly, weekly, and daily perspectives to coordinate every class, seminar, and tournament ring time.",
       viewOptions: {
         month: "Month",
         week: "Week",
@@ -263,23 +263,23 @@ export const en = {
       },
       workload: {
         heading: "Workload snapshot",
-        summary_zero: "No upcoming team commitments",
-        summary_one: "{{count}} upcoming team commitment",
-        summary_other: "{{count}} upcoming team commitments",
+        summary_zero: "No upcoming squad commitments",
+        summary_one: "{{count}} upcoming squad commitment",
+        summary_other: "{{count}} upcoming squad commitments",
         description:
-          "Track how training and competition time adds up across the selected focus filters.",
+          "Track how training blocks and tournament time add up across the selected focus filters.",
         metrics: {
           all: {
             label: "All events",
             sublabel: "Combined duration",
           },
           training: {
-            label: "Training sessions",
-            sublabel: "Active coaching time",
+            label: "Dojo sessions",
+            sublabel: "Active mat time",
           },
           competition: {
-            label: "Competition days",
-            sublabel: "Travel & execution windows",
+            label: "Tournament days",
+            sublabel: "Travel & ring windows",
           },
         },
       },
@@ -287,15 +287,15 @@ export const en = {
         heading: "Next on the agenda",
         empty: "No visible events",
         fallback:
-          "Adjust the focus filters to surface the next training session or competition on the shared schedule.",
-        coach: "Lead coach: {{name}}",
-        competitionDetails: "{{level}} meet · Check-in at {{time}}",
+          "Adjust the focus filters to surface the next class, grading, or tournament on the shared schedule.",
+        coach: "Lead master: {{name}}",
+        competitionDetails: "{{level}} tournament · Ring check-in at {{time}}",
       },
       filters: {
         heading: "Focus filters",
         title: "Highlight the moments that matter",
         description:
-          "Toggle categories to focus on upcoming training preparation or competition execution.",
+          "Toggle categories to focus on upcoming class preparation or tournament execution.",
         status: {
           all: "Both categories are visible.",
           single:
@@ -305,18 +305,18 @@ export const en = {
       },
       categories: {
         training: {
-          label: "Training Sessions",
+          label: "Dojo Sessions",
           description:
-            "Skill development, conditioning, and video review touchpoints.",
+            "Technical poomsae, sparring drills, and conditioning touchpoints.",
           shortLabel: "Training",
-          badge: "Training Session",
+          badge: "Dojo Session",
         },
         competition: {
-          label: "Competition Days",
+          label: "Tournament Days",
           description:
-            "Travel logistics, qualifying rounds, and championship meets.",
-          shortLabel: "Competition",
-          badge: "Competition Day",
+            "Travel logistics, weigh-ins, and championship brackets.",
+          shortLabel: "Tournament",
+          badge: "Tournament Day",
         },
       },
       states: {
@@ -340,12 +340,12 @@ export const en = {
       },
       dayView: {
         headerDescription:
-          "All training sessions and competition duties for this date.",
+          "All classes, seminars, and tournament duties for this date.",
         eventCount_zero: "No events",
         eventCount_one: "{{count}} event",
         eventCount_other: "{{count}} events",
-        coachLabel: "Lead · {{name}}",
-        checkIn: "Check-in at {{time}}",
+        coachLabel: "Lead master · {{name}}",
+        checkIn: "Ring check-in at {{time}}",
       },
       relativeDay: {
         inDays_one: "In {{count}} day",
@@ -370,14 +370,14 @@ export const en = {
       },
       events: {
         ts1: {
-          title: "Explosive Strength & Plyometrics",
-          location: "Arena Studio 2",
-          coach: "Coach Amara Lewis",
+          title: "Explosive Kicking & Plyometrics",
+          location: "Dojang Studio 2",
+          coach: "Master Amara Lewis",
         },
         ts2: {
-          title: "Technical Drills & Recovery",
-          location: "Track 1",
-          coach: "Coach Hugo Martín",
+          title: "Technical Sparring & Mobility",
+          location: "Main Dojang",
+          coach: "Master Hugo Martín",
         },
         ts3: {
           title: "Video Review & Strategy Lab",
@@ -385,37 +385,37 @@ export const en = {
           coach: "Analyst Team",
         },
         cc1: {
-          title: "Metropolitan Invitational",
-          location: "New Crest Stadium",
+          title: "Metropolitan Taekwondo Open",
+          location: "New Crest Arena",
         },
         cc2: {
-          title: "Summer National Trials",
-          location: "Capital City Arena",
+          title: "Summer National Team Trials",
+          location: "Capital City Pavilion",
         },
         cc3: {
           title: "Continental Grand Prix",
-          location: "Lisbon Athletics Park",
+          location: "Lisbon Martial Arts Park",
         },
       },
     },
     training: {
-      title: "Training Session Calendar",
+      title: "Dojo Session Calendar",
       description: "Stay aligned with the squad and confirm your availability early.",
       weekLabel: "Week {{week}}",
       lead: "Lead · {{coach}}",
       confirmAvailability: "Confirm availability",
     },
     coachEvaluation: {
-      heading: "Coach evaluation",
+      heading: "Master evaluation",
       description: "Snapshot from the latest bi-weekly meeting with the coaching staff.",
       overallLabel: "Overall",
       focusLabel: "Focus for next review",
       addNote: "Add coach note",
       summary: {
-        focusStatement: "Sharpen top-end speed for national trials in May.",
+        focusStatement: "Sharpen spinning heel kick accuracy ahead of national championships in May.",
         leadCoach: {
-          label: "Lead coach",
-          value: "Coach Amara Lewis",
+          label: "Head master",
+          value: "Master Amara Lewis",
         },
         lastReview: {
           label: "Last review",
@@ -434,14 +434,14 @@ export const en = {
         heading: "Momentum drivers",
         items: [
           {
-            title: "Block work clicking",
+            title: "Poomsae precision",
             detail:
-              "Explosive phase is cleaner after contrast sprints · keep 2x weekly rhythm drills.",
+              "Accuracy up 4% after mirror drills · maintain 2x weekly pattern rehearsals.",
           },
           {
-            title: "Race rehearsal",
+            title: "Ring rehearsal",
             detail:
-              "Confidence high following indoor meet simulation · pre-race routine locked in.",
+              "Confidence high after mock tournament · pre-bout visualization dialed in.",
           },
         ],
       },
@@ -449,14 +449,14 @@ export const en = {
         heading: "Watch closely",
         items: [
           {
-            title: "Late-race relaxation",
+            title: "Guard discipline",
             detail:
-              "Neck and jaw tension returning under fatigue · integrate breathing reset cue.",
+              "Guard drops during counter combos · integrate breathing reset cue between rounds.",
           },
           {
-            title: "Regeneration block",
+            title: "Recovery block",
             detail:
-              "Sleep quality dipped on travel week · align physio flush with light tempo day.",
+              "Sleep quality dipped on travel week · align physiotherapy flush with light technical day.",
           },
         ],
       },
@@ -467,13 +467,13 @@ export const en = {
         dueLabel: "Due {{date}}",
         items: [
           {
-            title: "30m fly timing",
-            owner: "Coach Lewis",
+            title: "Sparring timing review",
+            owner: "Master Lewis",
             due: "Apr 26",
             status: "Scheduled",
           },
           {
-            title: "Sprint mechanics video review",
+            title: "Video breakdown: counter-kick mechanics",
             owner: "Athlete",
             due: "Apr 24",
             status: "In progress",
@@ -490,19 +490,19 @@ export const en = {
         heading: "Competency snapshot",
         scores: [
           {
-            label: "Explosive starts",
+            label: "Explosive kicking",
             score: 4.5,
-            note: "Improved block exit · maintain shin angle drills",
+            note: "Faster execution after plyo focus · maintain med-ball tosses",
           },
           {
-            label: "Speed endurance",
+            label: "Ring endurance",
             score: 4.2,
-            note: "Hold form in final 60m · add resisted runs",
+            note: "Hold form late in round three · add interval sparring",
           },
           {
-            label: "Race tactics",
+            label: "Ring tactics",
             score: 4.0,
-            note: "Continue video briefs · refine lane positioning",
+            note: "Continue video briefs · refine corner positioning",
           },
           {
             label: "Recovery habits",
@@ -557,23 +557,23 @@ export const en = {
           { label: "Apr", performance: 82, target: 78 },
         ],
         summary:
-          "Sustained improvement over the last four microcycles keeps the squad comfortably ahead of projected development. Maintain current training density, continue sleep tracking, and repeat readiness screening on Monday sessions.",
+          "Sustained improvement over the last four microcycles keeps the squad comfortably ahead of projected development. Maintain current class density, continue sleep tracking, and repeat readiness screening on Monday sessions.",
         focus: {
           label: "Focus next week",
           detail:
-            "Reinforce acceleration form during Tuesday and Friday technical blocks.",
+            "Refine spinning kick entries during Tuesday and Friday technical blocks.",
         },
       },
       momentumWatch: {
         heading: "Momentum watch",
         items: [
           {
-            title: "Speed work",
-            detail: "Maintain contrast sprint sequencing 2x weekly.",
+            title: "Speed kicks",
+            detail: "Maintain contrast pad sequencing 2x weekly.",
           },
           {
             title: "Strength block",
-            detail: "Shift front squat emphasis to high velocity loads.",
+            detail: "Shift lower-body strength work to high velocity loads.",
           },
           {
             title: "Recovery",
@@ -582,12 +582,12 @@ export const en = {
         ],
       },
       coachAlerts: {
-        heading: "Coach alerts",
+        heading: "Master alerts",
         items: [
           {
-            title: "Acceleration split",
+            title: "Combo timing",
             detail:
-              "Average 30m time dropped by 0.11s · keep resisted sprint block.",
+              "Average counter window improved by 0.3s · keep resisted pad block.",
           },
           {
             title: "Strength progression",
@@ -598,10 +598,10 @@ export const en = {
       },
     },
     landing: {
-      badge: "Cloud-based sports management",
-      heroTitle: "Simplify club operations and inspire every athlete",
+      badge: "Cloud-based Taekwondo management",
+      heroTitle: "Unify your dojang and empower every martial artist",
       heroDescription:
-        "Cloub empowers coaches, athletes, and administrators with a unified platform for scheduling, performance tracking, and real-time communication. Build stronger programs with insights that keep everyone aligned.",
+        "Cloub equips masters, practitioners, and coordinators with a unified hub for class scheduling, belt assessments, and tournament preparation. Strengthen your program with insights that keep every ring team aligned.",
       ctas: {
         primary: "Sign up",
         secondary: "Log in",
@@ -609,41 +609,41 @@ export const en = {
       },
       features: [
         {
-          title: "Centralized scheduling",
+          title: "Integrated class planning",
           description:
-            "Organize practices, competitions, and travel with automated reminders that keep every roster member informed.",
+            "Organize poomsae, sparring, and conditioning blocks with automated reminders that keep every belt group informed.",
         },
         {
           title: "Performance intelligence",
           description:
-            "Visualize athlete progress with dashboards that combine attendance, training load, and evaluation insights.",
+            "Visualize practitioner progress with dashboards that combine attendance, technique scores, and evaluation insights.",
         },
         {
           title: "Secure access for all",
           description:
-            "Role-based permissions give coaches, athletes, and guardians the right visibility while protecting sensitive data.",
+            "Role-based permissions give masters, athletes, and guardians the right visibility while protecting sensitive data.",
         },
       ],
       experience: {
-        title: "Deliver a world-class club experience",
+        title: "Deliver a world-class dojang experience",
         description:
-          "Move beyond disconnected spreadsheets and embrace a modern workflow for the entire organization. Cloub streamlines registration, communication, and competitive analysis so you can focus on athlete development.",
+          "Leave behind disconnected spreadsheets and embrace a modern workflow for the entire dojang. Cloub streamlines registration, communication, and competitive analysis so you can focus on Taekwondo mastery.",
         bullets: [
-          "Personalized dashboards for coaches with drills, attendance trends, and athlete alerts in one place.",
-          "Self-service athlete portal with training goals, academic checkpoints, and secure document storage.",
+          "Personalized dashboards for masters with drills, attendance trends, and practitioner alerts in one place.",
+          "Self-service athlete portal with belt goals, testing checkpoints, and secure document storage.",
           "Automated billing and notifications reduce manual admin work and keep every family in the loop.",
         ],
         stats: {
-          label: "Trusted by clubs",
-          value: "12k+",
+          label: "Trusted by dojangs",
+          value: "650+",
           description:
-            "teams coordinate their seasons with Cloub to boost member satisfaction and reduce admin overhead.",
+            "martial arts programs coordinate their seasons with Cloub to elevate training quality and reduce admin overhead.",
         },
       },
       contact: {
         title: "Talk with our team",
         description:
-          "Ready to modernize your club? Share your goals and we’ll tailor a walkthrough that fits your season timeline.",
+          "Ready to modernize your dojang? Share your goals and we’ll tailor a walkthrough that fits your belt-testing timeline.",
         email: "hello@cloub.co",
         schedule: "Schedule a discovery call: Mon–Fri · 9am–6pm PT",
       },
@@ -659,7 +659,7 @@ export const en = {
     },
     profile: {
       heading: {
-        title: "My athlete profile",
+        title: "My Taekwondo profile",
         description:
           "Keep your credentials current to unlock personalised drills and access.",
         badge: "Manage & update",
@@ -667,13 +667,13 @@ export const en = {
       photo: {
         title: "Profile photo",
         description: "Drag a clear headshot or browse to upload.",
-        uploadedAlt: "Uploaded athlete portrait",
+        uploadedAlt: "Uploaded practitioner portrait",
         uploaded: {
           hint: "Drop a new image or press enter to replace your photo.",
           note: "PNG or JPG up to 5MB.",
         },
         empty: {
-          heading: "Drag & drop your athlete photo here",
+          heading: "Drag & drop your practitioner photo here",
           note: "PNG or JPG up to 5MB, or click to browse.",
         },
         errors: {
@@ -689,17 +689,17 @@ export const en = {
         },
         role: {
           label: "Role",
-          placeholder: "Sprinter / Mid-distance",
+          placeholder: "Fighter / Poomsae specialist",
           readinessLabel: "a role",
         },
         squad: {
           label: "Squad / Tier",
-          placeholder: "Elite Performance Squad",
+          placeholder: "Elite Dan Squad",
           readinessLabel: "a squad assignment",
         },
         email: {
           label: "Email",
-          placeholder: "athlete@clubpulse.io",
+          placeholder: "practitioner@dojang.io",
           readinessLabel: "an email address",
         },
         emergencyContact: {
@@ -710,7 +710,7 @@ export const en = {
         membershipId: {
           label: "Membership ID",
           placeholder: "CP-2025-184",
-          helperText: "Used to verify entry and sync wearable data.",
+          helperText: "Used to verify belt tests and facility entry.",
           readinessLabel: "the membership ID",
         },
       },
@@ -725,31 +725,31 @@ export const en = {
         heading: "Profile readiness",
         completeDescription: "Every detail is in place.",
         incompleteDescription: "Complete the profile to unlock the full experience.",
-        readyMessage: "You're ready to share this profile with coaches.",
+        readyMessage: "You're ready to share this profile with masters.",
         nextField: "Next up: add {{field}}.",
         remaining: "Add the remaining details to finish your profile.",
       },
       summary: {
         heading: "Membership snapshot",
-        fallbackName: "Awaiting athlete details",
+        fallbackName: "Awaiting practitioner details",
         membershipIdLabel: "Membership ID",
         membershipIdFallback: "Pending assignment",
         roleLabel: "Role",
         roleFallback: "Define your training focus",
         squadLabel: "Squad",
-        squadFallback: "Assign a squad for tailored drills",
+        squadFallback: "Assign a ring team for tailored drills",
       },
       achievements: {
         heading: "Highlights & achievements",
-        description: "Capture season wins to keep your motivation board updated.",
+        description: "Capture belt tests and tournament wins to keep your motivation board updated.",
         placeholder: "Add new highlight",
         removeAria: "Remove highlight",
-        empty: "No highlights yet. Start by celebrating a recent win.",
+        empty: "No highlights yet. Start by celebrating a recent sparring or poomsae win.",
       },
     },
     access: {
       heading: {
-        title: "Club access QR",
+        title: "Dojang access QR",
         description:
           "Instantly retrieve your smart gate pass once your profile is saved.",
         badge: "Instant pass",
@@ -809,44 +809,44 @@ export const en = {
         title: "Access tips",
         items: [
           "QR refreshes automatically every time you save your profile.",
-          "Keep screen brightness high for the scanners at Gate B.",
-          "Add your emergency contact for compliant access accreditation.",
+          "Keep screen brightness high for the scanners at the dojang entrance.",
+          "Add your emergency contact for compliant competition accreditation.",
         ],
       },
       eventChecklist: {
         title: "Event day checklist",
         items: [
-          "Arrive 15 minutes before your allocated gate slot.",
-          "Carry a physical ID for manual verification when required.",
+          "Arrive 15 minutes before your ring call time.",
+          "Carry a physical ID and Kukkiwon card for manual verification when required.",
           "Ensure guardians have the latest pick-up instructions.",
         ],
       },
       qr: {
-        alt: "Club access QR code",
+        alt: "Dojang access QR code",
       },
     },
     performanceTracking: {
-      title: "Performance tracking",
+      title: "Taekwondo performance tracking",
       description:
-        "Draft dashboard for monitoring technical progress, presence milestones and competitive readiness.",
+        "Draft dashboard for monitoring technical precision, dojang presence, and ring readiness.",
       technicalProgress: {
         title: "Technical progress",
         lastAudit: "Last audit · Apr 12",
         milestones: [
           {
-            phase: "Block phase",
-            milestone: "Shin angles within 45° for first three steps",
-            status: "Verified on Apr 12 video review",
+            phase: "Poomsae",
+            milestone: "Taegeuk 5 judged at 92% accuracy in internal review",
+            status: "Verified during Apr 12 video analysis",
           },
           {
-            phase: "Acceleration",
-            milestone: "Maintain horizontal force through 30m mark",
-            status: "Needs second cue · schedule sled sprints",
+            phase: "Kyorugi",
+            milestone: "Maintain three-point kicking combo under 10 seconds",
+            status: "Needs second cue · schedule high-intensity sparring",
           },
         ],
       },
       attendance: {
-        title: "Total attendance",
+        title: "Total dojo attendance",
         totalSessionsLabel_one: "{{count}} session",
         totalSessionsLabel_other: "{{count}} sessions",
         summary: {
@@ -865,9 +865,9 @@ export const en = {
         title: "Training statistics",
         subtitle: "Block summary",
         items: [
-          { label: "Total hours", value: "118h", trend: "+6% vs last block" },
-          { label: "Sessions logged", value: "64", trend: "Target: 72 sessions" },
-          { label: "Load score", value: "Moderate", trend: "Maintain during taper" },
+          { label: "Sparring rounds", value: "118", trend: "+6% vs last block" },
+          { label: "Video reviews", value: "16", trend: "Target: 20 reviews" },
+          { label: "Explosive kick score", value: "Moderate", trend: "Maintain during taper" },
         ],
       },
       competitionResults: {
@@ -876,13 +876,13 @@ export const en = {
         placementFormat: "Placement · {{placement}}",
         items: [
           {
-            event: "Metropolitan Invitational",
-            result: "400m · 49.20s",
-            placing: "Bronze",
+            event: "Metropolitan Taekwondo Open",
+            result: "Senior -68kg · Final score 18–9",
+            placing: "Gold",
           },
           {
-            event: "State Indoor Championships",
-            result: "200m · 21.80s",
+            event: "State Team Trials",
+            result: "Poomsae pair · Average 8.45",
             placing: "Finalist",
           },
         ],
@@ -897,17 +897,17 @@ export const en = {
           { label: "Week 16", weight: "78.0 kg" },
         ],
         rangeNote:
-          "Range target 77.8 kg – 78.4 kg. Flag a nutrition review if weight drifts outside band for two consecutive weeks.",
+          "Maintain the -80 kg class: target range 77.8 kg – 78.4 kg. Flag a nutrition review if weight drifts outside band for two consecutive weeks.",
       },
     },
     competitions: {
-      heading: "Competition Calendar",
+      heading: "Tournament Calendar",
       description:
-        "Visualise your travel blocks and prepare your race-day checklists.",
+        "Visualise your travel blocks and prepare your ring-day checklists.",
       badge: "Season Peak",
-      checkIn: "Check-in at {{time}}",
+      checkIn: "Ring check-in at {{time}}",
       logistics: "Logistics",
-      cta: "Travel briefing",
+      cta: "Ring briefing",
       levels: {
         Regional: "Regional",
         National: "National",
@@ -1192,7 +1192,7 @@ export const en = {
     trainingAttendance: {
       heading: "Training attendance",
       description:
-        "Weekly overview of confirmed check-ins and key staff notes.",
+        "Weekly overview of confirmed dojang check-ins and key staff notes.",
       seasonRate: {
         label: "Season rate",
         value: "{{percent}}%",
@@ -1212,7 +1212,7 @@ export const en = {
           },
           week15: {
             label: "Week 15",
-            highlight: "Missed strength lift · travel delay",
+            highlight: "Missed morning sparring · travel delay",
           },
           week16: {
             label: "Week 16",
@@ -1234,7 +1234,7 @@ export const en = {
         readinessIndex: {
           label: "Readiness index",
           value: "92%",
-          detail: "Coach feedback and physio clearance trending up",
+          detail: "Master feedback and physio clearance trending up",
         },
       },
       upcoming: {
@@ -1247,9 +1247,9 @@ export const en = {
           pending: {
             label: "Confirm travel arrivals",
             detail_one:
-              "{{count}} athlete is awaiting travel desk confirmation and location briefing.",
+              "{{count}} practitioner is awaiting travel desk confirmation and ring assignment briefing.",
             detail_other:
-              "{{count}} athletes are awaiting travel desk confirmation and location briefings.",
+              "{{count}} practitioners are awaiting travel desk confirmation and ring assignment briefings.",
             emphasis_one: "Send reminder before Thursday noon logistics call.",
             emphasis_other:
               "Send reminders before Thursday noon logistics call.",
@@ -1257,34 +1257,34 @@ export const en = {
           medical: {
             label: "Coordinate medical reviews",
             detail_one:
-              "{{count}} athlete flagged for clearance needs an updated return timeline.",
+              "{{count}} practitioner flagged for clearance needs an updated return timeline.",
             detail_other:
-              "{{count}} athletes flagged for clearance need updated return timelines.",
+              "{{count}} practitioners flagged for clearance need updated return timelines.",
             emphasis_one:
-              "Sync physio notes with coaching staff before Friday block plan.",
+              "Sync physio notes with masters before Friday block plan.",
             emphasis_other:
-              "Sync physio notes with coaching staff before Friday block plan.",
+              "Sync physio notes with masters before Friday block plan.",
           },
         },
       },
       sessions: {
         ts1: {
           focus:
-            "Velocity testing during strength sets—assign check-in tablets near racks.",
+            "Reaction testing during pad rounds—assign check-in tablets near rings.",
           emphasis:
             "Wellness survey opens 30 minutes prior; capture RPE after each block.",
         },
         ts2: {
           focus:
-            "Travel squad tune-up with individual mobility protocols staged on arrival.",
+            "Travel squad tune-up with individualized mobility protocols staged on arrival.",
           emphasis:
-            "Ensure hydration scans are logged before main warm-up lap.",
+            "Ensure hydration scans are logged before main warm-up.",
         },
         ts3: {
           focus:
-            "Film room breakdown with positional pairings and leadership huddles.",
+            "Film room breakdown with sparring pairings and leadership huddles.",
           emphasis:
-            "Circulate remote check-in link for athletes on modified plans.",
+            "Circulate remote check-in link for practitioners on modified plans.",
         },
       },
       teamStatus: {
@@ -1294,18 +1294,18 @@ export const en = {
       statuses: {
         confirmed: {
           label: "Confirmed",
-          count_one: "{{count}} athlete confirmed",
-          count_other: "{{count}} athletes confirmed",
+          count_one: "{{count}} practitioner confirmed",
+          count_other: "{{count}} practitioners confirmed",
         },
         pending: {
           label: "Pending",
-          count_one: "{{count}} athlete pending",
-          count_other: "{{count}} athletes pending",
+          count_one: "{{count}} practitioner pending",
+          count_other: "{{count}} practitioners pending",
         },
         medicalHold: {
           label: "Medical hold",
-          count_one: "{{count}} athlete on medical hold",
-          count_other: "{{count}} athletes on medical hold",
+          count_one: "{{count}} practitioner on medical hold",
+          count_other: "{{count}} practitioners on medical hold",
         },
         percent: "{{percent}}% of roster",
       },
@@ -1317,15 +1317,15 @@ export const en = {
           jonahHill: "Jonah Hill",
         },
         roles: {
-          linaReyes: "400m hurdles",
-          noahPetrov: "800m",
-          aishaKato: "Relay anchor",
-          jonahHill: "Shot put",
+          linaReyes: "Featherweight fighter",
+          noahPetrov: "Lightweight fighter",
+          aishaKato: "Poomsae specialist",
+          jonahHill: "Heavyweight fighter",
         },
         notes: {
           linaReyes: "Checked in via mobile app · 18:05",
           noahPetrov: "Flight arrives 14:20 · needs remote warm-up brief",
-          aishaKato: "Clearing return-to-sprint test at Thursday physio",
+          aishaKato: "Clearing return-to-kick test at Thursday physio",
           jonahHill: "Strength block moved to 07:30 with Hugo",
         },
       },

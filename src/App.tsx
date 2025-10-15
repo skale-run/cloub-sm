@@ -155,8 +155,8 @@ function App() {
   );
   const [achievements, setAchievements] = useState<string[]>(() =>
     getStoredArrayValue(ACHIEVEMENTS_STORAGE_KEY, [
-      "Season-best 400m: 49.20s",
-      "Bronze medal · State Indoor Championships",
+      "Gold medal · Regional Taekwondo Open",
+      "Certified · Kukkiwon 2nd Dan Promotion",
     ]),
   );
   const [newAchievement, setNewAchievement] = useState("");
