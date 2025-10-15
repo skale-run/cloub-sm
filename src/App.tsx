@@ -132,7 +132,7 @@ const getIsDesktop = () =>
   window.matchMedia(DESKTOP_BREAKPOINT).matches;
 
 function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const pageTitles = useMemo(() => ({
     [landingPath]: t("app.pageTitles.landing"),
     "/calendar": t("app.pageTitles.calendar"),
@@ -362,12 +362,22 @@ function App() {
     );
   }
 
+  const isRTL = i18n.dir() === "rtl";
+
   return (
     <>
       <div
-        className={`relative min-h-screen overflow-x-hidden text-red-100 transition-[padding-left] duration-300 ease-out ${
-          sidebarOpen && isDesktop ? "lg:pl-80" : "lg:pl-0"
-        }`}
+        className={cn(
+          "relative min-h-screen overflow-x-hidden text-red-100 duration-300 ease-out",
+          isRTL ? "transition-[padding-right]" : "transition-[padding-left]",
+          sidebarOpen && isDesktop
+            ? isRTL
+              ? "lg:pr-80"
+              : "lg:pl-80"
+            : isRTL
+            ? "lg:pr-0"
+            : "lg:pl-0",
+        )}
       >
         <Header
           isSidebarOpen={sidebarOpen}

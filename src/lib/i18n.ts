@@ -30,11 +30,15 @@ const englishPresentation: LanguagePresentation = {
 
 const languagePresentations: Record<LanguageKey, LanguagePresentation> = {
   en: englishPresentation,
-  ar: { ...englishPresentation },
   fr: {
     ...englishPresentation,
     htmlLang: "fr",
     locale: "fr-FR",
+  ar: {
+    direction: "rtl",
+    htmlLang: "ar",
+    locale: "ar-MA",
+    numberingSystem: "arab",
   },
 };
 

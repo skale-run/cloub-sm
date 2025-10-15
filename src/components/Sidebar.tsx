@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { RoutePath } from "../routes";
+import { cn } from "../lib/cn";
 import LanguageSwitcher from "./LanguageSwitcher";
 import RedSurface from "./RedSurface";
 
@@ -57,7 +58,8 @@ function Sidebar({
   onNavigateTo,
   currentPath,
 }: SidebarProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
   const brand = t("sidebar.brand", { returnObjects: true }) as {
     name: string;
     label: string;
@@ -116,9 +118,11 @@ function Sidebar({
   return (
     <aside
       id="app-sidebar"
-      className={`fixed inset-y-0 left-0 z-40 flex w-full max-w-sm shrink-0 flex-col overflow-hidden border-r border-red-500/35 bg-red-950/90 shadow-[0_35px_90px_rgba(127,29,29,0.45)] backdrop-blur transition-transform duration-300 ease-out ${
-        open ? "translate-x-0" : "-translate-x-full"
-      } lg:max-w-none lg:w-80`}
+      className={cn(
+        "fixed inset-y-0 z-40 flex w-full max-w-sm shrink-0 flex-col overflow-hidden bg-red-950/90 shadow-[0_35px_90px_rgba(127,29,29,0.45)] backdrop-blur transition-transform duration-300 ease-out lg:max-w-none lg:w-80",
+        isRTL ? "right-0 border-l border-red-500/35" : "left-0 border-r border-red-500/35",
+        open ? "translate-x-0" : isRTL ? "translate-x-full" : "-translate-x-full",
+      )}
       aria-label={t("common.navigation.primary")}
     >
       <div className="flex h-full flex-col gap-8 overflow-y-auto p-6">
