@@ -42,7 +42,7 @@ function Header({
           <button
             type="button"
             onClick={onToggleSidebar}
-            className="group inline-flex items-center gap-2 rounded-2xl bg-red-900/60 p-1.5 text-red-100 transition hover:bg-red-900/80 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+            className="group inline-flex items-center gap-2 rounded-2xl bg-red-900/35 p-1.5 text-red-100 shadow-sm ring-1 ring-inset ring-transparent transition hover:bg-red-900/60 hover:text-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-red-950"
             aria-label={
               isSidebarOpen
                 ? t("aria.toggleNavigation.close")
@@ -51,7 +51,7 @@ function Header({
             aria-expanded={isSidebarOpen}
             aria-controls="app-sidebar"
           >
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-red-950/60 text-red-100 transition group-hover:bg-red-900/80 group-focus-visible:ring-2 group-focus-visible:ring-red-300/70">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-red-950/70 via-red-900/60 to-red-800/55 text-red-100 transition group-hover:from-red-900/70 group-hover:via-red-900/65 group-hover:to-red-800/60 group-focus-visible:ring-2 group-focus-visible:ring-red-300/70 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-red-950">
               <Menu aria-hidden className="h-5 w-5 lg:hidden" />
               {isSidebarOpen ? (
                 <CollapseIcon aria-hidden className="hidden h-5 w-5 lg:block" />
@@ -69,7 +69,7 @@ function Header({
           <span className="hidden text-sm font-medium text-red-100/80 sm:inline">
             {userFullName}
           </span>
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-red-900/60 text-base font-semibold uppercase tracking-wider text-red-50 shadow-inner ring-1 ring-inset ring-red-400/30">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-red-900/70 via-red-800/60 to-red-700/55 text-base font-semibold uppercase tracking-wider text-red-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
             {userInitials}
           </span>
         </div>

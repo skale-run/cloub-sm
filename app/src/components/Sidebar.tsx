@@ -129,8 +129,8 @@ function Sidebar({
     <aside
       id="app-sidebar"
       className={cn(
-        "fixed inset-y-0 z-50 lg:z-40 flex w-full max-w-sm shrink-0 flex-col overflow-hidden bg-red-950/90 shadow-[0_35px_90px_rgba(127,29,29,0.45)] backdrop-blur transition-transform duration-300 ease-out lg:max-w-none lg:w-80",
-        isRTL ? "right-0 border-l border-red-500/35" : "left-0 border-r border-red-500/35",
+        "fixed inset-y-0 z-50 lg:z-40 flex w-full max-w-sm shrink-0 flex-col overflow-hidden bg-gradient-to-b from-red-950/95 via-red-950/85 to-red-900/80 shadow-[0_30px_80px_rgba(59,9,9,0.55)] backdrop-blur-xl transition-transform duration-300 ease-out lg:max-w-none lg:w-80",
+        isRTL ? "right-0" : "left-0",
         open ? "translate-x-0" : isRTL ? "translate-x-full" : "-translate-x-full",
       )}
       aria-label={t("common.navigation.primary")}
@@ -152,7 +152,7 @@ function Sidebar({
             <LanguageSwitcher />
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-red-500/40 text-red-200 transition hover:border-red-400/70 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 lg:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-red-900/40 text-red-200 shadow-sm transition hover:bg-red-900/55 hover:text-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-red-900 lg:hidden"
               onClick={onToggleSidebar}
               aria-label={t("common.navigation.close")}
             >
