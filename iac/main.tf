@@ -29,15 +29,18 @@ locals {
     "${var.container_image_repository}:${var.image_version}" :
     null
   )
+
+  required_services = [
+    "run.googleapis.com",
+    "artifactregistry.googleapis.com",
+  ]
 }
 
-resource "google_project_service" "run" {
-  service            = "run.googleapis.com"
-  disable_on_destroy = false
-}
+resource "google_project_service" "required" {
+  for_each = toset(local.required_services)
 
-resource "google_project_service" "artifact_registry" {
-  service            = "artifactregistry.googleapis.com"
+  project            = var.project_id
+  service            = each.value
   disable_on_destroy = false
 }
 
@@ -46,15 +49,6 @@ resource "google_service_account" "cloud_run" {
   display_name = "Cloud Run service account for ${var.service_name}"
 }
 
-data "google_storage_bucket" "wac_io_tfstate" {
-  name = "wac-adherents-tfstate"
-}
-
-resource "google_storage_bucket_iam_member" "cloud_run_object_viewer" {
-  bucket = data.google_storage_bucket.wac_io_tfstate.name
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_service_account.cloud_run.email}"
-}
 resource "google_cloud_run_service" "service" {
   name     = var.service_name
   location = var.region
@@ -90,10 +84,7 @@ resource "google_cloud_run_service" "service" {
     latest_revision = true
   }
 
-  depends_on = [
-    google_project_service.run,
-    google_project_service.artifact_registry
-  ]
+  depends_on = [for _, service in google_project_service.required : service]
 }
 
 resource "google_cloud_run_service_iam_member" "unauthenticated" {
