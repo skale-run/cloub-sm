@@ -1,31 +1,75 @@
 import type { FormEvent } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Header from "./components/Header";
 import RedSurface from "./components/RedSurface";
 import Sidebar from "./components/Sidebar";
-import AccessSection from "./features/access/AccessSection";
 import AuthenticationExperienceModal from "./features/auth/AuthenticationExperienceModal";
 import { useAthletePortalModal } from "./features/auth/AthletePortalModalContext";
 import { useMember, type Member } from "./features/auth/MemberContext";
-import CalendarSection from "./features/calendar/CalendarSection";
-import CoachEvaluationSection from "./features/evaluations/CoachEvaluationSection";
-import ProgressOverviewSection from "./features/evaluations/ProgressOverviewSection";
-import AcademicRecordSection from "./features/information/AcademicRecordSection";
-import BillingSection from "./features/information/BillingSection";
-import TrainingAttendanceSection from "./features/information/TrainingAttendanceSection";
-import PerformanceTrackingSection from "./features/performance/PerformanceTrackingSection";
-import ProfileSection from "./features/profile/ProfileSection";
 import { emptyProfile, type Profile } from "./features/profile/profileTypes";
-import LandingPage from "./features/landing/LandingPage";
 import { cn } from "./lib/cn";
+import { lazyWithPreload } from "./lib/lazyWithPreload";
 import { landingPath, normalizePath, type RoutePath } from "./routes";
+
+const LandingPage = lazyWithPreload(() => import("./features/landing/LandingPage"));
+const CalendarSection = lazyWithPreload(
+  () => import("./features/calendar/CalendarSection"),
+);
+const AcademicRecordSection = lazyWithPreload(
+  () => import("./features/information/AcademicRecordSection"),
+);
+const BillingSection = lazyWithPreload(
+  () => import("./features/information/BillingSection"),
+);
+const TrainingAttendanceSection = lazyWithPreload(
+  () => import("./features/information/TrainingAttendanceSection"),
+);
+const CoachEvaluationSection = lazyWithPreload(
+  () => import("./features/evaluations/CoachEvaluationSection"),
+);
+const ProgressOverviewSection = lazyWithPreload(
+  () => import("./features/evaluations/ProgressOverviewSection"),
+);
+const PerformanceTrackingSection = lazyWithPreload(
+  () => import("./features/performance/PerformanceTrackingSection"),
+);
+const ProfileSection = lazyWithPreload(
+  () => import("./features/profile/ProfileSection"),
+);
+const AccessSection = lazyWithPreload(
+  () => import("./features/access/AccessSection"),
+);
+
+function SectionFallback({ label }: { label: string }) {
+  return (
+    <div className="flex min-h-[240px] items-center justify-center text-sm text-red-100/80">
+      <div className="flex items-center gap-2 rounded-full border border-dashed border-red-500/50 px-4 py-2">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-red-300" aria-hidden />
+        <span>{label}</span>
+      </div>
+    </div>
+  );
+}
 
 const DESKTOP_BREAKPOINT = "(min-width: 1024px)" as const;
 const PROFILE_DRAFT_STORAGE_KEY = "cloub-profile-draft" as const;
 const SAVED_PROFILE_STORAGE_KEY = "cloub-saved-profile" as const;
 const ACHIEVEMENTS_STORAGE_KEY = "cloub-profile-achievements" as const;
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
+
+const sectionPreloaders: Partial<Record<RoutePath, () => Promise<unknown>>> = {
+  [landingPath]: LandingPage.preload,
+  "/calendar": CalendarSection.preload,
+  "/academic-record": AcademicRecordSection.preload,
+  "/billing": BillingSection.preload,
+  "/training-attendance": TrainingAttendanceSection.preload,
+  "/coach-evaluation": CoachEvaluationSection.preload,
+  "/progress-overview": ProgressOverviewSection.preload,
+  "/performance-tracking": PerformanceTrackingSection.preload,
+  "/profile": ProfileSection.preload,
+  "/access": AccessSection.preload,
+};
 
 function getStoredJsonValue<T extends Record<string, unknown>>(
   key: string,
@@ -151,6 +195,23 @@ function App() {
   const { member, setMember, clearMember } = useMember();
   const { open: openAthletePortalModal } = useAthletePortalModal();
   const previousMemberRef = useRef<Member | null>(null);
+  const prefetchedPathsRef = useRef(new Set<RoutePath>());
+  const prefetchSection = useCallback(
+    (path: RoutePath) => {
+      if (prefetchedPathsRef.current.has(path)) {
+        return;
+      }
+
+      const preload = sectionPreloaders[path];
+      if (!preload) {
+        return;
+      }
+
+      prefetchedPathsRef.current.add(path);
+      void preload();
+    },
+    [prefetchedPathsRef],
+  );
   const pageTitles = useMemo(() => ({
     [landingPath]: t("app.pageTitles.landing"),
     "/calendar": t("app.pageTitles.calendar"),
@@ -188,6 +249,10 @@ function App() {
   });
 
   useEffect(() => {
+    prefetchSection(currentPath);
+  }, [currentPath, prefetchSection]);
+
+  useEffect(() => {
     if (member) {
       const mappedProfile = mapMemberToProfile(member);
       setProfileDraft(mappedProfile);
@@ -219,6 +284,7 @@ function App() {
         window.history.replaceState(null, "", normalized);
       }
 
+      prefetchSection(normalized);
       setCurrentPath(normalized);
     };
 
@@ -227,11 +293,12 @@ function App() {
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
-  }, []);
+  }, [prefetchSection]);
 
   const navigateTo = (path: RoutePath) => {
     const normalized = normalizePath(path);
 
+    prefetchSection(normalized);
     if (window.location.pathname !== normalized) {
       window.history.pushState(null, "", normalized);
     }
@@ -463,14 +530,18 @@ function App() {
     }
   };
 
+  const fallbackMessage = t("common.loading", { defaultValue: "Loading…" });
+
   if (isLandingPage) {
     return (
       <>
-      <LandingPage
-          onSignup={() => openAthletePortalModal("register")}
-          onLogin={() => openAthletePortalModal("login")}
-          onContact={handleContactClick}
-        />
+        <Suspense fallback={<SectionFallback label={fallbackMessage} />}>
+          <LandingPage
+            onSignup={() => openAthletePortalModal("register")}
+            onLogin={() => openAthletePortalModal("login")}
+            onContact={handleContactClick}
+          />
+        </Suspense>
         <AuthenticationExperienceModal />
       </>
     );
@@ -520,6 +591,7 @@ function App() {
             onToggleSidebar={toggleSidebar}
             onNavigate={handleSidebarNavigate}
             onNavigateTo={navigateTo}
+            onPrefetchSection={prefetchSection}
             currentPath={currentPath}
           />
 
@@ -528,44 +600,46 @@ function App() {
             className="flex flex-1 flex-col overflow-x-hidden xl:rounded-[32px]"
           >
             <main className="relative z-0 flex-1 space-y-10 px-4 pb-14 pt-6 sm:px-8 sm:pb-16 sm:pt-8 lg:px-12">
-              {(() => {
-                switch (currentPath) {
-                  case "/calendar":
-                    return <CalendarSection />;
-                  case "/academic-record":
-                    return <AcademicRecordSection />;
-                  case "/billing":
-                    return <BillingSection />;
-                  case "/training-attendance":
-                    return <TrainingAttendanceSection />;
-                  case "/coach-evaluation":
-                    return <CoachEvaluationSection />;
-                  case "/progress-overview":
-                    return <ProgressOverviewSection />;
-                  case "/performance-tracking":
-                    return <PerformanceTrackingSection />;
-                  case "/profile":
-                    return (
-                      <ProfileSection
-                        profileDraft={profileDraft}
-                        onProfileChange={handleProfileChange}
-                        onSaveProfile={handleSaveProfile}
-                        onResetProfile={handleResetProfile}
-                        onDeleteProfile={handleDeleteProfile}
-                        statusMessage={statusMessage}
-                        achievements={achievements}
-                        newAchievement={newAchievement}
-                        onNewAchievementChange={setNewAchievement}
-                        onAddAchievement={handleAddAchievement}
-                        onRemoveAchievement={handleRemoveAchievement}
-                      />
-                    );
-                  case "/access":
-                    return <AccessSection savedProfile={savedProfile} />;
-                  default:
-                    return <CalendarSection />;
-                }
-              })()}
+              <Suspense fallback={<SectionFallback label={fallbackMessage} />}>
+                {(() => {
+                  switch (currentPath) {
+                    case "/calendar":
+                      return <CalendarSection />;
+                    case "/academic-record":
+                      return <AcademicRecordSection />;
+                    case "/billing":
+                      return <BillingSection />;
+                    case "/training-attendance":
+                      return <TrainingAttendanceSection />;
+                    case "/coach-evaluation":
+                      return <CoachEvaluationSection />;
+                    case "/progress-overview":
+                      return <ProgressOverviewSection />;
+                    case "/performance-tracking":
+                      return <PerformanceTrackingSection />;
+                    case "/profile":
+                      return (
+                        <ProfileSection
+                          profileDraft={profileDraft}
+                          onProfileChange={handleProfileChange}
+                          onSaveProfile={handleSaveProfile}
+                          onResetProfile={handleResetProfile}
+                          onDeleteProfile={handleDeleteProfile}
+                          statusMessage={statusMessage}
+                          achievements={achievements}
+                          newAchievement={newAchievement}
+                          onNewAchievementChange={setNewAchievement}
+                          onAddAchievement={handleAddAchievement}
+                          onRemoveAchievement={handleRemoveAchievement}
+                        />
+                      );
+                    case "/access":
+                      return <AccessSection savedProfile={savedProfile} />;
+                    default:
+                      return <CalendarSection />;
+                  }
+                })()}
+              </Suspense>
             </main>
           </RedSurface>
         </div>
