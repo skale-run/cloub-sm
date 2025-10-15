@@ -4,7 +4,11 @@ import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import { getLanguagePresentation } from "../../lib/i18n";
-import { calendarEvents, type CalendarEvent } from "./calendarEvents";
+import {
+  calendarCategoryStyles,
+  calendarEvents,
+  type CalendarEvent,
+} from "./calendarEvents";
 import { ChevronLeft, ChevronRight } from "../../lucide-react";
 
 type CalendarView = "month" | "week" | "day";
@@ -33,16 +37,6 @@ type MonthDay = {
   date: Date;
   inCurrentMonth: boolean;
   events: CalendarEvent[];
-};
-
-const typeStyles: Record<CalendarEvent["category"], string> = {
-  training: "border-red-400/40 bg-red-500/15 text-red-100",
-  competition: "border-fuchsia-400/40 bg-fuchsia-500/15 text-fuchsia-100",
-};
-
-const categoryAccentMap: Record<CalendarEvent["category"], string> = {
-  training: "bg-red-400",
-  competition: "bg-fuchsia-400",
 };
 
 function formatDuration(
@@ -654,10 +648,10 @@ function CalendarSection(): ReactElement {
             </div>
             {upcomingEvent ? (
               <span
-                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${typeStyles[upcomingEvent.category]}`}
+                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${calendarCategoryStyles[upcomingEvent.category].badge}`}
               >
                 <span
-                  className={`h-2.5 w-2.5 rounded-full ${categoryAccentMap[upcomingEvent.category]}`}
+                  className={`h-2.5 w-2.5 rounded-full ${calendarCategoryStyles[upcomingEvent.category].accent}`}
                 />
                 {t(`calendar.categories.${upcomingEvent.category}.label`)}
               </span>
@@ -730,7 +724,7 @@ function CalendarSection(): ReactElement {
                 }`}
               >
                 <span
-                  className={`h-2.5 w-2.5 rounded-full ${categoryAccentMap[category]}`}
+                  className={`h-2.5 w-2.5 rounded-full ${calendarCategoryStyles[category].accent}`}
                 />
                 {t(`calendar.categories.${category}.label`)}
               </button>
@@ -740,7 +734,7 @@ function CalendarSection(): ReactElement {
             {categoryOrder.map((category) => (
               <div key={category} className="flex items-start gap-3">
                 <span
-                  className={`mt-1 h-2.5 w-2.5 rounded-full ${categoryAccentMap[category]}`}
+                  className={`mt-1 h-2.5 w-2.5 rounded-full ${calendarCategoryStyles[category].accent}`}
                   aria-hidden
                 />
                 <div>
@@ -851,7 +845,7 @@ function CalendarSection(): ReactElement {
                                 {t(event.titleKey)}
                               </p>
                               <span
-                                className={`inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded-full border px-2 text-[10px] font-semibold uppercase tracking-[0.2em] ${typeStyles[event.category]}`}
+                                className={`inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded-full border px-2 text-[10px] font-semibold uppercase tracking-[0.2em] ${calendarCategoryStyles[event.category].badge}`}
                               >
                                 {t(`calendar.categories.${event.category}.shortLabel`)}
                               </span>
@@ -947,7 +941,7 @@ function CalendarSection(): ReactElement {
                                 {t(event.locationKey)}
                               </p>
                               <span
-                                className={`mt-2 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.25em] ${typeStyles[event.category]}`}
+                                className={`mt-2 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.25em] ${calendarCategoryStyles[event.category].badge}`}
                               >
                                 {t(
                                   `calendar.categories.${event.category}.shortLabel`,
@@ -1034,7 +1028,7 @@ function CalendarSection(): ReactElement {
                           {timeFormatter.format(endDate)}
                         </span>
                         <span
-                          className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${typeStyles[event.category]}`}
+                          className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${calendarCategoryStyles[event.category].badge}`}
                         >
                           {t(`calendar.categories.${event.category}.badge`)}
                         </span>

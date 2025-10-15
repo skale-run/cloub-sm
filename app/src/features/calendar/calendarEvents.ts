@@ -1,5 +1,22 @@
 export type CalendarCategory = "training" | "competition";
 
+export const calendarCategoryStyles = {
+  training: {
+    badge: "border-red-400/55 bg-red-500/15 text-red-100",
+    accent: "bg-red-400",
+  },
+  competition: {
+    badge: "border-white/10 bg-white/5 text-white/80",
+    accent: "bg-white/60",
+  },
+} satisfies Record<
+  CalendarCategory,
+  {
+    badge: string;
+    accent: string;
+  }
+>;
+
 type BaseCalendarEvent = {
   id: string;
   category: CalendarCategory;
