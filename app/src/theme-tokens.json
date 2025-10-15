@@ -2,8 +2,8 @@
   "$schema": "https://design-tokens.github.io/community-group/format/dtcg.schema.json",
   "$metadata": {
     "id": "lkany.theme",
-    "version": "1.3.0",
-    "updated": "2025-05-13T00:00:00.000Z",
+    "version": "1.4.0",
+    "updated": "2025-05-21T00:00:00.000Z",
     "description": "Design tokens powering the LKANY interface theme.",
     "source": "src/theme.js"
   },
@@ -2064,11 +2064,11 @@
       "$description": "Preferred font families for core typographic contexts.",
       "sans": {
         "$type": "fontFamily",
-        "$value": "'Inter', 'Segoe UI', system-ui, sans-serif"
+        "$value": "'Tajawal', 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif"
       },
       "display": {
         "$type": "fontFamily",
-        "$value": "'Satoshi', 'Inter', 'Segoe UI', system-ui, sans-serif"
+        "$value": "'Space Grotesk', 'Tajawal', 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif"
       },
       "mono": {
         "$type": "fontFamily",
@@ -2240,19 +2240,19 @@
     "$description": "Shadow tokens for depth and elevation.",
     "xs": {
       "$type": "shadow",
-      "$value": "0 1px 2px rgba(15, 23, 42, 0.16)"
+      "$value": "0 1px 2px rgba(154, 17, 44, 0.18)"
     },
     "sm": {
       "$type": "shadow",
-      "$value": "0 4px 12px rgba(15, 23, 42, 0.22)"
+      "$value": "0 4px 12px rgba(154, 17, 44, 0.24)"
     },
     "md": {
       "$type": "shadow",
-      "$value": "0 12px 24px rgba(15, 23, 42, 0.28)"
+      "$value": "0 12px 24px rgba(200, 24, 58, 0.3)"
     },
     "lg": {
       "$type": "shadow",
-      "$value": "0 18px 40px rgba(15, 23, 42, 0.32)"
+      "$value": "0 18px 40px rgba(200, 24, 58, 0.36)"
     }
   },
   "motion": {
@@ -2460,6 +2460,10 @@
         "--accent-color": {
           "$type": "color",
           "$value": "{color.themes.light.primary}"
+        },
+        "--app-bg-image": {
+          "$type": "string",
+          "$value": "{color.themes.light.backgroundImage}"
         },
         "--theme-name": {
           "$type": "string",
@@ -3530,6 +3534,10 @@
         "--accent-color": {
           "$type": "color",
           "$value": "{color.themes.dark.primary}"
+        },
+        "--app-bg-image": {
+          "$type": "string",
+          "$value": "{color.themes.dark.backgroundImage}"
         },
         "--theme-name": {
           "$type": "string",
