@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const { query } = require("../db/pool");
+const { isValidUuid, normalizeOptionalString } = require("../utils/validation");
 
 const router = express.Router();
 
@@ -19,22 +20,6 @@ function formatMember(row) {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
-}
-
-function isValidUuid(value) {
-  return (
-    typeof value === "string" &&
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
-  );
-}
-
-function normalizeOptionalString(value) {
-  if (typeof value !== "string") {
-    return undefined;
-  }
-
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : undefined;
 }
 
 function parseIntegerParam(value, { name, min, max }) {
