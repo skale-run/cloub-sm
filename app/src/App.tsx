@@ -192,7 +192,7 @@ function mapMemberToProfile(member: Member): Profile {
 
 function App() {
   const { t, i18n } = useTranslation();
-  const { member, setMember, clearMember } = useMember();
+  const { member, authToken, setMember, clearMember } = useMember();
   const { open: openAthletePortalModal } = useAthletePortalModal();
   const previousMemberRef = useRef<Member | null>(null);
   const prefetchedPathsRef = useRef(new Set<RoutePath>());
@@ -423,6 +423,7 @@ function App() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
           },
           body: JSON.stringify({
             fullName: trimmedProfile.fullName,
@@ -440,6 +441,12 @@ function App() {
           | null;
 
         if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            clearMember();
+            setStatusMessage(t("app.statusMessages.saveError"));
+            return;
+          }
+
           setStatusMessage(
             payload?.error ?? t("app.statusMessages.saveError"),
           );
@@ -482,9 +489,18 @@ function App() {
       try {
         const response = await fetch(`${API_BASE_URL}/members/${member.id}`, {
           method: "DELETE",
+          headers: authToken
+            ? { Authorization: `Bearer ${authToken}` }
+            : undefined,
         });
 
         if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            clearMember();
+            setStatusMessage(t("app.statusMessages.deleteError"));
+            return;
+          }
+
           setStatusMessage(t("app.statusMessages.deleteError"));
           return;
         }
