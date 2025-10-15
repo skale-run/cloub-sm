@@ -376,7 +376,7 @@ function AuthenticationExperienceModal() {
         });
 
         const payload = (await response.json().catch(() => null)) as
-          | { error?: string; member?: Member }
+          | { error?: string; member?: Member; token?: string }
           | null;
 
         if (!response.ok) {
@@ -393,7 +393,7 @@ function AuthenticationExperienceModal() {
           return;
         }
 
-        if (!payload?.member) {
+        if (!payload?.member || !payload.token) {
           setLoginState({
             status: "error",
             message: t("auth.modal.status.generic"),
@@ -401,7 +401,7 @@ function AuthenticationExperienceModal() {
           return;
         }
 
-        setMember(payload.member);
+        setMember(payload.member, payload.token);
 
         setLoginForm((previous) => ({
           ...previous,

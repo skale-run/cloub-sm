@@ -10,6 +10,7 @@ import {
 } from "react";
 
 const STORAGE_KEY = "cloub-auth-member" as const;
+const TOKEN_STORAGE_KEY = "cloub-auth-token" as const;
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
 
 export type Member = {
@@ -48,9 +49,28 @@ function getStoredMember(): Member | null {
   }
 }
 
+function getStoredToken(): string | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const rawValue = window.localStorage.getItem(TOKEN_STORAGE_KEY);
+    if (!rawValue) {
+      return null;
+    }
+
+    return rawValue;
+  } catch (error) {
+    console.error("Failed to read stored auth token", error);
+    return null;
+  }
+}
+
 type MemberContextValue = {
   member: Member | null;
-  setMember: (member: Member) => void;
+  authToken: string | null;
+  setMember: (member: Member, token?: string | null) => void;
   clearMember: () => void;
 };
 
@@ -62,6 +82,7 @@ type MemberProviderProps = {
 
 export function MemberProvider({ children }: MemberProviderProps) {
   const [member, setMemberState] = useState<Member | null>(getStoredMember);
+  const [authToken, setAuthToken] = useState<string | null>(getStoredToken);
   const initialMemberRef = useRef(member);
 
   useEffect(() => {
@@ -77,8 +98,25 @@ export function MemberProvider({ children }: MemberProviderProps) {
   }, [member]);
 
   useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (authToken) {
+      window.localStorage.setItem(TOKEN_STORAGE_KEY, authToken);
+    } else {
+      window.localStorage.removeItem(TOKEN_STORAGE_KEY);
+    }
+  }, [authToken]);
+
+  useEffect(() => {
     const initialMember = initialMemberRef.current;
     if (!initialMember) {
+      return;
+    }
+
+    if (!authToken) {
+      setMemberState(null);
       return;
     }
 
@@ -88,12 +126,24 @@ export function MemberProvider({ children }: MemberProviderProps) {
       try {
         const response = await fetch(
           `${API_BASE_URL}/members/${initialMember.id}`,
-          { signal: controller.signal },
+          {
+            signal: controller.signal,
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          },
         );
 
         if (!response.ok) {
           if (response.status === 404) {
             setMemberState(null);
+            setAuthToken(null);
+            return;
+          }
+
+          if (response.status === 401 || response.status === 403) {
+            setMemberState(null);
+            setAuthToken(null);
             return;
           }
 
@@ -121,23 +171,34 @@ export function MemberProvider({ children }: MemberProviderProps) {
     return () => {
       controller.abort();
     };
-  }, []);
+  }, [authToken, setAuthToken, setMemberState]);
 
-  const setMember = useCallback((nextMember: Member) => {
-    setMemberState(nextMember);
-  }, []);
+  const setMember = useCallback(
+    (nextMember: Member, token?: string | null) => {
+      setMemberState(nextMember);
+
+      if (typeof token === "string" && token) {
+        setAuthToken(token);
+      } else if (token === null) {
+        setAuthToken(null);
+      }
+    },
+    [setAuthToken, setMemberState],
+  );
 
   const clearMember = useCallback(() => {
     setMemberState(null);
-  }, []);
+    setAuthToken(null);
+  }, [setAuthToken, setMemberState]);
 
   const value = useMemo(
     () => ({
       member,
+      authToken,
       setMember,
       clearMember,
     }),
-    [member, setMember, clearMember],
+    [member, authToken, setMember, clearMember],
   );
 
   return <MemberContext.Provider value={value}>{children}</MemberContext.Provider>;

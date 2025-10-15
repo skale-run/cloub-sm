@@ -1,6 +1,8 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const { query } = require("../db/pool");
+const { authenticate } = require("../middleware/authenticate");
+const { createSession, signSessionToken } = require("../services/auth");
 const { isValidUuid, normalizeOptionalString } = require("../utils/validation");
 
 const router = express.Router();
@@ -45,7 +47,7 @@ function parseIntegerParam(value, { name, min, max }) {
   return { ok: true, value: parsed };
 }
 
-router.get("/", async (req, res, next) => {
+router.get("/", authenticate, async (req, res, next) => {
   const search = normalizeOptionalString(req.query.search);
   const squad = normalizeOptionalString(req.query.squad);
   const role = normalizeOptionalString(req.query.role);
@@ -261,17 +263,34 @@ router.post("/login", async (req, res, next) => {
       return res.status(401).json({ error: "Invalid email or password." });
     }
 
-    res.json({ member: formatMember(member) });
+    const session = await createSession(member.id);
+    const token = signSessionToken({
+      sessionId: session.id,
+      memberId: member.id,
+    });
+
+    res.json({
+      member: formatMember(member),
+      token,
+      session: {
+        id: session.id,
+        expiresAt: new Date(session.expires_at).toISOString(),
+      },
+    });
   } catch (error) {
     next(error);
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
 
   if (!isValidUuid(id)) {
     return res.status(400).json({ error: "Invalid member id." });
+  }
+
+  if (req.auth?.memberId !== id) {
+    return res.status(403).json({ error: "You do not have access to this member." });
   }
 
   try {
@@ -292,7 +311,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const {
     fullName,
@@ -307,6 +326,10 @@ router.put("/:id", async (req, res, next) => {
 
   if (!isValidUuid(id)) {
     return res.status(400).json({ error: "Invalid member id." });
+  }
+
+  if (req.auth?.memberId !== id) {
+    return res.status(403).json({ error: "You do not have access to update this member." });
   }
 
   const updates = [];
@@ -416,11 +439,15 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
 
   if (!isValidUuid(id)) {
     return res.status(400).json({ error: "Invalid member id." });
+  }
+
+  if (req.auth?.memberId !== id) {
+    return res.status(403).json({ error: "You do not have access to delete this member." });
   }
 
   try {
