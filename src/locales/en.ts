@@ -18,7 +18,7 @@ export const en = {
     },
     app: {
       pageTitles: {
-        landing: "Welcome to Cloub Dojang",
+        landing: "Welcome to Wydad Taekwondo",
         calendar: "Training & tournament calendar",
         academicRecord: "Academic record",
         billing: "Billing",
