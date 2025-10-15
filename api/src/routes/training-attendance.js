@@ -4,7 +4,9 @@ const {
   isValidUuid,
   normalizeOptionalString,
   parseIsoDate,
+  parseLimitParam,
 } = require("../utils/validation");
+const { createFilterBuilder } = require("../utils/query-builder");
 
 const router = express.Router();
 
@@ -26,16 +28,14 @@ router.get("/", async (req, res, next) => {
   try {
     const { memberId, calendarEventId, status: statusFilter, limit: limitParam } = req.query;
 
-    const filters = [];
-    const values = [];
+    const filterBuilder = createFilterBuilder();
 
     if (memberId !== undefined) {
       if (!isValidUuid(memberId)) {
         return res.status(400).json({ error: "memberId must be a valid UUID." });
       }
 
-      values.push(memberId);
-      filters.push(`member_id = $${values.length}`);
+      filterBuilder.addEquality("member_id", memberId);
     }
 
     if (calendarEventId !== undefined) {
@@ -43,8 +43,7 @@ router.get("/", async (req, res, next) => {
         return res.status(400).json({ error: "calendarEventId must be a valid UUID." });
       }
 
-      values.push(calendarEventId);
-      filters.push(`calendar_event_id = $${values.length}`);
+      filterBuilder.addEquality("calendar_event_id", calendarEventId);
     }
 
     if (statusFilter !== undefined) {
@@ -52,29 +51,22 @@ router.get("/", async (req, res, next) => {
         return res.status(400).json({ error: "status must be one of present, absent, late, or excused." });
       }
 
-      values.push(statusFilter);
-      filters.push(`status = $${values.length}`);
+      filterBuilder.addEquality("status", statusFilter);
     }
 
-    let limit = 100;
-    if (limitParam !== undefined) {
-      const parsedLimit = Number(limitParam);
-      if (!Number.isInteger(parsedLimit) || parsedLimit <= 0 || parsedLimit > 500) {
-        return res.status(400).json({ error: "limit must be an integer between 1 and 500." });
-      }
-      limit = parsedLimit;
-    }
+    const limit = parseLimitParam(limitParam);
 
-    const whereClause = filters.length ? `WHERE ${filters.join(" AND ")}` : "";
+    const whereClause = filterBuilder.buildWhereClause();
 
-    values.push(limit);
+    const limitPlaceholder = filterBuilder.values.length + 1;
+    const values = filterBuilder.buildValues(limit);
 
     const result = await query(
       `SELECT id, calendar_event_id, member_id, status, recorded_at, note, created_at
          FROM training_attendance_logs
          ${whereClause}
          ORDER BY recorded_at DESC, created_at DESC
-         LIMIT $${values.length}`,
+         LIMIT $${limitPlaceholder}`,
       values,
     );
 
