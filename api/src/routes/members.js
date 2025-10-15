@@ -4,6 +4,8 @@ const { query } = require("../db/pool");
 
 const router = express.Router();
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function formatMember(row) {
   return {
     id: row.id,
@@ -20,18 +22,148 @@ function formatMember(row) {
 }
 
 function isValidUuid(value) {
-  return typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+  return (
+    typeof value === "string" &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
+  );
+}
+
+function normalizeOptionalString(value) {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
+function parseIntegerParam(value, { name, min, max }) {
+  if (value === undefined || value === null || value === "") {
+    return { ok: true, value: undefined };
+  }
+
+  const normalized = typeof value === "string" ? value.trim() : value;
+  const parsed = Number(normalized);
+
+  if (!Number.isFinite(parsed) || !Number.isInteger(parsed)) {
+    return { ok: false, error: `${name} must be an integer.` };
+  }
+
+  if (typeof min === "number" && parsed < min) {
+    return { ok: false, error: `${name} must be greater than or equal to ${min}.` };
+  }
+
+  if (typeof max === "number" && parsed > max) {
+    return { ok: false, error: `${name} must be less than or equal to ${max}.` };
+  }
+
+  return { ok: true, value: parsed };
 }
 
 router.get("/", async (req, res, next) => {
-  try {
-    const result = await query(
-      `SELECT id, full_name, email, role, squad, emergency_contact, membership_id, profile_photo_url, created_at, updated_at
-       FROM members
-       ORDER BY created_at DESC`,
-    );
+  const search = normalizeOptionalString(req.query.search);
+  const squad = normalizeOptionalString(req.query.squad);
+  const role = normalizeOptionalString(req.query.role);
 
-    res.json({ members: result.rows.map(formatMember) });
+  const limitResult = parseIntegerParam(req.query.limit, {
+    name: "limit",
+    min: 1,
+    max: 100,
+  });
+
+  if (!limitResult.ok) {
+    return res.status(400).json({ error: limitResult.error });
+  }
+
+  const offsetResult = parseIntegerParam(req.query.offset, {
+    name: "offset",
+    min: 0,
+  });
+
+  if (!offsetResult.ok) {
+    return res.status(400).json({ error: offsetResult.error });
+  }
+
+  const filters = [];
+  const filterValues = [];
+
+  if (search) {
+    filterValues.push(`%${search}%`);
+    const placeholder = `$${filterValues.length}`;
+    filters.push(
+      `(full_name ILIKE ${placeholder} OR email ILIKE ${placeholder} OR membership_id ILIKE ${placeholder})`,
+    );
+  }
+
+  if (squad) {
+    filterValues.push(squad.toLowerCase());
+    filters.push(`LOWER(squad) = $${filterValues.length}`);
+  }
+
+  if (role) {
+    filterValues.push(role.toLowerCase());
+    filters.push(`LOWER(role) = $${filterValues.length}`);
+  }
+
+  const whereClause = filters.length ? `WHERE ${filters.join(" AND ")}` : "";
+  const baseQuery = `FROM members ${whereClause}`;
+
+  try {
+    const totalResult = await query(`SELECT COUNT(*) AS total ${baseQuery}`, filterValues);
+
+    const dataValues = [...filterValues];
+    let dataQuery =
+      `SELECT id, full_name, email, role, squad, emergency_contact, membership_id, profile_photo_url, created_at, updated_at ${baseQuery} ORDER BY created_at DESC, id DESC`;
+
+    if (limitResult.value !== undefined) {
+      dataValues.push(limitResult.value);
+      dataQuery += ` LIMIT $${dataValues.length}`;
+    }
+
+    const effectiveOffset =
+      offsetResult.value !== undefined
+        ? offsetResult.value
+        : limitResult.value !== undefined
+        ? 0
+        : undefined;
+
+    if (effectiveOffset !== undefined) {
+      dataValues.push(effectiveOffset);
+      dataQuery += ` OFFSET $${dataValues.length}`;
+    }
+
+    const result = await query(dataQuery, dataValues);
+
+    const response = {
+      members: result.rows.map(formatMember),
+      meta: {
+        total: Number(totalResult.rows[0].total ?? 0),
+        count: result.rowCount,
+      },
+    };
+
+    if (limitResult.value !== undefined || effectiveOffset !== undefined) {
+      response.meta.limit = limitResult.value ?? null;
+      response.meta.offset = effectiveOffset ?? 0;
+    }
+
+    if (search || squad || role) {
+      response.meta.filters = {};
+
+      if (search) {
+        response.meta.filters.search = search;
+      }
+
+      if (squad) {
+        response.meta.filters.squad = squad;
+      }
+
+      if (role) {
+        response.meta.filters.role = role;
+      }
+    }
+
+    res.json(response);
   } catch (error) {
     next(error);
   }
@@ -69,7 +201,7 @@ router.post("/", async (req, res, next) => {
     return res.status(400).json({ error: "Full name is required." });
   }
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+  if (!EMAIL_REGEX.test(normalizedEmail)) {
     return res.status(400).json({ error: "A valid email address is required." });
   }
 
@@ -203,7 +335,7 @@ router.put("/:id", async (req, res, next) => {
   if (typeof email === "string" && email.trim()) {
     const normalizedEmail = email.trim().toLowerCase();
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+    if (!EMAIL_REGEX.test(normalizedEmail)) {
       return res.status(400).json({ error: "A valid email address is required." });
     }
 
