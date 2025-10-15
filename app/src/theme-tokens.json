@@ -355,6 +355,18 @@
           "$type": "color",
           "$value": "rgba(76, 8, 21, 0.42)"
         },
+        "borderAmbient": {
+          "$type": "color",
+          "$value": "rgba(154, 17, 44, 0.24)"
+        },
+        "borderHighlight": {
+          "$type": "color",
+          "$value": "rgba(200, 24, 58, 0.62)"
+        },
+        "borderShadow": {
+          "$type": "color",
+          "$value": "rgba(76, 10, 29, 0.32)"
+        },
         "muted": {
           "$type": "color",
           "$value": "rgba(200, 24, 58, 0.1)"
@@ -370,6 +382,26 @@
         "scrim": {
           "$type": "color",
           "$value": "rgba(45, 5, 16, 0.2)"
+        },
+        "selectionBg": {
+          "$type": "color",
+          "$value": "rgba(232, 56, 86, 0.24)"
+        },
+        "selectionFg": {
+          "$type": "color",
+          "$value": "{color.themes.light.textInverse}"
+        },
+        "headerGlowPrimary": {
+          "$type": "color",
+          "$value": "rgba(200, 24, 58, 0.2)"
+        },
+        "headerGlowAccent": {
+          "$type": "color",
+          "$value": "rgba(242, 111, 62, 0.16)"
+        },
+        "headerDivider": {
+          "$type": "color",
+          "$value": "rgba(200, 24, 58, 0.42)"
         },
         "backgroundImage": {
           "$type": "string",
@@ -466,6 +498,18 @@
           "$type": "color",
           "$value": "rgba(232, 56, 86, 0.38)"
         },
+        "borderAmbient": {
+          "$type": "color",
+          "$value": "rgba(232, 56, 86, 0.34)"
+        },
+        "borderHighlight": {
+          "$type": "color",
+          "$value": "rgba(232, 56, 86, 0.58)"
+        },
+        "borderShadow": {
+          "$type": "color",
+          "$value": "rgba(39, 6, 14, 0.58)"
+        },
         "muted": {
           "$type": "color",
           "$value": "rgba(232, 56, 86, 0.16)"
@@ -481,6 +525,26 @@
         "scrim": {
           "$type": "color",
           "$value": "rgba(12, 2, 5, 0.54)"
+        },
+        "selectionBg": {
+          "$type": "color",
+          "$value": "rgba(232, 56, 86, 0.58)"
+        },
+        "selectionFg": {
+          "$type": "color",
+          "$value": "{color.themes.dark.textInverse}"
+        },
+        "headerGlowPrimary": {
+          "$type": "color",
+          "$value": "rgba(232, 56, 86, 0.35)"
+        },
+        "headerGlowAccent": {
+          "$type": "color",
+          "$value": "rgba(242, 111, 62, 0.26)"
+        },
+        "headerDivider": {
+          "$type": "color",
+          "$value": "rgba(255, 172, 198, 0.55)"
         },
         "backgroundImage": {
           "$type": "string",
@@ -2441,6 +2505,18 @@
           "$type": "color",
           "$value": "{color.themes.light.borderStrong}"
         },
+        "--theme-border-ambient": {
+          "$type": "color",
+          "$value": "{color.themes.light.borderAmbient}"
+        },
+        "--theme-border-highlight": {
+          "$type": "color",
+          "$value": "{color.themes.light.borderHighlight}"
+        },
+        "--theme-border-shadow": {
+          "$type": "color",
+          "$value": "{color.themes.light.borderShadow}"
+        },
         "--color-overlay": {
           "$type": "color",
           "$value": "{color.themes.light.overlay}"
@@ -2448,6 +2524,26 @@
         "--color-scrim": {
           "$type": "color",
           "$value": "{color.themes.light.scrim}"
+        },
+        "--theme-selection-bg": {
+          "$type": "color",
+          "$value": "{color.themes.light.selectionBg}"
+        },
+        "--theme-selection-fg": {
+          "$type": "color",
+          "$value": "{color.themes.light.selectionFg}"
+        },
+        "--theme-header-glow-primary": {
+          "$type": "color",
+          "$value": "{color.themes.light.headerGlowPrimary}"
+        },
+        "--theme-header-glow-accent": {
+          "$type": "color",
+          "$value": "{color.themes.light.headerGlowAccent}"
+        },
+        "--theme-header-divider": {
+          "$type": "color",
+          "$value": "{color.themes.light.headerDivider}"
         },
         "--color-intent-info": {
           "$type": "color",
@@ -3515,6 +3611,18 @@
           "$type": "color",
           "$value": "{color.themes.dark.borderStrong}"
         },
+        "--theme-border-ambient": {
+          "$type": "color",
+          "$value": "{color.themes.dark.borderAmbient}"
+        },
+        "--theme-border-highlight": {
+          "$type": "color",
+          "$value": "{color.themes.dark.borderHighlight}"
+        },
+        "--theme-border-shadow": {
+          "$type": "color",
+          "$value": "{color.themes.dark.borderShadow}"
+        },
         "--color-overlay": {
           "$type": "color",
           "$value": "{color.themes.dark.overlay}"
@@ -3522,6 +3630,26 @@
         "--color-scrim": {
           "$type": "color",
           "$value": "{color.themes.dark.scrim}"
+        },
+        "--theme-selection-bg": {
+          "$type": "color",
+          "$value": "{color.themes.dark.selectionBg}"
+        },
+        "--theme-selection-fg": {
+          "$type": "color",
+          "$value": "{color.themes.dark.selectionFg}"
+        },
+        "--theme-header-glow-primary": {
+          "$type": "color",
+          "$value": "{color.themes.dark.headerGlowPrimary}"
+        },
+        "--theme-header-glow-accent": {
+          "$type": "color",
+          "$value": "{color.themes.dark.headerGlowAccent}"
+        },
+        "--theme-header-divider": {
+          "$type": "color",
+          "$value": "{color.themes.dark.headerDivider}"
         },
         "--color-intent-info": {
           "$type": "color",
