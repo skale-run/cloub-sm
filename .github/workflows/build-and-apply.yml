@@ -3,7 +3,7 @@ name: Build and Apply Infrastructure
 on:
   push:
     branches:
-      - mainx
+      - main
   workflow_dispatch:
 
 permissions:
@@ -39,11 +39,11 @@ jobs:
         run: npm install
 
       - name: Build web app
-        working-directory: ./
+        working-directory: ./app
         run: npm run build
 
       - name: Verify build output directory
-        working-directory: ./
+        working-directory: ./app
         run: test -d "${BUILD_OUTPUT_DIR}"
 
       - name: Set up QEMU

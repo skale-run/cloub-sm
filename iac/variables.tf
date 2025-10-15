@@ -14,6 +14,19 @@ variable "service_name" {
   type        = string
 }
 
+variable "image_version" {
+  description = "Container image tag applied to lkany services when explicit image URIs are not provided."
+  type        = string
+  default     = null
+}
+
+
+variable "app_image" {
+  description = "Optional override for the lkany web application container image URI."
+  type        = string
+  default     = null
+}
+
 variable "container_image" {
   description = "The container image to deploy, for example gcr.io/project/image:tag."
   type        = string

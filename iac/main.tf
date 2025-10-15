@@ -24,6 +24,18 @@ provider "google" {
   region  = var.region
 }
 
+locals {
+  container_registry    = var.container_registry
+  default_image_version = "v50"
+
+  configured_image_version = trimspace(var.image_version != null ? var.image_version : "")
+
+  effective_image_version = local.configured_image_version != "" ? local.configured_image_version : local.default_image_version
+
+  app_image_uri = coalesce(var.app_image, "${local.container_registry}/club-sm:${local.effective_image_version}")
+}
+
+
 resource "google_project_service" "run" {
   service            = "run.googleapis.com"
   disable_on_destroy = false
@@ -39,13 +51,16 @@ resource "google_service_account" "cloud_run" {
   display_name = "Cloud Run service account for ${var.service_name}"
 }
 
-resource "google_artifact_registry_repository_iam_member" "cloud_run_data_reader" {
-  project    = var.project_id
-  location   = var.region
-  repository = "data"
-  role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:${google_service_account.cloud_run.email}"
+data "google_storage_bucket" "lkany_io_tfstate" {
+  name = "lkany-io-tfstate"
 }
+
+resource "google_storage_bucket_iam_member" "cloud_run_object_viewer" {
+  bucket = data.google_storage_bucket.lkany_io_tfstate.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${google_service_account.cloud_run.email}"
+}
+
 
 resource "google_cloud_run_service" "service" {
   name     = var.service_name
@@ -56,7 +71,7 @@ resource "google_cloud_run_service" "service" {
       service_account_name = google_service_account.cloud_run.email
 
       containers {
-        image = var.container_image
+        image = local.app_image_uri
 
         dynamic "env" {
           for_each = var.environment_variables
