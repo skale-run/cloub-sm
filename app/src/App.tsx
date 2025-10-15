@@ -14,6 +14,7 @@ import LandingPage from "./features/landing/LandingPage";
 import { emptyProfile, type Profile } from "./features/profile/profileTypes";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import { cn } from "./lib/cn";
 import { lazyWithPreload } from "./lib/lazyWithPreload";
 import {
   defaultPath,
@@ -419,7 +420,12 @@ function App() {
         onPrefetchSection={prefetchSection}
         currentPath={currentPath}
       />
-      <div className="flex min-h-screen flex-1 flex-col lg:pl-80">
+      <div
+        className={cn(
+          "flex min-h-screen flex-1 flex-col transition-[padding] duration-300",
+          isSidebarOpen ? "lg:pl-80" : "lg:pl-0",
+        )}
+      >
         <Header
           isSidebarOpen={isSidebarOpen}
           onToggleSidebar={toggleSidebar}
@@ -427,7 +433,12 @@ function App() {
           userFullName={connectedUserName}
         />
         <main className="relative flex-1 overflow-y-auto px-4 pb-16 pt-6 sm:px-6 lg:px-10">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
+          <div
+            className={cn(
+              "mx-auto flex w-full flex-col gap-6",
+              isSidebarOpen ? "max-w-6xl" : "max-w-none",
+            )}
+          >
             <Suspense fallback={<SectionFallback label={fallbackMessage} />}>
               {renderSection()}
             </Suspense>
