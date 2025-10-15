@@ -1,7 +1,6 @@
 terraform {
   required_version = ">= 1.5.0"
 
-
   backend "gcs" {
     bucket = "lkany-io-tfstate"
     prefix = "club-sm"
@@ -22,6 +21,14 @@ terraform {
 provider "google" {
   project = var.project_id
   region  = var.region
+}
+
+locals {
+  container_image = var.container_image != null ? var.container_image : (
+    var.container_image_repository != null && var.image_version != null ?
+    "${var.container_image_repository}:${var.image_version}" :
+    null
+  )
 }
 
 resource "google_project_service" "run" {
@@ -51,12 +58,19 @@ resource "google_cloud_run_service" "service" {
   name     = var.service_name
   location = var.region
 
+  lifecycle {
+    precondition {
+      condition     = local.container_image != null
+      error_message = "Set either container_image or container_image_repository together with image_version."
+    }
+  }
+
   template {
     spec {
       service_account_name = google_service_account.cloud_run.email
 
       containers {
-        image = var.container_image
+        image = local.container_image
 
         dynamic "env" {
           for_each = var.environment_variables
