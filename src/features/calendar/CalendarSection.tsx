@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
+import { getLanguagePresentation } from "../../lib/i18n";
 import { calendarEvents, type CalendarEvent } from "./calendarEvents";
 
 type CalendarView = "month" | "week" | "day";
@@ -138,16 +139,15 @@ function isSameDay(a: Date, b: Date): boolean {
 function CalendarSection(): ReactElement {
   const { t, i18n } = useTranslation();
 
-  const isArabic = useMemo(() => i18n.language.startsWith("ar"), [i18n.language]);
-  const dateLocale = useMemo(
-    () => (isArabic ? "ar-EG" : "en-US"),
-    [isArabic],
+  const languagePresentation = useMemo(
+    () => getLanguagePresentation(i18n.language),
+    [i18n.language],
   );
-  const numberingSystem = useMemo(
-    () => (isArabic ? "arab" : "latn"),
-    [isArabic],
-  );
-  const direction = useMemo(() => (isArabic ? "rtl" : "ltr"), [isArabic]);
+  const {
+    direction,
+    locale: dateLocale,
+    numberingSystem,
+  } = languagePresentation;
 
   const monthFormatter = useMemo(
     () =>

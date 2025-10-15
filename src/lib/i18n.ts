@@ -12,6 +12,29 @@ const LANGUAGE_STORAGE_KEY = "preferred-language";
 type LanguageKey = keyof typeof resources;
 const supportedLanguages = new Set<LanguageKey>(["en", "ar"]);
 
+type LanguagePresentation = {
+  direction: "ltr" | "rtl";
+  htmlLang: string;
+  locale: string;
+  numberingSystem: string;
+};
+
+const englishPresentation: LanguagePresentation = {
+  direction: "ltr",
+  htmlLang: "en",
+  locale: "en-US",
+  numberingSystem: "latn",
+};
+
+const languagePresentations: Record<LanguageKey, LanguagePresentation> = {
+  en: englishPresentation,
+  ar: { ...englishPresentation },
+};
+
+export function getLanguagePresentation(language: string): LanguagePresentation {
+  return languagePresentations[language as LanguageKey] ?? englishPresentation;
+}
+
 let initialLanguage: LanguageKey = "en";
 
 if (typeof window !== "undefined") {
@@ -45,13 +68,11 @@ i18n
     }
   });
 
-const rtlLanguages = new Set<LanguageKey>(["ar"]);
-
 function applyLanguageAttributes(language: string) {
   const root = document.documentElement;
-  const direction = rtlLanguages.has(language) ? "rtl" : "ltr";
-  root.lang = language;
-  root.dir = direction;
+  const presentation = getLanguagePresentation(language);
+  root.lang = presentation.htmlLang;
+  root.dir = presentation.direction;
 }
 
 if (typeof document !== "undefined") {
