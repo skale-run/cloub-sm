@@ -569,9 +569,11 @@ function TrainingAttendanceSection(): ReactElement {
                 {followUpActions.map((action) => {
                   const ActionIcon = action.icon;
                   return (
-                    <li
+                    <RedSurface
                       key={action.id}
-                      className="rounded-2xl border border-red-400/25 bg-red-500/10 p-4"
+                      as="li"
+                      tone="glass"
+                      className="rounded-2xl p-4"
                     >
                       <div className="flex items-start gap-3">
                         <span className="rounded-full border border-red-400/40 bg-red-500/15 p-2 text-red-100/85">
@@ -593,7 +595,7 @@ function TrainingAttendanceSection(): ReactElement {
                           </p>
                         </div>
                       </div>
-                    </li>
+                    </RedSurface>
                   );
                 })}
               </ul>
@@ -664,9 +666,11 @@ function TrainingAttendanceSection(): ReactElement {
             </div>
             <ul className="space-y-3">
               {rosterAttendance.map((entry) => (
-                <li
+                <RedSurface
                   key={entry.key}
-                  className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4"
+                  as="li"
+                  tone="glass"
+                  className="rounded-2xl p-4"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
@@ -690,7 +694,7 @@ function TrainingAttendanceSection(): ReactElement {
                   <p className="mt-2 text-xs text-red-100/75">
                     {t(entry.noteKey)}
                   </p>
-                </li>
+                </RedSurface>
               ))}
             </ul>
           </RedSurface>

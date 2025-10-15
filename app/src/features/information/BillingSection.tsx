@@ -49,23 +49,23 @@ type SummaryCardKey = "balance" | "autopay" | "lastPayment";
 
 type SummaryCardConfig = {
   key: SummaryCardKey;
-  tone: string;
+  accentClassName: string;
   amount?: number;
 };
 
 const summaryCards: SummaryCardConfig[] = [
   {
     key: "balance",
-    tone: "border-amber-400/40 bg-amber-500/10 text-amber-100",
+    accentClassName: "border-amber-400/40 bg-amber-500/15",
     amount: 180,
   },
   {
     key: "autopay",
-    tone: "border-red-400/45 bg-red-500/15 text-red-100",
+    accentClassName: "border-red-400/45 bg-red-500/15",
   },
   {
     key: "lastPayment",
-    tone: "border-red-400/25 bg-red-500/10 text-red-50",
+    accentClassName: "border-red-400/30 bg-red-500/12",
     amount: 60,
   },
 ];
@@ -177,7 +177,7 @@ function BillingSection(): ReactElement {
 
         return {
           key: card.key,
-          tone: card.tone,
+          accentClassName: card.accentClassName,
           label: t(`information.billing.summaryCards.${card.key}.label`),
           value:
             typeof amount === "string"
@@ -270,16 +270,18 @@ function BillingSection(): ReactElement {
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {summaryCardContent.map((card) => (
-          <div
+          <RedSurface
             key={card.key}
-            className={`flex flex-col gap-1 rounded-2xl border px-5 py-4 ${card.tone}`}
+            as="article"
+            tone="glass"
+            className={`flex flex-col gap-1 rounded-2xl px-5 py-4 ${card.accentClassName}`}
           >
             <span className="text-xs uppercase tracking-[0.32em] text-red-200/70">
               {card.label}
             </span>
             <span className="text-2xl font-semibold text-red-50">{card.value}</span>
             <span className="text-sm text-red-100/80">{card.helper}</span>
-          </div>
+          </RedSurface>
         ))}
       </div>
 
@@ -311,7 +313,11 @@ function BillingSection(): ReactElement {
           </header>
 
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <dl className="grid flex-1 gap-3 rounded-2xl border border-red-500/20 bg-red-950/35 p-4 sm:grid-cols-3">
+            <RedSurface
+              as="dl"
+              tone="glass"
+              className="grid flex-1 gap-3 rounded-2xl p-4 sm:grid-cols-3"
+            >
               <div className="space-y-1">
                 <dt className="text-xs uppercase tracking-[0.3em] text-red-200/70">
                   {t("information.billing.invoices.pending.label")}
@@ -368,10 +374,13 @@ function BillingSection(): ReactElement {
                   })}
                 </dd>
               </div>
-            </dl>
+            </RedSurface>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-red-500/25">
+          <RedSurface
+            tone="glass"
+            className="overflow-hidden rounded-2xl p-0"
+          >
             <table className="min-w-full divide-y divide-red-500/20 text-left text-sm text-red-50">
               <thead className="bg-red-950/40 text-xs uppercase tracking-[0.3em] text-red-200/70">
                 <tr>
@@ -421,7 +430,7 @@ function BillingSection(): ReactElement {
                 )}
               </tbody>
             </table>
-          </div>
+          </RedSurface>
         </RedSurface>
 
         <div className="space-y-6">
@@ -445,9 +454,10 @@ function BillingSection(): ReactElement {
 
             <div className="space-y-3">
               {paymentMethodItems.map((method) => (
-                <div
+                <RedSurface
                   key={method.id}
-                  className="flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-950/35 p-4"
+                  tone="glass"
+                  className="flex items-start gap-3 rounded-2xl p-4"
                 >
                   <div className="flex h-10 w-10 items-center justify-center rounded-full border border-red-500/30 bg-red-500/15 text-red-100">
                     <CreditCard size={18} />
@@ -462,7 +472,7 @@ function BillingSection(): ReactElement {
                     ) : null}
                     <p className="text-xs text-red-200/70">{method.status}</p>
                   </div>
-                </div>
+                </RedSurface>
               ))}
             </div>
           </RedSurface>
@@ -482,9 +492,11 @@ function BillingSection(): ReactElement {
 
             <ul className="space-y-4">
               {upcomingChargeItems.map((charge) => (
-                <li
+                <RedSurface
                   key={charge.id}
-                  className="flex items-center justify-between gap-3 rounded-2xl border border-red-500/20 bg-red-950/40 px-4 py-3"
+                  as="li"
+                  tone="glass"
+                  className="flex items-center justify-between gap-3 rounded-2xl px-4 py-3"
                 >
                   <div>
                     <p className="text-sm font-semibold text-red-50">{charge.label}</p>
@@ -495,7 +507,7 @@ function BillingSection(): ReactElement {
                   <span className="text-sm font-semibold text-red-100">
                     {charge.amount}
                   </span>
-                </li>
+                </RedSurface>
               ))}
             </ul>
           </RedSurface>

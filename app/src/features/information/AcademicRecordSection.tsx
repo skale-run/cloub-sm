@@ -234,9 +234,10 @@ function CreditOverviewCard({
       </div>
       <div className="grid gap-3 sm:grid-cols-3">
         {CREDIT_DISTRIBUTION.map((creditArea) => (
-          <div
+          <RedSurface
             key={creditArea.key}
-            className="rounded-2xl border border-red-500/20 bg-red-900/30 p-3"
+            tone="glass"
+            className="rounded-2xl p-3"
           >
             <p className="text-[0.65rem] uppercase tracking-[0.3em] text-red-200/60">
               {t(
@@ -253,7 +254,7 @@ function CreditOverviewCard({
                 `information.academic.creditDistribution.${creditArea.key}.context`,
               )}
             </p>
-          </div>
+          </RedSurface>
         ))}
       </div>
     </RedSurface>
@@ -402,9 +403,11 @@ function UpcomingEvaluationsCard({ t }: UpcomingEvaluationsCardProps): ReactElem
           );
 
           return (
-            <li
+            <RedSurface
               key={evaluation.key}
-              className="space-y-1 rounded-2xl border border-red-500/20 bg-red-900/30 p-3"
+              as="li"
+              tone="glass"
+              className="space-y-1 rounded-2xl p-3"
             >
               <p className="text-sm font-semibold text-red-50">
                 {t(
@@ -421,7 +424,7 @@ function UpcomingEvaluationsCard({ t }: UpcomingEvaluationsCardProps): ReactElem
                   date,
                 })}
               </p>
-            </li>
+            </RedSurface>
           );
         })}
       </ul>
@@ -450,9 +453,11 @@ function ChecklistCard({ t }: ChecklistCardProps): ReactElement {
           const Icon = statusConfig.icon;
 
           return (
-            <li
+            <RedSurface
               key={item.key}
-              className="flex flex-col gap-2 rounded-2xl border border-red-500/20 bg-red-900/30 p-4"
+              as="li"
+              tone="glass"
+              className="flex flex-col gap-2 rounded-2xl p-4"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
@@ -480,7 +485,7 @@ function ChecklistCard({ t }: ChecklistCardProps): ReactElement {
                   `information.academic.checklist.items.${item.key}.detail`,
                 )}
               </p>
-            </li>
+            </RedSurface>
           );
         })}
       </ul>
@@ -505,9 +510,11 @@ function AdvisorGuidanceCard({ t }: AdvisorGuidanceCardProps): ReactElement {
       </div>
       <ul className="space-y-3">
         {ADVISOR_NOTES.map((note) => (
-          <li
+          <RedSurface
             key={note.key}
-            className="flex flex-col gap-2 rounded-2xl border border-red-500/20 bg-red-900/30 p-4"
+            as="li"
+            tone="glass"
+            className="flex flex-col gap-2 rounded-2xl p-4"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="space-y-1">
@@ -530,7 +537,7 @@ function AdvisorGuidanceCard({ t }: AdvisorGuidanceCardProps): ReactElement {
                 </span>
               ) : null}
             </div>
-          </li>
+          </RedSurface>
         ))}
       </ul>
     </RedSurface>
