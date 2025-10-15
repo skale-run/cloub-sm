@@ -4,6 +4,7 @@ const express = require("express");
 const helmet = require("helmet");
 
 const membersRouter = require("./src/routes/members");
+const calendarEventsRouter = require("./src/routes/calendar-events");
 const { errorHandler } = require("./src/middleware/error-handler");
 const { notFoundHandler } = require("./src/middleware/not-found");
 const { pool } = require("./src/db/pool");
@@ -28,6 +29,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/members", membersRouter);
+app.use("/api/calendar-events", calendarEventsRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
