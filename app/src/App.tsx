@@ -43,10 +43,25 @@ const AccessSection = lazyWithPreload(
 
 function SectionFallback({ label }: { label: string }) {
   return (
-    <div className="flex min-h-[240px] items-center justify-center text-sm text-red-100/80">
-      <div className="flex items-center gap-2 rounded-full border border-dashed border-red-500/50 px-4 py-2">
-        <span className="h-2 w-2 animate-pulse rounded-full bg-red-300" aria-hidden />
-        <span>{label}</span>
+    <div className="relative isolate flex min-h-[240px] w-full flex-1 items-center justify-center overflow-hidden rounded-3xl border border-red-500/30 bg-gradient-to-br from-red-900/45 via-rose-950/40 to-slate-950/60 px-6 py-10 text-sm text-red-100/80 shadow-[0_18px_48px_rgba(200,24,58,0.2)]">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-60"
+        aria-hidden
+      >
+        <div className="absolute inset-x-16 top-[-40%] h-[140%] rounded-full bg-[radial-gradient(circle_at_top,rgba(248,113,113,0.35),transparent_70%)] blur-2xl" />
+        <div className="absolute inset-12 rounded-[36px] border border-white/5" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(79,70,229,0.15),transparent_65%)]" />
+      </div>
+
+      <div className="relative flex flex-col items-center gap-4" role="status" aria-live="polite">
+        <span className="relative flex h-12 w-12 items-center justify-center">
+          <span className="absolute h-full w-full animate-spin rounded-full border-2 border-red-300/60 border-t-transparent" />
+          <span className="absolute h-4 w-4 animate-ping rounded-full bg-red-200/60" />
+          <span className="relative h-2 w-2 rounded-full bg-red-100" />
+        </span>
+        <span className="rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-[0.2em] text-red-100/90 shadow-inner">
+          {label}
+        </span>
       </div>
     </div>
   );
