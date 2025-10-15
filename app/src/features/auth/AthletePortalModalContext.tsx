@@ -7,10 +7,13 @@ import {
   type ReactNode,
 } from "react";
 
+export type AuthMode = "login" | "register";
+
 type AthletePortalModalContextValue = {
   isOpen: boolean;
-  open: () => void;
+  open: (mode?: AuthMode) => void;
   close: () => void;
+  requestedMode: AuthMode;
 };
 
 const AthletePortalModalContext = createContext<
@@ -25,8 +28,10 @@ export function AthletePortalModalProvider({
   children,
 }: AthletePortalModalProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [requestedMode, setRequestedMode] = useState<AuthMode>("login");
 
-  const open = useCallback(() => {
+  const open = useCallback((mode: AuthMode = "login") => {
+    setRequestedMode(mode);
     setIsOpen(true);
   }, []);
 
@@ -39,8 +44,9 @@ export function AthletePortalModalProvider({
       isOpen,
       open,
       close,
+      requestedMode,
     }),
-    [isOpen, open, close],
+    [close, isOpen, open, requestedMode],
   );
 
   return (

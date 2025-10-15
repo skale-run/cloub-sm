@@ -38,6 +38,10 @@ export const fr = {
         reverted: "Le brouillon a été rétabli sur la dernière version enregistrée du profil.",
         cleared: "Le brouillon du profil a été effacé.",
         deleted: "Profil supprimé. Créez-en un nouveau pour générer un QR code.",
+        saveError:
+          "Impossible de mettre le profil à jour. Vérifiez votre connexion et réessayez.",
+        deleteError:
+          "La suppression du profil a échoué. Veuillez réessayer dans un instant.",
       },
       defaults: {
         teamMember: "Pratiquant de taekwondo",
@@ -107,7 +111,7 @@ export const fr = {
             label: "Rôle",
             placeholder: "Athlète",
           },
-          squadTier: {
+          squad: {
             label: "Escouade / Niveau",
             placeholder: "Escouade d'élite sparring",
           },

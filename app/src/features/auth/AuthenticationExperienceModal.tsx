@@ -10,7 +10,9 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { Activity, Award, BarChart3, Users, X } from "../../lucide-react";
-import { useAthletePortalModal } from "./AthletePortalModalContext";
+import { useAthletePortalModal, type AuthMode } from "./AthletePortalModalContext";
+import { useMember } from "./MemberContext";
+import type { Member } from "./MemberContext";
 
 const highlightConfig = [
   {
@@ -37,8 +39,6 @@ const highlightConfig = [
   },
 ];
 
-type AuthMode = "login" | "register";
-
 const LOGIN_FORM_STORAGE_KEY = "cloub-auth-login-form" as const;
 const REGISTER_FORM_STORAGE_KEY = "cloub-auth-register-form" as const;
 
@@ -60,7 +60,7 @@ type RegisterFormState = {
   email: string;
   password: string;
   role: string;
-  squadTier: string;
+  squad: string;
   emergencyContact: string;
   membershipId: string;
   profilePhotoUrl: string;
@@ -85,7 +85,8 @@ const authCopy: Record<
 const supportEmail = "coach@aerodash.com" as const;
 
 function AuthenticationExperienceModal() {
-  const { isOpen, close } = useAthletePortalModal();
+  const { isOpen, close, requestedMode } = useAthletePortalModal();
+  const { setMember } = useMember();
   const { t } = useTranslation();
   const [mode, setMode] = useState<AuthMode>("login");
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -123,7 +124,7 @@ function AuthenticationExperienceModal() {
         email: "",
         password: "",
         role: "",
-        squadTier: "",
+        squad: "",
         emergencyContact: "",
         membershipId: "",
         profilePhotoUrl: "",
@@ -138,7 +139,7 @@ function AuthenticationExperienceModal() {
           email: "",
           password: "",
           role: "",
-          squadTier: "",
+          squad: "",
           emergencyContact: "",
           membershipId: "",
           profilePhotoUrl: "",
@@ -151,7 +152,7 @@ function AuthenticationExperienceModal() {
           | "email"
           | "password"
           | "role"
-          | "squadTier"
+          | "squad"
           | "emergencyContact"
           | "membershipId"
           | "profilePhotoUrl",
@@ -164,7 +165,7 @@ function AuthenticationExperienceModal() {
         email: parsed.email ?? "",
         password: parsed.password ?? "",
         role: parsed.role ?? "",
-        squadTier: parsed.squadTier ?? "",
+        squad: parsed.squad ?? "",
         emergencyContact: parsed.emergencyContact ?? "",
         membershipId: parsed.membershipId ?? "",
         profilePhotoUrl: parsed.profilePhotoUrl ?? "",
@@ -176,7 +177,7 @@ function AuthenticationExperienceModal() {
         email: "",
         password: "",
         role: "",
-        squadTier: "",
+        squad: "",
         emergencyContact: "",
         membershipId: "",
         profilePhotoUrl: "",
@@ -309,10 +310,12 @@ function AuthenticationExperienceModal() {
   }, [close, isOpen]);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      setMode(requestedMode);
+    } else {
       setMode("login");
     }
-  }, [isOpen]);
+  }, [isOpen, requestedMode]);
 
   const { heading, description, cta } = useMemo(() => {
     const { headingKey, descriptionKey, ctaKey } = authCopy[mode];
@@ -373,7 +376,7 @@ function AuthenticationExperienceModal() {
         });
 
         const payload = (await response.json().catch(() => null)) as
-          | { error?: string }
+          | { error?: string; member?: Member }
           | null;
 
         if (!response.ok) {
@@ -390,15 +393,22 @@ function AuthenticationExperienceModal() {
           return;
         }
 
-        setLoginState({
-          status: "success",
-          message: t("auth.modal.status.login.success"),
-        });
+        if (!payload?.member) {
+          setLoginState({
+            status: "error",
+            message: t("auth.modal.status.generic"),
+          });
+          return;
+        }
+
+        setMember(payload.member);
 
         setLoginForm((previous) => ({
           ...previous,
           password: "",
         }));
+
+        close();
       } catch (error) {
         if (
           (error instanceof DOMException && error.name === "AbortError") ||
@@ -418,7 +428,15 @@ function AuthenticationExperienceModal() {
         }
       }
     },
-    [loginForm.email, loginForm.password, setLoginForm, setLoginState, t],
+    [
+      close,
+      loginForm.email,
+      loginForm.password,
+      setLoginForm,
+      setLoginState,
+      setMember,
+      t,
+    ],
   );
 
   const handleRegisterSubmit = useCallback(
@@ -428,7 +446,7 @@ function AuthenticationExperienceModal() {
       const trimmedFullName = registerForm.fullName.trim();
       const trimmedEmail = registerForm.email.trim();
       const trimmedRole = registerForm.role.trim();
-      const trimmedSquadTier = registerForm.squadTier.trim();
+      const trimmedSquad = registerForm.squad.trim();
       const trimmedEmergencyContact = registerForm.emergencyContact.trim();
       const trimmedMembershipId = registerForm.membershipId.trim();
       const trimmedProfilePhotoUrl = registerForm.profilePhotoUrl.trim();
@@ -452,7 +470,7 @@ function AuthenticationExperienceModal() {
             email: trimmedEmail,
             password: registerForm.password,
             role: trimmedRole,
-            squadTier: trimmedSquadTier,
+            squad: trimmedSquad,
             emergencyContact: trimmedEmergencyContact,
             membershipId: trimmedMembershipId,
             profilePhotoUrl: trimmedProfilePhotoUrl,
@@ -461,7 +479,7 @@ function AuthenticationExperienceModal() {
         });
 
         const payload = (await response.json().catch(() => null)) as
-          | { error?: string }
+          | { error?: string; member?: Member }
           | null;
 
         if (!response.ok) {
@@ -478,12 +496,20 @@ function AuthenticationExperienceModal() {
           return;
         }
 
+        if (!payload?.member) {
+          setRegisterState({
+            status: "error",
+            message: t("auth.modal.status.generic"),
+          });
+          return;
+        }
+
         setRegisterForm({
           fullName: "",
           email: "",
           password: "",
           role: "",
-          squadTier: "",
+          squad: "",
           emergencyContact: "",
           membershipId: "",
           profilePhotoUrl: "",
@@ -493,11 +519,8 @@ function AuthenticationExperienceModal() {
           ...previous,
           email: trimmedEmail,
         }));
-        setMode("login");
-        setLoginState({
-          status: "success",
-          message: t("auth.modal.status.register.success"),
-        });
+        setMember(payload.member);
+        close();
       } catch (error) {
         if (
           (error instanceof DOMException && error.name === "AbortError") ||
@@ -522,15 +545,15 @@ function AuthenticationExperienceModal() {
       registerForm.fullName,
       registerForm.password,
       registerForm.role,
-      registerForm.squadTier,
+      registerForm.squad,
       registerForm.emergencyContact,
       registerForm.membershipId,
       registerForm.profilePhotoUrl,
       setLoginForm,
-      setLoginState,
-      setMode,
+      close,
       setRegisterForm,
       setRegisterState,
+      setMember,
       t,
     ],
   );
@@ -785,18 +808,18 @@ function AuthenticationExperienceModal() {
                     />
                   </label>
                   <label className="block text-sm font-medium text-red-100">
-                    {t("auth.modal.registerForm.squadTier.label")}
+                    {t("auth.modal.registerForm.squad.label")}
                     <input
                       type="text"
-                      name="squadTier"
+                      name="squad"
                       autoComplete="organization"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder={t("auth.modal.registerForm.squadTier.placeholder")}
-                      value={registerForm.squadTier}
+                      placeholder={t("auth.modal.registerForm.squad.placeholder")}
+                      value={registerForm.squad}
                       onChange={(event) =>
                         setRegisterForm((previous) => ({
                           ...previous,
-                          squadTier: event.target.value,
+                          squad: event.target.value,
                         }))
                       }
                     />

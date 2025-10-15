@@ -9,8 +9,8 @@ function formatMember(row) {
     id: row.id,
     fullName: row.full_name,
     email: row.email,
+    squad: row.squad,
     role: row.role,
-    squadTier: row.squad_tier,
     emergencyContact: row.emergency_contact,
     membershipId: row.membership_id,
     profilePhotoUrl: row.profile_photo_url,
@@ -26,7 +26,7 @@ function isValidUuid(value) {
 router.get("/", async (req, res, next) => {
   try {
     const result = await query(
-      `SELECT id, full_name, email, role, squad_tier, emergency_contact, membership_id, profile_photo_url, created_at, updated_at
+      `SELECT id, full_name, email, role, squad, emergency_contact, membership_id, profile_photo_url, created_at, updated_at
        FROM members
        ORDER BY created_at DESC`,
     );
@@ -43,7 +43,7 @@ router.post("/", async (req, res, next) => {
     email,
     password,
     role,
-    squadTier,
+    squad,
     emergencyContact,
     membershipId,
     profilePhotoUrl,
@@ -58,7 +58,7 @@ router.post("/", async (req, res, next) => {
   const normalizedFullName = fullName.trim();
   const normalizedEmail = email.trim().toLowerCase();
   const normalizedRole = typeof role === "string" ? role.trim() : "";
-  const normalizedSquadTier = typeof squadTier === "string" ? squadTier.trim() : "";
+  const normalizedSquad = typeof squad === "string" ? squad.trim() : "";
   const normalizedEmergencyContact =
     typeof emergencyContact === "string" ? emergencyContact.trim() : "";
   const normalizedMembershipId = membershipId.trim();
@@ -87,15 +87,15 @@ router.post("/", async (req, res, next) => {
     const passwordHash = await bcrypt.hash(password, 10);
 
     const result = await query(
-      `INSERT INTO members (full_name, email, password_hash, role, squad_tier, emergency_contact, membership_id, profile_photo_url)
+      `INSERT INTO members (full_name, email, password_hash, role, squad, emergency_contact, membership_id, profile_photo_url)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-       RETURNING id, full_name, email, role, squad_tier, emergency_contact, membership_id, profile_photo_url, created_at, updated_at`,
+       RETURNING id, full_name, email, role, squad, emergency_contact, membership_id, profile_photo_url, created_at, updated_at`,
       [
         normalizedFullName,
         normalizedEmail,
         passwordHash,
         normalizedRole || null,
-        normalizedSquadTier || null,
+        normalizedSquad || null,
         normalizedEmergencyContact || null,
         normalizedMembershipId,
         normalizedProfilePhotoUrl || null,
@@ -105,7 +105,12 @@ router.post("/", async (req, res, next) => {
     res.status(201).json({ member: formatMember(result.rows[0]) });
   } catch (error) {
     if (error.code === "23505") {
-      res.status(409).json({ error: "A member with this email already exists." });
+      const message =
+        error.constraint === "members_membership_id_key"
+          ? "A member with this membership ID already exists."
+          : "A member with this email already exists.";
+
+      res.status(409).json({ error: message });
       return;
     }
 
@@ -122,7 +127,7 @@ router.post("/login", async (req, res, next) => {
 
   try {
     const result = await query(
-      `SELECT id, full_name, email, password_hash, role, squad_tier, emergency_contact, membership_id, profile_photo_url, created_at, updated_at
+      `SELECT id, full_name, email, password_hash, role, squad, emergency_contact, membership_id, profile_photo_url, created_at, updated_at
        FROM members
        WHERE LOWER(email) = LOWER($1)`,
       [email.trim()],
@@ -154,7 +159,7 @@ router.get("/:id", async (req, res, next) => {
 
   try {
     const result = await query(
-      `SELECT id, full_name, email, role, squad_tier, emergency_contact, membership_id, profile_photo_url, created_at, updated_at
+      `SELECT id, full_name, email, role, squad, emergency_contact, membership_id, profile_photo_url, created_at, updated_at
        FROM members
        WHERE id = $1`,
       [id],
@@ -177,7 +182,7 @@ router.put("/:id", async (req, res, next) => {
     email,
     password,
     role,
-    squadTier,
+    squad,
     emergencyContact,
     membershipId,
     profilePhotoUrl,
@@ -212,10 +217,10 @@ router.put("/:id", async (req, res, next) => {
     updates.push(`role = $${values.length}`);
   }
 
-  if (typeof squadTier === "string") {
-    const normalizedSquadTier = squadTier.trim();
-    values.push(normalizedSquadTier || null);
-    updates.push(`squad_tier = $${values.length}`);
+  if (typeof squad === "string") {
+    const normalizedSquad = squad.trim();
+    values.push(normalizedSquad || null);
+    updates.push(`squad = $${values.length}`);
   }
 
   if (typeof emergencyContact === "string") {
@@ -270,7 +275,7 @@ router.put("/:id", async (req, res, next) => {
       `UPDATE members
        SET ${updates.join(", ")}
        WHERE id = $${values.length}
-       RETURNING id, full_name, email, role, squad_tier, emergency_contact, membership_id, profile_photo_url, created_at, updated_at`,
+       RETURNING id, full_name, email, role, squad, emergency_contact, membership_id, profile_photo_url, created_at, updated_at`,
       values,
     );
 
@@ -281,7 +286,12 @@ router.put("/:id", async (req, res, next) => {
     res.json({ member: formatMember(result.rows[0]) });
   } catch (error) {
     if (error.code === "23505") {
-      res.status(409).json({ error: "A member with this email already exists." });
+      const message =
+        error.constraint === "members_membership_id_key"
+          ? "A member with this membership ID already exists."
+          : "A member with this email already exists.";
+
+      res.status(409).json({ error: message });
       return;
     }
 

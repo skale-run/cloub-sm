@@ -38,6 +38,8 @@ export const en = {
         reverted: "Draft reverted to the last saved profile.",
         cleared: "Profile draft cleared.",
         deleted: "Profile deleted. Create a new one to generate a QR code.",
+        saveError: "Couldn't update the profile. Check your connection and try again.",
+        deleteError: "We couldn't remove the profile right now. Please try again shortly.",
       },
       defaults: {
         teamMember: "Taekwondo practitioner",
@@ -107,7 +109,7 @@ export const en = {
             label: "Role",
             placeholder: "Athlete",
           },
-          squadTier: {
+          squad: {
             label: "Squad / Tier",
             placeholder: "Elite sparring squad",
           },
