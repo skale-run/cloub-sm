@@ -1070,21 +1070,21 @@ export const en = {
     billing: {
       heading: "Billing overview",
       description:
-        "Monitor dojang dues, travel levies, and service add-ons in one taekwondo finance dashboard.",
+        "Stay on top of dojang dues, travel levies, and service add-ons from a single taekwondo finance dashboard.",
       balanceBadge: {
-        label: "Balance",
+        label: "Current balance",
         value: "{{amount}}",
       },
       summaryCards: {
         balance: {
           label: "Outstanding balance",
           value: "{{amount}}",
-          helper: "WT Grand Prix travel support · Due Apr 25, 2025",
+          helper: "WT Grand Prix travel support · due Apr 25, 2025",
         },
         autopay: {
-          label: "Next auto-pay",
+          label: "Next auto-pay draft",
           value: "May 01, 2025",
-          helper: "National team residency dues",
+          helper: "National team residency dues · scheduled monthly",
         },
         lastPayment: {
           label: "Last payment received",
@@ -1094,18 +1094,18 @@ export const en = {
       },
       invoices: {
         heading: "Invoices",
-        helper: "Statement history for the current taekwondo season",
+        helper: "Statement history for the current taekwondo season.",
         download: "Download statement",
         sendReceipt: "Send receipt",
         pending: {
           label: "Pending invoices",
           count_one: "{{count}} due",
           count_other: "{{count}} due",
-          total: "{{amount}} outstanding",
+          total: "Totaling {{amount}} outstanding",
         },
         paid: {
           label: "Paid this season",
-          total: "{{amount}}",
+          total: "{{amount}} posted",
           count_one: "Across {{count}} invoice",
           count_other: "Across {{count}} invoices",
         },
@@ -1152,8 +1152,8 @@ export const en = {
       },
       autoPay: {
         heading: "Auto-pay",
-        helper: "Enabled for monthly taekwondo subscriptions",
-        manage: "Manage",
+        helper: "Auto-pay is enabled for monthly taekwondo subscriptions.",
+        manage: "Manage auto-pay",
       },
       paymentMethods: {
         primaryCard: {
@@ -1165,12 +1165,12 @@ export const en = {
         backupAccount: {
           label: "Backup payment method",
           detail: "Checking · First Peninsula Bank",
-          status: "Used for championship travel charges",
+          status: "Reserved for championship travel charges",
         },
       },
       upcomingCharges: {
         heading: "Upcoming charges",
-        helper: "Scheduled across the championship season",
+        helper: "Scheduled across the championship season.",
         items: {
           physiotherapyBlock: {
             label: "Post-tournament physiotherapy block",
