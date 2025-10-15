@@ -13,6 +13,33 @@ export const typographyScale = typographyTokens.scale ?? {};
 export const fontFamilyTokens = typographyTokens.families ?? {};
 export const fontWeightTokens = typographyTokens.weights ?? {};
 
+function unwrapTokenValue(token) {
+  if (token && typeof token === "object" && "$value" in token) {
+    return token.$value;
+  }
+  return token;
+}
+
+function normalizeColorRamps(ramps) {
+  if (!ramps || typeof ramps !== "object") return {};
+
+  return Object.fromEntries(
+    Object.entries(ramps).map(([rampName, rampValues]) => {
+      if (!rampValues || typeof rampValues !== "object") {
+        return [rampName, rampValues];
+      }
+
+      const normalizedRamp = Object.fromEntries(
+        Object.entries(rampValues)
+          .filter(([step]) => !step.startsWith("$"))
+          .map(([step, value]) => [step, unwrapTokenValue(value)]),
+      );
+
+      return [rampName, normalizedRamp];
+    }),
+  );
+}
+
 export const spacingScale = designTokenManifest.spacing ?? {};
 export const layoutTokens = designTokenManifest.layout ?? {};
 export const radiusScale = designTokenManifest.radii ?? {};
@@ -28,7 +55,7 @@ export const motionTokens = {
     "(prefers-reduced-motion: reduce)",
 };
 
-const colorRamps = designTokenManifest.color?.ramps ?? {};
+const colorRamps = normalizeColorRamps(designTokenManifest.color?.ramps);
 const themeColorTokens = cloneTokens(designTokenManifest.color?.themes ?? {});
 
 const lightTheme = themeColorTokens.light ?? {};
