@@ -2,15 +2,17 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { en } from "../locales/en";
 import { ar } from "../locales/ar";
+import { fr } from "../locales/fr";
 
 const resources = {
   en,
   ar,
+  fr,
 } as const;
 
 const LANGUAGE_STORAGE_KEY = "preferred-language";
 type LanguageKey = keyof typeof resources;
-const supportedLanguages = new Set<LanguageKey>(["en", "ar"]);
+const supportedLanguages = new Set<LanguageKey>(["en", "ar", "fr"]);
 
 type LanguagePresentation = {
   direction: "ltr" | "rtl";
@@ -29,6 +31,11 @@ const englishPresentation: LanguagePresentation = {
 const languagePresentations: Record<LanguageKey, LanguagePresentation> = {
   en: englishPresentation,
   ar: { ...englishPresentation },
+  fr: {
+    ...englishPresentation,
+    htmlLang: "fr",
+    locale: "fr-FR",
+  },
 };
 
 export function getLanguagePresentation(language: string): LanguagePresentation {
