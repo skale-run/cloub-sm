@@ -28,7 +28,12 @@ const englishPresentation: LanguagePresentation = {
 
 const languagePresentations: Record<LanguageKey, LanguagePresentation> = {
   en: englishPresentation,
-  ar: { ...englishPresentation },
+  ar: {
+    direction: "rtl",
+    htmlLang: "ar",
+    locale: "ar-MA",
+    numberingSystem: "arab",
+  },
 };
 
 export function getLanguagePresentation(language: string): LanguagePresentation {
