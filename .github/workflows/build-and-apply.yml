@@ -43,7 +43,7 @@ jobs:
         run: npm run build
 
       - name: Verify build output directory
-        working-directory: ./
+        working-directory: ./app
         run: test -d "${BUILD_OUTPUT_DIR}"
 
       - name: Set up QEMU
