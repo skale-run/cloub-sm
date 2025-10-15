@@ -23,6 +23,7 @@ type NavItem = {
   to: RoutePath;
   label: string;
   description: string;
+  status?: "soon";
   Icon: typeof Activity;
 };
 
@@ -70,7 +71,12 @@ function Sidebar({
   const navSections = useMemo<ReadonlyArray<NavSection>>(() => {
     const sections = t("sidebar.sections", { returnObjects: true }) as Array<{
       heading: string;
-      items: Array<{ to: RoutePath; label: string; description: string }>;
+      items: Array<{
+        to: RoutePath;
+        label: string;
+        description: string;
+        status?: "soon";
+      }>;
     }>;
 
     return sections.map((section) => ({
@@ -90,6 +96,8 @@ function Sidebar({
   const seasonSummary = t("sidebar.seasonSummary", {
     returnObjects: true,
   }) as { line1: string; line2: string };
+
+  const soonLabel = t("common.badges.soon");
 
   const handleNavigate = () => {
     if (open) {
@@ -162,18 +170,37 @@ function Sidebar({
               <nav className="grid gap-2">
                 {section.items.map((item) => {
                   const isActive = currentPath === item.to;
+                  const isComingSoon = item.status === "soon";
                   return (
                     <a
                       key={item.to}
                       href={item.to}
-                      onClick={(event) => handleItemClick(event, item.to)}
-                      onPointerEnter={() => onPrefetchSection?.(item.to)}
-                      onFocus={() => onPrefetchSection?.(item.to)}
+                      onClick={(event) => {
+                        if (isComingSoon) {
+                          event.preventDefault();
+                          return;
+                        }
+
+                        handleItemClick(event, item.to);
+                      }}
+                      onPointerEnter={
+                        isComingSoon
+                          ? undefined
+                          : () => onPrefetchSection?.(item.to)
+                      }
+                      onFocus={
+                        isComingSoon ? undefined : () => onPrefetchSection?.(item.to)
+                      }
                       aria-current={isActive ? "page" : undefined}
+                      aria-disabled={isComingSoon || undefined}
                       className={`group flex items-center gap-4 rounded-2xl border px-4 py-3 text-sm transition hover:border-red-400/50 hover:bg-red-950/55 hover:text-red-50 ${
                         isActive
                           ? "border-red-400/70 bg-red-950/60 text-red-50"
                           : "border-red-500/25 bg-red-950/35 text-red-100/85"
+                      } ${
+                        isComingSoon
+                          ? "cursor-not-allowed opacity-70 hover:border-red-500/25 hover:bg-red-950/35 hover:text-red-100/85"
+                          : ""
                       }`}
                     >
                       <span
@@ -186,7 +213,14 @@ function Sidebar({
                         <item.Icon className="h-5 w-5" aria-hidden />
                       </span>
                       <span className="flex flex-col">
-                        <span className="font-semibold">{item.label}</span>
+                        <span className="flex items-center gap-2 font-semibold">
+                          {item.label}
+                          {isComingSoon ? (
+                            <span className="rounded-full border border-red-400/70 bg-red-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-red-50">
+                              {soonLabel}
+                            </span>
+                          ) : null}
+                        </span>
                         <span className="text-xs text-red-200/70">
                           {item.description}
                         </span>

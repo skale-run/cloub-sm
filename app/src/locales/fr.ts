@@ -9,6 +9,9 @@ export const fr = {
           fr: "Français",
         },
       },
+      badges: {
+        soon: "Bientôt",
+      },
       navigation: {
         open: "Ouvrir la navigation",
         close: "Fermer la navigation",
@@ -206,6 +209,7 @@ export const fr = {
               to: "/billing",
               label: "Vue d'ensemble de la facturation",
               description: "Suivez factures et paiements",
+              status: "soon",
             },
             {
               to: "/training-attendance",
