@@ -11,6 +11,7 @@ app.use(
     contentSecurityPolicy: false,
   }),
 );
+
 // Serve static assets from the build directory
 app.use(express.static(path.join(__dirname)));
 
