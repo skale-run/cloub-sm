@@ -36,16 +36,20 @@ function LanguageSwitcher() {
           onChange={handleChange}
           className="appearance-none rounded-2xl border border-red-500/40 bg-red-950/60 px-3 py-1.5 pr-9 text-red-50 shadow-inner transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
         >
-          {languages.map((language) => (
-            <option
-              key={language.code}
-              value={language.code}
-              aria-label={t(`languageSwitcher.languages.${language.code}`)}
-              title={t(`languageSwitcher.languages.${language.code}`)}
-            >
-              {language.flag}
-            </option>
-          ))}
+          {languages.map((language) => {
+            const languageName = t(`languageSwitcher.languages.${language.code}`);
+
+            return (
+              <option
+                key={language.code}
+                value={language.code}
+                aria-label={languageName}
+                title={languageName}
+              >
+                {language.flag} {languageName}
+              </option>
+            );
+          })}
         </select>
         <span
           aria-hidden
