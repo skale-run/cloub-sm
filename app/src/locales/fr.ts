@@ -135,6 +135,18 @@ export const fr = {
           intro: "Envoyez un message à",
           outro: "ou discutez avec votre équipe d'entraîneurs sur le canal du groupe.",
         },
+        status: {
+          network: "Impossible de joindre le serveur. Veuillez réessayer dans un instant.",
+          generic: "Une erreur est survenue. Veuillez réessayer.",
+          login: {
+            success: "Bon retour ! Vous êtes connecté.",
+            invalid: "Impossible de trouver un compte avec cet e-mail et ce mot de passe.",
+          },
+          register: {
+            success: "Compte créé. Vous pouvez vous connecter avec vos nouveaux identifiants.",
+            duplicate: "Un compte existe déjà avec cet e-mail.",
+          },
+        },
       },
     },
     sidebar: {

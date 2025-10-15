@@ -135,6 +135,18 @@ export const en = {
           intro: "Drop a note to",
           outro: "or chat with your coaching team in the squad channel.",
         },
+        status: {
+          network: "We couldn't reach the server. Please try again in a moment.",
+          generic: "Something went wrong. Please try again.",
+          login: {
+            success: "Welcome back! You're signed in.",
+            invalid: "We couldn't find an account with that email and password.",
+          },
+          register: {
+            success: "Account created. You can sign in with your new credentials.",
+            duplicate: "An account with that email already exists.",
+          },
+        },
       },
     },
     sidebar: {

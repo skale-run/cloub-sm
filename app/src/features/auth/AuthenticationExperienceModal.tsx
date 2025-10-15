@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { Activity, Award, BarChart3, Users, X } from "../../lucide-react";
 import { useAthletePortalModal } from "./AthletePortalModalContext";
@@ -32,6 +39,14 @@ type AuthMode = "login" | "register";
 
 const LOGIN_FORM_STORAGE_KEY = "cloub-auth-login-form" as const;
 const REGISTER_FORM_STORAGE_KEY = "cloub-auth-register-form" as const;
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
+
+type SubmissionState =
+  | { status: "idle" }
+  | { status: "submitting" }
+  | { status: "success"; message: string }
+  | { status: "error"; message: string };
 
 type LoginFormState = {
   email: string;
@@ -68,6 +83,7 @@ function AuthenticationExperienceModal() {
   const [mode, setMode] = useState<AuthMode>("login");
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
+  const activeRequestRef = useRef<AbortController | null>(null);
   const [loginForm, setLoginForm] = useState<LoginFormState>(() => {
     if (typeof window === "undefined") {
       return { email: "", password: "" };
@@ -117,6 +133,12 @@ function AuthenticationExperienceModal() {
       return { fullName: "", email: "", password: "" };
     }
   });
+  const [loginState, setLoginState] = useState<SubmissionState>({
+    status: "idle",
+  });
+  const [registerState, setRegisterState] = useState<SubmissionState>({
+    status: "idle",
+  });
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -139,6 +161,22 @@ function AuthenticationExperienceModal() {
       JSON.stringify(registerForm),
     );
   }, [registerForm]);
+
+  useEffect(() => () => {
+    activeRequestRef.current?.abort();
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) {
+      if (activeRequestRef.current) {
+        activeRequestRef.current.abort();
+        activeRequestRef.current = null;
+      }
+
+      setLoginState({ status: "idle" });
+      setRegisterState({ status: "idle" });
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -198,6 +236,186 @@ function AuthenticationExperienceModal() {
       })),
     [t],
   );
+
+  const handleModeChange = useCallback(
+    (value: AuthMode) => {
+      setMode(value);
+
+      if (value === "login") {
+        setRegisterState({ status: "idle" });
+      } else {
+        setLoginState({ status: "idle" });
+      }
+    },
+    [setMode, setLoginState, setRegisterState],
+  );
+
+  const handleLoginSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      const controller = new AbortController();
+      if (activeRequestRef.current) {
+        activeRequestRef.current.abort();
+      }
+      activeRequestRef.current = controller;
+
+      setLoginState({ status: "submitting" });
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/members/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: loginForm.email.trim(),
+            password: loginForm.password,
+          }),
+          signal: controller.signal,
+        });
+
+        const payload = (await response.json().catch(() => null)) as
+          | { error?: string }
+          | null;
+
+        if (!response.ok) {
+          const message =
+            payload?.error ??
+            (response.status === 401
+              ? t("auth.modal.status.login.invalid")
+              : t("auth.modal.status.generic"));
+
+          setLoginState({
+            status: "error",
+            message,
+          });
+          return;
+        }
+
+        setLoginState({
+          status: "success",
+          message: t("auth.modal.status.login.success"),
+        });
+
+        setLoginForm((previous) => ({
+          ...previous,
+          password: "",
+        }));
+      } catch (error) {
+        if (
+          (error instanceof DOMException && error.name === "AbortError") ||
+          (error instanceof Error && error.name === "AbortError")
+        ) {
+          return;
+        }
+
+        console.error("Failed to sign in", error);
+        setLoginState({
+          status: "error",
+          message: t("auth.modal.status.network"),
+        });
+      } finally {
+        if (activeRequestRef.current === controller) {
+          activeRequestRef.current = null;
+        }
+      }
+    },
+    [loginForm.email, loginForm.password, setLoginForm, setLoginState, t],
+  );
+
+  const handleRegisterSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      const trimmedFullName = registerForm.fullName.trim();
+      const trimmedEmail = registerForm.email.trim();
+
+      const controller = new AbortController();
+      if (activeRequestRef.current) {
+        activeRequestRef.current.abort();
+      }
+      activeRequestRef.current = controller;
+
+      setRegisterState({ status: "submitting" });
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/members`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName: trimmedFullName,
+            email: trimmedEmail,
+            password: registerForm.password,
+          }),
+          signal: controller.signal,
+        });
+
+        const payload = (await response.json().catch(() => null)) as
+          | { error?: string }
+          | null;
+
+        if (!response.ok) {
+          const message =
+            payload?.error ??
+            (response.status === 409
+              ? t("auth.modal.status.register.duplicate")
+              : t("auth.modal.status.generic"));
+
+          setRegisterState({
+            status: "error",
+            message,
+          });
+          return;
+        }
+
+        setRegisterForm({ fullName: "", email: "", password: "" });
+        setRegisterState({ status: "idle" });
+        setLoginForm((previous) => ({
+          ...previous,
+          email: trimmedEmail,
+        }));
+        setMode("login");
+        setLoginState({
+          status: "success",
+          message: t("auth.modal.status.register.success"),
+        });
+      } catch (error) {
+        if (
+          (error instanceof DOMException && error.name === "AbortError") ||
+          (error instanceof Error && error.name === "AbortError")
+        ) {
+          return;
+        }
+
+        console.error("Failed to create account", error);
+        setRegisterState({
+          status: "error",
+          message: t("auth.modal.status.network"),
+        });
+      } finally {
+        if (activeRequestRef.current === controller) {
+          activeRequestRef.current = null;
+        }
+      }
+    },
+    [
+      registerForm.email,
+      registerForm.fullName,
+      registerForm.password,
+      setLoginForm,
+      setLoginState,
+      setMode,
+      setRegisterForm,
+      setRegisterState,
+      t,
+    ],
+  );
+
+  const isLoginSubmitting = loginState.status === "submitting";
+  const isRegisterSubmitting = registerState.status === "submitting";
 
   if (!isOpen) {
     return null;
@@ -260,7 +478,7 @@ function AuthenticationExperienceModal() {
                   <button
                     key={option.value}
                     type="button"
-                    onClick={() => setMode(option.value)}
+                    onClick={() => handleModeChange(option.value)}
                     className={`flex-1 rounded-full px-6 py-2 font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400 ${
                       mode === option.value
                         ? "bg-red-500 text-red-50 shadow-[0_18px_45px_rgba(220,38,38,0.45)]"
@@ -277,9 +495,8 @@ function AuthenticationExperienceModal() {
                 <form
                   className="space-y-4"
                   aria-label={t("auth.modal.aria.loginForm")}
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                  }}
+                  aria-busy={isLoginSubmitting}
+                  onSubmit={handleLoginSubmit}
                 >
                   <label className="block text-sm font-medium text-red-100">
                     {t("auth.modal.loginForm.email.label")}
@@ -319,10 +536,29 @@ function AuthenticationExperienceModal() {
                   </label>
                   <button
                     type="submit"
-                    className="w-full rounded-2xl bg-gradient-to-r from-red-400 via-red-500 to-amber-300 px-4 py-3 text-base font-semibold text-slate-950 shadow-[0_25px_65px_rgba(220,38,38,0.45)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+                    disabled={isLoginSubmitting}
+                    className="w-full rounded-2xl bg-gradient-to-r from-red-400 via-red-500 to-amber-300 px-4 py-3 text-base font-semibold text-slate-950 shadow-[0_25px_65px_rgba(220,38,38,0.45)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200 disabled:cursor-not-allowed disabled:opacity-70"
                   >
-                    {cta}
+                    {isLoginSubmitting ? `${cta}…` : cta}
                   </button>
+                  {loginState.status === "error" && (
+                    <p
+                      className="text-center text-xs text-red-200/85"
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      {loginState.message}
+                    </p>
+                  )}
+                  {loginState.status === "success" && (
+                    <p
+                      className="text-center text-xs text-emerald-200/85"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      {loginState.message}
+                    </p>
+                  )}
                   <p className="text-center text-xs text-red-200/75">
                     {t("auth.modal.loginForm.forgotPassword")}
                   </p>
@@ -331,9 +567,8 @@ function AuthenticationExperienceModal() {
                 <form
                   className="space-y-4"
                   aria-label={t("auth.modal.aria.registerForm")}
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                  }}
+                  aria-busy={isRegisterSubmitting}
+                  onSubmit={handleRegisterSubmit}
                 >
                   <label className="block text-sm font-medium text-red-100">
                     {t("auth.modal.registerForm.fullName.label")}
@@ -379,6 +614,7 @@ function AuthenticationExperienceModal() {
                       type="password"
                       name="password"
                       autoComplete="new-password"
+                      minLength={8}
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                       placeholder={t(
                         "auth.modal.registerForm.password.placeholder",
@@ -395,10 +631,20 @@ function AuthenticationExperienceModal() {
                   </label>
                   <button
                     type="submit"
-                    className="w-full rounded-2xl bg-gradient-to-r from-red-500 via-amber-400 to-orange-300 px-4 py-3 text-base font-semibold text-slate-950 shadow-[0_25px_70px_rgba(220,38,38,0.42)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+                    disabled={isRegisterSubmitting}
+                    className="w-full rounded-2xl bg-gradient-to-r from-red-500 via-amber-400 to-orange-300 px-4 py-3 text-base font-semibold text-slate-950 shadow-[0_25px_70px_rgba(220,38,38,0.42)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200 disabled:cursor-not-allowed disabled:opacity-70"
                   >
-                    {cta}
+                    {isRegisterSubmitting ? `${cta}…` : cta}
                   </button>
+                  {registerState.status === "error" && (
+                    <p
+                      className="text-center text-xs text-red-200/85"
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      {registerState.message}
+                    </p>
+                  )}
                   <p className="text-center text-xs text-red-200/75">
                     {t("auth.modal.registerForm.disclaimer")}
                   </p>
