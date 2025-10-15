@@ -342,6 +342,17 @@ export function applyThemeToDocument(mode, target) {
     root.style.setProperty(cssVar, String(value ?? ""));
   });
 
+  const accentColor = cssAliases["--accent-color"];
+  if (accentColor != null && accentColor !== "") {
+    root.style.accentColor = String(accentColor);
+    root.style.setProperty("accent-color", String(accentColor));
+  } else {
+    root.style.removeProperty("accent-color");
+    if ("accentColor" in root.style) {
+      root.style.accentColor = "";
+    }
+  }
+
   // Apply dataset + color-scheme
   root.dataset.theme = resolvedMode;
   root.dataset.colorScheme = resolvedMode;
