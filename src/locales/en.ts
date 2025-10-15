@@ -219,34 +219,6 @@ export const en = {
         { label: "Sleep score", value: "7h 10m" },
         { label: "Hydration", value: "On target" },
       ],
-      memberSnapshot: {
-        heading: "Member snapshot",
-        memberCard: {
-          label: "Member card",
-          status: "Active",
-          idLabel: "ID",
-          roleLabel: "Role",
-          squadLabel: "Squad",
-        },
-        details: {
-          role: {
-            label: "Role",
-            fallback: "Assign a role",
-          },
-          squad: {
-            label: "Squad",
-            fallback: "Update squad to personalise drills",
-          },
-          membershipId: {
-            label: "Membership ID",
-            fallback: "Pending assignment",
-          },
-        },
-        complete: "Profile complete — masters can access the latest details.",
-        nextUpdate: "Next update: {{field}}.",
-        emptyState:
-          "Save your athlete profile to unlock tailored navigation insights.",
-      },
       seasonSummary: {
         line1: "Season 2025 · Elite Dan Team",
         line2: "Next rest day: Sun, 20 Apr",
