@@ -10,6 +10,21 @@
     sans-serif
   );
   accent-color: var(--accent-color, var(--color-primary, #c8183a));
+
+  --theme-focus-ring: var(--color-intent-info, #0ea5e9);
+  --theme-focus-ring-outer: rgb(14 165 233 / 32%);
+  --focus-ring-size: 3px;
+  --focus-ring-offset: 2px;
+  --focus-ring-shadow: 0 0 0 calc(var(--focus-ring-size) * 2)
+    color-mix(
+      in srgb,
+      var(--theme-focus-ring-outer, rgb(14 165 233 / 32%)) 65%,
+      transparent
+    );
+  --focus-ring-transition: outline-color var(--motion-duration-short, 220ms)
+      var(--motion-easing-standard, ease),
+    box-shadow var(--motion-duration-short, 220ms)
+      var(--motion-easing-standard, ease);
   --app-border-color: var(
     --theme-border-ambient,
     color-mix(
@@ -64,7 +79,7 @@
   );
   --app-header-divider: var(
     --theme-header-divider,
-    rgba(255, 172, 198, 0.55)
+    rgb(255 172 198 / 55%)
   );
 }
 
@@ -103,6 +118,13 @@ body {
   -webkit-font-smoothing: antialiased;
   font-synthesis: none;
   text-rendering: optimizelegibility;
+  transition:
+    background-color var(--motion-duration-medium, 320ms)
+      var(--motion-easing-standard, ease),
+    color var(--motion-duration-short, 220ms)
+      var(--motion-easing-standard, ease),
+    background-image var(--motion-duration-long, 480ms)
+      var(--motion-easing-standard, ease);
 }
 
 :where(.border, .border-2, .border-4, .border-8):not(.border-transparent) {
@@ -120,6 +142,7 @@ body {
 }
 
 @supports (mask-composite: exclude) or (-webkit-mask-composite: xor) {
+  /* stylelint-disable property-no-vendor-prefix */
   :where(.border, .border-2, .border-4, .border-8):not(.border-transparent)::after {
     content: "";
     position: absolute;
@@ -143,6 +166,7 @@ body {
     padding: 1px;
     opacity: 0.9;
   }
+  /* stylelint-enable property-no-vendor-prefix */
 }
 
 #root,
@@ -154,6 +178,15 @@ body {
 ::selection {
   background: var(--app-selection-bg);
   color: var(--app-selection-fg);
+}
+
+:focus-visible {
+  outline: var(--focus-ring-size) solid
+    var(--theme-focus-ring, var(--color-intent-info, #0ea5e9));
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: var(--focus-ring-shadow);
+  border-radius: var(--focus-ring-radius, inherit);
+  transition: var(--focus-ring-transition);
 }
 
 a {
@@ -176,6 +209,16 @@ select {
 img {
   max-width: 100%;
   display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :focus-visible {
+    transition: none;
+  }
+
+  body {
+    transition: none;
+  }
 }
 
 .app-header {

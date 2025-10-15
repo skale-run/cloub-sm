@@ -191,11 +191,6 @@ const themeAliasTokens =
     ]),
   );
 
-export const cssVariableTokenMap = cssVariableTokenBlueprintByMode;
-
-export const themeTokens = semanticColorTokens;
-export const themeAliases = themeAliasTokens;
-
 const componentDesignTokens = {
   button: {
     light: componentButtonTokensLight,
@@ -206,6 +201,51 @@ const componentDesignTokens = {
     dark: componentBadgeTokensDark,
   },
 };
+
+export const cssVariableTokenMap = cssVariableTokenBlueprintByMode;
+
+export const themeTokens = semanticColorTokens;
+export const themeAliases = themeAliasTokens;
+
+export function getThemeSnapshot(mode = DEFAULT_THEME_MODE) {
+  const resolvedMode = resolveThemeMode(mode);
+  const themeDefinition = semanticColorTokens[resolvedMode] ?? {};
+  const {
+    components: inlineComponentTokens = {},
+    ...themeWithoutComponents
+  } = themeDefinition;
+
+  const { name: themeDisplayName, ...semanticPrimitives } =
+    themeWithoutComponents;
+
+  const componentNames = new Set([
+    ...Object.keys(componentDesignTokens),
+    ...Object.keys(inlineComponentTokens),
+  ]);
+
+  const componentTokensSnapshot = Object.fromEntries(
+    [...componentNames].map((componentName) => [
+      componentName,
+      {
+        ...(inlineComponentTokens?.[componentName] ?? {}),
+        ...(componentDesignTokens[componentName]?.[resolvedMode] ?? {}),
+      },
+    ]),
+  );
+
+  const resolvedName =
+    typeof themeDisplayName === "string" && themeDisplayName.trim().length > 0
+      ? themeDisplayName.trim()
+      : getThemeName(resolvedMode) ?? resolvedMode;
+
+  return {
+    mode: resolvedMode,
+    name: resolvedName,
+    semanticTokens: semanticPrimitives,
+    componentTokens: componentTokensSnapshot,
+    aliasTokens: themeAliasTokens[resolvedMode] ?? {},
+  };
+}
 
 export const designTokens = {
   color: {
@@ -246,6 +286,17 @@ function resolveThemeMode(candidate) {
     }
   }
   return DEFAULT_THEME_MODE;
+}
+
+function getThemeName(mode) {
+  const definition = semanticColorTokens[mode];
+  if (!definition) return null;
+  const candidate = definition.name;
+  if (typeof candidate !== "string") {
+    return null;
+  }
+  const trimmed = candidate.trim();
+  return trimmed.length > 0 ? trimmed : null;
 }
 
 function applyGlobalTokens(root) {
@@ -362,6 +413,13 @@ export function applyThemeToDocument(mode, target) {
   root.style.setProperty("color-scheme", colorScheme);
   root.style.setProperty("--theme-mode", resolvedMode);
   root.style.setProperty("--theme-source", themeSource);
+
+  const themeName = getThemeName(resolvedMode);
+  if (themeName) {
+    root.dataset.themeName = themeName;
+  } else {
+    delete root.dataset.themeName;
+  }
 
   // If you want body to pick up the gradient automatically:
   // You can reference var(--app-bg-image) in your global CSS

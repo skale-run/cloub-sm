@@ -391,6 +391,14 @@
           "$type": "color",
           "$value": "{color.themes.light.textInverse}"
         },
+        "focusRing": {
+          "$type": "color",
+          "$value": "{color.ramps.info.500}"
+        },
+        "focusRingOuter": {
+          "$type": "color",
+          "$value": "rgba(14, 165, 233, 0.32)"
+        },
         "headerGlowPrimary": {
           "$type": "color",
           "$value": "rgba(200, 24, 58, 0.2)"
@@ -533,6 +541,14 @@
         "selectionFg": {
           "$type": "color",
           "$value": "{color.themes.dark.textInverse}"
+        },
+        "focusRing": {
+          "$type": "color",
+          "$value": "{color.ramps.info.300}"
+        },
+        "focusRingOuter": {
+          "$type": "color",
+          "$value": "rgba(56, 189, 248, 0.38)"
         },
         "headerGlowPrimary": {
           "$type": "color",
@@ -2545,6 +2561,14 @@
           "$type": "color",
           "$value": "{color.themes.light.headerDivider}"
         },
+        "--theme-focus-ring": {
+          "$type": "color",
+          "$value": "{color.themes.light.focusRing}"
+        },
+        "--theme-focus-ring-outer": {
+          "$type": "color",
+          "$value": "{color.themes.light.focusRingOuter}"
+        },
         "--color-intent-info": {
           "$type": "color",
           "$value": "{color.themes.light.info}"
@@ -3650,6 +3674,14 @@
         "--theme-header-divider": {
           "$type": "color",
           "$value": "{color.themes.dark.headerDivider}"
+        },
+        "--theme-focus-ring": {
+          "$type": "color",
+          "$value": "{color.themes.dark.focusRing}"
+        },
+        "--theme-focus-ring-outer": {
+          "$type": "color",
+          "$value": "{color.themes.dark.focusRingOuter}"
         },
         "--color-intent-info": {
           "$type": "color",
