@@ -31,18 +31,18 @@ function Header({
   const ExpandIcon = isRTL ? ChevronLeft : ChevronRight;
 
   return (
-    <header className="app-header sticky top-0 z-40 border-b border-red-500/40 bg-red-950/80 px-2 backdrop-blur-xl">
+    <header className="app-header sticky top-0 z-40 px-3 py-3 sm:px-6 lg:px-8">
       <div
         className={cn(
-          "relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between gap-4 rounded-3xl px-3 py-4 sm:px-6 lg:px-8",
+          "relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between gap-4 text-red-50",
           !isSidebarOpen ? "lg:max-w-none" : undefined,
         )}
       >
-        <div className="flex flex-1 items-center gap-3 text-red-50">
+        <div className="flex flex-1 items-center gap-3">
           <button
             type="button"
             onClick={onToggleSidebar}
-            className="group inline-flex items-center gap-2 rounded-2xl border border-red-500/30 bg-red-950/60 p-1.5 text-red-100 transition hover:border-red-300/60 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+            className="group inline-flex items-center gap-2 rounded-2xl bg-red-900/20 p-1.5 text-red-100 transition hover:bg-red-900/35 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
             aria-label={
               isSidebarOpen
                 ? t("aria.toggleNavigation.close")
@@ -51,7 +51,7 @@ function Header({
             aria-expanded={isSidebarOpen}
             aria-controls="app-sidebar"
           >
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-red-900/60 text-red-100 transition group-hover:bg-red-900/80">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-red-900/40 text-red-100 transition group-hover:bg-red-900/60">
               <Menu aria-hidden className="h-5 w-5 lg:hidden" />
               {isSidebarOpen ? (
                 <CollapseIcon aria-hidden className="hidden h-5 w-5 lg:block" />
@@ -69,7 +69,7 @@ function Header({
           <span className="hidden text-sm font-medium text-red-100/80 sm:inline">
             {userFullName}
           </span>
-          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-red-400/30 bg-red-900/50 text-base font-semibold uppercase tracking-wider text-red-50">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-red-900/50 text-base font-semibold uppercase tracking-wider text-red-50 shadow-[0_0_24px_rgba(232,56,86,0.15)]">
             {userInitials}
           </span>
         </div>
