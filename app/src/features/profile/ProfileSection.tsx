@@ -8,6 +8,7 @@ import type {
   KeyboardEvent,
 } from "react";
 import RedSurface from "../../components/RedSurface";
+import { cn } from "../../lib/cn";
 import type { Profile } from "./profileTypes";
 
 type ProfileSectionProps = {
@@ -202,7 +203,7 @@ function ProfileSection({
             {t("profile.heading.description")}
           </p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-red-400/50 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
+        <span className="inline-flex items-center gap-2 rounded-full border border-red-400/35 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
           {t("profile.heading.badge")}
         </span>
       </div>
@@ -211,12 +212,12 @@ function ProfileSection({
         <RedSurface
           as="form"
           tone="muted"
-          className="p-6 text-red-50"
+          className="flex flex-col gap-8 p-6 text-red-50"
           onSubmit={onSaveProfile}
         >
-          <div className="mb-6">
+          <div className="space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
+              <div className="space-y-1">
                 <h3 className="text-lg font-semibold text-red-50">
                   {t("profile.photo.title")}
                 </h3>
@@ -228,14 +229,16 @@ function ProfileSection({
                 <button
                   type="button"
                   onClick={handleRemoveImage}
-                  className="inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-950/40 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-red-100 transition hover:border-red-400/60 hover:bg-red-500/20 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+                  className="inline-flex items-center justify-center rounded-2xl border border-red-400/35 bg-red-950/35 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-red-100 transition hover:border-red-300/60 hover:bg-red-500/20 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
                 >
                   {t("profile.actions.remove")}
                 </button>
               ) : null}
             </div>
 
-            <div
+            <RedSurface
+              as="div"
+              tone="dashed"
               role="button"
               tabIndex={0}
               onClick={handleBrowseClick}
@@ -244,32 +247,33 @@ function ProfileSection({
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              className={`mt-4 flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-10 text-center transition ${
+              className={cn(
+                "flex flex-col items-center justify-center gap-3 px-6 py-10 text-center text-red-200/80 transition",
                 isDragging
-                  ? "border-red-300/80 bg-red-500/10"
-                  : "border-red-400/40 bg-red-950/40 hover:border-red-300/70 hover:bg-red-900/40"
-              }`}
+                  ? "border-red-300/80 bg-red-500/15 text-red-100"
+                  : "border-red-400/40 bg-red-950/35 hover:border-red-300/65 hover:bg-red-900/45 hover:text-red-100",
+              )}
             >
               {profileDraft.profileImage ? (
                 <>
                   <img
                     src={profileDraft.profileImage}
                     alt={t("profile.photo.uploadedAlt")}
-                    className="h-28 w-28 rounded-full border border-red-400/40 object-cover shadow-[0_12px_30px_rgba(127,29,29,0.45)]"
+                    className="h-28 w-28 rounded-full border border-red-400/40 object-cover shadow-[0_16px_45px_rgba(127,29,29,0.45)]"
                   />
-                  <p className="text-sm text-red-200/80">
+                  <p className="text-sm text-red-100/85">
                     {t("profile.photo.uploaded.hint")}
                   </p>
-                  <p className="text-xs text-red-200/60">
+                  <p className="text-xs text-red-200/65">
                     {t("profile.photo.uploaded.note")}
                   </p>
                 </>
               ) : (
                 <>
-                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-red-400/30 bg-red-950/60 text-red-200">
+                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-red-400/30 bg-red-950/55 text-red-200">
                     <Upload aria-hidden className="h-6 w-6" />
                   </span>
-                  <p className="text-sm font-medium text-red-100">
+                  <p className="text-sm font-semibold text-red-100">
                     {t("profile.photo.empty.heading")}
                   </p>
                   <p className="text-xs text-red-200/65">
@@ -277,7 +281,7 @@ function ProfileSection({
                   </p>
                 </>
               )}
-            </div>
+            </RedSurface>
             <input
               ref={fileInputRef}
               type="file"
@@ -286,7 +290,7 @@ function ProfileSection({
               onChange={handleInputChange}
             />
             {uploadError ? (
-              <p className="mt-2 text-xs text-red-200/80">{uploadError}</p>
+              <p className="text-xs text-red-200/80">{uploadError}</p>
             ) : null}
           </div>
 
@@ -303,7 +307,7 @@ function ProfileSection({
                     }
                     placeholder={placeholder}
                     required={required}
-                    className="rounded-2xl border border-red-400/35 bg-red-950/60 px-4 py-3 text-red-50 placeholder:text-red-200/60 focus:border-red-400/60 focus:outline-none focus:ring-2 focus:ring-red-400/40"
+                    className="rounded-2xl border border-red-400/30 bg-red-950/50 px-4 py-3 text-red-50 placeholder:text-red-200/60 transition focus:border-red-300/60 focus:outline-none focus:ring-2 focus:ring-red-400/35"
                   />
                   {helperText ? (
                     <span className="text-xs text-red-200/70">{helperText}</span>
@@ -313,7 +317,7 @@ function ProfileSection({
             )}
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3">
             <button
               type="submit"
               className="inline-flex items-center justify-center rounded-2xl border border-red-400/40 bg-red-500/20 px-5 py-2.5 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-400/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
@@ -323,14 +327,14 @@ function ProfileSection({
             <button
               type="button"
               onClick={onResetProfile}
-              className="inline-flex items-center justify-center rounded-2xl border border-red-400/35 bg-red-950/40 px-5 py-2.5 text-sm font-semibold text-red-100 transition hover:border-red-400/55 hover:bg-red-900/50 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              className="inline-flex items-center justify-center rounded-2xl border border-red-400/30 bg-red-950/35 px-5 py-2.5 text-sm font-semibold text-red-100 transition hover:border-red-300/55 hover:bg-red-900/45 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
             >
               {t("profile.actions.reset")}
             </button>
             <button
               type="button"
               onClick={onDeleteProfile}
-              className="inline-flex items-center justify-center rounded-2xl border border-red-400/50 bg-red-500/15 px-5 py-2.5 text-sm font-semibold text-red-200 transition hover:border-red-400/70 hover:bg-red-500/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              className="inline-flex items-center justify-center rounded-2xl border border-red-400/45 bg-red-500/15 px-5 py-2.5 text-sm font-semibold text-red-200 transition hover:border-red-400/65 hover:bg-red-500/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
             >
               {t("profile.actions.delete")}
             </button>
@@ -340,7 +344,7 @@ function ProfileSection({
             <p
               role="status"
               aria-live="polite"
-              className="mt-4 inline-flex rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-2 text-sm text-red-100"
+              className="inline-flex rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-2 text-sm text-red-100"
             >
               {statusMessage}
             </p>
@@ -473,25 +477,31 @@ function ProfileSection({
             <ul className="space-y-3">
               {achievements.length > 0 ? (
                 achievements.map((item, index) => (
-                  <li
+                  <RedSurface
+                    as="li"
+                    tone="glass"
                     key={`${item}-${index}`}
-                    className="flex items-center justify-between gap-3 rounded-2xl border border-red-400/25 bg-red-950/35 px-4 py-3 text-sm"
+                    className="flex items-center justify-between gap-3 rounded-2xl px-4 py-3 text-sm text-red-100"
                   >
-                    <span className="text-red-100">{item}</span>
+                    <span className="text-red-100/95">{item}</span>
                     <button
                       type="button"
                       onClick={() => onRemoveAchievement(index)}
                       aria-label={t("profile.achievements.removeAria")}
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-red-400/35 bg-red-950/50 text-red-200 transition hover:border-red-400/60 hover:bg-red-500/20 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-red-400/35 bg-red-950/40 text-red-200 transition hover:border-red-300/60 hover:bg-red-500/20 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
                     >
                       <X aria-hidden className="h-4 w-4" />
                     </button>
-                  </li>
+                  </RedSurface>
                 ))
               ) : (
-                <li className="flex items-center justify-between gap-3 rounded-2xl border border-red-400/20 bg-red-950/35 px-4 py-3 text-sm text-red-200/70">
+                <RedSurface
+                  as="li"
+                  tone="glass"
+                  className="flex items-center justify-between gap-3 rounded-2xl px-4 py-3 text-sm text-red-200/75"
+                >
                   <span>{t("profile.achievements.empty")}</span>
-                </li>
+                </RedSurface>
               )}
             </ul>
           </RedSurface>
