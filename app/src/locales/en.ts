@@ -346,6 +346,10 @@ export const en = {
         eventsCount_zero: "No events",
         eventsCount_one: "{{count}} event",
         eventsCount_other: "{{count}} events",
+        previous: "Previous month",
+        next: "Next month",
+        previousShort: "Prev",
+        nextShort: "Next",
       },
       weekView: {
         weekLabel: "Week of {{start}}",
