@@ -17,7 +17,6 @@ import { useTranslation } from "react-i18next";
 import type { RoutePath } from "../routes";
 import { cn } from "../lib/cn";
 import LanguageSwitcher from "./LanguageSwitcher";
-import RedSurface from "./RedSurface";
 
 type NavItem = {
   to: RoutePath;
@@ -129,21 +128,21 @@ function Sidebar({
     <aside
       id="app-sidebar"
       className={cn(
-        "fixed inset-y-0 z-50 lg:z-40 flex w-full max-w-sm shrink-0 flex-col overflow-hidden bg-gradient-to-b from-red-950/95 via-red-950/85 to-red-900/80 shadow-[0_30px_80px_rgba(59,9,9,0.55)] backdrop-blur-xl transition-transform duration-300 ease-out lg:max-w-none lg:w-80",
+        "fixed inset-y-0 z-50 lg:z-40 flex w-full max-w-sm shrink-0 flex-col overflow-hidden border-r border-white/5 bg-slate-950/95 text-slate-100 shadow-[0_20px_60px_rgba(15,23,42,0.45)] backdrop-blur-xl transition-transform duration-300 ease-out lg:max-w-none lg:w-80",
         isRTL ? "right-0" : "left-0",
         open ? "translate-x-0" : isRTL ? "translate-x-full" : "-translate-x-full",
       )}
       aria-label={t("common.navigation.primary")}
     >
-      <div className="flex h-full flex-col gap-8 overflow-y-auto p-6">
-        <div className="flex items-start justify-between gap-3">
+      <div className="flex h-full flex-col overflow-y-auto">
+        <div className="flex items-center justify-between gap-3 border-b border-white/5 px-6 py-5">
           <div className="flex items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500/30 via-red-500/10 to-transparent text-red-200">
-              <Activity className="h-6 w-6" aria-hidden />
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-red-500/20 via-red-500/10 to-transparent text-red-200">
+              <Activity className="h-5 w-5" aria-hidden />
             </span>
-            <div>
-              <p className="text-sm font-semibold text-red-50">{brand.name}</p>
-              <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-white/90">{brand.name}</p>
+              <p className="text-[11px] uppercase tracking-[0.35em] text-white/50">
                 {brand.label}
               </p>
             </div>
@@ -152,7 +151,7 @@ function Sidebar({
             <LanguageSwitcher />
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-red-900/40 text-red-200 shadow-sm transition hover:bg-red-900/55 hover:text-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-red-900 lg:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/70 transition hover:border-white/20 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 lg:hidden"
               onClick={onToggleSidebar}
               aria-label={t("common.navigation.close")}
             >
@@ -161,102 +160,102 @@ function Sidebar({
           </div>
         </div>
 
-        <section className="space-y-5" aria-label={t("common.navigation.primary")}>
-          {navSections.map((section) => (
-            <div key={section.heading} className="space-y-2">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-red-200/70">
-                {section.heading}
-              </p>
-              <nav className="grid gap-2">
-                {section.items.map((item) => {
-                  const isActive = currentPath === item.to;
-                  const isComingSoon = item.status === "soon";
-                  return (
-                    <a
-                      key={item.to}
-                      href={item.to}
-                      onClick={(event) => {
-                        if (isComingSoon) {
-                          event.preventDefault();
-                          return;
+        <div className="flex-1 space-y-8 px-6 py-6">
+          <section className="space-y-6" aria-label={t("common.navigation.primary")}>
+            {navSections.map((section) => (
+              <div key={section.heading} className="space-y-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/45">
+                  {section.heading}
+                </p>
+                <nav className="space-y-2">
+                  {section.items.map((item) => {
+                    const isActive = currentPath === item.to;
+                    const isComingSoon = item.status === "soon";
+                    return (
+                      <a
+                        key={item.to}
+                        href={item.to}
+                        onClick={(event) => {
+                          if (isComingSoon) {
+                            event.preventDefault();
+                            return;
+                          }
+
+                          handleItemClick(event, item.to);
+                        }}
+                        onPointerEnter={
+                          isComingSoon
+                            ? undefined
+                            : () => onPrefetchSection?.(item.to)
                         }
-
-                        handleItemClick(event, item.to);
-                      }}
-                      onPointerEnter={
-                        isComingSoon
-                          ? undefined
-                          : () => onPrefetchSection?.(item.to)
-                      }
-                      onFocus={
-                        isComingSoon ? undefined : () => onPrefetchSection?.(item.to)
-                      }
-                      aria-current={isActive ? "page" : undefined}
-                      aria-disabled={isComingSoon || undefined}
-                      className={`group flex items-center gap-4 rounded-2xl border px-4 py-3 text-sm transition hover:border-red-400/50 hover:bg-red-950/55 hover:text-red-50 ${
-                        isActive
-                          ? "border-red-400/70 bg-red-950/60 text-red-50"
-                          : "border-red-500/25 bg-red-950/35 text-red-100/85"
-                      } ${
-                        isComingSoon
-                          ? "cursor-not-allowed opacity-70 hover:border-red-500/25 hover:bg-red-950/35 hover:text-red-100/85"
-                          : ""
-                      }`}
-                    >
-                      <span
-                        className={`flex h-10 w-10 items-center justify-center rounded-2xl text-red-200 transition-colors group-hover:bg-red-500/15 ${
+                        onFocus={
+                          isComingSoon ? undefined : () => onPrefetchSection?.(item.to)
+                        }
+                        aria-current={isActive ? "page" : undefined}
+                        aria-disabled={isComingSoon || undefined}
+                        className={cn(
+                          "group relative flex items-start gap-3 rounded-2xl border border-white/5 bg-white/0 px-4 py-3 text-sm transition-colors",
                           isActive
-                            ? "bg-red-500/20 text-red-100"
-                            : "bg-red-950/55"
-                        }`}
+                            ? "border-red-400/60 bg-red-500/10 text-white shadow-lg shadow-red-900/30"
+                            : "text-white/80 hover:border-red-400/40 hover:bg-red-500/5 hover:text-white",
+                          isComingSoon &&
+                            "cursor-not-allowed opacity-60 hover:border-white/5 hover:bg-white/0 hover:text-white/80",
+                        )}
                       >
-                        <item.Icon className="h-5 w-5" aria-hidden />
-                      </span>
-                      <span className="flex flex-col">
-                        <span className="flex items-center gap-2 font-semibold">
-                          {item.label}
-                          {isComingSoon ? (
-                            <span className="rounded-full border border-red-400/70 bg-red-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-red-50">
-                              {soonLabel}
-                            </span>
-                          ) : null}
+                        <span
+                          className={cn(
+                            "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-base transition-colors",
+                            isActive
+                              ? "bg-red-500/25 text-red-100"
+                              : "bg-white/5 text-white/70 group-hover:bg-red-500/20 group-hover:text-red-100",
+                          )}
+                        >
+                          <item.Icon className="h-5 w-5" aria-hidden />
                         </span>
-                        <span className="text-xs text-red-200/70">
-                          {item.description}
+                        <span className="flex flex-1 flex-col gap-1">
+                          <span className="flex items-center gap-2 text-sm font-semibold">
+                            {item.label}
+                            {isComingSoon ? (
+                              <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
+                                {soonLabel}
+                              </span>
+                            ) : null}
+                          </span>
+                          <span className="text-xs leading-relaxed text-white/55">
+                            {item.description}
+                          </span>
                         </span>
-                      </span>
-                    </a>
-                  );
-                })}
-              </nav>
-            </div>
-          ))}
-        </section>
-
-        <section className="space-y-4" aria-label="Readiness overview">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">
-            {readinessHeading}
-          </p>
-          <ul className="grid gap-3">
-            {readinessHighlights.map((item) => (
-              <RedSurface
-                as="li"
-                tone="glass"
-                key={item.label}
-                className="flex items-center justify-between rounded-2xl px-4 py-3 text-sm text-red-50"
-              >
-                <span className="text-xs uppercase tracking-wide text-red-200/70">
-                  {item.label}
-                </span>
-                <span className="font-semibold text-red-50">{item.value}</span>
-              </RedSurface>
+                      </a>
+                    );
+                  })}
+                </nav>
+              </div>
             ))}
-          </ul>
-        </section>
+          </section>
 
-        <div className="mt-auto space-y-1 text-xs text-red-200/70">
+          <section className="space-y-4" aria-label="Readiness overview">
+            <div className="rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white/50">
+              {readinessHeading}
+            </div>
+            <ul className="space-y-3">
+              {readinessHighlights.map((item) => (
+                <li
+                  key={item.label}
+                  className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/[0.04] px-4 py-3 text-sm text-white/80"
+                >
+                  <span className="text-xs uppercase tracking-wide text-white/55">
+                    {item.label}
+                  </span>
+                  <span className="font-semibold text-white">{item.value}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        <div className="border-t border-white/5 px-6 py-5 text-xs text-white/60">
           <p>{seasonSummary.line1}</p>
-          <p className="font-semibold text-red-100">{seasonSummary.line2}</p>
+          <p className="mt-1 font-semibold text-white">{seasonSummary.line2}</p>
         </div>
       </div>
     </aside>
