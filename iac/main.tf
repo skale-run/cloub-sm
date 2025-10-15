@@ -2,7 +2,7 @@ terraform {
   required_version = ">= 1.5.0"
 
   backend "gcs" {
-    bucket = "lkany-io-tfstate"
+    bucket = "wac-adherents-tfstate"
     prefix = "club-sm"
   }
 
@@ -46,12 +46,12 @@ resource "google_service_account" "cloud_run" {
   display_name = "Cloud Run service account for ${var.service_name}"
 }
 
-data "google_storage_bucket" "lkany_io_tfstate" {
-  name = "lkany-io-tfstate"
+data "google_storage_bucket" "wac_io_tfstate" {
+  name = "wac-adherents-tfstate"
 }
 
 resource "google_storage_bucket_iam_member" "cloud_run_object_viewer" {
-  bucket = data.google_storage_bucket.lkany_io_tfstate.name
+  bucket = data.google_storage_bucket.wac_io_tfstate.name
   role   = "roles/storage.objectViewer"
   member = "serviceAccount:${google_service_account.cloud_run.email}"
 }

@@ -1,23 +1,12 @@
 const express = require("express");
 const { query, pool } = require("../db/pool");
+const { isValidUuid } = require("../utils/validation");
 
 const router = express.Router();
 
 const ALLOWED_CATEGORIES = new Set(["training", "competition"]);
 const ALLOWED_LEVELS = new Set(["regional", "national", "international"]);
-const ALLOWED_EVENT_TYPES = new Set([
-  "competition",
-  "entrainment",
-  "meet",
-  "other",
-]);
-
-function isValidUuid(value) {
-  return (
-    typeof value === "string" &&
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
-  );
-}
+const ALLOWED_EVENT_TYPES = new Set(["competition", "entrainment", "meet", "other"]);
 
 function toIsoString(value) {
   if (value instanceof Date) {
