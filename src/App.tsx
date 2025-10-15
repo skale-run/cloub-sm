@@ -422,7 +422,6 @@ function App() {
             onNavigate={handleSidebarNavigate}
             onNavigateTo={navigateTo}
             currentPath={currentPath}
-            savedProfile={savedProfile}
           />
 
           <RedSurface
