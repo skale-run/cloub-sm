@@ -3,7 +3,7 @@ name: Build and Apply Infrastructure
 on:
   push:
     branches:
-      - mainx
+      - main
   workflow_dispatch:
 
 permissions:
