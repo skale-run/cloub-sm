@@ -106,10 +106,10 @@ resource "google_cloud_run_service_iam_member" "unauthenticated" {
   member   = "allUsers"
 }
 
-resource "google_cloud_run_domain_mapping" "custom_domain" {
-  count    = var.custom_domain != null ? 1 : 0
+resource "google_cloud_run_domain_mapping" "app_domain" {
+  count    = var.app_domain != null ? 1 : 0
   location = google_cloud_run_service.service.location
-  name     = var.custom_domain
+  name     = var.app_domain
   project  = var.project_id
 
   metadata {

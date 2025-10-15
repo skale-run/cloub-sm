@@ -44,8 +44,8 @@ variable "environment_variables" {
   default     = {}
 }
 
-variable "custom_domain" {
-  description = "Optional custom domain to map to the Cloud Run service."
+variable "app_domain" {
+  description = "Optional application domain to map to the Cloud Run service."
   type        = string
   default     = null
 }
