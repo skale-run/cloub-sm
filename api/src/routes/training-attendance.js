@@ -1,42 +1,14 @@
 const express = require("express");
 const { query } = require("../db/pool");
+const {
+  isValidUuid,
+  normalizeOptionalString,
+  parseIsoDate,
+} = require("../utils/validation");
 
 const router = express.Router();
 
 const ALLOWED_STATUSES = new Set(["present", "absent", "late", "excused"]);
-
-function isValidUuid(value) {
-  return (
-    typeof value === "string" &&
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
-  );
-}
-
-function normalizeOptionalString(value) {
-  if (typeof value !== "string") {
-    return undefined;
-  }
-
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : undefined;
-}
-
-function parseIsoDate(value, fieldName) {
-  if (value === undefined) {
-    return undefined;
-  }
-
-  const parsed = new Date(value);
-
-  if (Number.isNaN(parsed.getTime())) {
-    const error = new Error(`${fieldName} must be a valid ISO 8601 date-time string.`);
-    error.status = 400;
-    error.expose = true;
-    throw error;
-  }
-
-  return parsed.toISOString();
-}
 
 function formatAttendanceLog(row) {
   return {
