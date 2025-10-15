@@ -48,6 +48,7 @@ type SidebarProps = {
   onToggleSidebar: () => void;
   onNavigate?: () => void;
   onNavigateTo: (path: RoutePath) => void;
+  onPrefetchSection?: (path: RoutePath) => void;
   currentPath: RoutePath;
 };
 
@@ -56,6 +57,7 @@ function Sidebar({
   onToggleSidebar,
   onNavigate,
   onNavigateTo,
+  onPrefetchSection,
   currentPath,
 }: SidebarProps) {
   const { t, i18n } = useTranslation();
@@ -165,6 +167,8 @@ function Sidebar({
                       key={item.to}
                       href={item.to}
                       onClick={(event) => handleItemClick(event, item.to)}
+                      onPointerEnter={() => onPrefetchSection?.(item.to)}
+                      onFocus={() => onPrefetchSection?.(item.to)}
                       aria-current={isActive ? "page" : undefined}
                       className={`group flex items-center gap-4 rounded-2xl border px-4 py-3 text-sm transition hover:border-red-400/50 hover:bg-red-950/55 hover:text-red-50 ${
                         isActive
