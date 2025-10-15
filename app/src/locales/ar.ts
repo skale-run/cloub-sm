@@ -9,6 +9,9 @@ export const ar = {
           fr: "الفرنسية",
         },
       },
+      badges: {
+        soon: "قريبًا",
+      },
       navigation: {
         open: "فتح التنقّل",
         close: "إغلاق التنقّل",
@@ -204,6 +207,7 @@ export const ar = {
               to: "/billing",
               label: "نظرة عامة على الفوترة",
               description: "تتبّع الفواتير والمدفوعات",
+              status: "soon",
             },
             {
               to: "/training-attendance",
