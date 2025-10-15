@@ -34,6 +34,7 @@ const languagePresentations: Record<LanguageKey, LanguagePresentation> = {
     ...englishPresentation,
     htmlLang: "fr",
     locale: "fr-FR",
+  },
   ar: {
     direction: "rtl",
     htmlLang: "ar",
