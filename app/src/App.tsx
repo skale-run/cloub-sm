@@ -134,6 +134,11 @@ function App() {
     if (!member) {
       setSavedProfile(trimmedProfile);
       setStatusMessage(t("app.statusMessages.saved"));
+      const modeLabel = isRegistering ? "registered" : "logged in";
+      setMessage(
+        `Successfully ${modeLabel} as ${formState.email || "your account"}. This is a demo submission.`,
+      );
+      setFormState(createInitialState());
       return;
     }
 
@@ -280,11 +285,7 @@ function App() {
         </Suspense>
         <AuthenticationExperienceModal />
       </>
-    const modeLabel = isRegistering ? "registered" : "logged in";
-    setMessage(
-      `Successfully ${modeLabel} as ${formState.email || "your account"}. This is a demo submission.`,
     );
-    setFormState(createInitialState());
   }
 
   return (
