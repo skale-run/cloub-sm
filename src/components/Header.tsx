@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, Menu } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { cn } from "../lib/cn";
 
 type HeaderProps = {
   isSidebarOpen: boolean;
@@ -28,7 +29,12 @@ function Header({
 
   return (
     <header className="app-header sticky top-0 z-40 border-b border-red-500/40 bg-red-950/80 px-2 backdrop-blur-xl">
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between gap-4 rounded-3xl px-3 py-4 sm:px-6 lg:px-8">
+      <div
+        className={cn(
+          "relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between gap-4 rounded-3xl px-3 py-4 sm:px-6 lg:px-8",
+          !isSidebarOpen ? "lg:max-w-none" : undefined,
+        )}
+      >
         <div className="flex flex-1 items-center gap-3 text-red-50">
           <button
             type="button"

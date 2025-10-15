@@ -16,6 +16,7 @@ import PerformanceTrackingSection from "./features/performance/PerformanceTracki
 import ProfileSection from "./features/profile/ProfileSection";
 import { emptyProfile, type Profile } from "./features/profile/profileTypes";
 import LandingPage from "./features/landing/LandingPage";
+import { cn } from "./lib/cn";
 import { landingPath, normalizePath, type RoutePath } from "./routes";
 
 const DESKTOP_BREAKPOINT = "(min-width: 1024px)" as const;
@@ -384,7 +385,12 @@ function App() {
           />
         ) : null}
 
-        <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-3 py-5 sm:px-6 sm:py-6 lg:items-start lg:gap-8 lg:px-10 lg:py-10">
+        <div
+          className={cn(
+            "mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-3 py-5 sm:px-6 sm:py-6 lg:items-start lg:gap-8 lg:px-10 lg:py-10",
+            !sidebarOpen ? "lg:max-w-none" : undefined,
+          )}
+        >
           <Sidebar
             open={sidebarOpen}
             onToggleSidebar={toggleSidebar}
