@@ -106,6 +106,22 @@ resource "google_cloud_run_service_iam_member" "unauthenticated" {
   member   = "allUsers"
 }
 
+resource "google_cloud_run_domain_mapping" "custom_domain" {
+  count    = var.custom_domain != null ? 1 : 0
+  location = google_cloud_run_service.service.location
+  name     = var.custom_domain
+  project  = var.project_id
+
+  metadata {
+    namespace = var.project_id
+  }
+
+  spec {
+    route_name       = google_cloud_run_service.service.name
+    certificate_mode = "AUTOMATIC"
+  }
+}
+
 output "service_url" {
   description = "The URL of the deployed Cloud Run service."
   value       = google_cloud_run_service.service.status[0].url

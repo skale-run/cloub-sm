@@ -43,3 +43,9 @@ variable "environment_variables" {
   type        = map(string)
   default     = {}
 }
+
+variable "custom_domain" {
+  description = "Optional custom domain to map to the Cloud Run service."
+  type        = string
+  default     = null
+}
