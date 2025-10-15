@@ -1,6 +1,7 @@
 import { useMemo, type ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
+import { getLanguagePresentation } from "../../lib/i18n";
 import { competitionCalendarEvents } from "../calendar/calendarEvents";
 
 const levelColors: Record<
@@ -14,7 +15,7 @@ const levelColors: Record<
 
 function CompetitionSection(): ReactElement {
   const { i18n, t } = useTranslation("competitions");
-  const locale = i18n.language.startsWith("ar") ? "ar-EG" : "en-US";
+  const { locale } = getLanguagePresentation(i18n.language);
   const dateFormatter = useMemo(
     () =>
       new Intl.DateTimeFormat(locale, {
