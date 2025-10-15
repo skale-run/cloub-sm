@@ -3,7 +3,11 @@ node_modules/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
-
+terraform.lock.hcl
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
 # Build output
 dist/
 run/assets/

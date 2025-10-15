@@ -886,428 +886,430 @@ export const en = {
         International: "International",
       },
     },
-  },
-  information: {
-    academic: {
-      heading: "Academic record & planning",
-      description:
-        "Monitor credit progress, milestone evaluations, and advisor follow-ups in one place.",
-      creditBadge: {
-        label: "Credits this term",
-        value: "{{current}} / {{target}} credits confirmed",
-        helper: "On pace for graduation review",
-      },
-      creditLoad: {
-        heading: "Credit load overview",
-        caption:
-          "{{current}} of {{target}} credits confirmed for this term",
-        helper:
-          "{{available}} elective credits remain to personalise your schedule.",
-      },
-      creditDistribution: {
-        coreCurriculum: {
-          label: "Core curriculum",
-          value: "9 credits",
-          context: "Major requirements in progress",
+
+    /* ---- MOVED HERE: previously at root ---- */
+    information: {
+      academic: {
+        heading: "Academic record & planning",
+        description:
+          "Monitor credit progress, milestone evaluations, and advisor follow-ups in one place.",
+        creditBadge: {
+          label: "Credits this term",
+          value: "{{current}} / {{target}} credits confirmed",
+          helper: "On pace for graduation review",
         },
-        researchLabs: {
-          label: "Research & labs",
-          value: "6 credits",
-          context: "Lab attendance verified with faculty",
+        creditLoad: {
+          heading: "Credit load overview",
+          caption:
+            "{{current}} of {{target}} credits confirmed for this term",
+          helper:
+            "{{available}} elective credits remain to personalise your schedule.",
         },
-        electives: {
-          label: "Electives",
-          value: "3 credits",
-          context: "Advisor approval submitted",
+        creditDistribution: {
+          coreCurriculum: {
+            label: "Core curriculum",
+            value: "9 credits",
+            context: "Major requirements in progress",
+          },
+          researchLabs: {
+            label: "Research & labs",
+            value: "6 credits",
+            context: "Lab attendance verified with faculty",
+          },
+          electives: {
+            label: "Electives",
+            value: "3 credits",
+            context: "Advisor approval submitted",
+          },
         },
-      },
-      programInsights: {
-        heading: "Program insights",
-      },
-      summaryInsights: {
-        currentGpa: {
-          label: "Current GPA",
-          value: "3.72",
-          context: "Calculated across upper-division courses",
+        programInsights: {
+          heading: "Program insights",
         },
-        scholarshipStanding: {
-          label: "Scholarship standing",
-          value: "Maintained",
-          context: "Renewal review scheduled for May 15",
+        summaryInsights: {
+          currentGpa: {
+            label: "Current GPA",
+            value: "3.72",
+            context: "Calculated across upper-division courses",
+          },
+          scholarshipStanding: {
+            label: "Scholarship standing",
+            value: "Maintained",
+            context: "Renewal review scheduled for May 15",
+          },
+          graduationPlan: {
+            label: "Graduation plan",
+            value: "Spring 2026",
+            context: "Capstone proposal approved",
+          },
         },
-        graduationPlan: {
-          label: "Graduation plan",
-          value: "Spring 2026",
-          context: "Capstone proposal approved",
+        modules: {
+          credits: "{{count}} credits",
+          focusCheckpoint: "Focus checkpoint",
+          progress: "{{percent}}% complete",
+          nextEvaluationLabel: "Next milestone · {{date}}",
+          capstoneResearchStudio: {
+            title: "Capstone research studio",
+            focus:
+              "Compile findings with faculty feedback ahead of the final defence.",
+            nextEvaluationDate: "May 10",
+          },
+          dataVisualizationLab: {
+            title: "Data visualisation lab",
+            focus:
+              "Finalise dashboard deliverables and peer review results.",
+            nextEvaluationDate: "Apr 28",
+          },
+          communityImpactSeminar: {
+            title: "Community impact seminar",
+            focus: "Submit reflective brief documenting service-learning outcomes.",
+            nextEvaluationDate: "—",
+          },
         },
-      },
-      modules: {
-        credits: "{{count}} credits",
-        focusCheckpoint: "Focus checkpoint",
-        progress: "{{percent}}% complete",
-        nextEvaluationLabel: "Next milestone · {{date}}",
-        capstoneResearchStudio: {
-          title: "Capstone research studio",
-          focus:
-            "Compile findings with faculty feedback ahead of the final defence.",
-          nextEvaluationDate: "May 10",
-        },
-        dataVisualizationLab: {
-          title: "Data visualisation lab",
-          focus:
-            "Finalise dashboard deliverables and peer review results.",
-          nextEvaluationDate: "Apr 28",
-        },
-        communityImpactSeminar: {
-          title: "Community impact seminar",
-          focus: "Submit reflective brief documenting service-learning outcomes.",
-          nextEvaluationDate: "—",
-        },
-      },
-      moduleStatuses: {
-        onTrack: "On track",
-        completed: "Completed",
-        actionNeeded: "Action needed",
-      },
-      upcomingEvaluations: {
-        heading: "Upcoming evaluations",
-        helper: "Next 30 days",
-        dateLabel: "Due {{date}}",
-        capstonePresentation: {
-          module: "Capstone research studio",
-          type: "Faculty presentation",
-          date: "May 10",
-        },
-        researchColloquium: {
-          module: "Undergraduate research colloquium",
-          type: "Poster submission",
-          date: "Apr 28",
-        },
-        internshipReflection: {
-          module: "Internship reflection",
-          type: "Portfolio review",
-          date: "May 30",
-        },
-      },
-      checklist: {
-        heading: "Eligibility checklist",
-        helper: "Synced automatically each day",
-        statuses: {
+        moduleStatuses: {
           onTrack: "On track",
-          reviewNeeded: "Review needed",
-          scheduled: "Scheduled",
+          completed: "Completed",
+          actionNeeded: "Action needed",
         },
-        items: {
-          financialAid: {
-            label: "Confirm financial aid requirements",
-            detail:
-              "Documentation received — upload signed award letter to the portal.",
+        upcomingEvaluations: {
+          heading: "Upcoming evaluations",
+          helper: "Next 30 days",
+          dateLabel: "Due {{date}}",
+          capstonePresentation: {
+            module: "Capstone research studio",
+            type: "Faculty presentation",
+            date: "May 10",
           },
-          internshipPaperwork: {
-            label: "Submit internship paperwork",
-            detail:
-              "Awaiting updated employer agreement from career services.",
+          researchColloquium: {
+            module: "Undergraduate research colloquium",
+            type: "Poster submission",
+            date: "Apr 28",
           },
-          advisorMeeting: {
-            label: "Schedule advisor meeting",
-            detail:
-              "Coordinate degree-planning session ahead of autumn registration.",
-          },
-        },
-      },
-      advisor: {
-        heading: "Advisor guidance",
-        helper: "Last updated Apr 10",
-        notes: {
-          degreeAudit: {
-            title: "Degree audit review",
-            description:
-              "Verify general education substitutions before submission.",
-            action: "Upload documents",
-          },
-          researchFunding: {
-            title: "Research funding follow-up",
-            description:
-              "Prepare summary for undergraduate research grant renewal.",
-            action: "Share update",
-          },
-          careerMentorship: {
-            title: "Career mentorship hours",
-            description:
-              "Log mentorship sessions to complete graduation requirement.",
+          internshipReflection: {
+            module: "Internship reflection",
+            type: "Portfolio review",
+            date: "May 30",
           },
         },
-      },
-    },
-    billing: {
-      heading: "Billing overview",
-      description:
-        "Stay on top of dojang dues, travel levies, and service add-ons from a single taekwondo finance dashboard.",
-      balanceBadge: {
-        label: "Current balance",
-        value: "{{amount}}",
-      },
-      summaryCards: {
-        balance: {
-          label: "Outstanding balance",
-          value: "{{amount}}",
-          helper: "WT Grand Prix travel support · due Apr 25, 2025",
-        },
-        autopay: {
-          label: "Next auto-pay draft",
-          value: "May 01, 2025",
-          helper: "National team residency dues · scheduled monthly",
-        },
-        lastPayment: {
-          label: "Last payment received",
-          value: "{{amount}}",
-          helper: "Elite sparring camp · Posted Mar 18, 2025",
-        },
-      },
-      invoices: {
-        heading: "Invoices",
-        helper: "Statement history for the current taekwondo season.",
-        download: "Download statement",
-        sendReceipt: "Send receipt",
-        pending: {
-          label: "Pending invoices",
-          count_one: "{{count}} due",
-          count_other: "{{count}} due",
-          total: "Totaling {{amount}} outstanding",
-        },
-        paid: {
-          label: "Paid this season",
-          total: "{{amount}} posted",
-          count_one: "Across {{count}} invoice",
-          count_other: "Across {{count}} invoices",
-        },
-        filters: {
-          label: "Filters",
+        checklist: {
+          heading: "Eligibility checklist",
+          helper: "Synced automatically each day",
+          statuses: {
+            onTrack: "On track",
+            reviewNeeded: "Review needed",
+            scheduled: "Scheduled",
+          },
           items: {
-            all: "All",
+            financialAid: {
+              label: "Confirm financial aid requirements",
+              detail:
+                "Documentation received — upload signed award letter to the portal.",
+            },
+            internshipPaperwork: {
+              label: "Submit internship paperwork",
+              detail:
+                "Awaiting updated employer agreement from career services.",
+            },
+            advisorMeeting: {
+              label: "Schedule advisor meeting",
+              detail:
+                "Coordinate degree-planning session ahead of autumn registration.",
+            },
+          },
+        },
+        advisor: {
+          heading: "Advisor guidance",
+          helper: "Last updated Apr 10",
+          notes: {
+            degreeAudit: {
+              title: "Degree audit review",
+              description:
+                "Verify general education substitutions before submission.",
+              action: "Upload documents",
+            },
+            researchFunding: {
+              title: "Research funding follow-up",
+              description:
+                "Prepare summary for undergraduate research grant renewal.",
+              action: "Share update",
+            },
+            careerMentorship: {
+              title: "Career mentorship hours",
+              description:
+                "Log mentorship sessions to complete graduation requirement.",
+            },
+          },
+        },
+      },
+      billing: {
+        heading: "Billing overview",
+        description:
+          "Stay on top of dojang dues, travel levies, and service add-ons from a single taekwondo finance dashboard.",
+        balanceBadge: {
+          label: "Current balance",
+          value: "{{amount}}",
+        },
+        summaryCards: {
+          balance: {
+            label: "Outstanding balance",
+            value: "{{amount}}",
+            helper: "WT Grand Prix travel support · due Apr 25, 2025",
+          },
+          autopay: {
+            label: "Next auto-pay draft",
+            value: "May 01, 2025",
+            helper: "National team residency dues · scheduled monthly",
+          },
+          lastPayment: {
+            label: "Last payment received",
+            value: "{{amount}}",
+            helper: "Elite sparring camp · Posted Mar 18, 2025",
+          },
+        },
+        invoices: {
+          heading: "Invoices",
+          helper: "Statement history for the current taekwondo season.",
+          download: "Download statement",
+          sendReceipt: "Send receipt",
+          pending: {
+            label: "Pending invoices",
+            count_one: "{{count}} due",
+            count_other: "{{count}} due",
+            total: "Totaling {{amount}} outstanding",
+          },
+          paid: {
+            label: "Paid this season",
+            total: "{{amount}} posted",
+            count_one: "Across {{count}} invoice",
+            count_other: "Across {{count}} invoices",
+          },
+          filters: {
+            label: "Filters",
+            items: {
+              all: "All",
+              pending: "Pending",
+              paid: "Paid",
+            },
+          },
+          table: {
+            invoice: "Invoice",
+            dueDate: "Due date",
+            amount: "Amount",
+            status: "Status",
+          },
+          items: {
+            springMembershipDues: {
+              label: "Spring dojang membership",
+              dueDate: {
+                apr252025: "Apr 25, 2025",
+              },
+            },
+            strengthLabAccess: {
+              label: "High-performance kicking lab access",
+              dueDate: {
+                mar182025: "Mar 18, 2025",
+              },
+            },
+            travelContribution: {
+              label: "World Taekwondo Grand Prix travel contribution",
+              dueDate: {
+                feb022025: "Feb 02, 2025",
+              },
+            },
+          },
+          statuses: {
             pending: "Pending",
             paid: "Paid",
           },
+          empty:
+            "No invoices match the selected filter. Try another status to review prior taekwondo statements.",
         },
-        table: {
-          invoice: "Invoice",
-          dueDate: "Due date",
-          amount: "Amount",
-          status: "Status",
+        autoPay: {
+          heading: "Auto-pay",
+          helper: "Auto-pay is enabled for monthly taekwondo subscriptions.",
+          manage: "Manage auto-pay",
         },
-        items: {
-          springMembershipDues: {
-            label: "Spring dojang membership",
-            dueDate: {
-              apr252025: "Apr 25, 2025",
+        paymentMethods: {
+          primaryCard: {
+            label: "Primary payment method",
+            detail: "Visa •••• 4298",
+            expires: "Exp. 08/27",
+            status: "Auto-pay enabled",
+          },
+          backupAccount: {
+            label: "Backup payment method",
+            detail: "Checking · First Peninsula Bank",
+            status: "Reserved for championship travel charges",
+          },
+        },
+        upcomingCharges: {
+          heading: "Upcoming charges",
+          helper: "Scheduled across the championship season.",
+          items: {
+            physiotherapyBlock: {
+              label: "Post-tournament physiotherapy block",
+              date: {
+                may082025: "May 08, 2025",
+              },
+            },
+            facilityLevy: {
+              label: "Electronic hogu maintenance levy",
+              date: {
+                jun122025: "Jun 12, 2025",
+              },
+            },
+            summerTravelFund: {
+              label: "International circuit travel fund",
+              date: {
+                jul012025: "Jul 01, 2025",
+              },
             },
           },
-          strengthLabAccess: {
-            label: "High-performance kicking lab access",
-            dueDate: {
-              mar182025: "Mar 18, 2025",
+        },
+      },
+      trainingAttendance: {
+        heading: "Training attendance",
+        description:
+          "Weekly overview of confirmed dojang check-ins and key staff notes.",
+        seasonRate: {
+          label: "Season rate",
+          value: "{{percent}}%",
+        },
+        rateDelta: "{{value}}% vs last block",
+        byWeek: {
+          heading: "Attendance by week",
+          summary: "Attended {{attended}} of {{planned}} sessions",
+          peak: "Top week: {{label}} · {{highlight}}",
+          focus: "Focus week: {{label}} · {{highlight}}",
+          weeklyAttendance: "{{percent}}% attendance",
+          sessions: "{{attended}} of {{planned}} sessions · {{highlight}}",
+          items: {
+            week14: {
+              label: "Week 14",
+              highlight: "Perfect attendance",
+            },
+            week15: {
+              label: "Week 15",
+              highlight: "Missed morning sparring · travel delay",
+            },
+            week16: {
+              label: "Week 16",
+              highlight: "Recovery block · cleared by physio",
             },
           },
-          travelContribution: {
-            label: "World Taekwondo Grand Prix travel contribution",
-            dueDate: {
-              feb022025: "Feb 02, 2025",
+        },
+        insights: {
+          consistencyStreak: {
+            label: "Consistency streak",
+            value: "6 sessions",
+            detail: "Zero misses since Apr 2 · new personal best",
+          },
+          availabilityForms: {
+            label: "Travel confirmations",
+            value_one: "{{count}} pending form",
+            value_other: "{{count}} pending forms",
+            detailPending_one:
+              "{{count}} travel confirmation still needs logistics sign-off before Friday.",
+            detailPending_other:
+              "{{count}} travel confirmations still need logistics sign-off before Friday.",
+            detailCleared: "All travel confirmations received for this block.",
+          },
+          readinessIndex: {
+            label: "Readiness index",
+            value: "92%",
+            detail: "Master feedback and physio clearance trending up",
+          },
+        },
+        upcoming: {
+          heading: "Upcoming check-ins",
+        },
+        followUp: {
+          heading: "Follow-up actions",
+          helper: "Check-in priorities this week",
+          actions: {
+            pending: {
+              label: "Confirm travel arrivals",
+              detail_one:
+                "{{count}} practitioner is awaiting travel desk confirmation and ring assignment briefing.",
+              detail_other:
+                "{{count}} practitioners are awaiting travel desk confirmation and ring assignment briefings.",
+              emphasis_one: "Send reminder before Thursday noon logistics call.",
+              emphasis_other:
+                "Send reminders before Thursday noon logistics call.",
+            },
+            medical: {
+              label: "Coordinate medical reviews",
+              detail_one:
+                "{{count}} practitioner flagged for clearance needs an updated return timeline.",
+              detail_other:
+                "{{count}} practitioners flagged for clearance need updated return timelines.",
+              emphasis_one:
+                "Sync physio notes with masters before Friday block plan.",
+              emphasis_other:
+                "Sync physio notes with masters before Friday block plan.",
             },
           },
+        },
+        sessions: {
+          ts1: {
+            focus:
+              "Reaction testing during pad rounds—assign check-in tablets near rings.",
+            emphasis:
+              "Wellness survey opens 30 minutes prior; capture RPE after each block.",
+          },
+          ts2: {
+            focus:
+              "Travel squad tune-up with individualized mobility protocols staged on arrival.",
+            emphasis:
+              "Ensure hydration scans are logged before main warm-up.",
+          },
+          ts3: {
+            focus:
+              "Film room breakdown with sparring pairings and leadership huddles.",
+            emphasis:
+              "Circulate remote check-in link for practitioners on modified plans.",
+          },
+        },
+        teamStatus: {
+          heading: "Team check-in status",
+          helper: "Live roster availability",
         },
         statuses: {
-          pending: "Pending",
-          paid: "Paid",
-        },
-        empty:
-          "No invoices match the selected filter. Try another status to review prior taekwondo statements.",
-      },
-      autoPay: {
-        heading: "Auto-pay",
-        helper: "Auto-pay is enabled for monthly taekwondo subscriptions.",
-        manage: "Manage auto-pay",
-      },
-      paymentMethods: {
-        primaryCard: {
-          label: "Primary payment method",
-          detail: "Visa •••• 4298",
-          expires: "Exp. 08/27",
-          status: "Auto-pay enabled",
-        },
-        backupAccount: {
-          label: "Backup payment method",
-          detail: "Checking · First Peninsula Bank",
-          status: "Reserved for championship travel charges",
-        },
-      },
-      upcomingCharges: {
-        heading: "Upcoming charges",
-        helper: "Scheduled across the championship season.",
-        items: {
-          physiotherapyBlock: {
-            label: "Post-tournament physiotherapy block",
-            date: {
-              may082025: "May 08, 2025",
-            },
+          confirmed: {
+            label: "Confirmed",
+            count_one: "{{count}} practitioner confirmed",
+            count_other: "{{count}} practitioners confirmed",
           },
-          facilityLevy: {
-            label: "Electronic hogu maintenance levy",
-            date: {
-              jun122025: "Jun 12, 2025",
-            },
-          },
-          summerTravelFund: {
-            label: "International circuit travel fund",
-            date: {
-              jul012025: "Jul 01, 2025",
-            },
-          },
-        },
-      },
-    },
-    trainingAttendance: {
-      heading: "Training attendance",
-      description:
-        "Weekly overview of confirmed dojang check-ins and key staff notes.",
-      seasonRate: {
-        label: "Season rate",
-        value: "{{percent}}%",
-      },
-      rateDelta: "{{value}}% vs last block",
-      byWeek: {
-        heading: "Attendance by week",
-        summary: "Attended {{attended}} of {{planned}} sessions",
-        peak: "Top week: {{label}} · {{highlight}}",
-        focus: "Focus week: {{label}} · {{highlight}}",
-        weeklyAttendance: "{{percent}}% attendance",
-        sessions: "{{attended}} of {{planned}} sessions · {{highlight}}",
-        items: {
-          week14: {
-            label: "Week 14",
-            highlight: "Perfect attendance",
-          },
-          week15: {
-            label: "Week 15",
-            highlight: "Missed morning sparring · travel delay",
-          },
-          week16: {
-            label: "Week 16",
-            highlight: "Recovery block · cleared by physio",
-          },
-        },
-      },
-      insights: {
-        consistencyStreak: {
-          label: "Consistency streak",
-          value: "6 sessions",
-          detail: "Zero misses since Apr 2 · new personal best",
-        },
-        availabilityForms: {
-          label: "Travel confirmations",
-          value_one: "{{count}} pending form",
-          value_other: "{{count}} pending forms",
-          detailPending_one:
-            "{{count}} travel confirmation still needs logistics sign-off before Friday.",
-          detailPending_other:
-            "{{count}} travel confirmations still need logistics sign-off before Friday.",
-          detailCleared: "All travel confirmations received for this block.",
-        },
-        readinessIndex: {
-          label: "Readiness index",
-          value: "92%",
-          detail: "Master feedback and physio clearance trending up",
-        },
-      },
-      upcoming: {
-        heading: "Upcoming check-ins",
-      },
-      followUp: {
-        heading: "Follow-up actions",
-        helper: "Check-in priorities this week",
-        actions: {
           pending: {
-            label: "Confirm travel arrivals",
-            detail_one:
-              "{{count}} practitioner is awaiting travel desk confirmation and ring assignment briefing.",
-            detail_other:
-              "{{count}} practitioners are awaiting travel desk confirmation and ring assignment briefings.",
-            emphasis_one: "Send reminder before Thursday noon logistics call.",
-            emphasis_other:
-              "Send reminders before Thursday noon logistics call.",
+            label: "Pending",
+            count_one: "{{count}} practitioner pending",
+            count_other: "{{count}} practitioners pending",
           },
-          medical: {
-            label: "Coordinate medical reviews",
-            detail_one:
-              "{{count}} practitioner flagged for clearance needs an updated return timeline.",
-            detail_other:
-              "{{count}} practitioners flagged for clearance need updated return timelines.",
-            emphasis_one:
-              "Sync physio notes with masters before Friday block plan.",
-            emphasis_other:
-              "Sync physio notes with masters before Friday block plan.",
+          medicalHold: {
+            label: "Medical hold",
+            count_one: "{{count}} practitioner on medical hold",
+            count_other: "{{count}} practitioners on medical hold",
           },
+          percent: "{{percent}}% of roster",
         },
-      },
-      sessions: {
-        ts1: {
-          focus:
-            "Reaction testing during pad rounds—assign check-in tablets near rings.",
-          emphasis:
-            "Wellness survey opens 30 minutes prior; capture RPE after each block.",
-        },
-        ts2: {
-          focus:
-            "Travel squad tune-up with individualized mobility protocols staged on arrival.",
-          emphasis:
-            "Ensure hydration scans are logged before main warm-up.",
-        },
-        ts3: {
-          focus:
-            "Film room breakdown with sparring pairings and leadership huddles.",
-          emphasis:
-            "Circulate remote check-in link for practitioners on modified plans.",
-        },
-      },
-      teamStatus: {
-        heading: "Team check-in status",
-        helper: "Live roster availability",
-      },
-      statuses: {
-        confirmed: {
-          label: "Confirmed",
-          count_one: "{{count}} practitioner confirmed",
-          count_other: "{{count}} practitioners confirmed",
-        },
-        pending: {
-          label: "Pending",
-          count_one: "{{count}} practitioner pending",
-          count_other: "{{count}} practitioners pending",
-        },
-        medicalHold: {
-          label: "Medical hold",
-          count_one: "{{count}} practitioner on medical hold",
-          count_other: "{{count}} practitioners on medical hold",
-        },
-        percent: "{{percent}}% of roster",
-      },
-      roster: {
-        names: {
-          linaReyes: "Lina Reyes",
-          noahPetrov: "Noah Petrov",
-          aishaKato: "Aisha Kato",
-          jonahHill: "Jonah Hill",
-        },
-        roles: {
-          linaReyes: "Featherweight fighter",
-          noahPetrov: "Lightweight fighter",
-          aishaKato: "Poomsae specialist",
-          jonahHill: "Heavyweight fighter",
-        },
-        notes: {
-          linaReyes: "Checked in via mobile app · 18:05",
-          noahPetrov: "Flight arrives 14:20 · needs remote warm-up brief",
-          aishaKato: "Clearing return-to-kick test at Thursday physio",
-          jonahHill: "Strength block moved to 07:30 with Hugo",
+        roster: {
+          names: {
+            linaReyes: "Lina Reyes",
+            noahPetrov: "Noah Petrov",
+            aishaKato: "Aisha Kato",
+            jonahHill: "Jonah Hill",
+          },
+          roles: {
+            linaReyes: "Featherweight fighter",
+            noahPetrov: "Lightweight fighter",
+            aishaKato: "Poomsae specialist",
+            jonahHill: "Heavyweight fighter",
+          },
+          notes: {
+            linaReyes: "Checked in via mobile app · 18:05",
+            noahPetrov: "Flight arrives 14:20 · needs remote warm-up brief",
+            aishaKato: "Clearing return-to-kick test at Thursday physio",
+            jonahHill: "Strength block moved to 07:30 with Hugo",
+          },
         },
       },
     },
