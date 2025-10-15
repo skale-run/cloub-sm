@@ -221,7 +221,7 @@ export const en = {
         { label: "Hydration", value: "On target" },
       ],
       seasonSummary: {
-        line1: "Season 2025 · Elite Dan Team",
+        line1: "Season 2025 · Wydad Taekwondo",
         line2: "Next rest day: Sun, 20 Apr",
       },
     },

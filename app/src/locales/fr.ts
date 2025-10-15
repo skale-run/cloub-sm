@@ -221,7 +221,7 @@ export const fr = {
         { label: "Hydratation", value: "Dans l'objectif" },
       ],
       seasonSummary: {
-        line1: "Saison 2025 · Équipe Dan élite",
+        line1: "Saison 2025 · Wydad Taekwondo",
         line2: "Prochain jour de repos : dim. 20 avr.",
       },
     },

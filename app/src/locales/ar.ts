@@ -221,7 +221,7 @@ export const ar = {
         { label: "الترطيب", value: "على المسار" },
       ],
       seasonSummary: {
-        line1: "موسم 2025 · فريق دان النخبوي",
+        line1: "موسم 2025 ·Wydad Taekwondo",
         line2: "يوم الراحة التالي: الأحد، 20 أبريل",
       },
     },
