@@ -113,9 +113,11 @@ function SectionFallback({ label }: { label: string }) {
 }
 
 function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { open: openAthletePortalModal } = useAthletePortalModal();
   const { member, authToken, setMember, clearMember } = useMember();
+
+  const isRTL = i18n.dir() === "rtl";
 
   const [currentPath, setCurrentPath] = useState<RoutePath>(() => {
     if (typeof window === "undefined") {
@@ -423,7 +425,13 @@ function App() {
       <div
         className={cn(
           "flex min-h-screen flex-1 flex-col transition-[padding] duration-300",
-          isSidebarOpen ? "lg:pl-80" : "lg:pl-0",
+          isSidebarOpen
+            ? isRTL
+              ? "lg:pr-80"
+              : "lg:pl-80"
+            : isRTL
+              ? "lg:pr-0"
+              : "lg:pl-0",
         )}
       >
         <Header
