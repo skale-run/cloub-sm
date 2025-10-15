@@ -21,6 +21,37 @@ function normalizeOptionalString(value) {
   return trimmed.length > 0 ? trimmed : undefined;
 }
 
+function parseOptionalUuidParam(value, fieldName) {
+  if (value === undefined) {
+    return { ok: true, value: undefined };
+  }
+
+  if (!isValidUuid(value)) {
+    return { ok: false, error: `${fieldName} must be a valid UUID.` };
+  }
+
+  return { ok: true, value };
+}
+
+function parseRequiredUuidParam(value, fieldName) {
+  if (value === undefined || value === null || value === "") {
+    return {
+      ok: false,
+      error: `${fieldName} is required and must be a valid UUID.`,
+    };
+  }
+
+  const result = parseOptionalUuidParam(value, fieldName);
+  if (!result.ok) {
+    return {
+      ok: false,
+      error: `${fieldName} is required and must be a valid UUID.`,
+    };
+  }
+
+  return result;
+}
+
 function parseIsoDate(value, fieldName) {
   if (value === undefined) {
     return undefined;
@@ -57,6 +88,8 @@ function parseLimitParam(
 module.exports = {
   isValidUuid,
   normalizeOptionalString,
+  parseOptionalUuidParam,
+  parseRequiredUuidParam,
   parseIsoDate,
   parseLimitParam,
 };

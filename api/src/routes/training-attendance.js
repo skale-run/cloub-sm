@@ -1,10 +1,11 @@
 const express = require("express");
 const { query } = require("../db/pool");
 const {
-  isValidUuid,
   normalizeOptionalString,
   parseIsoDate,
   parseLimitParam,
+  parseOptionalUuidParam,
+  parseRequiredUuidParam,
 } = require("../utils/validation");
 const { createFilterBuilder } = require("../utils/query-builder");
 
@@ -30,20 +31,26 @@ router.get("/", async (req, res, next) => {
 
     const filterBuilder = createFilterBuilder();
 
-    if (memberId !== undefined) {
-      if (!isValidUuid(memberId)) {
-        return res.status(400).json({ error: "memberId must be a valid UUID." });
-      }
-
-      filterBuilder.addEquality("member_id", memberId);
+    const memberIdResult = parseOptionalUuidParam(memberId, "memberId");
+    if (!memberIdResult.ok) {
+      return res.status(400).json({ error: memberIdResult.error });
+    }
+    if (memberIdResult.value !== undefined) {
+      filterBuilder.addEquality("member_id", memberIdResult.value);
     }
 
-    if (calendarEventId !== undefined) {
-      if (!isValidUuid(calendarEventId)) {
-        return res.status(400).json({ error: "calendarEventId must be a valid UUID." });
-      }
-
-      filterBuilder.addEquality("calendar_event_id", calendarEventId);
+    const calendarEventIdResult = parseOptionalUuidParam(
+      calendarEventId,
+      "calendarEventId",
+    );
+    if (!calendarEventIdResult.ok) {
+      return res.status(400).json({ error: calendarEventIdResult.error });
+    }
+    if (calendarEventIdResult.value !== undefined) {
+      filterBuilder.addEquality(
+        "calendar_event_id",
+        calendarEventIdResult.value,
+      );
     }
 
     if (statusFilter !== undefined) {
@@ -80,14 +87,17 @@ router.post("/", async (req, res, next) => {
   try {
     const { calendarEventId, memberId, status, recordedAt, note } = req.body ?? {};
 
-    if (!calendarEventId || !isValidUuid(calendarEventId)) {
-      return res
-        .status(400)
-        .json({ error: "calendarEventId is required and must be a valid UUID." });
+    const calendarEventIdResult = parseRequiredUuidParam(
+      calendarEventId,
+      "calendarEventId",
+    );
+    if (!calendarEventIdResult.ok) {
+      return res.status(400).json({ error: calendarEventIdResult.error });
     }
 
-    if (!memberId || !isValidUuid(memberId)) {
-      return res.status(400).json({ error: "memberId is required and must be a valid UUID." });
+    const memberIdResult = parseRequiredUuidParam(memberId, "memberId");
+    if (!memberIdResult.ok) {
+      return res.status(400).json({ error: memberIdResult.error });
     }
 
     if (!status || !ALLOWED_STATUSES.has(status)) {
@@ -104,8 +114,8 @@ router.post("/", async (req, res, next) => {
        VALUES ($1, $2, $3, COALESCE($4::timestamptz, NOW()), $5)
        RETURNING id, calendar_event_id, member_id, status, recorded_at, note, created_at`,
       [
-        calendarEventId,
-        memberId,
+        calendarEventIdResult.value,
+        memberIdResult.value,
         status,
         normalizedRecordedAt ?? null,
         normalizedNote ?? null,

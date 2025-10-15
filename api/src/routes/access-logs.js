@@ -1,10 +1,11 @@
 const express = require("express");
 const { query } = require("../db/pool");
 const {
-  isValidUuid,
   normalizeOptionalString,
   parseIsoDate,
   parseLimitParam,
+  parseOptionalUuidParam,
+  parseRequiredUuidParam,
 } = require("../utils/validation");
 const { createFilterBuilder } = require("../utils/query-builder");
 
@@ -27,12 +28,12 @@ router.get("/", async (req, res, next) => {
 
     const filterBuilder = createFilterBuilder();
 
-    if (memberId !== undefined) {
-      if (!isValidUuid(memberId)) {
-        return res.status(400).json({ error: "memberId must be a valid UUID." });
-      }
-
-      filterBuilder.addEquality("member_id", memberId);
+    const memberIdResult = parseOptionalUuidParam(memberId, "memberId");
+    if (!memberIdResult.ok) {
+      return res.status(400).json({ error: memberIdResult.error });
+    }
+    if (memberIdResult.value !== undefined) {
+      filterBuilder.addEquality("member_id", memberIdResult.value);
     }
 
     const limit = parseLimitParam(limitParam);
@@ -61,8 +62,9 @@ router.post("/", async (req, res, next) => {
   try {
     const { memberId, accessedAt, accessPoint, note } = req.body ?? {};
 
-    if (!memberId || !isValidUuid(memberId)) {
-      return res.status(400).json({ error: "memberId is required and must be a valid UUID." });
+    const memberIdResult = parseRequiredUuidParam(memberId, "memberId");
+    if (!memberIdResult.ok) {
+      return res.status(400).json({ error: memberIdResult.error });
     }
 
     const normalizedAccessPoint = normalizeOptionalString(accessPoint);
@@ -75,7 +77,7 @@ router.post("/", async (req, res, next) => {
        VALUES ($1, COALESCE($2::timestamptz, NOW()), $3, $4)
        RETURNING id, member_id, accessed_at, access_point, note, created_at`,
       [
-        memberId,
+        memberIdResult.value,
         normalizedAccessedAt ?? null,
         normalizedAccessPoint ?? null,
         normalizedNote ?? null,
