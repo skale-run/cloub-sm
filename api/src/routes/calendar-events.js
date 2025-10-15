@@ -5,6 +5,12 @@ const router = express.Router();
 
 const ALLOWED_CATEGORIES = new Set(["training", "competition"]);
 const ALLOWED_LEVELS = new Set(["regional", "national", "international"]);
+const ALLOWED_EVENT_TYPES = new Set([
+  "competition",
+  "entrainment",
+  "meet",
+  "other",
+]);
 
 function isValidUuid(value) {
   return (
@@ -21,16 +27,58 @@ function toIsoString(value) {
   return value ?? null;
 }
 
+function parseMembers(value) {
+  if (!value) {
+    return [];
+  }
+
+  const parsed = Array.isArray(value)
+    ? value
+    : typeof value === "string"
+      ? (() => {
+          try {
+            const result = JSON.parse(value);
+            return Array.isArray(result) ? result : [];
+          } catch (error) {
+            return [];
+          }
+        })()
+      : [];
+
+  return parsed
+    .map((member) => {
+      if (!member || typeof member !== "object") {
+        return null;
+      }
+
+      const { id, fullName, email, membershipId } = member;
+
+      if (!isValidUuid(id)) {
+        return null;
+      }
+
+      return {
+        id,
+        fullName: typeof fullName === "string" ? fullName : null,
+        email: typeof email === "string" ? email : null,
+        membershipId: typeof membershipId === "string" ? membershipId : null,
+      };
+    })
+    .filter(Boolean);
+}
+
 function formatCalendarEvent(row) {
   const base = {
     id: row.id,
     category: row.category,
+    eventType: row.event_type,
     titleKey: row.title_key,
     locationKey: row.location_key,
     start: toIsoString(row.start_time),
     end: toIsoString(row.end_time),
     createdAt: toIsoString(row.created_at),
     updatedAt: toIsoString(row.updated_at),
+    members: parseMembers(row.members),
   };
 
   if (row.category === "training") {
@@ -52,6 +100,7 @@ function getCalendarEventRowById(id, executor = query) {
     `SELECT
         ce.id,
         ce.category,
+        ce.event_type,
         ce.title_key,
         ce.location_key,
         ce.start_time,
@@ -60,7 +109,24 @@ function getCalendarEventRowById(id, executor = query) {
         ce.updated_at,
         ted.coach_key,
         ced.level,
-        ced.check_in
+        ced.check_in,
+        COALESCE(
+          (
+            SELECT jsonb_agg(
+              jsonb_build_object(
+                'id', m.id,
+                'fullName', m.full_name,
+                'email', m.email,
+                'membershipId', m.membership_id
+              )
+              ORDER BY m.full_name
+            )
+            FROM calendar_event_members cem
+            JOIN members m ON m.id = cem.member_id
+            WHERE cem.calendar_event_id = ce.id
+          ),
+          '[]'::jsonb
+        ) AS members
       FROM calendar_events ce
       LEFT JOIN training_event_details ted ON ted.calendar_event_id = ce.id
       LEFT JOIN competition_event_details ced ON ced.calendar_event_id = ce.id
@@ -80,6 +146,7 @@ router.get("/", async (req, res, next) => {
       `SELECT
          ce.id,
          ce.category,
+         ce.event_type,
          ce.title_key,
          ce.location_key,
          ce.start_time,
@@ -88,7 +155,24 @@ router.get("/", async (req, res, next) => {
          ce.updated_at,
          ted.coach_key,
          ced.level,
-         ced.check_in
+         ced.check_in,
+         COALESCE(
+           (
+             SELECT jsonb_agg(
+               jsonb_build_object(
+                 'id', m.id,
+                 'fullName', m.full_name,
+                 'email', m.email,
+                 'membershipId', m.membership_id
+               )
+               ORDER BY m.full_name
+             )
+             FROM calendar_event_members cem
+             JOIN members m ON m.id = cem.member_id
+             WHERE cem.calendar_event_id = ce.id
+           ),
+           '[]'::jsonb
+         ) AS members
        FROM calendar_events ce
        LEFT JOIN training_event_details ted ON ted.calendar_event_id = ce.id
        LEFT JOIN competition_event_details ced ON ced.calendar_event_id = ce.id
@@ -124,6 +208,7 @@ router.get("/:id", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   const {
     category,
+    eventType,
     titleKey,
     locationKey,
     start,
@@ -131,14 +216,21 @@ router.post("/", async (req, res, next) => {
     coachKey,
     level,
     checkIn,
+    members,
   } = req.body ?? {};
 
   const normalizedCategory = typeof category === "string" ? category.trim().toLowerCase() : "";
+  const normalizedEventType =
+    typeof eventType === "string" ? eventType.trim().toLowerCase() : "";
   const normalizedTitleKey = typeof titleKey === "string" ? titleKey.trim() : "";
   const normalizedLocationKey = typeof locationKey === "string" ? locationKey.trim() : "";
 
   if (!ALLOWED_CATEGORIES.has(normalizedCategory)) {
     return res.status(400).json({ error: "Category must be training or competition." });
+  }
+
+  if (!ALLOWED_EVENT_TYPES.has(normalizedEventType)) {
+    return res.status(400).json({ error: "Invalid event type provided." });
   }
 
   if (!normalizedTitleKey || !normalizedLocationKey) {
@@ -158,6 +250,43 @@ router.post("/", async (req, res, next) => {
     return res
       .status(400)
       .json({ error: "End time must be after the start time." });
+  }
+
+  let memberIds = [];
+
+  if (members !== undefined) {
+    if (!Array.isArray(members)) {
+      return res.status(400).json({ error: "Members must be an array of UUID strings." });
+    }
+
+    const normalizedMembers = [];
+
+    for (const memberId of members) {
+      if (typeof memberId !== "string") {
+        return res.status(400).json({ error: "Member IDs must be UUID strings." });
+      }
+
+      const trimmed = memberId.trim();
+
+      if (!isValidUuid(trimmed)) {
+        return res.status(400).json({ error: "One or more member IDs are invalid." });
+      }
+
+      normalizedMembers.push(trimmed);
+    }
+
+    memberIds = [...new Set(normalizedMembers)];
+  }
+
+  if (memberIds.length > 0) {
+    const memberCheck = await query(
+      `SELECT id FROM members WHERE id = ANY($1::uuid[])`,
+      [memberIds],
+    );
+
+    if (memberCheck.rowCount !== memberIds.length) {
+      return res.status(400).json({ error: "One or more member IDs do not exist." });
+    }
   }
 
   let normalizedCoachKey = null;
@@ -195,11 +324,12 @@ router.post("/", async (req, res, next) => {
     transactionStarted = true;
 
     const baseResult = await client.query(
-      `INSERT INTO calendar_events (category, title_key, location_key, start_time, end_time)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO calendar_events (category, event_type, title_key, location_key, start_time, end_time)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING id`,
       [
         normalizedCategory,
+        normalizedEventType,
         normalizedTitleKey,
         normalizedLocationKey,
         startDate.toISOString(),
@@ -220,6 +350,15 @@ router.post("/", async (req, res, next) => {
         `INSERT INTO competition_event_details (calendar_event_id, level, check_in)
          VALUES ($1, $2, $3)`,
         [eventId, normalizedLevel, checkInDate.toISOString()],
+      );
+    }
+
+    if (memberIds.length > 0) {
+      await client.query(
+        `INSERT INTO calendar_event_members (calendar_event_id, member_id)
+         SELECT $1, member_ids.member_id
+         FROM UNNEST($2::uuid[]) AS member_ids(member_id)`,
+        [eventId, memberIds],
       );
     }
 
@@ -261,6 +400,7 @@ router.put("/:id", async (req, res, next) => {
 
   const {
     category,
+    eventType,
     titleKey,
     locationKey,
     start,
@@ -268,6 +408,7 @@ router.put("/:id", async (req, res, next) => {
     coachKey,
     level,
     checkIn,
+    members,
   } = req.body ?? {};
 
   const updates = [];
@@ -286,6 +427,19 @@ router.put("/:id", async (req, res, next) => {
       nextCategory = normalized;
       values.push(normalized);
       updates.push(`category = $${values.length}`);
+    }
+  }
+
+  if (typeof eventType === "string") {
+    const normalized = eventType.trim().toLowerCase();
+
+    if (!ALLOWED_EVENT_TYPES.has(normalized)) {
+      return res.status(400).json({ error: "Invalid event type provided." });
+    }
+
+    if (normalized !== existingRow.event_type) {
+      values.push(normalized);
+      updates.push(`event_type = $${values.length}`);
     }
   }
 
@@ -352,6 +506,42 @@ router.put("/:id", async (req, res, next) => {
   let nextCoachKey = existingRow.coach_key;
   let nextLevel = existingRow.level;
   let nextCheckIn = existingRow.check_in;
+  let normalizedMemberIds = null;
+
+  if (members !== undefined) {
+    if (!Array.isArray(members)) {
+      return res.status(400).json({ error: "Members must be an array of UUID strings." });
+    }
+
+    const collected = [];
+
+    for (const memberId of members) {
+      if (typeof memberId !== "string") {
+        return res.status(400).json({ error: "Member IDs must be UUID strings." });
+      }
+
+      const trimmed = memberId.trim();
+
+      if (!isValidUuid(trimmed)) {
+        return res.status(400).json({ error: "One or more member IDs are invalid." });
+      }
+
+      collected.push(trimmed);
+    }
+
+    normalizedMemberIds = [...new Set(collected)];
+
+    if (normalizedMemberIds.length > 0) {
+      const memberCheck = await query(
+        `SELECT id FROM members WHERE id = ANY($1::uuid[])`,
+        [normalizedMemberIds],
+      );
+
+      if (memberCheck.rowCount !== normalizedMemberIds.length) {
+        return res.status(400).json({ error: "One or more member IDs do not exist." });
+      }
+    }
+  }
 
   if (nextCategory === "training") {
     if (coachKey !== undefined) {
@@ -495,6 +685,22 @@ router.put("/:id", async (req, res, next) => {
           `INSERT INTO competition_event_details (calendar_event_id, level, check_in)
            VALUES ($1, $2, $3)`,
           [id, nextLevel, nextCheckIn.toISOString()],
+        );
+      }
+    }
+
+    if (normalizedMemberIds !== null) {
+      await client.query(
+        `DELETE FROM calendar_event_members WHERE calendar_event_id = $1`,
+        [id],
+      );
+
+      if (normalizedMemberIds.length > 0) {
+        await client.query(
+          `INSERT INTO calendar_event_members (calendar_event_id, member_id)
+           SELECT $1, member_ids.member_id
+           FROM UNNEST($2::uuid[]) AS member_ids(member_id)`,
+          [id, normalizedMemberIds],
         );
       }
     }
