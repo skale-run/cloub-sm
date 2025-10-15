@@ -4,8 +4,8 @@ import { I18nextProvider } from "react-i18next";
 import { applyThemeToDocument } from "./theme.js";
 import "./index.css";
 import App from "./App.tsx";
-import { AthletePortalModalProvider } from "./features/auth/AthletePortalModalContext";
-import i18n from "./lib/i18n";
+import { AthletePortalModalProvider } from "./features/auth/AthletePortalModalContext.tsx";
+import i18n from "./lib/i18n.ts";
 
 applyThemeToDocument();
 
