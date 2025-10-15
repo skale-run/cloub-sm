@@ -917,36 +917,36 @@ export const en = {
   },
   information: {
     academic: {
-      heading: "Taekwondo curriculum progression",
+      heading: "Academic record & planning",
       description:
-        "Track Kukkiwon coursework, performance labs, and leadership requirements alongside the season plan.",
+        "Monitor credit progress, milestone evaluations, and advisor follow-ups in one place.",
       creditBadge: {
-        label: "Curriculum hours",
-        value: "{{current}} / {{target}} hours logged",
-        helper: "Ready for Kukkiwon submission",
+        label: "Credits this term",
+        value: "{{current}} / {{target}} credits confirmed",
+        helper: "On pace for graduation review",
       },
       creditLoad: {
-        heading: "Curriculum load snapshot",
+        heading: "Credit load overview",
         caption:
-          "{{current}} of {{target}} targeted hours confirmed for this term",
+          "{{current}} of {{target}} credits confirmed for this term",
         helper:
-          "{{available}} elective hours available to tailor specialization blocks.",
+          "{{available}} elective credits remain to personalise your schedule.",
       },
       creditDistribution: {
-        coreSciences: {
-          label: "Technical curriculum",
-          value: "12 hours",
-          context: "Dan theory and poomsae breakdowns",
+        coreCurriculum: {
+          label: "Core curriculum",
+          value: "9 credits",
+          context: "Major requirements in progress",
         },
-        performanceLabs: {
-          label: "Performance labs",
-          value: "8 hours",
-          context: "Kyorugi video review & sparring analytics",
+        researchLabs: {
+          label: "Research & labs",
+          value: "6 credits",
+          context: "Lab attendance verified with faculty",
         },
-        leadershipElectives: {
-          label: "Leadership & officiating",
-          value: "4 hours",
-          context: "Corner coaching + WT rule clinics",
+        electives: {
+          label: "Electives",
+          value: "3 credits",
+          context: "Advisor approval submitted",
         },
       },
       programInsights: {
@@ -954,66 +954,66 @@ export const en = {
       },
       summaryInsights: {
         currentGpa: {
-          label: "Kukkiwon coursework score",
-          value: "91%",
-          context: "Averaged across spring theory modules",
+          label: "Current GPA",
+          value: "3.72",
+          context: "Calculated across upper-division courses",
         },
-        scholarshipEligibility: {
-          label: "WT licence status",
-          value: "Approved",
-          context: "2025 federation licence on file",
+        scholarshipStanding: {
+          label: "Scholarship standing",
+          value: "Maintained",
+          context: "Renewal review scheduled for May 15",
         },
-        graduationPath: {
-          label: "Dan progression",
-          value: "3rd Dan candidate",
-          context: "Prerequisites aligned for Oct grading",
+        graduationPlan: {
+          label: "Graduation plan",
+          value: "Spring 2026",
+          context: "Capstone proposal approved",
         },
       },
       modules: {
-        credits: "{{count}} hours",
+        credits: "{{count}} credits",
         focusCheckpoint: "Focus checkpoint",
         progress: "{{percent}}% complete",
-        nextEvaluationLabel: "Next evaluation · {{date}}",
-        elitePoomsaeAnalytics: {
-          title: "Elite Poomsae Analytics",
+        nextEvaluationLabel: "Next milestone · {{date}}",
+        capstoneResearchStudio: {
+          title: "Capstone research studio",
           focus:
-            "Refine Taegeuk 6 scoring cues and rhythm mapping for national judges.",
-          nextEvaluationDate: "May 05",
+            "Compile findings with faculty feedback ahead of the final defence.",
+          nextEvaluationDate: "May 10",
         },
-        kyorugiStrategyLab: {
-          title: "Kyorugi Strategy Lab",
+        dataVisualizationLab: {
+          title: "Data visualisation lab",
           focus:
-            "Build counter-attack decision trees for southpaw opponents.",
+            "Finalise dashboard deliverables and peer review results.",
           nextEvaluationDate: "Apr 28",
         },
-        recoveryFuelSystems: {
-          title: "Recovery & Fuel Systems",
-          focus: "Deliver individualized cutting-phase fueling protocols.",
+        communityImpactSeminar: {
+          title: "Community impact seminar",
+          focus: "Submit reflective brief documenting service-learning outcomes.",
           nextEvaluationDate: "—",
         },
       },
       moduleStatuses: {
         onTrack: "On track",
         completed: "Completed",
-        labReportDue: "Lab report due",
+        actionNeeded: "Action needed",
       },
       upcomingEvaluations: {
         heading: "Upcoming evaluations",
         helper: "Next 30 days",
         dateLabel: "Due {{date}}",
-        elitePoomsaeAnalytics: {
-          module: "Elite Poomsae Analytics",
-          type: "Video adjudication review",
-          date: "May 05",
+        capstonePresentation: {
+          module: "Capstone research studio",
+          type: "Faculty presentation",
+          date: "May 10",
         },
-        kyorugiStrategyLab: {
-          module: "Kyorugi Strategy Lab",
-          type: "Scenario sparring audit",
+        researchColloquium: {
+          module: "Undergraduate research colloquium",
+          type: "Poster submission",
           date: "Apr 28",
         },
-        recoveryFuelSystems: {
-          module: "Recovery & Fuel Systems",
-          type: "Nutrition consult submission",
+        internshipReflection: {
+          module: "Internship reflection",
+          type: "Portfolio review",
           date: "May 30",
         },
       },
@@ -1026,43 +1026,43 @@ export const en = {
           scheduled: "Scheduled",
         },
         items: {
-          wtLicense: {
-            label: "Maintain World Taekwondo athlete licence",
+          financialAid: {
+            label: "Confirm financial aid requirements",
             detail:
-              "Renewal paperwork approved — upload confirmation to the athlete portal.",
+              "Documentation received — upload signed award letter to the portal.",
           },
-          weightCertification: {
-            label: "Submit weight certification",
+          internshipPaperwork: {
+            label: "Submit internship paperwork",
             detail:
-              "Awaiting updated -80 kg verification from sports science team.",
+              "Awaiting updated employer agreement from career services.",
           },
-          cornerBriefing: {
-            label: "Schedule corner briefing",
+          advisorMeeting: {
+            label: "Schedule advisor meeting",
             detail:
-              "Coordinate tactics walkthrough with Master Rivera before Seoul Open.",
+              "Coordinate degree-planning session ahead of autumn registration.",
           },
         },
       },
       advisor: {
         heading: "Advisor guidance",
-        helper: "Last synced Apr 10",
+        helper: "Last updated Apr 10",
         notes: {
-          internationalCircuit: {
-            title: "International circuit planning",
+          degreeAudit: {
+            title: "Degree audit review",
             description:
-              "Align travel blocks with WT ranking events and recovery windows.",
-            action: "Confirm itinerary",
+              "Verify general education substitutions before submission.",
+            action: "Upload documents",
           },
-          wtRanking: {
-            title: "WT ranking submission",
+          researchFunding: {
+            title: "Research funding follow-up",
             description:
-              "Compile latest podium results and upload dossier by May 1.",
-            action: "Prepare dossier",
+              "Prepare summary for undergraduate research grant renewal.",
+            action: "Share update",
           },
-          communityOutreach: {
-            title: "Community outreach hours",
+          careerMentorship: {
+            title: "Career mentorship hours",
             description:
-              "Log mentorship workshops to satisfy federation service requirements.",
+              "Log mentorship sessions to complete graduation requirement.",
           },
         },
       },
