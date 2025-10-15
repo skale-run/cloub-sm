@@ -23,11 +23,19 @@ const attendanceByWeek: Array<{
   { key: "week16", plannedSessions: 3, attendedSessions: 2 },
 ];
 
-const attendanceInsights = [
+type AttendanceInsightKey =
+  | "consistencyStreak"
+  | "availabilityForms"
+  | "readinessIndex";
+
+const attendanceInsightDefinitions: Array<{
+  key: AttendanceInsightKey;
+  icon: LucideIcon;
+}> = [
   { key: "consistencyStreak", icon: ClipboardCheck },
   { key: "availabilityForms", icon: CalendarDays },
   { key: "readinessIndex", icon: LineChart },
-] as const;
+];
 
 type RosterStatus = "confirmed" | "pending" | "medicalHold";
 
@@ -134,6 +142,8 @@ const sessionFocusNotes: Record<
   },
 };
 
+const PREVIOUS_ATTENDANCE_RATE = 82;
+
 function TrainingAttendanceSection(): ReactElement {
   const { t, i18n } = useTranslation();
   const locale = i18n.language.startsWith("ar") ? "ar-EG" : "en-US";
@@ -157,116 +167,204 @@ function TrainingAttendanceSection(): ReactElement {
     [locale],
   );
 
-  const totalPlanned = attendanceByWeek.reduce(
-    (total, week) => total + week.plannedSessions,
-    0,
-  );
-  const totalAttended = attendanceByWeek.reduce(
-    (total, week) => total + week.attendedSessions,
-    0,
-  );
-  const attendanceRate = Math.round((totalAttended / totalPlanned) * 100);
-  const previousAttendanceRate = 82;
-  const rateDelta = attendanceRate - previousAttendanceRate;
-  const formattedDelta = `${rateDelta >= 0 ? "+" : ""}${rateDelta}`;
-  const rateDeltaLabel = t("information.trainingAttendance.rateDelta", {
-    value: formattedDelta,
-  });
+  const attendanceSummary = useMemo(
+    () => {
+      const summary = attendanceByWeek.reduce(
+        (accumulator, week) => {
+          accumulator.totalPlanned += week.plannedSessions;
+          accumulator.totalAttended += week.attendedSessions;
 
-  const upcomingSessions = trainingCalendarEvents.slice(0, 3).map((session) => {
-    const start = new Date(session.start);
-    const focus = sessionFocusNotes[session.id];
+          const weeklyRate = week.attendedSessions / week.plannedSessions;
+          if (
+            accumulator.bestWeek === null ||
+            weeklyRate > accumulator.bestRate
+          ) {
+            accumulator.bestWeek = week;
+            accumulator.bestRate = weeklyRate;
+          }
+          if (
+            accumulator.focusWeek === null ||
+            weeklyRate < accumulator.focusRate
+          ) {
+            accumulator.focusWeek = week;
+            accumulator.focusRate = weeklyRate;
+          }
+
+          return accumulator;
+        },
+        {
+          totalPlanned: 0,
+          totalAttended: 0,
+          bestWeek: null as (typeof attendanceByWeek)[number] | null,
+          bestRate: -Infinity,
+          focusWeek: null as (typeof attendanceByWeek)[number] | null,
+          focusRate: Infinity,
+        },
+      );
+
+      const attendanceRate = summary.totalPlanned
+        ? Math.round((summary.totalAttended / summary.totalPlanned) * 100)
+        : 0;
+
+      return {
+        totalPlanned: summary.totalPlanned,
+        totalAttended: summary.totalAttended,
+        attendanceRate,
+        bestWeek: summary.bestWeek,
+        focusWeek: summary.focusWeek,
+      };
+    },
+    [],
+  );
+
+  const { totalAttended, totalPlanned, attendanceRate, bestWeek, focusWeek } =
+    attendanceSummary;
+
+  const rateDeltaLabel = useMemo(() => {
+    const rateDelta = attendanceRate - PREVIOUS_ATTENDANCE_RATE;
+    const formattedDelta = `${rateDelta >= 0 ? "+" : ""}${rateDelta}`;
+    return t("information.trainingAttendance.rateDelta", {
+      value: formattedDelta,
+    });
+  }, [attendanceRate, t]);
+
+  const bestWeekContent = useMemo(() => {
+    if (!bestWeek) {
+      return null;
+    }
+
     return {
-      id: session.id,
-      title: t(session.titleKey),
-      dateLabel: dateFormatter.format(start),
-      timeLabel: timeFormatter.format(start),
-      coach: t(session.coachKey),
-      location: t(session.locationKey),
-      focus: focus ? t(focus.focusKey) : undefined,
-      emphasis: focus ? t(focus.emphasisKey) : undefined,
+      label: t(
+        `information.trainingAttendance.byWeek.items.${bestWeek.key}.label`,
+      ),
+      highlight: t(
+        `information.trainingAttendance.byWeek.items.${bestWeek.key}.highlight`,
+      ),
     };
-  });
+  }, [bestWeek, t]);
+
+  const focusWeekContent = useMemo(() => {
+    if (!focusWeek) {
+      return null;
+    }
+
+    return {
+      label: t(
+        `information.trainingAttendance.byWeek.items.${focusWeek.key}.label`,
+      ),
+      highlight: t(
+        `information.trainingAttendance.byWeek.items.${focusWeek.key}.highlight`,
+      ),
+    };
+  }, [focusWeek, t]);
+
+  const upcomingSessions = useMemo(
+    () =>
+      trainingCalendarEvents.slice(0, 3).map((session) => {
+        const start = new Date(session.start);
+        const focus = sessionFocusNotes[session.id];
+        return {
+          id: session.id,
+          title: t(session.titleKey),
+          dateLabel: dateFormatter.format(start),
+          timeLabel: timeFormatter.format(start),
+          coach: t(session.coachKey),
+          location: t(session.locationKey),
+          focus: focus ? t(focus.focusKey) : undefined,
+          emphasis: focus ? t(focus.emphasisKey) : undefined,
+        };
+      }),
+    [dateFormatter, t, timeFormatter],
+  );
+
+  const rosterStatusCounts = useMemo(
+    () =>
+      rosterAttendance.reduce(
+        (accumulator, entry) => {
+          accumulator[entry.status] = (accumulator[entry.status] ?? 0) + 1;
+          return accumulator;
+        },
+        {} as Partial<Record<RosterStatus, number>>,
+      ),
+    [],
+  );
 
   const totalRoster = rosterAttendance.length;
 
-  const rosterStatusCounts = rosterAttendance.reduce(
-    (accumulator, entry) => {
-      accumulator[entry.status] = (accumulator[entry.status] ?? 0) + 1;
-      return accumulator;
-    },
-    {} as Partial<Record<RosterStatus, number>>,
+  const statusBreakdown = useMemo(
+    () =>
+      (Object.keys(statusBadgeStyles) as RosterStatus[]).map((status) => {
+        const count = rosterStatusCounts[status] ?? 0;
+        const percent =
+          totalRoster === 0 ? 0 : Math.round((count / totalRoster) * 100);
+        const summaryStyle = statusSummaryStyles[status];
+        const SummaryIcon = summaryStyle.icon;
+        return {
+          status,
+          count,
+          percent,
+          SummaryIcon,
+          trackClassName: summaryStyle.track,
+          barClassName: summaryStyle.bar,
+        };
+      }),
+    [rosterStatusCounts, totalRoster],
   );
 
-  const statusBreakdown = (Object.keys(statusBadgeStyles) as RosterStatus[]).map(
-    (status) => {
-      const count = rosterStatusCounts[status] ?? 0;
-      const percent = totalRoster === 0 ? 0 : Math.round((count / totalRoster) * 100);
-      const summaryStyle = statusSummaryStyles[status];
-      const SummaryIcon = summaryStyle.icon;
-      return {
-        status,
-        count,
-        percent,
-        SummaryIcon,
-        trackClassName: summaryStyle.track,
-        barClassName: summaryStyle.bar,
-      };
-    },
+  const followUpActions = useMemo(
+    () =>
+      followUpActionDefinitions
+        .map((definition) => {
+          const count = rosterStatusCounts[definition.status] ?? 0;
+          if (!count) {
+            return null;
+          }
+
+          return {
+            id: definition.id,
+            icon: definition.icon,
+            count,
+            translationKey: definition.translationKey,
+          };
+        })
+        .filter(Boolean) as Array<{
+          id: "pending" | "medical";
+          icon: LucideIcon;
+          count: number;
+          translationKey: FollowUpActionDefinition["translationKey"];
+        }>,
+    [rosterStatusCounts],
   );
 
-  const followUpActions = followUpActionDefinitions
-    .map((definition) => {
-      const count = rosterStatusCounts[definition.status] ?? 0;
-      if (!count) {
-        return null;
-      }
+  const pendingRosterCount = rosterStatusCounts.pending ?? 0;
 
-      return {
-        id: definition.id,
-        icon: definition.icon,
-        count,
-        translationKey: definition.translationKey,
-      };
-    })
-    .filter(Boolean) as Array<{
-    id: "pending" | "medical";
-    icon: LucideIcon;
-    count: number;
-    translationKey: FollowUpActionDefinition["translationKey"];
-  }>;
+  const insights = useMemo(
+    () =>
+      attendanceInsightDefinitions.map((definition) => {
+        const baseKey = `information.trainingAttendance.insights.${definition.key}`;
+        const label = t(`${baseKey}.label`);
+        const Icon = definition.icon;
 
-  const weeklyAttendanceRanking = attendanceByWeek.reduce(
-    (
-      accumulator,
-      week,
-    ): {
-      bestWeek: (typeof attendanceByWeek)[number] | null;
-      bestRate: number;
-      focusWeek: (typeof attendanceByWeek)[number] | null;
-      focusRate: number;
-    } => {
-      const weeklyRate = week.attendedSessions / week.plannedSessions;
-      if (accumulator.bestWeek === null || weeklyRate > accumulator.bestRate) {
-        accumulator.bestWeek = week;
-        accumulator.bestRate = weeklyRate;
-      }
-      if (accumulator.focusWeek === null || weeklyRate < accumulator.focusRate) {
-        accumulator.focusWeek = week;
-        accumulator.focusRate = weeklyRate;
-      }
-      return accumulator;
-    },
-    {
-      bestWeek: null,
-      bestRate: -Infinity,
-      focusWeek: null,
-      focusRate: Infinity,
-    },
+        if (definition.key === "availabilityForms") {
+          const value = t(`${baseKey}.value`, { count: pendingRosterCount });
+          const detail =
+            pendingRosterCount === 0
+              ? t(`${baseKey}.detailCleared`)
+              : t(`${baseKey}.detailPending`, { count: pendingRosterCount });
+
+          return { key: definition.key, label, value, detail, Icon };
+        }
+
+        return {
+          key: definition.key,
+          label,
+          value: t(`${baseKey}.value`),
+          detail: t(`${baseKey}.detail`),
+          Icon,
+        };
+      }),
+    [pendingRosterCount, t],
   );
-
-  const bestWeek = weeklyAttendanceRanking.bestWeek;
-  const focusWeek = weeklyAttendanceRanking.focusWeek;
 
   return (
     <section id="training-attendance" className="space-y-6">
@@ -310,34 +408,26 @@ function TrainingAttendanceSection(): ReactElement {
             </p>
           </header>
           <div className="space-y-2 text-xs text-red-100/70">
-            {bestWeek ? (
+            {bestWeekContent ? (
               <p>
                 {t("information.trainingAttendance.byWeek.peak", {
-                  label: t(
-                    `information.trainingAttendance.byWeek.items.${bestWeek.key}.label`,
-                  ),
-                  highlight: t(
-                    `information.trainingAttendance.byWeek.items.${bestWeek.key}.highlight`,
-                  ),
+                  label: bestWeekContent.label,
+                  highlight: bestWeekContent.highlight,
                 })}
               </p>
             ) : null}
-            {focusWeek ? (
+            {focusWeekContent ? (
               <p>
                 {t("information.trainingAttendance.byWeek.focus", {
-                  label: t(
-                    `information.trainingAttendance.byWeek.items.${focusWeek.key}.label`,
-                  ),
-                  highlight: t(
-                    `information.trainingAttendance.byWeek.items.${focusWeek.key}.highlight`,
-                  ),
+                  label: focusWeekContent.label,
+                  highlight: focusWeekContent.highlight,
                 })}
               </p>
             ) : null}
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
-            {attendanceInsights.map((insight) => {
-              const InsightIcon = insight.icon;
+            {insights.map((insight) => {
+              const InsightIcon = insight.Icon;
               return (
                 <RedSurface
                   key={insight.key}
@@ -346,9 +436,7 @@ function TrainingAttendanceSection(): ReactElement {
                 >
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                      {t(
-                        `information.trainingAttendance.insights.${insight.key}.label`,
-                      )}
+                      {insight.label}
                     </p>
                     <InsightIcon
                       className="h-5 w-5 text-red-200/80"
@@ -356,14 +444,10 @@ function TrainingAttendanceSection(): ReactElement {
                     />
                   </div>
                   <p className="text-lg font-semibold text-red-50">
-                    {t(
-                      `information.trainingAttendance.insights.${insight.key}.value`,
-                    )}
+                    {insight.value}
                   </p>
                   <p className="text-xs text-red-100/80">
-                    {t(
-                      `information.trainingAttendance.insights.${insight.key}.detail`,
-                    )}
+                    {insight.detail}
                   </p>
                 </RedSurface>
               );

@@ -1203,9 +1203,14 @@ export const en = {
           detail: "Zero misses since Apr 2 · new personal best",
         },
         availabilityForms: {
-          label: "Availability forms",
-          value: "3 pending",
-          detail: "Travel squad confirmations required before Friday",
+          label: "Travel confirmations",
+          value_one: "{{count}} pending form",
+          value_other: "{{count}} pending forms",
+          detailPending_one:
+            "{{count}} travel confirmation still needs logistics sign-off before Friday.",
+          detailPending_other:
+            "{{count}} travel confirmations still need logistics sign-off before Friday.",
+          detailCleared: "All travel confirmations received for this block.",
         },
         readinessIndex: {
           label: "Readiness index",
