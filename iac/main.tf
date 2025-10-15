@@ -46,14 +46,15 @@ resource "google_service_account" "cloud_run" {
   display_name = "Cloud Run service account for ${var.service_name}"
 }
 
-resource "google_artifact_registry_repository_iam_member" "cloud_run_data_reader" {
-  project    = var.project_id
-  location   = var.region
-  repository = "data"
-  role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:${google_service_account.cloud_run.email}"
+data "google_storage_bucket" "lkany_io_tfstate" {
+  name = "lkany-io-tfstate"
 }
 
+resource "google_storage_bucket_iam_member" "cloud_run_object_viewer" {
+  bucket = data.google_storage_bucket.lkany_io_tfstate.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${google_service_account.cloud_run.email}"
+}
 resource "google_cloud_run_service" "service" {
   name     = var.service_name
   location = var.region
