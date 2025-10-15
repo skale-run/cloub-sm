@@ -5,6 +5,7 @@ const helmet = require("helmet");
 
 const membersRouter = require("./src/routes/members");
 const { errorHandler } = require("./src/middleware/error-handler");
+const { notFoundHandler } = require("./src/middleware/not-found");
 const { pool } = require("./src/db/pool");
 
 const app = express();
@@ -28,6 +29,7 @@ app.get("/health", (req, res) => {
 
 app.use("/api/members", membersRouter);
 
+app.use(notFoundHandler);
 app.use(errorHandler);
 
 async function start() {
