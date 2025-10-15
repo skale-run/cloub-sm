@@ -25,7 +25,10 @@ function Header({
   userFullName,
 }: HeaderProps) {
   const userInitials = getInitials(userFullName);
-  const { t } = useTranslation("header");
+  const { t, i18n } = useTranslation("header");
+  const isRTL = i18n.dir() === "rtl";
+  const CollapseIcon = isRTL ? ChevronRight : ChevronLeft;
+  const ExpandIcon = isRTL ? ChevronLeft : ChevronRight;
 
   return (
     <header className="app-header sticky top-0 z-40 border-b border-red-500/40 bg-red-950/80 px-2 backdrop-blur-xl">
@@ -51,9 +54,9 @@ function Header({
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-red-900/60 text-red-100 transition group-hover:bg-red-900/80">
               <Menu aria-hidden className="h-5 w-5 lg:hidden" />
               {isSidebarOpen ? (
-                <ChevronLeft aria-hidden className="hidden h-5 w-5 lg:block" />
+                <CollapseIcon aria-hidden className="hidden h-5 w-5 lg:block" />
               ) : (
-                <ChevronRight aria-hidden className="hidden h-5 w-5 lg:block" />
+                <ExpandIcon aria-hidden className="hidden h-5 w-5 lg:block" />
               )}
             </span>
           </button>
