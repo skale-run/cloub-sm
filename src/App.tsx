@@ -1,6 +1,5 @@
 import type { FormEvent } from "react";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Header from "./components/Header";
 import RedSurface from "./components/RedSurface";
@@ -383,36 +382,6 @@ function App() {
             onClick={handleSidebarNavigate}
             className="fixed inset-0 z-30 bg-red-950/70 backdrop-blur-sm lg:hidden"
           />
-        ) : null}
-
-        {isDesktop ? (
-          <button
-            type="button"
-            onClick={toggleSidebar}
-            aria-label={
-              sidebarOpen
-                ? t("common.navigation.collapse")
-                : t("common.navigation.expand")
-            }
-            aria-controls="app-sidebar"
-            aria-expanded={sidebarOpen}
-            className={`group fixed top-1/2 z-50 hidden -translate-y-1/2 items-center gap-2 rounded-r-3xl border border-red-500/40 bg-red-950/80 pr-4 text-red-100 shadow-[0_18px_40px_rgba(127,29,29,0.35)] transition hover:border-red-400/70 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 lg:flex ${
-              sidebarOpen ? "left-80" : "left-0"
-            }`}
-          >
-            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-900/60 text-red-100 transition group-hover:bg-red-900/80">
-              {sidebarOpen ? (
-                <ChevronLeft aria-hidden className="h-5 w-5" />
-              ) : (
-                <ChevronRight aria-hidden className="h-5 w-5" />
-              )}
-            </span>
-            <span className="hidden text-[11px] font-semibold uppercase tracking-[0.35em] text-red-200/80 xl:inline">
-              {sidebarOpen
-                ? t("common.navigation.collapse")
-                : t("common.navigation.expand")}
-            </span>
-          </button>
         ) : null}
 
         <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-3 py-5 sm:px-6 sm:py-6 lg:items-start lg:gap-8 lg:px-10 lg:py-10">

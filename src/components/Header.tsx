@@ -1,4 +1,4 @@
-import { Menu } from "lucide-react";
+import { ChevronLeft, ChevronRight, Menu } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 type HeaderProps = {
@@ -25,6 +25,7 @@ function Header({
 }: HeaderProps) {
   const userInitials = getInitials(userFullName);
   const { t } = useTranslation("header");
+  const { t: translate } = useTranslation();
 
   return (
     <header className="app-header sticky top-0 z-40 border-b border-red-500/40 bg-red-950/80 px-2 backdrop-blur-xl">
@@ -33,7 +34,7 @@ function Header({
           <button
             type="button"
             onClick={onToggleSidebar}
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-red-500/30 bg-red-950/60 text-red-100 transition hover:border-red-300/60 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 lg:hidden"
+            className="group inline-flex items-center gap-2 rounded-2xl border border-red-500/30 bg-red-950/60 p-1.5 text-red-100 transition hover:border-red-300/60 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
             aria-label={
               isSidebarOpen
                 ? t("aria.toggleNavigation.close")
@@ -42,7 +43,19 @@ function Header({
             aria-expanded={isSidebarOpen}
             aria-controls="app-sidebar"
           >
-            <Menu aria-hidden className="h-5 w-5" />
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-red-900/60 text-red-100 transition group-hover:bg-red-900/80">
+              <Menu aria-hidden className="h-5 w-5 lg:hidden" />
+              {isSidebarOpen ? (
+                <ChevronLeft aria-hidden className="hidden h-5 w-5 lg:block" />
+              ) : (
+                <ChevronRight aria-hidden className="hidden h-5 w-5 lg:block" />
+              )}
+            </span>
+            <span className="hidden pr-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-red-200/80 lg:inline">
+              {isSidebarOpen
+                ? translate("common.navigation.collapse")
+                : translate("common.navigation.expand")}
+            </span>
           </button>
           <h1 className="text-lg font-semibold leading-tight text-red-50 sm:text-2xl">
             {pageTitle}
