@@ -37,8 +37,13 @@ function LanguageSwitcher() {
           className="appearance-none rounded-2xl border border-red-500/40 bg-red-950/60 px-3 py-1.5 pr-9 text-red-50 shadow-inner transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
         >
           {languages.map((language) => (
-            <option key={language.code} value={language.code}>
-              {`${language.flag} ${t(`languageSwitcher.languages.${language.code}`)}`}
+            <option
+              key={language.code}
+              value={language.code}
+              aria-label={t(`languageSwitcher.languages.${language.code}`)}
+              title={t(`languageSwitcher.languages.${language.code}`)}
+            >
+              {language.flag}
             </option>
           ))}
         </select>
