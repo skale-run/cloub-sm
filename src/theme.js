@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export const typographyScale = {
   50: {
@@ -1008,11 +1008,14 @@ export const designTokens = {
 };
 
 let globalTokensApplied = false;
-const lastAppliedTheme = { root: null, mode: null };
+const lastAppliedTheme = { root: null, mode: null, source: null };
 
 function resolveThemeMode(candidate) {
-  if (VALID_THEME_MODES.has(candidate)) {
-    return candidate;
+  if (typeof candidate === "string") {
+    const normalized = candidate.toLowerCase();
+    if (VALID_THEME_MODES.has(normalized)) {
+      return normalized;
+    }
   }
   return DEFAULT_THEME_MODE;
 }
@@ -1064,22 +1067,46 @@ function applyGlobalTokens(root) {
   globalTokensApplied = true;
 }
 
-const VALID_THEME_MODES = new Set(["dark"]); // single-mode by design
+const VALID_THEME_MODES = new Set(["light", "dark"]);
+export const THEME_MODES = Object.freeze([...VALID_THEME_MODES]);
 const DEFAULT_THEME_MODE = "dark";
 
-export function applyThemeToDocument(mode = "dark", target) {
+const SYSTEM_MODE_TOKENS = new Set(["system", "auto", "default"]);
+
+function isSystemModeRequest(candidate) {
+  if (candidate == null) return true;
+  if (typeof candidate !== "string") return false;
+  return SYSTEM_MODE_TOKENS.has(candidate.toLowerCase());
+}
+
+export function applyThemeToDocument(mode, target) {
   const root =
     target ??
     (typeof document !== "undefined" ? document.documentElement : undefined);
   if (!root) return;
   applyGlobalTokens(root);
 
-  const resolvedMode = resolveThemeMode(mode);
+  let themeSource = "explicit";
+  let candidateMode = mode;
+
+  if (isSystemModeRequest(candidateMode)) {
+    themeSource = "system";
+    const stored = readStoredMode();
+    if (stored) {
+      candidateMode = stored;
+      themeSource = "storage";
+    } else {
+      candidateMode = getPreferredColorScheme();
+    }
+  }
+
+  const resolvedMode = resolveThemeMode(candidateMode);
   if (
     lastAppliedTheme.root === root &&
-    lastAppliedTheme.mode === resolvedMode
+    lastAppliedTheme.mode === resolvedMode &&
+    lastAppliedTheme.source === themeSource
   ) {
-    return;
+    return resolvedMode;
   }
 
   const cssAliases = themeAliasTokens[resolvedMode] ?? themeAliasTokens.dark;
@@ -1090,14 +1117,20 @@ export function applyThemeToDocument(mode = "dark", target) {
   // Apply dataset + color-scheme
   root.dataset.theme = resolvedMode;
   root.dataset.colorScheme = resolvedMode;
+  root.dataset.themeSource = themeSource;
   const colorScheme = resolvedMode === "dark" ? "dark" : "light";
   root.style.colorScheme = colorScheme;
   root.style.setProperty("color-scheme", colorScheme);
+  root.style.setProperty("--theme-mode", resolvedMode);
+  root.style.setProperty("--theme-source", themeSource);
 
   // If you want body to pick up the gradient automatically:
   // You can reference var(--app-bg-image) in your global CSS
   lastAppliedTheme.root = root;
   lastAppliedTheme.mode = resolvedMode;
+  lastAppliedTheme.source = themeSource;
+
+  return resolvedMode;
 }
 
 function getElectronThemeBridge() {
@@ -1124,8 +1157,10 @@ function readStoredMode() {
   if (typeof window === "undefined") return null;
   try {
     const stored = window.localStorage?.getItem(THEME_STORAGE_KEY);
-    if (VALID_THEME_MODES.has(stored ?? "")) {
-      return stored;
+    const normalized =
+      typeof stored === "string" ? stored.toLowerCase() : stored ?? undefined;
+    if (typeof normalized === "string" && VALID_THEME_MODES.has(normalized)) {
+      return normalized;
     }
     if (stored != null) {
       window.localStorage?.removeItem(THEME_STORAGE_KEY);
@@ -1139,11 +1174,13 @@ function readStoredMode() {
 function storeMode(mode) {
   if (typeof window === "undefined") return;
   try {
-    if (VALID_THEME_MODES.has(mode)) {
-      window.localStorage?.setItem(THEME_STORAGE_KEY, mode);
-    } else {
-      window.localStorage?.removeItem(THEME_STORAGE_KEY);
+    const normalized =
+      typeof mode === "string" ? mode.toLowerCase() : undefined;
+    if (normalized && VALID_THEME_MODES.has(normalized)) {
+      window.localStorage?.setItem(THEME_STORAGE_KEY, normalized);
+      return;
     }
+    window.localStorage?.removeItem(THEME_STORAGE_KEY);
   } catch {
     // ignore
   }
@@ -1169,23 +1206,124 @@ function getPreferredColorScheme() {
   }
 }
 
+function subscribeToSystemPreference(callback) {
+  if (typeof window === "undefined") return () => {};
+  const media = window.matchMedia?.("(prefers-color-scheme: dark)");
+  if (!media) return () => {};
+
+  const notify = (matches) => {
+    try {
+      callback(Boolean(matches));
+    } catch {
+      // ignore callback errors
+    }
+  };
+
+  notify(media.matches);
+
+  const listener = (event) => {
+    notify(event?.matches);
+  };
+
+  if (typeof media.addEventListener === "function") {
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }
+
+  if (typeof media.addListener === "function") {
+    media.addListener(listener);
+    return () => media.removeListener(listener);
+  }
+
+  return () => {};
+}
+
 export function useTheme() {
+  const [themeState, setThemeState] = useState(() => {
+    const stored = readStoredMode();
+    if (stored) {
+      return { mode: stored, hasExplicitMode: true };
+    }
+    return { mode: getPreferredColorScheme(), hasExplicitMode: false };
+  });
+
   useEffect(() => {
-    applyThemeToDocument("dark");
+    applyThemeToDocument(
+      themeState.hasExplicitMode ? themeState.mode : "system",
+    );
+  }, [themeState.mode, themeState.hasExplicitMode]);
+
+  useEffect(() => {
+    if (themeState.hasExplicitMode) {
+      storeMode(themeState.mode);
+      setElectronTheme(themeState.mode);
+      return;
+    }
+
+    clearStoredMode();
+    setElectronTheme("system");
+  }, [themeState.mode, themeState.hasExplicitMode]);
+
+  useEffect(() => {
+    if (themeState.hasExplicitMode) return undefined;
+
+    return subscribeToSystemPreference((isDark) => {
+      setThemeState((current) => {
+        if (current.hasExplicitMode) {
+          return current;
+        }
+        const nextMode = isDark ? "dark" : "light";
+        if (current.mode === nextMode) {
+          return current;
+        }
+        return { mode: nextMode, hasExplicitMode: false };
+      });
+    });
+  }, [themeState.hasExplicitMode]);
+
+  const setMode = useCallback((nextMode) => {
+    if (isSystemModeRequest(nextMode)) {
+      setThemeState(() => ({
+        mode: getPreferredColorScheme(),
+        hasExplicitMode: false,
+      }));
+      return;
+    }
+
+    setThemeState((current) => {
+      const resolved = resolveThemeMode(nextMode);
+      if (current.mode === resolved && current.hasExplicitMode) {
+        return current;
+      }
+      return { mode: resolved, hasExplicitMode: true };
+    });
   }, []);
 
-  const setMode = useCallback(() => {}, []);
-  const toggleMode = useCallback(() => {}, []);
+  const toggleMode = useCallback(() => {
+    setThemeState((current) => {
+      const nextMode = current.mode === "dark" ? "light" : "dark";
+      return { mode: nextMode, hasExplicitMode: true };
+    });
+  }, []);
+
+  const resetMode = useCallback(() => {
+    setThemeState(() => ({
+      mode: getPreferredColorScheme(),
+      hasExplicitMode: false,
+    }));
+  }, []);
 
   return useMemo(
     () => ({
-      mode: "dark",
-      isDark: true,
+      mode: themeState.mode,
+      isDark: themeState.mode === "dark",
       setMode,
       toggleMode,
-      hasExplicitMode: true,
+      resetMode,
+      hasExplicitMode: themeState.hasExplicitMode,
+      source: themeState.hasExplicitMode ? "explicit" : "system",
     }),
-    [setMode, toggleMode],
+    [themeState.mode, themeState.hasExplicitMode, setMode, toggleMode, resetMode],
   );
 }
 

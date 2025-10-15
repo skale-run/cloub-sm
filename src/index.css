@@ -1,9 +1,33 @@
 :root {
   color-scheme: dark;
-  font-family: "Tajawal", "Plus Jakarta Sans", Inter, "Segoe UI", system-ui, sans-serif;
+  font-family: var(
+    --font-family-sans,
+    "Tajawal",
+    "Plus Jakarta Sans",
+    Inter,
+    "Segoe UI",
+    system-ui,
+    sans-serif
+  );
+  accent-color: var(--accent-color, var(--color-primary, #c8183a));
   --app-border-color: rgb(248 113 113 / 42%);
   --app-border-highlight: rgb(255 147 179 / 58%);
   --app-border-shadow: rgb(88 28 67 / 45%);
+  --app-border-color: color-mix(
+    in srgb,
+    var(--color-border-default, rgb(248 113 113 / 42%)) 55%,
+    transparent
+  );
+  --app-border-highlight: color-mix(
+    in srgb,
+    var(--color-primary, rgb(232 56 86)) 68%,
+    transparent
+  );
+  --app-border-shadow: color-mix(
+    in srgb,
+    var(--color-border-strong, rgb(88 28 67 / 45%)) 65%,
+    transparent
+  );
 }
 
 html,
@@ -22,7 +46,7 @@ body {
   padding: 0;
   min-height: 100vh;
   display: flex;
-  background-color: #140208;
+  background-color: var(--color-app-background, #140208);
   background-image:
     radial-gradient(
       1320px 600px at 12% -16%,
@@ -35,8 +59,22 @@ body {
       transparent 74%
     ),
     linear-gradient(180deg, #140208 0%, #1f0410 42%, #31081b 100%);
-  color: rgb(255 227 231);
-  accent-color: #c8183a;
+  background-image: var(
+    --app-bg-image,
+    radial-gradient(
+      1320px 600px at 12% -16%,
+      rgb(232 56 86 / 30%),
+      transparent 70%
+    ),
+    radial-gradient(
+      1120px 660px at 86% -10%,
+      rgb(200 24 58 / 26%),
+      transparent 74%
+    ),
+    linear-gradient(180deg, #140208 0%, #1f0410 42%, #31081b 100%)
+  );
+  color: var(--color-text-primary, rgb(255 227 231));
+  accent-color: var(--accent-color, var(--color-primary, #c8183a));
   -webkit-font-smoothing: antialiased;
   font-synthesis: none;
   text-rendering: optimizelegibility;
@@ -48,6 +86,13 @@ body {
   background-clip: padding-box;
   box-shadow:
     inset 0 0 0 0.5px rgb(255 255 255 / 12%),
+    0 0 0 1px color-mix(in srgb, var(--app-border-shadow) 65%, transparent);
+  box-shadow:
+    inset 0 0 0 0.5px color-mix(
+      in srgb,
+      var(--color-text-inverse, #fff9fb) 12%,
+      transparent
+    ),
     0 0 0 1px color-mix(in srgb, var(--app-border-shadow) 65%, transparent);
 }
 
@@ -85,7 +130,12 @@ body {
 
 ::selection {
   background: rgb(232 56 86 / 62%);
-  color: #fff9fb;
+  background: color-mix(
+    in srgb,
+    var(--color-primary, rgb(232 56 86)) 62%,
+    transparent
+  );
+  color: var(--color-text-inverse, #fff9fb);
 }
 
 a {
@@ -130,6 +180,25 @@ img {
       rgb(255 95 135 / 12%),
       transparent 75%
     );
+  background:
+    radial-gradient(
+      120% 140% at 0% 0%,
+      color-mix(
+        in srgb,
+        var(--color-primary, rgb(232 56 86)) 28%,
+        transparent
+      ) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      90% 110% at 100% 12%,
+      color-mix(
+        in srgb,
+        var(--color-accent, rgb(242 111 62)) 20%,
+        transparent
+      ) 0%,
+      transparent 75%
+    );
   pointer-events: none;
   z-index: 0;
 }
@@ -145,6 +214,16 @@ img {
     rgb(255 172 198 / 0%),
     rgb(255 172 198 / 55%),
     rgb(255 172 198 / 0%)
+  );
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(
+      in srgb,
+      var(--color-primary, rgb(232 56 86)) 55%,
+      transparent
+    ),
+    transparent
   );
   pointer-events: none;
   z-index: 1;
