@@ -38,15 +38,15 @@ function Header({
   const ExpandIcon = isRTL ? ChevronLeft : ChevronRight;
 
   return (
-    <header className="app-header sticky top-0 z-40 isolate border-b border-white/10 bg-slate-950/85 backdrop-blur-xl">
+    <header className="app-header sticky top-0 z-40 isolate border-b border-white/5 bg-slate-950/95 text-white backdrop-blur-xl">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           aria-hidden
-          className="absolute left-1/2 top-[-120px] h-64 w-[620px] -translate-x-1/2 rounded-full bg-red-600/25 blur-3xl"
+          className="absolute left-1/2 top-[-120px] h-64 w-[620px] -translate-x-1/2 rounded-full bg-red-500/20 blur-3xl"
         />
         <div
           aria-hidden
-          className="absolute right-10 bottom-[-160px] h-72 w-72 rounded-full bg-red-900/30 blur-3xl"
+          className="absolute right-10 bottom-[-160px] h-72 w-72 rounded-full bg-red-900/20 blur-3xl"
         />
       </div>
 
@@ -60,7 +60,7 @@ function Header({
           <button
             type="button"
             onClick={onToggleSidebar}
-            className="group relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 text-red-50 shadow-[0_12px_32px_rgba(127,29,29,0.35)] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 hover:border-red-300/40 hover:bg-red-500/10"
+            className="group relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 text-white/80 shadow-[0_20px_45px_rgba(15,23,42,0.45)] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 hover:border-white/20 hover:bg-white/10 hover:text-white"
             aria-label={
               isSidebarOpen
                 ? t("aria.toggleNavigation.close")
@@ -85,21 +85,21 @@ function Header({
           </button>
 
           <div className="flex min-w-0 flex-col">
-            <span className="text-xs font-medium uppercase tracking-[0.32em] text-red-100/70">
+            <span className="text-xs font-medium uppercase tracking-[0.32em] text-white/55">
               {firstName ? `Welcome, ${firstName}` : "Club Command"}
             </span>
-            <h1 className="truncate text-xl font-semibold text-red-50 sm:text-2xl">{pageTitle}</h1>
+            <h1 className="truncate text-xl font-semibold text-white sm:text-2xl">{pageTitle}</h1>
           </div>
         </div>
 
-        <div className="flex flex-none items-center gap-4 text-red-50">
+        <div className="flex flex-none items-center gap-4 text-white">
           <div className="hidden shrink-0 text-right sm:flex sm:flex-col">
-            <span className="truncate text-sm font-semibold text-red-50">{userFullName}</span>
-            <span className="text-xs text-red-100/70">Active member</span>
+            <span className="truncate text-sm font-semibold text-white/90">{userFullName}</span>
+            <span className="text-xs text-white/55">Active member</span>
           </div>
-          <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-red-500 via-red-600 to-red-700 text-base font-semibold uppercase tracking-wide text-red-50 shadow-[0_12px_32px_rgba(127,29,29,0.35)] ring-1 ring-white/20">
+          <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-red-500/90 via-red-600 to-red-700 text-base font-semibold uppercase tracking-wide text-red-50 shadow-[0_20px_45px_rgba(15,23,42,0.45)] ring-1 ring-white/15">
             <span>{userInitials}</span>
-            <span className="pointer-events-none absolute inset-[2px] rounded-[18px] border border-white/20" aria-hidden />
+            <span className="pointer-events-none absolute inset-[2px] rounded-[18px] border border-white/15" aria-hidden />
           </div>
         </div>
       </div>
