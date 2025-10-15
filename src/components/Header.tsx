@@ -25,7 +25,6 @@ function Header({
 }: HeaderProps) {
   const userInitials = getInitials(userFullName);
   const { t } = useTranslation("header");
-  const { t: translate } = useTranslation();
 
   return (
     <header className="app-header sticky top-0 z-40 border-b border-red-500/40 bg-red-950/80 px-2 backdrop-blur-xl">
@@ -50,11 +49,6 @@ function Header({
               ) : (
                 <ChevronRight aria-hidden className="hidden h-5 w-5 lg:block" />
               )}
-            </span>
-            <span className="hidden pr-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-red-200/80 lg:inline">
-              {isSidebarOpen
-                ? translate("common.navigation.collapse")
-                : translate("common.navigation.expand")}
             </span>
           </button>
           <h1 className="text-lg font-semibold leading-tight text-red-50 sm:text-2xl">
