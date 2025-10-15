@@ -6,6 +6,7 @@ export const ar = {
         languages: {
           en: "English",
           ar: "العربية",
+          fr: "الفرنسية",
         },
       },
       navigation: {
