@@ -1,10 +1,11 @@
 import type { ReactElement } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import { getLanguagePresentation } from "../../lib/i18n";
 import { calendarEvents, type CalendarEvent } from "./calendarEvents";
+import { ChevronLeft, ChevronRight } from "../../lucide-react";
 
 type CalendarView = "month" | "week" | "day";
 
@@ -27,9 +28,10 @@ type WeekBucket = {
   }[];
 };
 
-type MonthBucket = {
-  id: string;
-  label: string;
+type MonthDay = {
+  key: string;
+  date: Date;
+  inCurrentMonth: boolean;
   events: CalendarEvent[];
 };
 
@@ -180,6 +182,24 @@ function CalendarSection(): ReactElement {
     [dateLocale, numberingSystem],
   );
 
+  const weekdayFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(dateLocale, {
+        weekday: "short",
+        numberingSystem,
+      }),
+    [dateLocale, numberingSystem],
+  );
+
+  const dayNumberFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(dateLocale, {
+        day: "numeric",
+        numberingSystem,
+      }),
+    [dateLocale, numberingSystem],
+  );
+
   const timeFormatter = useMemo(
     () =>
       new Intl.DateTimeFormat(dateLocale, {
@@ -265,27 +285,72 @@ function CalendarSection(): ReactElement {
     );
   }, [filteredEvents]);
 
-  const months = useMemo(() => {
-    const monthBuckets = new Map<string, MonthBucket>();
+  const [view, setView] = useState<CalendarView>("month");
+  const [selectedDayKey, setSelectedDayKey] = useState<string>("");
+  const [currentMonth, setCurrentMonth] = useState<Date>(() => {
+    const initial = new Date();
+    initial.setDate(1);
+    initial.setHours(0, 0, 0, 0);
+    return initial;
+  });
 
-    filteredEvents.forEach((event) => {
-      const startDate = new Date(event.start);
-      const monthKey = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, "0")}`;
-      const bucket = monthBuckets.get(monthKey);
+  const firstDayOfCurrentMonth = useMemo(() => {
+    const reference = new Date(currentMonth);
+    reference.setDate(1);
+    reference.setHours(0, 0, 0, 0);
+    return reference;
+  }, [currentMonth]);
 
-      if (bucket) {
-        bucket.events.push(event);
-      } else {
-        monthBuckets.set(monthKey, {
-          id: monthKey,
-          label: monthFormatter.format(startDate),
-          events: [event],
-        });
-      }
+  const lastDayOfCurrentMonth = useMemo(() => {
+    const reference = new Date(firstDayOfCurrentMonth);
+    reference.setMonth(reference.getMonth() + 1);
+    reference.setDate(0);
+    reference.setHours(0, 0, 0, 0);
+    return reference;
+  }, [firstDayOfCurrentMonth]);
+
+  const monthGridDays = useMemo<MonthDay[]>(() => {
+    const start = startOfWeek(firstDayOfCurrentMonth);
+    const end = endOfWeek(new Date(lastDayOfCurrentMonth));
+    const days: MonthDay[] = [];
+    const cursor = new Date(start);
+
+    while (cursor.getTime() <= end.getTime()) {
+      const dayDate = new Date(cursor);
+      const key = getDateKey(dayDate);
+      const eventsOnDay = filteredEvents.filter((event) =>
+        isSameDay(new Date(event.start), dayDate),
+      );
+
+      days.push({
+        key,
+        date: dayDate,
+        inCurrentMonth: dayDate.getMonth() === firstDayOfCurrentMonth.getMonth(),
+        events: eventsOnDay,
+      });
+
+      cursor.setDate(cursor.getDate() + 1);
+    }
+
+    return days;
+  }, [filteredEvents, firstDayOfCurrentMonth, lastDayOfCurrentMonth]);
+
+  const weekdayLabels = useMemo(() => {
+    const start = startOfWeek(firstDayOfCurrentMonth);
+    return Array.from({ length: 7 }).map((_, index) => {
+      const date = new Date(start);
+      date.setDate(start.getDate() + index);
+      return weekdayFormatter.format(date);
     });
+  }, [firstDayOfCurrentMonth, weekdayFormatter]);
 
-    return Array.from(monthBuckets.values());
-  }, [filteredEvents, monthFormatter]);
+  const monthEventsCount = useMemo(
+    () =>
+      monthGridDays
+        .filter((day) => day.inCurrentMonth)
+        .reduce((total, day) => total + day.events.length, 0),
+    [monthGridDays],
+  );
 
   const weeks = useMemo(() => {
     const weekBuckets = new Map<string, WeekBucket>();
@@ -366,8 +431,25 @@ function CalendarSection(): ReactElement {
     );
   }, [filteredEvents, dayFormatter, longDayFormatter]);
 
-  const [view, setView] = useState<CalendarView>("month");
-  const [selectedDayKey, setSelectedDayKey] = useState<string>("");
+  const goToPreviousMonth = () => {
+    setCurrentMonth((previous) => {
+      const next = new Date(previous);
+      next.setMonth(previous.getMonth() - 1);
+      next.setDate(1);
+      next.setHours(0, 0, 0, 0);
+      return next;
+    });
+  };
+
+  const goToNextMonth = () => {
+    setCurrentMonth((previous) => {
+      const next = new Date(previous);
+      next.setMonth(previous.getMonth() + 1);
+      next.setDate(1);
+      next.setHours(0, 0, 0, 0);
+      return next;
+    });
+  };
 
   const activeCategoryCount =
     Object.values(activeCategories).filter(Boolean).length;
@@ -424,15 +506,44 @@ function CalendarSection(): ReactElement {
     return futureEvent ?? filteredEvents[filteredEvents.length - 1];
   }, [filteredEvents]);
 
-  const upcomingEventStart = upcomingEvent
-    ? new Date(upcomingEvent.start)
-    : undefined;
-  const upcomingEventEnd = upcomingEvent
-    ? new Date(upcomingEvent.end)
-    : undefined;
-  const upcomingEventRelativeText = upcomingEventStart
-    ? formatRelativeDay(upcomingEventStart, t)
-    : "";
+  const upcomingEventStart = useMemo(() => {
+    if (!upcomingEvent) {
+      return undefined;
+    }
+
+    return new Date(upcomingEvent.start);
+  }, [upcomingEvent]);
+
+  const upcomingEventEnd = useMemo(() => {
+    if (!upcomingEvent) {
+      return undefined;
+    }
+
+    return new Date(upcomingEvent.end);
+  }, [upcomingEvent]);
+
+  const upcomingEventRelativeText = useMemo(
+    () => (upcomingEventStart ? formatRelativeDay(upcomingEventStart, t) : ""),
+    [t, upcomingEventStart],
+  );
+
+  const hasInitializedMonthRef = useRef(false);
+
+  useEffect(() => {
+    if (hasInitializedMonthRef.current) {
+      return;
+    }
+
+    if (!upcomingEventStart && filteredEvents.length === 0) {
+      return;
+    }
+
+    const initialReference = new Date(upcomingEventStart ?? today);
+    initialReference.setDate(1);
+    initialReference.setHours(0, 0, 0, 0);
+    setCurrentMonth(initialReference);
+    hasInitializedMonthRef.current = true;
+  }, [filteredEvents.length, today, upcomingEventStart]);
 
   return (
     <section id="calendar" className="space-y-6" dir={direction}>
@@ -661,66 +772,107 @@ function CalendarSection(): ReactElement {
       ) : null}
 
       {filteredEvents.length > 0 && view === "month" ? (
-        <div className="grid gap-5 lg:grid-cols-2">
-          {months.map((month) => (
-            <RedSurface
-              key={month.id}
-              as="article"
-              tone="muted"
-              className="flex flex-col gap-4 p-6 text-red-50"
+        <RedSurface as="article" tone="muted" className="p-6 text-red-50">
+          <header className="flex flex-wrap items-center justify-between gap-4">
+            <button
+              type="button"
+              onClick={goToPreviousMonth}
+              className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-950/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-200/80 transition hover:border-red-400/45 hover:text-red-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              aria-label={t("calendar.monthView.previous")}
             >
-              <header className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-red-50">
-                  {month.label}
-                </h3>
-                <span className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                  {t("calendar.monthView.eventsCount", {
-                    count: month.events.length,
-                  })}
-                </span>
-              </header>
-              <div className="space-y-4">
-                {month.events.map((event) => {
-                  const startDate = new Date(event.start);
-                  const endDate = new Date(event.end);
-
-                  return (
-                    <RedSurface
-                      key={event.id}
-                      tone="glass"
-                      className="rounded-2xl p-4 transition hover:border-red-400/45"
-                    >
-                      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-red-200/75">
-                        <span className="font-semibold text-red-50">
-                          {dayFormatter.format(startDate)}
-                        </span>
-                        <span>
-                          {timeFormatter.format(startDate)} –{" "}
-                          {timeFormatter.format(endDate)}
-                        </span>
-                      </div>
-                      <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
-                        <div>
-                          <p className="text-base font-semibold text-red-50">
-                            {t(event.titleKey)}
-                          </p>
-                          <p className="text-sm text-red-200/75">
-                            {t(event.locationKey)}
-                          </p>
-                        </div>
-                        <span
-                          className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${typeStyles[event.category]}`}
-                        >
-                          {t(`calendar.categories.${event.category}.badge`)}
-                        </span>
-                      </div>
-                    </RedSurface>
-                  );
+              <ChevronLeft size={16} aria-hidden className="text-red-200/70" />
+              {t("calendar.monthView.previousShort")}
+            </button>
+            <div className="text-center">
+              <h3 className="text-lg font-semibold text-red-50">
+                {monthFormatter.format(firstDayOfCurrentMonth)}
+              </h3>
+              <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
+                {t("calendar.monthView.eventsCount", {
+                  count: monthEventsCount,
                 })}
-              </div>
-            </RedSurface>
-          ))}
-        </div>
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={goToNextMonth}
+              className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-950/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-200/80 transition hover:border-red-400/45 hover:text-red-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              aria-label={t("calendar.monthView.next")}
+            >
+              {t("calendar.monthView.nextShort")}
+              <ChevronRight size={16} aria-hidden className="text-red-200/70" />
+            </button>
+          </header>
+
+          <div className="mt-6 grid grid-cols-7 gap-3 text-center text-[11px] font-semibold uppercase tracking-[0.35em] text-red-200/60">
+            {weekdayLabels.map((label) => (
+              <div key={label}>{label}</div>
+            ))}
+          </div>
+
+          <div className="mt-4 grid grid-cols-7 gap-3">
+            {monthGridDays.map((day) => {
+              const isToday = isSameDay(day.date, today);
+
+              return (
+                <div
+                  key={day.key}
+                  className={`flex min-h-[148px] flex-col gap-3 rounded-2xl border p-3 transition ${
+                    day.events.length > 0
+                      ? "border-red-400/35 bg-red-950/55"
+                      : "border-red-500/20 bg-red-950/30"
+                  } ${
+                    isToday ? "ring-1 ring-inset ring-red-400/70" : ""
+                  } ${day.inCurrentMonth ? "" : "opacity-60"}`}
+                >
+                  <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-red-200/70">
+                    <span className="text-red-200/80">
+                      {dayNumberFormatter.format(day.date)}
+                    </span>
+                    {isToday ? (
+                      <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-[10px] font-semibold tracking-[0.2em] text-red-50">
+                        {t("calendar.weekView.today")}
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="space-y-2 text-[11px] leading-snug text-red-200/75">
+                    {day.events.length > 0 ? (
+                      day.events.map((event) => {
+                        const startDate = new Date(event.start);
+                        const endDate = new Date(event.end);
+
+                        return (
+                          <div
+                            key={event.id}
+                            className="rounded-xl border border-red-500/25 bg-red-950/50 p-2"
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <p className="text-[11px] font-semibold text-red-50">
+                                {t(event.titleKey)}
+                              </p>
+                              <span
+                                className={`inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded-full border px-2 text-[10px] font-semibold uppercase tracking-[0.2em] ${typeStyles[event.category]}`}
+                              >
+                                {t(`calendar.categories.${event.category}.shortLabel`)}
+                              </span>
+                            </div>
+                            <p className="mt-1 text-[10px] uppercase tracking-[0.25em] text-red-200/60">
+                              {timeFormatter.format(startDate)} – {" "}
+                              {timeFormatter.format(endDate)}
+                            </p>
+                            <p className="mt-1 text-[11px] text-red-200/70">
+                              {t(event.locationKey)}
+                            </p>
+                          </div>
+                        );
+                      })
+                    ) : null}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </RedSurface>
       ) : null}
 
       {filteredEvents.length > 0 && view === "week" ? (
