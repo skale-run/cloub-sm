@@ -336,12 +336,17 @@ router.put("/:id", async (req, res, next) => {
     updates.push(`end_time = $${values.length}`);
   }
 
-  const effectiveStart = startDate ?? existingRow.start_time;
-  const effectiveEnd = endDate ?? existingRow.end_time;
+  const effectiveStart =
+    startDate ??
+    (existingRow.start_time ? new Date(existingRow.start_time) : null);
+  const effectiveEnd =
+    endDate ?? (existingRow.end_time ? new Date(existingRow.end_time) : null);
 
   if (
     effectiveStart instanceof Date &&
+    !Number.isNaN(effectiveStart.getTime()) &&
     effectiveEnd instanceof Date &&
+    !Number.isNaN(effectiveEnd.getTime()) &&
     effectiveEnd.getTime() <= effectiveStart.getTime()
   ) {
     return res
