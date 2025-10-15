@@ -81,6 +81,16 @@ function AuthField({
 }
 
 function App() {
+  const { t, i18n } = useTranslation();
+  const { member, authToken, setMember, clearMember } = useMember();
+  const { open: openAthletePortalModal } = useAthletePortalModal();
+  const previousMemberRef = useRef<Member | null>(null);
+  const prefetchedPathsRef = useRef(new Set<RoutePath>());
+  const prefetchSection = useCallback(
+    (path: RoutePath) => {
+      if (prefetchedPathsRef.current.has(path)) {
+        return;
+      }
   const [mode, setMode] = useState<AuthMode>("login");
   const [formState, setFormState] = useState<AuthFormState>(() => createInitialState());
   const [message, setMessage] = useState<string>("");
@@ -119,6 +129,157 @@ function App() {
       return;
     }
 
+    setProfileDraft(trimmedProfile);
+
+    if (!member) {
+      setSavedProfile(trimmedProfile);
+      setStatusMessage(t("app.statusMessages.saved"));
+      return;
+    }
+
+    void (async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/members/${member.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+          },
+          body: JSON.stringify({
+            fullName: trimmedProfile.fullName,
+            email: trimmedProfile.email,
+            role: trimmedProfile.role,
+            squad: trimmedProfile.squad,
+            emergencyContact: trimmedProfile.emergencyContact,
+            membershipId: trimmedProfile.membershipId,
+            profilePhotoUrl: trimmedProfile.profileImage || null,
+          }),
+        });
+
+        const payload = (await response.json().catch(() => null)) as
+          | { member?: Member; error?: string }
+          | null;
+
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            clearMember();
+            setStatusMessage(t("app.statusMessages.saveError"));
+            return;
+          }
+
+          setStatusMessage(
+            payload?.error ?? t("app.statusMessages.saveError"),
+          );
+          return;
+        }
+
+        if (!payload?.member) {
+          setStatusMessage(t("app.statusMessages.saveError"));
+          return;
+        }
+
+        setMember(payload.member);
+        setStatusMessage(t("app.statusMessages.saved"));
+      } catch (error) {
+        console.error("Failed to save member profile", error);
+        setStatusMessage(t("app.statusMessages.saveError"));
+      }
+    })();
+  };
+
+  const handleResetProfile = () => {
+    if (savedProfile) {
+      setProfileDraft(savedProfile);
+      setStatusMessage(t("app.statusMessages.reverted"));
+    } else {
+      setProfileDraft(emptyProfile);
+      setStatusMessage(t("app.statusMessages.cleared"));
+    }
+  };
+
+  const handleDeleteProfile = () => {
+    if (!member) {
+      setSavedProfile(null);
+      setProfileDraft(emptyProfile);
+      setStatusMessage(t("app.statusMessages.deleted"));
+      return;
+    }
+
+    void (async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/members/${member.id}`, {
+          method: "DELETE",
+          headers: authToken
+            ? { Authorization: `Bearer ${authToken}` }
+            : undefined,
+        });
+
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            clearMember();
+            setStatusMessage(t("app.statusMessages.deleteError"));
+            return;
+          }
+
+          setStatusMessage(t("app.statusMessages.deleteError"));
+          return;
+        }
+
+        clearMember();
+        setSavedProfile(null);
+        setProfileDraft(emptyProfile);
+        setStatusMessage(t("app.statusMessages.deleted"));
+      } catch (error) {
+        console.error("Failed to delete member profile", error);
+        setStatusMessage(t("app.statusMessages.deleteError"));
+      }
+    })();
+  };
+
+  const handleAddAchievement = () => {
+    if (!newAchievement.trim()) return;
+    setAchievements((previous) => [newAchievement.trim(), ...previous]);
+    setNewAchievement("");
+  };
+
+  const handleRemoveAchievement = (index: number) => {
+    setAchievements((previous) => previous.filter((_, idx) => idx !== index));
+  };
+
+  const isLandingPage = currentPath === landingPath;
+
+  const connectedUserName = (() => {
+    const savedName = savedProfile?.fullName?.trim();
+    const draftName = profileDraft.fullName.trim();
+
+    return savedName || draftName || t("app.defaults.teamMember");
+  })();
+
+  const handleContactClick = () => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    const contactSection = document.getElementById("landing-contact");
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const fallbackMessage = t("common.loading", { defaultValue: "Loading…" });
+
+  if (isLandingPage) {
+    return (
+      <>
+        <Suspense fallback={<SectionFallback label={fallbackMessage} />}>
+          <LandingPage
+            onSignup={() => openAthletePortalModal("register")}
+            onLogin={() => openAthletePortalModal("login")}
+            onContact={handleContactClick}
+          />
+        </Suspense>
+        <AuthenticationExperienceModal />
+      </>
     const modeLabel = isRegistering ? "registered" : "logged in";
     setMessage(
       `Successfully ${modeLabel} as ${formState.email || "your account"}. This is a demo submission.`,
