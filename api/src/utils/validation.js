@@ -5,6 +5,13 @@ function isValidUuid(value) {
   return typeof value === "string" && UUID_REGEX.test(value);
 }
 
+function createValidationError(message) {
+  const error = new Error(message);
+  error.status = 400;
+  error.expose = true;
+  return error;
+}
+
 function normalizeOptionalString(value) {
   if (typeof value !== "string") {
     return undefined;
@@ -22,17 +29,34 @@ function parseIsoDate(value, fieldName) {
   const parsed = new Date(value);
 
   if (Number.isNaN(parsed.getTime())) {
-    const error = new Error(`${fieldName} must be a valid ISO 8601 date-time string.`);
-    error.status = 400;
-    error.expose = true;
-    throw error;
+    throw createValidationError(`${fieldName} must be a valid ISO 8601 date-time string.`);
   }
 
   return parsed.toISOString();
+}
+
+function parseLimitParam(
+  value,
+  { fieldName = "limit", defaultValue = 100, min = 1, max = 500 } = {},
+) {
+  if (value === undefined) {
+    return defaultValue;
+  }
+
+  const parsed = Number(value);
+
+  if (!Number.isInteger(parsed) || parsed < min || parsed > max) {
+    throw createValidationError(
+      `${fieldName} must be an integer between ${min} and ${max}.`,
+    );
+  }
+
+  return parsed;
 }
 
 module.exports = {
   isValidUuid,
   normalizeOptionalString,
   parseIsoDate,
+  parseLimitParam,
 };
