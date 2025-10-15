@@ -1,7 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  DragEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { Activity, Award, BarChart3, Users, X } from "../../lucide-react";
-import { useAthletePortalModal } from "./AthletePortalModalContext";
+import { useAthletePortalModal, type AuthMode } from "./AthletePortalModalContext";
+import { useMember } from "./MemberContext";
+import type { Member } from "./MemberContext";
 
 const highlightConfig = [
   {
@@ -28,10 +39,16 @@ const highlightConfig = [
   },
 ];
 
-type AuthMode = "login" | "register";
-
 const LOGIN_FORM_STORAGE_KEY = "cloub-auth-login-form" as const;
 const REGISTER_FORM_STORAGE_KEY = "cloub-auth-register-form" as const;
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
+
+type SubmissionState =
+  | { status: "idle" }
+  | { status: "submitting" }
+  | { status: "success"; message: string }
+  | { status: "error"; message: string };
 
 type LoginFormState = {
   email: string;
@@ -42,6 +59,11 @@ type RegisterFormState = {
   fullName: string;
   email: string;
   password: string;
+  role: string;
+  squad: string;
+  emergencyContact: string;
+  membershipId: string;
+  profilePhotoUrl: string;
 };
 
 const authCopy: Record<
@@ -63,11 +85,14 @@ const authCopy: Record<
 const supportEmail = "coach@aerodash.com" as const;
 
 function AuthenticationExperienceModal() {
-  const { isOpen, close } = useAthletePortalModal();
+  const { isOpen, close, requestedMode } = useAthletePortalModal();
+  const { setMember } = useMember();
   const { t } = useTranslation();
   const [mode, setMode] = useState<AuthMode>("login");
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
+  const activeRequestRef = useRef<AbortController | null>(null);
+  const profilePhotoInputRef = useRef<HTMLInputElement | null>(null);
   const [loginForm, setLoginForm] = useState<LoginFormState>(() => {
     if (typeof window === "undefined") {
       return { email: "", password: "" };
@@ -94,29 +119,124 @@ function AuthenticationExperienceModal() {
   });
   const [registerForm, setRegisterForm] = useState<RegisterFormState>(() => {
     if (typeof window === "undefined") {
-      return { fullName: "", email: "", password: "" };
+      return {
+        fullName: "",
+        email: "",
+        password: "",
+        role: "",
+        squad: "",
+        emergencyContact: "",
+        membershipId: "",
+        profilePhotoUrl: "",
+      };
     }
 
     try {
       const rawValue = window.localStorage.getItem(REGISTER_FORM_STORAGE_KEY);
       if (!rawValue) {
-        return { fullName: "", email: "", password: "" };
+        return {
+          fullName: "",
+          email: "",
+          password: "",
+          role: "",
+          squad: "",
+          emergencyContact: "",
+          membershipId: "",
+          profilePhotoUrl: "",
+        };
       }
 
       const parsed = JSON.parse(rawValue) as Partial<
-        Record<"fullName" | "email" | "password", string>
+        Record<
+          | "fullName"
+          | "email"
+          | "password"
+          | "role"
+          | "squad"
+          | "emergencyContact"
+          | "membershipId"
+          | "profilePhotoUrl",
+          string
+        >
       >;
 
       return {
         fullName: parsed.fullName ?? "",
         email: parsed.email ?? "",
         password: parsed.password ?? "",
+        role: parsed.role ?? "",
+        squad: parsed.squad ?? "",
+        emergencyContact: parsed.emergencyContact ?? "",
+        membershipId: parsed.membershipId ?? "",
+        profilePhotoUrl: parsed.profilePhotoUrl ?? "",
       };
     } catch (error) {
       console.error("Failed to parse stored registration form", error);
-      return { fullName: "", email: "", password: "" };
+      return {
+        fullName: "",
+        email: "",
+        password: "",
+        role: "",
+        squad: "",
+        emergencyContact: "",
+        membershipId: "",
+        profilePhotoUrl: "",
+      };
     }
   });
+  const [loginState, setLoginState] = useState<SubmissionState>({
+    status: "idle",
+  });
+  const [registerState, setRegisterState] = useState<SubmissionState>({
+    status: "idle",
+  });
+
+  const handleProfilePhotoSelect = useCallback(
+    (file: File | undefined | null) => {
+      if (!file) {
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result;
+        if (typeof result === "string") {
+          setRegisterForm((previous) => ({
+            ...previous,
+            profilePhotoUrl: result,
+          }));
+        }
+      };
+      reader.readAsDataURL(file);
+    },
+    [setRegisterForm],
+  );
+
+  const handleProfilePhotoInputChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const [file] = event.target.files ?? [];
+      handleProfilePhotoSelect(file);
+    },
+    [handleProfilePhotoSelect],
+  );
+
+  const handleProfilePhotoDrop = useCallback((event: DragEvent<HTMLElement>) => {
+      event.preventDefault();
+      const [file] = event.dataTransfer.files ?? [];
+      handleProfilePhotoSelect(file);
+    },
+    [handleProfilePhotoSelect],
+  );
+
+  const handleProfilePhotoClear = useCallback(() => {
+    setRegisterForm((previous) => ({
+      ...previous,
+      profilePhotoUrl: "",
+    }));
+    if (profilePhotoInputRef.current) {
+      profilePhotoInputRef.current.value = "";
+    }
+  }, [setRegisterForm]);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -139,6 +259,22 @@ function AuthenticationExperienceModal() {
       JSON.stringify(registerForm),
     );
   }, [registerForm]);
+
+  useEffect(() => () => {
+    activeRequestRef.current?.abort();
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) {
+      if (activeRequestRef.current) {
+        activeRequestRef.current.abort();
+        activeRequestRef.current = null;
+      }
+
+      setLoginState({ status: "idle" });
+      setRegisterState({ status: "idle" });
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -174,10 +310,12 @@ function AuthenticationExperienceModal() {
   }, [close, isOpen]);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      setMode(requestedMode);
+    } else {
       setMode("login");
     }
-  }, [isOpen]);
+  }, [isOpen, requestedMode]);
 
   const { heading, description, cta } = useMemo(() => {
     const { headingKey, descriptionKey, ctaKey } = authCopy[mode];
@@ -198,6 +336,230 @@ function AuthenticationExperienceModal() {
       })),
     [t],
   );
+
+  const handleModeChange = useCallback(
+    (value: AuthMode) => {
+      setMode(value);
+
+      if (value === "login") {
+        setRegisterState({ status: "idle" });
+      } else {
+        setLoginState({ status: "idle" });
+      }
+    },
+    [setMode, setLoginState, setRegisterState],
+  );
+
+  const handleLoginSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      const controller = new AbortController();
+      if (activeRequestRef.current) {
+        activeRequestRef.current.abort();
+      }
+      activeRequestRef.current = controller;
+
+      setLoginState({ status: "submitting" });
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/members/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: loginForm.email.trim(),
+            password: loginForm.password,
+          }),
+          signal: controller.signal,
+        });
+
+        const payload = (await response.json().catch(() => null)) as
+          | { error?: string; member?: Member }
+          | null;
+
+        if (!response.ok) {
+          const message =
+            payload?.error ??
+            (response.status === 401
+              ? t("auth.modal.status.login.invalid")
+              : t("auth.modal.status.generic"));
+
+          setLoginState({
+            status: "error",
+            message,
+          });
+          return;
+        }
+
+        if (!payload?.member) {
+          setLoginState({
+            status: "error",
+            message: t("auth.modal.status.generic"),
+          });
+          return;
+        }
+
+        setMember(payload.member);
+
+        setLoginForm((previous) => ({
+          ...previous,
+          password: "",
+        }));
+
+        close();
+      } catch (error) {
+        if (
+          (error instanceof DOMException && error.name === "AbortError") ||
+          (error instanceof Error && error.name === "AbortError")
+        ) {
+          return;
+        }
+
+        console.error("Failed to sign in", error);
+        setLoginState({
+          status: "error",
+          message: t("auth.modal.status.network"),
+        });
+      } finally {
+        if (activeRequestRef.current === controller) {
+          activeRequestRef.current = null;
+        }
+      }
+    },
+    [
+      close,
+      loginForm.email,
+      loginForm.password,
+      setLoginForm,
+      setLoginState,
+      setMember,
+      t,
+    ],
+  );
+
+  const handleRegisterSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      const trimmedFullName = registerForm.fullName.trim();
+      const trimmedEmail = registerForm.email.trim();
+      const trimmedRole = registerForm.role.trim();
+      const trimmedSquad = registerForm.squad.trim();
+      const trimmedEmergencyContact = registerForm.emergencyContact.trim();
+      const trimmedMembershipId = registerForm.membershipId.trim();
+      const trimmedProfilePhotoUrl = registerForm.profilePhotoUrl.trim();
+
+      const controller = new AbortController();
+      if (activeRequestRef.current) {
+        activeRequestRef.current.abort();
+      }
+      activeRequestRef.current = controller;
+
+      setRegisterState({ status: "submitting" });
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/members`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName: trimmedFullName,
+            email: trimmedEmail,
+            password: registerForm.password,
+            role: trimmedRole,
+            squad: trimmedSquad,
+            emergencyContact: trimmedEmergencyContact,
+            membershipId: trimmedMembershipId,
+            profilePhotoUrl: trimmedProfilePhotoUrl,
+          }),
+          signal: controller.signal,
+        });
+
+        const payload = (await response.json().catch(() => null)) as
+          | { error?: string; member?: Member }
+          | null;
+
+        if (!response.ok) {
+          const message =
+            payload?.error ??
+            (response.status === 409
+              ? t("auth.modal.status.register.duplicate")
+              : t("auth.modal.status.generic"));
+
+          setRegisterState({
+            status: "error",
+            message,
+          });
+          return;
+        }
+
+        if (!payload?.member) {
+          setRegisterState({
+            status: "error",
+            message: t("auth.modal.status.generic"),
+          });
+          return;
+        }
+
+        setRegisterForm({
+          fullName: "",
+          email: "",
+          password: "",
+          role: "",
+          squad: "",
+          emergencyContact: "",
+          membershipId: "",
+          profilePhotoUrl: "",
+        });
+        setRegisterState({ status: "idle" });
+        setLoginForm((previous) => ({
+          ...previous,
+          email: trimmedEmail,
+        }));
+        setMember(payload.member);
+        close();
+      } catch (error) {
+        if (
+          (error instanceof DOMException && error.name === "AbortError") ||
+          (error instanceof Error && error.name === "AbortError")
+        ) {
+          return;
+        }
+
+        console.error("Failed to create account", error);
+        setRegisterState({
+          status: "error",
+          message: t("auth.modal.status.network"),
+        });
+      } finally {
+        if (activeRequestRef.current === controller) {
+          activeRequestRef.current = null;
+        }
+      }
+    },
+    [
+      registerForm.email,
+      registerForm.fullName,
+      registerForm.password,
+      registerForm.role,
+      registerForm.squad,
+      registerForm.emergencyContact,
+      registerForm.membershipId,
+      registerForm.profilePhotoUrl,
+      setLoginForm,
+      close,
+      setRegisterForm,
+      setRegisterState,
+      setMember,
+      t,
+    ],
+  );
+
+  const isLoginSubmitting = loginState.status === "submitting";
+  const isRegisterSubmitting = registerState.status === "submitting";
 
   if (!isOpen) {
     return null;
@@ -260,7 +622,7 @@ function AuthenticationExperienceModal() {
                   <button
                     key={option.value}
                     type="button"
-                    onClick={() => setMode(option.value)}
+                    onClick={() => handleModeChange(option.value)}
                     className={`flex-1 rounded-full px-6 py-2 font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400 ${
                       mode === option.value
                         ? "bg-red-500 text-red-50 shadow-[0_18px_45px_rgba(220,38,38,0.45)]"
@@ -277,9 +639,8 @@ function AuthenticationExperienceModal() {
                 <form
                   className="space-y-4"
                   aria-label={t("auth.modal.aria.loginForm")}
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                  }}
+                  aria-busy={isLoginSubmitting}
+                  onSubmit={handleLoginSubmit}
                 >
                   <label className="block text-sm font-medium text-red-100">
                     {t("auth.modal.loginForm.email.label")}
@@ -319,10 +680,29 @@ function AuthenticationExperienceModal() {
                   </label>
                   <button
                     type="submit"
-                    className="w-full rounded-2xl bg-gradient-to-r from-red-400 via-red-500 to-amber-300 px-4 py-3 text-base font-semibold text-slate-950 shadow-[0_25px_65px_rgba(220,38,38,0.45)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+                    disabled={isLoginSubmitting}
+                    className="w-full rounded-2xl bg-gradient-to-r from-red-400 via-red-500 to-amber-300 px-4 py-3 text-base font-semibold text-slate-950 shadow-[0_25px_65px_rgba(220,38,38,0.45)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200 disabled:cursor-not-allowed disabled:opacity-70"
                   >
-                    {cta}
+                    {isLoginSubmitting ? `${cta}…` : cta}
                   </button>
+                  {loginState.status === "error" && (
+                    <p
+                      className="text-center text-xs text-red-200/85"
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      {loginState.message}
+                    </p>
+                  )}
+                  {loginState.status === "success" && (
+                    <p
+                      className="text-center text-xs text-emerald-200/85"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      {loginState.message}
+                    </p>
+                  )}
                   <p className="text-center text-xs text-red-200/75">
                     {t("auth.modal.loginForm.forgotPassword")}
                   </p>
@@ -331,10 +711,65 @@ function AuthenticationExperienceModal() {
                 <form
                   className="space-y-4"
                   aria-label={t("auth.modal.aria.registerForm")}
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                  }}
+                  aria-busy={isRegisterSubmitting}
+                  onSubmit={handleRegisterSubmit}
                 >
+                  <div
+                    className="rounded-2xl border border-red-400/30 bg-red-950/35 p-4 text-red-100"
+                    onDragOver={(event) => event.preventDefault()}
+                    onDrop={handleProfilePhotoDrop}
+                  >
+                    <p className="text-sm font-medium">
+                      {t("auth.modal.registerForm.profilePhoto.label")}
+                    </p>
+                    <div className="mt-3 flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-red-400/40 bg-red-950/35 px-4 py-6 text-center">
+                      {registerForm.profilePhotoUrl ? (
+                        <img
+                          src={registerForm.profilePhotoUrl}
+                          alt={t("auth.modal.registerForm.profilePhoto.previewAlt")}
+                          className="h-24 w-24 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center gap-2 text-sm text-red-100/80">
+                          <span className="text-base font-medium text-red-50">
+                            {t("auth.modal.registerForm.profilePhoto.dropLabel")}
+                          </span>
+                          <span className="text-xs text-red-100/70">
+                            {t("auth.modal.registerForm.profilePhoto.helpText")}
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex flex-wrap items-center justify-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => profilePhotoInputRef.current?.click()}
+                          onDragOver={(event) => event.preventDefault()}
+                          onDrop={handleProfilePhotoDrop}
+                          className="rounded-xl border border-red-400/40 bg-red-500/20 px-4 py-2 text-sm font-medium text-red-50 transition hover:border-red-300/60 hover:bg-red-500/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+                        >
+                          {registerForm.profilePhotoUrl
+                            ? t("auth.modal.registerForm.profilePhoto.changeButton")
+                            : t("auth.modal.registerForm.profilePhoto.uploadButton")}
+                        </button>
+                        {registerForm.profilePhotoUrl && (
+                          <button
+                            type="button"
+                            onClick={handleProfilePhotoClear}
+                            className="rounded-xl border border-red-400/30 px-4 py-2 text-sm font-medium text-red-100 transition hover:border-red-300/50 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+                          >
+                            {t("auth.modal.registerForm.profilePhoto.removeButton")}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <input
+                      ref={profilePhotoInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg"
+                      className="sr-only"
+                      onChange={handleProfilePhotoInputChange}
+                    />
+                  </div>
                   <label className="block text-sm font-medium text-red-100">
                     {t("auth.modal.registerForm.fullName.label")}
                     <input
@@ -351,6 +786,40 @@ function AuthenticationExperienceModal() {
                         setRegisterForm((previous) => ({
                           ...previous,
                           fullName: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label className="block text-sm font-medium text-red-100">
+                    {t("auth.modal.registerForm.role.label")}
+                    <input
+                      type="text"
+                      name="role"
+                      autoComplete="organization-title"
+                      className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
+                      placeholder={t("auth.modal.registerForm.role.placeholder")}
+                      value={registerForm.role}
+                      onChange={(event) =>
+                        setRegisterForm((previous) => ({
+                          ...previous,
+                          role: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label className="block text-sm font-medium text-red-100">
+                    {t("auth.modal.registerForm.squad.label")}
+                    <input
+                      type="text"
+                      name="squad"
+                      autoComplete="organization"
+                      className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
+                      placeholder={t("auth.modal.registerForm.squad.placeholder")}
+                      value={registerForm.squad}
+                      onChange={(event) =>
+                        setRegisterForm((previous) => ({
+                          ...previous,
+                          squad: event.target.value,
                         }))
                       }
                     />
@@ -374,11 +843,47 @@ function AuthenticationExperienceModal() {
                     />
                   </label>
                   <label className="block text-sm font-medium text-red-100">
+                    {t("auth.modal.registerForm.emergencyContact.label")}
+                    <input
+                      type="tel"
+                      name="emergencyContact"
+                      autoComplete="tel"
+                      className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
+                      placeholder={t("auth.modal.registerForm.emergencyContact.placeholder")}
+                      value={registerForm.emergencyContact}
+                      onChange={(event) =>
+                        setRegisterForm((previous) => ({
+                          ...previous,
+                          emergencyContact: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label className="block text-sm font-medium text-red-100">
+                    {t("auth.modal.registerForm.membershipId.label")}
+                    <input
+                      type="text"
+                      name="membershipId"
+                      autoComplete="off"
+                      className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
+                      placeholder={t("auth.modal.registerForm.membershipId.placeholder")}
+                      required
+                      value={registerForm.membershipId}
+                      onChange={(event) =>
+                        setRegisterForm((previous) => ({
+                          ...previous,
+                          membershipId: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label className="block text-sm font-medium text-red-100">
                     {t("auth.modal.registerForm.password.label")}
                     <input
                       type="password"
                       name="password"
                       autoComplete="new-password"
+                      minLength={8}
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                       placeholder={t(
                         "auth.modal.registerForm.password.placeholder",
@@ -395,10 +900,20 @@ function AuthenticationExperienceModal() {
                   </label>
                   <button
                     type="submit"
-                    className="w-full rounded-2xl bg-gradient-to-r from-red-500 via-amber-400 to-orange-300 px-4 py-3 text-base font-semibold text-slate-950 shadow-[0_25px_70px_rgba(220,38,38,0.42)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+                    disabled={isRegisterSubmitting}
+                    className="w-full rounded-2xl bg-gradient-to-r from-red-500 via-amber-400 to-orange-300 px-4 py-3 text-base font-semibold text-slate-950 shadow-[0_25px_70px_rgba(220,38,38,0.42)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200 disabled:cursor-not-allowed disabled:opacity-70"
                   >
-                    {cta}
+                    {isRegisterSubmitting ? `${cta}…` : cta}
                   </button>
+                  {registerState.status === "error" && (
+                    <p
+                      className="text-center text-xs text-red-200/85"
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      {registerState.message}
+                    </p>
+                  )}
                   <p className="text-center text-xs text-red-200/75">
                     {t("auth.modal.registerForm.disclaimer")}
                   </p>

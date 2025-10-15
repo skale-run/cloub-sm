@@ -10,6 +10,14 @@ export default defineConfig({
       "lucide-react": resolve(__dirname, "src/lucide-react.tsx"),
     },
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:4000",
+        changeOrigin: true,
+      },
+    },
+  },
   build: {
     outDir: "run",
     emptyOutDir: false,

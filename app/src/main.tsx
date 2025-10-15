@@ -5,6 +5,7 @@ import { applyThemeToDocument } from "./theme.js";
 import "./index.css";
 import App from "./App.tsx";
 import { AthletePortalModalProvider } from "./features/auth/AthletePortalModalContext.tsx";
+import { MemberProvider } from "./features/auth/MemberContext.tsx";
 import i18n from "./lib/i18n.ts";
 
 applyThemeToDocument();
@@ -12,9 +13,11 @@ applyThemeToDocument();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <I18nextProvider i18n={i18n}>
-      <AthletePortalModalProvider>
-        <App />
-      </AthletePortalModalProvider>
+      <MemberProvider>
+        <AthletePortalModalProvider>
+          <App />
+        </AthletePortalModalProvider>
+      </MemberProvider>
     </I18nextProvider>
   </StrictMode>,
 );

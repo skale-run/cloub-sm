@@ -38,6 +38,10 @@ export const fr = {
         reverted: "Le brouillon a été rétabli sur la dernière version enregistrée du profil.",
         cleared: "Le brouillon du profil a été effacé.",
         deleted: "Profil supprimé. Créez-en un nouveau pour générer un QR code.",
+        saveError:
+          "Impossible de mettre le profil à jour. Vérifiez votre connexion et réessayez.",
+        deleteError:
+          "La suppression du profil a échoué. Veuillez réessayer dans un instant.",
       },
       defaults: {
         teamMember: "Pratiquant de taekwondo",
@@ -90,13 +94,38 @@ export const fr = {
             "Mot de passe oublié ? Contactez votre maître ou un administrateur pour rétablir l'accès.",
         },
         registerForm: {
+          profilePhoto: {
+            label: "Photo de profil",
+            dropLabel: "Glissez-déposez votre photo de pratiquant ici",
+            helpText: "PNG ou JPG jusqu'à 5 Mo, ou cliquez pour parcourir.",
+            uploadButton: "Téléverser une photo",
+            changeButton: "Changer de photo",
+            removeButton: "Retirer la photo",
+            previewAlt: "Aperçu de la photo de profil sélectionnée",
+          },
           fullName: {
             label: "Nom complet",
             placeholder: "Jordan Adebayo",
           },
+          role: {
+            label: "Rôle",
+            placeholder: "Athlète",
+          },
+          squad: {
+            label: "Escouade / Niveau",
+            placeholder: "Escouade d'élite sparring",
+          },
           email: {
             label: "Email",
             placeholder: "vous@club.com",
+          },
+          emergencyContact: {
+            label: "Contact d'urgence",
+            placeholder: "+212 676 005 071",
+          },
+          membershipId: {
+            label: "Identifiant de membre",
+            placeholder: "CP-E43-K4",
           },
           password: {
             label: "Mot de passe",
@@ -134,6 +163,18 @@ export const fr = {
           heading: "Besoin d'aide pour commencer ?",
           intro: "Envoyez un message à",
           outro: "ou discutez avec votre équipe d'entraîneurs sur le canal du groupe.",
+        },
+        status: {
+          network: "Impossible de joindre le serveur. Veuillez réessayer dans un instant.",
+          generic: "Une erreur est survenue. Veuillez réessayer.",
+          login: {
+            success: "Bon retour ! Vous êtes connecté.",
+            invalid: "Impossible de trouver un compte avec cet e-mail et ce mot de passe.",
+          },
+          register: {
+            success: "Compte créé. Vous pouvez vous connecter avec vos nouveaux identifiants.",
+            duplicate: "Un compte existe déjà avec cet e-mail.",
+          },
         },
       },
     },

@@ -1,11 +1,13 @@
 import type { FormEvent } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Header from "./components/Header";
 import RedSurface from "./components/RedSurface";
 import Sidebar from "./components/Sidebar";
 import AccessSection from "./features/access/AccessSection";
 import AuthenticationExperienceModal from "./features/auth/AuthenticationExperienceModal";
+import { useAthletePortalModal } from "./features/auth/AthletePortalModalContext";
+import { useMember, type Member } from "./features/auth/MemberContext";
 import CalendarSection from "./features/calendar/CalendarSection";
 import CoachEvaluationSection from "./features/evaluations/CoachEvaluationSection";
 import ProgressOverviewSection from "./features/evaluations/ProgressOverviewSection";
@@ -23,6 +25,7 @@ const DESKTOP_BREAKPOINT = "(min-width: 1024px)" as const;
 const PROFILE_DRAFT_STORAGE_KEY = "cloub-profile-draft" as const;
 const SAVED_PROFILE_STORAGE_KEY = "cloub-saved-profile" as const;
 const ACHIEVEMENTS_STORAGE_KEY = "cloub-profile-achievements" as const;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
 
 function getStoredJsonValue<T extends Record<string, unknown>>(
   key: string,
@@ -131,8 +134,23 @@ const getIsDesktop = () =>
   typeof window !== "undefined" &&
   window.matchMedia(DESKTOP_BREAKPOINT).matches;
 
+function mapMemberToProfile(member: Member): Profile {
+  return {
+    fullName: member.fullName ?? "",
+    role: member.role ?? "",
+    squad: member.squad ?? "",
+    email: member.email ?? "",
+    emergencyContact: member.emergencyContact ?? "",
+    membershipId: member.membershipId ?? "",
+    profileImage: member.profilePhotoUrl ?? "",
+  };
+}
+
 function App() {
   const { t, i18n } = useTranslation();
+  const { member, setMember, clearMember } = useMember();
+  const { open: openAthletePortalModal } = useAthletePortalModal();
+  const previousMemberRef = useRef<Member | null>(null);
   const pageTitles = useMemo(() => ({
     [landingPath]: t("app.pageTitles.landing"),
     "/calendar": t("app.pageTitles.calendar"),
@@ -168,6 +186,21 @@ function App() {
 
     return normalized;
   });
+
+  useEffect(() => {
+    if (member) {
+      const mappedProfile = mapMemberToProfile(member);
+      setProfileDraft(mappedProfile);
+      setSavedProfile(mappedProfile);
+      setStatusMessage("");
+    } else if (previousMemberRef.current) {
+      setSavedProfile(null);
+      setProfileDraft(emptyProfile);
+      setStatusMessage("");
+    }
+
+    previousMemberRef.current = member;
+  }, [member]);
 
   useEffect(() => {
     const { pathname } = window.location;
@@ -294,13 +327,70 @@ function App() {
   const handleSaveProfile = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!profileDraft.fullName || !profileDraft.membershipId) {
+    const trimmedProfile: Profile = {
+      fullName: profileDraft.fullName.trim(),
+      role: profileDraft.role.trim(),
+      squad: profileDraft.squad.trim(),
+      email: profileDraft.email.trim(),
+      emergencyContact: profileDraft.emergencyContact.trim(),
+      membershipId: profileDraft.membershipId.trim(),
+      profileImage: profileDraft.profileImage,
+    };
+
+    if (!trimmedProfile.fullName || !trimmedProfile.membershipId) {
       setStatusMessage(t("app.statusMessages.completeRequired"));
       return;
     }
 
-    setSavedProfile(profileDraft);
-    setStatusMessage(t("app.statusMessages.saved"));
+    setProfileDraft(trimmedProfile);
+
+    if (!member) {
+      setSavedProfile(trimmedProfile);
+      setStatusMessage(t("app.statusMessages.saved"));
+      return;
+    }
+
+    void (async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/members/${member.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName: trimmedProfile.fullName,
+            email: trimmedProfile.email,
+            role: trimmedProfile.role,
+            squad: trimmedProfile.squad,
+            emergencyContact: trimmedProfile.emergencyContact,
+            membershipId: trimmedProfile.membershipId,
+            profilePhotoUrl: trimmedProfile.profileImage || null,
+          }),
+        });
+
+        const payload = (await response.json().catch(() => null)) as
+          | { member?: Member; error?: string }
+          | null;
+
+        if (!response.ok) {
+          setStatusMessage(
+            payload?.error ?? t("app.statusMessages.saveError"),
+          );
+          return;
+        }
+
+        if (!payload?.member) {
+          setStatusMessage(t("app.statusMessages.saveError"));
+          return;
+        }
+
+        setMember(payload.member);
+        setStatusMessage(t("app.statusMessages.saved"));
+      } catch (error) {
+        console.error("Failed to save member profile", error);
+        setStatusMessage(t("app.statusMessages.saveError"));
+      }
+    })();
   };
 
   const handleResetProfile = () => {
@@ -314,9 +404,33 @@ function App() {
   };
 
   const handleDeleteProfile = () => {
-    setSavedProfile(null);
-    setProfileDraft(emptyProfile);
-    setStatusMessage(t("app.statusMessages.deleted"));
+    if (!member) {
+      setSavedProfile(null);
+      setProfileDraft(emptyProfile);
+      setStatusMessage(t("app.statusMessages.deleted"));
+      return;
+    }
+
+    void (async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/members/${member.id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          setStatusMessage(t("app.statusMessages.deleteError"));
+          return;
+        }
+
+        clearMember();
+        setSavedProfile(null);
+        setProfileDraft(emptyProfile);
+        setStatusMessage(t("app.statusMessages.deleted"));
+      } catch (error) {
+        console.error("Failed to delete member profile", error);
+        setStatusMessage(t("app.statusMessages.deleteError"));
+      }
+    })();
   };
 
   const handleAddAchievement = () => {
@@ -352,9 +466,9 @@ function App() {
   if (isLandingPage) {
     return (
       <>
-        <LandingPage
-          onSignup={() => navigateTo("/access")}
-          onLogin={() => navigateTo("/calendar")}
+      <LandingPage
+          onSignup={() => openAthletePortalModal("register")}
+          onLogin={() => openAthletePortalModal("login")}
           onContact={handleContactClick}
         />
         <AuthenticationExperienceModal />
