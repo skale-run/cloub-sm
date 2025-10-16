@@ -755,6 +755,55 @@ export const ar = {
         removeAria: "إزالة الإنجاز",
         empty:
           "لا توجد إنجازات بعد. ابدأ بالاحتفال بفوز حديث في السبارينغ أو البومسي.",
+        newLabel: "عنوان الشارة",
+        categoryLabel: "فئة الشارة",
+        filters: {
+          all: "جميع الشارات",
+          tournament: "البطولات",
+          leadership: "القيادة",
+          communityService: "خدمة المجتمع",
+          discipline: "الانضباط",
+        },
+        categories: {
+          tournament: {
+            label: "شارة البطولة",
+            description: "احتفل بنتائج المنافسات واعتلاء منصات التتويج.",
+          },
+          leadership: {
+            label: "شارة القيادة",
+            description: "سلّط الضوء على اللحظات التي قدت فيها الصغار أو توليت الإحماء.",
+          },
+          communityService: {
+            label: "شارة خدمة المجتمع",
+            description:
+              "وثّق الأعمال التطوعية والمبادرات التي دعمت المجتمع الأوسع.",
+          },
+          discipline: {
+            label: "شارة الانضباط",
+            description: "اعترف بسلاسل التركيز، وضبط النفس، والمثابرة المتواصلة.",
+          },
+        },
+        badgeWall: {
+          title: "جدار شارات الدوجو",
+          subtitle: "رشّح حسب المسار لاستعادة كل محطة أنجزتها.",
+          countLabel_zero: "لا توجد شارات بعد",
+          countLabel_one: "شارة دوجو واحدة",
+          countLabel_two: "شارتا دوجو",
+          countLabel_few: "{{count}} شارات دوجو",
+          countLabel_many: "{{count}} شارة دوجو",
+          countLabel_other: "{{count}} شارة دوجو",
+          empty: "لا توجد شارات بعد. أضف أول إنجاز لإحياء الجدار.",
+          filterEmpty: "لا توجد شارات في هذا المسار بعد. أضف واحدة لتمثيل رحلتك.",
+        },
+        status: {
+          verified: "شارة موثقة",
+          pending: "بانتظار التحقق",
+        },
+        submission: {
+          prompt: "شارك قصة أو صورة ليتمكن الماسترز من توثيق شارتك.",
+          cta: "إرسال قصة أو صورة",
+          confirmation: "شكرًا! سيراجع المدربون مشاركتك ويؤكدون الشارة بعد التحقق.",
+        },
       },
     },
     access: {

@@ -12,6 +12,10 @@ import { useAthletePortalModal } from "./features/auth/AthletePortalModalContext
 import { useMember, type Member } from "./features/auth/MemberContext";
 import LandingPage from "./features/landing/LandingPage";
 import { emptyProfile, type Profile } from "./features/profile/profileTypes";
+import {
+  type Achievement,
+  type AchievementDraft,
+} from "./features/profile/achievementTypes";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import { cn } from "./lib/cn";
@@ -130,8 +134,11 @@ function App() {
   const [profileDraft, setProfileDraft] = useState<Profile>(emptyProfile);
   const [savedProfile, setSavedProfile] = useState<Profile | null>(null);
   const [statusMessage, setStatusMessage] = useState("");
-  const [achievements, setAchievements] = useState<string[]>([]);
-  const [newAchievement, setNewAchievement] = useState("");
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [newAchievement, setNewAchievement] = useState<AchievementDraft>({
+    title: "",
+    category: "tournament",
+  });
 
   const prefetchedPathsRef = useRef(new Set<RoutePath>());
 
@@ -254,18 +261,31 @@ function App() {
     })();
   }, [authToken, clearMember, member, t]);
 
+  const handleNewAchievementChange = useCallback(
+    <K extends keyof AchievementDraft>(key: K, value: AchievementDraft[K]) => {
+      setNewAchievement((previous) => ({ ...previous, [key]: value }));
+    },
+    [],
+  );
+
   const handleAddAchievement = useCallback(() => {
-    const trimmed = newAchievement.trim();
+    const trimmed = newAchievement.title.trim();
     if (!trimmed) {
       return;
     }
 
-    setAchievements((previous) => [trimmed, ...previous]);
-    setNewAchievement("");
+    const identifier = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    setAchievements((previous) => [
+      { id: identifier, title: trimmed, category: newAchievement.category, verified: false },
+      ...previous,
+    ]);
+    setNewAchievement((previous) => ({ ...previous, title: "" }));
   }, [newAchievement]);
 
-  const handleRemoveAchievement = useCallback((index: number) => {
-    setAchievements((previous) => previous.filter((_, idx) => idx !== index));
+  const handleRemoveAchievement = useCallback((id: string) => {
+    setAchievements((previous) =>
+      previous.filter((achievement) => achievement.id !== id),
+    );
   }, []);
 
   const handleSaveProfile = useCallback(
@@ -400,7 +420,7 @@ function App() {
             statusMessage={statusMessage}
             achievements={achievements}
             newAchievement={newAchievement}
-            onNewAchievementChange={setNewAchievement}
+            onNewAchievementChange={handleNewAchievementChange}
             onAddAchievement={handleAddAchievement}
             onRemoveAchievement={handleRemoveAchievement}
           />
