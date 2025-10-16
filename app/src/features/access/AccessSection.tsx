@@ -2,7 +2,13 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import { cn } from "../../lib/cn";
-import { ClipboardCheck, ScanQrCode, Users } from "../../lucide-react";
+import {
+  ClipboardCheck,
+  ClipboardList,
+  ScanQrCode,
+  ShieldCheck,
+  Users,
+} from "../../lucide-react";
 import type { LucideIcon } from "../../lucide-react";
 import type { Profile } from "../profile/profileTypes";
 
@@ -125,6 +131,51 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
     () => t("access.eventChecklist.items", { returnObjects: true }) as string[],
     [t],
   );
+
+  type PermissionLevel = "full" | "manage" | "edit" | "view" | "restricted";
+
+  type PermissionMatrixRow = {
+    id: string;
+    role: string;
+    permissions: Record<string, PermissionLevel>;
+  };
+
+  const permissionLabels = useMemo(
+    () =>
+      t("access.permissions.capabilityLabels", {
+        returnObjects: true,
+      }) as Record<string, string>,
+    [t],
+  );
+
+  const permissionLegend = useMemo(
+    () =>
+      t("access.permissions.legend", {
+        returnObjects: true,
+      }) as Record<PermissionLevel, string>,
+    [t],
+  );
+
+  const permissionMatrix = useMemo(
+    () =>
+      t("access.permissions.matrix", {
+        returnObjects: true,
+      }) as PermissionMatrixRow[],
+    [t],
+  );
+
+  const capabilityOrder = useMemo(
+    () => Object.keys(permissionLabels),
+    [permissionLabels],
+  );
+
+  const permissionLevelStyles: Record<PermissionLevel, string> = {
+    full: "border-emerald-400/60 bg-emerald-500/15 text-emerald-100",
+    manage: "border-red-300/60 bg-red-500/15 text-red-50",
+    edit: "border-red-300/40 bg-red-900/70 text-red-100",
+    view: "border-red-300/30 bg-red-950/60 text-red-200/80",
+    restricted: "border-red-400/30 bg-red-950/40 text-red-200/60",
+  };
 
   return (
     <section id="access" className="space-y-6">
@@ -272,6 +323,81 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
               ))}
             </div>
           </div>
+
+          <RedSurface tone="glass" className="flex flex-col gap-4 p-5">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="space-y-1">
+                <p className="text-sm font-semibold text-red-50">
+                  {t("access.permissions.heading")}
+                </p>
+                <p className="text-xs text-red-200/70">
+                  {t("access.permissions.description")}
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-red-200/60">
+                {Object.entries(permissionLegend).map(([level, label]) => (
+                  <span
+                    key={level}
+                    className={cn(
+                      "inline-flex items-center gap-2 rounded-full border px-3 py-1",
+                      permissionLevelStyles[level as PermissionLevel] ??
+                        "border-red-300/30 bg-red-950/60 text-red-200/80",
+                    )}
+                  >
+                    <ShieldCheck size={14} />
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-red-400/20 text-left text-xs text-red-100/80">
+                <thead>
+                  <tr className="text-[11px] uppercase tracking-[0.35em] text-red-200/70">
+                    <th className="px-4 py-3 font-semibold text-red-200/80">
+                      {t("access.permissions.roleColumn")}
+                    </th>
+                    {capabilityOrder.map((capability) => (
+                      <th key={capability} className="px-4 py-3 font-semibold text-red-200/70">
+                        <div className="flex items-center gap-2">
+                          <ClipboardList size={14} />
+                          <span>{permissionLabels[capability]}</span>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-red-400/10">
+                  {permissionMatrix.map((row) => (
+                    <tr key={row.id}>
+                      <th scope="row" className="px-4 py-3 text-sm font-semibold text-red-50">
+                        {row.role}
+                      </th>
+                      {capabilityOrder.map((capability) => {
+                        const level = row.permissions[capability] ?? "restricted";
+                        const badgeStyles =
+                          permissionLevelStyles[level] ??
+                          "border-red-300/30 bg-red-950/60 text-red-200/80";
+
+                        return (
+                          <td key={capability} className="px-4 py-3">
+                            <span
+                              className={cn(
+                                "inline-flex w-full items-center justify-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em]",
+                                badgeStyles,
+                              )}
+                            >
+                              {permissionLegend[level] ?? permissionLegend.restricted}
+                            </span>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </RedSurface>
         </RedSurface>
 
         <RedSurface as="aside" tone="muted" className="p-6 text-red-50">
