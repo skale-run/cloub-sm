@@ -198,10 +198,6 @@ function App() {
     }
   }, []);
 
-  const handleSidebarNavigate = useCallback(() => {
-    setIsSidebarOpen(false);
-  }, []);
-
   const hasCompletedProfile = useMemo(() => {
     if (!savedProfile) {
       return false;
@@ -459,7 +455,6 @@ function App() {
       <Sidebar
         open={isSidebarOpen}
         onToggleSidebar={toggleSidebar}
-        onNavigate={handleSidebarNavigate}
         onNavigateTo={handleNavigateTo}
         onPrefetchSection={prefetchSection}
         currentPath={currentPath}

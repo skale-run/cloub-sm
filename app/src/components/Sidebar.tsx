@@ -49,7 +49,6 @@ const iconMap: Record<RoutePath, typeof Activity> = {
 type SidebarProps = {
   open: boolean;
   onToggleSidebar: () => void;
-  onNavigate?: () => void;
   onNavigateTo: (path: RoutePath) => void;
   onPrefetchSection?: (path: RoutePath) => void;
   currentPath: RoutePath;
@@ -58,7 +57,6 @@ type SidebarProps = {
 function Sidebar({
   open,
   onToggleSidebar,
-  onNavigate,
   onNavigateTo,
   onPrefetchSection,
   currentPath,
@@ -101,12 +99,6 @@ function Sidebar({
 
   const soonLabel = t("common.badges.soon");
 
-  const handleNavigate = () => {
-    if (open) {
-      onNavigate?.();
-    }
-  };
-
   const handleItemClick = (
     event: MouseEvent<HTMLAnchorElement>,
     path: RoutePath,
@@ -124,7 +116,6 @@ function Sidebar({
 
     event.preventDefault();
     onNavigateTo(path);
-    handleNavigate();
   };
 
   return (
