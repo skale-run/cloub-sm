@@ -73,13 +73,13 @@ export const ar = {
           login: {
             heading: "سجّل الدخول إلى مقر الدوجان الخاص بك",
             description:
-              "عد إلى مركز قيادة التايكواندو الخاص بك ونسّق مع تركيز اليوم.",
+              "عد إلى مركز قيادة التايكواندو الخاص بك وواكب تركيز اليوم.",
             cta: "تسجيل الدخول",
           },
           register: {
             heading: "فعّل جواز التايكواندو الخاص بك",
             description:
-              "أنشئ بيانات اعتمادك لفتح جلسات بومسي مخصّصة ودعم الفريق.",
+              "أنشئ حسابك لفتح جلسات بومسي مخصّصة ودعم السكواد.",
             cta: "إنشاء حساب",
           },
         },
@@ -137,7 +137,7 @@ export const ar = {
             "بإنشائك حسابًا، فإنك تقبل ميثاق الدوجان وتوافق على تتبّع الأداء.",
         },
         highlights: {
-          heading: "لماذا يحبها الرياضيون",
+          heading: "لماذا يحب الرياضيون المنصة",
           items: {
             eliteTraining: {
               title: "مخططات تدريب الدوجو",
@@ -163,7 +163,7 @@ export const ar = {
         },
         support: {
           heading: "هل تحتاج مساعدة للبدء؟",
-          intro: "أرسل رسالة إلى",
+          intro: "أرسل ملاحظة إلى",
           outro: "أو تواصل مع فريق التدريب في قناة السكواد.",
         },
         status: {
@@ -219,7 +219,7 @@ export const ar = {
             {
               to: "/guardian-portal",
               label: "بوابة الوالدين",
-              description: "عرض خفيف للحضور والفوترة والفعاليات للعائلة",
+              description: "عرض عائلي عبر الحضور والفوترة والفعاليات",
             },
           ],
         },
@@ -359,10 +359,10 @@ export const ar = {
         eventsCount_zero: "لا أحداث",
         eventsCount_one: "حدث واحد",
         eventsCount_other: "{{count}} أحداث",
-        previous: "Previous month",
-        next: "Next month",
-        previousShort: "Prev",
-        nextShort: "Next",
+        previous: "الشهر السابق",
+        next: "الشهر التالي",
+        previousShort: "السابق",
+        nextShort: "التالي",
       },
       weekView: {
         weekLabel: "أسبوع {{start}}",

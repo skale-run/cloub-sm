@@ -71,15 +71,15 @@ export const en = {
         },
         copy: {
           login: {
-            heading: "Log in to your dojang HQ",
+            heading: "Sign in to your dojang HQ",
             description:
-              "Step back into your Taekwondo command center and sync with today’s focus.",
+              "Return to your Taekwondo command center and sync with today’s focus.",
             cta: "Sign in",
           },
           register: {
             heading: "Activate your Taekwondo passport",
             description:
-              "Create your credentials to unlock tailored poomsae sessions and squad support.",
+              "Create your account to unlock tailored poomsae sessions and squad support.",
             cta: "Create account",
           },
         },
@@ -137,7 +137,7 @@ export const en = {
             "By creating an account you accept the dojang charter and consent to performance tracking.",
         },
         highlights: {
-          heading: "Why athletes love it",
+          heading: "Why athletes love the hub",
           items: {
             eliteTraining: {
               title: "Dojo training blueprints",
@@ -163,7 +163,7 @@ export const en = {
         },
         support: {
           heading: "Need help getting started?",
-          intro: "Drop a note to",
+          intro: "Send a note to",
           outro: "or chat with your coaching team in the squad channel.",
         },
         status: {
@@ -207,7 +207,7 @@ export const en = {
             {
               to: "/billing",
               label: "Billing overview",
-              description: "Track invoices & payments",
+              description: "Track invoices and payments",
               status: "soon",
             },
             {
@@ -218,7 +218,7 @@ export const en = {
             {
               to: "/guardian-portal",
               label: "Guardian portal",
-              description: "Family view across attendance, billing & events",
+              description: "Family view across attendance, billing, and events",
             },
           ],
         },
@@ -233,7 +233,7 @@ export const en = {
             {
               to: "/progress-overview",
               label: "Progress insight",
-              description: "Growth trends & belt alerts",
+              description: "Growth trends and belt alerts",
             },
           ],
         },
@@ -243,7 +243,7 @@ export const en = {
             {
               to: "/performance-tracking",
               label: "Performance dashboard",
-              description: "Technical milestones & sparring load",
+              description: "Technical milestones and sparring load",
             },
           ],
         },
@@ -301,7 +301,7 @@ export const en = {
           },
           competition: {
             label: "Tournament days",
-            sublabel: "Travel & ring windows",
+            sublabel: "Travel and ring windows",
           },
         },
       },
