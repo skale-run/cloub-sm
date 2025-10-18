@@ -45,7 +45,7 @@ const highlightConfig = [
 const LOGIN_FORM_STORAGE_KEY = "cloub-auth-login-form" as const;
 const REGISTER_FORM_STORAGE_KEY = "cloub-auth-register-form" as const;
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/v1";
 
 type SubmissionState =
   | { status: "idle" }

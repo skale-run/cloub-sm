@@ -11,7 +11,7 @@ import {
 
 const STORAGE_KEY = "cloub-auth-member" as const;
 const TOKEN_STORAGE_KEY = "cloub-auth-token" as const;
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/v1";
 
 export type Member = {
   id: string;
