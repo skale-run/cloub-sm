@@ -683,50 +683,50 @@ export const fr = {
       },
     },
     landing: {
-      badge: "Cloud-based Taekwondo management",
-      heroTitle: "Unify your dojang and empower every martial artist",
+      badge: "Plateforme moderne de gestion taekwondo",
+      heroTitle: "Pilotez votre dojang avec clarté et confiance",
       heroDescription:
-        "Cloub equips masters, practitioners, and coordinators with a unified hub for class scheduling, belt assessments, and tournament preparation. Strengthen your program with insights that keep every ring team aligned.",
+        "Cloub réunit maîtres, pratiquants et coordinateurs dans un même espace pour planifier les cours, suivre les passages de ceinture et préparer les tournois. Transformez les données d'assiduité, de finances et de performance en actions pour chaque équipe.",
       ctas: {
-        primary: "Sign up",
-        secondary: "Log in",
-        tertiary: "Contact",
+        primary: "Commencer l'essai gratuit",
+        secondary: "Se connecter",
+        tertiary: "Nous contacter",
       },
       features: [
         {
-          title: "Integrated class planning",
+          title: "Planification de cours intégrée",
           description:
-            "Organize poomsae, sparring, and conditioning blocks with automated reminders that keep every belt group informed.",
+            "Créez des parcours de poomsae, sparring et préparation physique avec des rappels automatiques qui maintiennent chaque groupe de ceinture aligné.",
         },
         {
-          title: "Performance intelligence",
+          title: "Intelligence de performance",
           description:
-            "Visualize practitioner progress with dashboards that combine attendance, technique scores, and evaluation insights.",
+            "Visualisez la progression grâce à des tableaux de bord mêlant tendances d'assiduité, scores techniques et notes d'évaluation.",
         },
         {
-          title: "Secure access for all",
+          title: "Accès sécurisé pour chaque rôle",
           description:
-            "Role-based permissions give masters, athletes, and guardians the right visibility while protecting sensitive data.",
+            "Les permissions par rôle offrent aux maîtres, athlètes et tuteurs la bonne visibilité tout en protégeant les données sensibles.",
         },
       ],
       commandCenter: {
-        heading: "Role-aware control center",
+        heading: "Centre de commande pour chaque rôle",
         subheading:
-          "Switch between personas to see how Cloub personalizes insight, tasks, and communication guardrails.",
-        roleSwitcherLabel: "Preview dashboards",
+          "Apercevez comment chaque persona profite des insights guidés, des tâches et des garde-fous de communication de Cloub.",
+        roleSwitcherLabel: "Basculer de tableau de bord",
         notifications: {
-          title: "Notification center",
-          empty: "You're all caught up across every ring team.",
-          viewAll: "active alerts",
+          title: "Centre de notifications",
+          empty: "Vous êtes à jour sur toutes les équipes.",
+          viewAll: "voir les alertes",
         },
         statusLabels: {
-          completed: "Completed",
-          upcoming: "Upcoming",
-          overdue: "Overdue",
+          completed: "Terminé",
+          upcoming: "À venir",
+          overdue: "En retard",
         },
-        focusTitle: "Immediate focus",
-        focusSubtitle: "Auto-prioritised from attendance + finance data",
-        shortcutsTitle: "Quick shortcuts",
+        focusTitle: "Priorité immédiate",
+        focusSubtitle: "Priorisé automatiquement selon l'assiduité et la facturation",
+        shortcutsTitle: "Actions rapides",
         roleOptions: [
           {
             id: "master",
