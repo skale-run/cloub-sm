@@ -97,6 +97,16 @@ export const ClipboardCheck = createLucideIcon(
   </>,
 );
 
+export const ClipboardList = createLucideIcon(
+  <>
+    <rect x="4" y="3" width="16" height="18" rx="2" />
+    <path d="M9 3v4h6V3" />
+    <path d="M9 12h6" />
+    <path d="M9 16h6" />
+    <path d="M9 8h6" />
+  </>,
+);
+
 export const CreditCard = createLucideIcon(
   <>
     <rect x="2" y="5" width="20" height="14" rx="2" />
@@ -186,6 +196,33 @@ export const Menu = createLucideIcon(
 export const CheckCircle2 = createLucideIcon(
   <>
     <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" />
+    <path d="m9 12 2 2 4-4" />
+  </>,
+);
+
+export const Bell = createLucideIcon(
+  <>
+    <path d="M6.5 17h11" />
+    <path d="M17 17V9a5 5 0 0 0-10 0v8" />
+    <path d="M12 21a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2Z" />
+  </>,
+);
+
+export const Play = createLucideIcon(
+  <polygon points="6 4 20 12 6 20 6 4" />,
+);
+
+export const Sparkles = createLucideIcon(
+  <>
+    <path d="m12 3-1.5 3.5L7 8l3.5 1.5L12 13l1.5-3.5L17 8l-3.5-1.5Z" />
+    <path d="M5 15 4 17l-2 1 2 1 1 2 1-2 2-1-2-1Z" />
+    <path d="m19 15-.5 1.5L17 17l1.5.5L19 19l.5-1.5L21 17l-1.5-.5Z" />
+  </>,
+);
+
+export const ShieldCheck = createLucideIcon(
+  <>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
     <path d="m9 12 2 2 4-4" />
   </>,
 );
