@@ -16,6 +16,7 @@ import {
 } from "./AthletePortalModalContext";
 import { useMember } from "./MemberContext";
 import type { Member } from "./MemberContext";
+import AuthLanguageSelector from "./AuthLanguageSelector";
 
 const highlightConfig = [
   {
@@ -651,6 +652,8 @@ function AuthenticationExperienceModal({
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.18),transparent_55%)]"
           aria-hidden
         />
+
+        <AuthLanguageSelector className="absolute left-6 top-6" />
 
         {!isCloseDisabled && (
           <button
