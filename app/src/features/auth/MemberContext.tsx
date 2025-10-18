@@ -134,26 +134,6 @@ export function MemberProvider({ children }: MemberProviderProps) {
           },
         );
 
-        if (!response.ok) {
-          if (response.status === 404) {
-            setMemberState(null);
-            setAuthToken(null);
-            return;
-          }
-
-          if (response.status === 401 || response.status === 403) {
-            setMemberState(null);
-            setAuthToken(null);
-            return;
-          }
-
-          throw new Error(`Failed to refresh member (${response.status})`);
-        }
-
-        const payload = (await response.json().catch(() => null)) as {
-          member?: Member;
-        } | null;
-
         if (payload?.member) {
           setMemberState(payload.member);
         }
