@@ -2,10 +2,9 @@
 
 const fs = require("fs");
 const path = require("path");
-const { Pool } = require("pg");
-const dotenv = require("dotenv");
+require("../src/config/env");
 
-dotenv.config();
+const { Pool } = require("pg");
 
 const migrationsDir = path.join(__dirname, "migrations");
 const MIGRATIONS_TABLE = "schema_migrations";

@@ -1,3 +1,5 @@
+require("../config/env");
+
 const { Pool } = require("pg");
 
 function getDatabaseConfig() {
