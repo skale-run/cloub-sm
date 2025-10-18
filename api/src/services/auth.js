@@ -1,3 +1,5 @@
+require("../config/env");
+
 const jwt = require("jsonwebtoken");
 const { query } = require("../db/pool");
 
