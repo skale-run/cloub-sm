@@ -1,20 +1,13 @@
 const express = require("express");
 const { query, pool } = require("../db/pool");
 const { isValidUuid } = require("../utils/validation");
+const { toIsoString } = require("../utils/date");
 
 const router = express.Router();
 
 const ALLOWED_CATEGORIES = new Set(["training", "competition"]);
 const ALLOWED_LEVELS = new Set(["regional", "national", "international"]);
 const ALLOWED_EVENT_TYPES = new Set(["competition", "entrainment", "meet", "other"]);
-
-function toIsoString(value) {
-  if (value instanceof Date) {
-    return value.toISOString();
-  }
-
-  return value ?? null;
-}
 
 function parseMembers(value) {
   if (!value) {
