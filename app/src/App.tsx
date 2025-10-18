@@ -11,7 +11,6 @@ import { useTranslation } from "react-i18next";
 import AuthenticationExperienceModal from "./features/auth/AuthenticationExperienceModal";
 import { useAthletePortalModal } from "./features/auth/AthletePortalModalContext";
 import { useMember, type Member } from "./features/auth/MemberContext";
-import LandingPage from "./features/landing/LandingPage";
 import { emptyProfile, type Profile } from "./features/profile/profileTypes";
 import {
   type Achievement,
@@ -21,12 +20,7 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import { cn } from "./lib/cn";
 import { lazyWithPreload } from "./lib/lazyWithPreload";
-import {
-  defaultPath,
-  landingPath,
-  normalizePath,
-  type RoutePath,
-} from "./routes";
+import { defaultPath, normalizePath, type RoutePath } from "./routes";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/v1";
 
@@ -62,7 +56,6 @@ const AccessSection = lazyWithPreload(
 );
 
 const pageTitleKeyMap = {
-  "/": "landing",
   "/calendar": "calendar",
   "/academic-record": "academicRecord",
   "/billing": "billing",
@@ -76,10 +69,7 @@ const pageTitleKeyMap = {
 } satisfies Record<RoutePath, string>;
 
 const dashboardSectionLoaders: Partial<
-  Record<
-    Exclude<RoutePath, typeof landingPath>,
-    { preload?: () => Promise<unknown> }
-  >
+  Record<RoutePath, { preload?: () => Promise<unknown> }>
 > = {
   "/calendar": CalendarSection,
   "/academic-record": AcademicRecordSection,
@@ -134,7 +124,7 @@ function App() {
 
   const [currentPath, setCurrentPath] = useState<RoutePath>(() => {
     if (typeof window === "undefined") {
-      return landingPath;
+      return defaultPath;
     }
 
     return normalizePath(window.location.pathname);
@@ -189,12 +179,28 @@ function App() {
     document.title = pageTitle;
   }, [pageTitle]);
 
+  useEffect(() => {
+    if (!member) {
+      openAthletePortalModal("login");
+    }
+  }, [member, openAthletePortalModal]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (window.location.pathname !== currentPath) {
+      window.history.replaceState({ path: currentPath }, "", currentPath);
+    }
+  }, [currentPath]);
+
   const toggleSidebar = useCallback(() => {
     setIsSidebarOpen((previous) => !previous);
   }, []);
 
   const handleNavigateTo = useCallback((path: RoutePath) => {
-    const nextPath = path === landingPath ? landingPath : normalizePath(path);
+    const nextPath = normalizePath(path);
     setCurrentPath(nextPath);
 
     if (typeof window !== "undefined") {
@@ -217,12 +223,11 @@ function App() {
   }, [handleNavigateTo, hasCompletedProfile]);
 
   const prefetchSection = useCallback((path: RoutePath) => {
-    if (path === landingPath || prefetchedPathsRef.current.has(path)) {
+    if (prefetchedPathsRef.current.has(path)) {
       return;
     }
 
-    const loader =
-      dashboardSectionLoaders[path as Exclude<RoutePath, typeof landingPath>];
+    const loader = dashboardSectionLoaders[path];
     loader?.preload?.();
     prefetchedPathsRef.current.add(path);
   }, []);
@@ -391,34 +396,11 @@ function App() {
     [authToken, clearMember, member, profileDraft, setMember, t],
   );
 
-  const isLandingPage = currentPath === landingPath;
   const fallbackMessage = t("common.loading", { defaultValue: "Loading…" });
   const connectedUserName =
     savedProfile?.fullName.trim() ||
     profileDraft.fullName.trim() ||
     t("app.defaults.teamMember");
-
-  const handleContactClick = useCallback(() => {
-    if (typeof document === "undefined") {
-      return;
-    }
-
-    const contactSection = document.getElementById("landing-contact");
-    contactSection?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
-
-  if (isLandingPage) {
-    return (
-      <>
-        <LandingPage
-          onSignup={() => openAthletePortalModal("register")}
-          onLogin={() => openAthletePortalModal("login")}
-          onContact={handleContactClick}
-        />
-        <AuthenticationExperienceModal />
-      </>
-    );
-  }
 
   const renderSection = () => {
     switch (currentPath) {
@@ -503,7 +485,7 @@ function App() {
           </div>
         </main>
       </div>
-      <AuthenticationExperienceModal />
+      <AuthenticationExperienceModal isCloseDisabled={!member} />
     </div>
   );
 }

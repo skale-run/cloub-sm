@@ -87,12 +87,19 @@ const authCopy: Record<
 
 const supportEmail = "coach@aerodash.com" as const;
 
-function AuthenticationExperienceModal() {
+type AuthenticationExperienceModalProps = {
+  isCloseDisabled?: boolean;
+};
+
+function AuthenticationExperienceModal({
+  isCloseDisabled = false,
+}: AuthenticationExperienceModalProps = {}) {
   const { isOpen, close, requestedMode } = useAthletePortalModal();
   const { setMember } = useMember();
   const { t } = useTranslation();
   const [mode, setMode] = useState<AuthMode>("login");
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
   const activeRequestRef = useRef<AbortController | null>(null);
   const profilePhotoInputRef = useRef<HTMLInputElement | null>(null);
@@ -294,7 +301,10 @@ function AuthenticationExperienceModal() {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
-        close();
+
+        if (!isCloseDisabled) {
+          close();
+        }
       }
     };
 
@@ -305,7 +315,13 @@ function AuthenticationExperienceModal() {
     window.addEventListener("keydown", handleKeyDown);
 
     const timer = window.setTimeout(() => {
-      closeButtonRef.current?.focus({ preventScroll: true });
+      const focusTarget = isCloseDisabled
+        ? modalRef.current?.querySelector<HTMLElement>(
+            "[data-auth-modal-initial-focus]",
+          ) ?? null
+        : closeButtonRef.current;
+
+      focusTarget?.focus({ preventScroll: true });
     }, 0);
 
     return () => {
@@ -314,7 +330,7 @@ function AuthenticationExperienceModal() {
       style.overflow = originalOverflow;
       previouslyFocusedElementRef.current?.focus({ preventScroll: true });
     };
-  }, [close, isOpen]);
+  }, [close, isCloseDisabled, isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -627,21 +643,26 @@ function AuthenticationExperienceModal() {
       aria-labelledby="athlete-auth-modal-title"
       className="fixed inset-0 z-50 flex items-center justify-center bg-red-950/90 p-6 backdrop-blur-lg"
     >
-      <div className="relative flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-red-400/30 bg-gradient-to-br from-red-950/95 via-red-950/80 to-red-900/70 shadow-[0_55px_160px_rgba(127,29,29,0.55)]">
+      <div
+        ref={modalRef}
+        className="relative flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-red-400/30 bg-gradient-to-br from-red-950/95 via-red-950/80 to-red-900/70 shadow-[0_55px_160px_rgba(127,29,29,0.55)]"
+      >
         <div
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.18),transparent_55%)]"
           aria-hidden
         />
 
-        <button
-          ref={closeButtonRef}
-          type="button"
-          onClick={close}
-          className="absolute right-6 top-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-red-400/40 bg-red-950/40 text-red-100 transition hover:border-red-300/60 hover:bg-red-900/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
-          aria-label={t("auth.modal.aria.close")}
-        >
-          <X className="h-5 w-5" aria-hidden />
-        </button>
+        {!isCloseDisabled && (
+          <button
+            ref={closeButtonRef}
+            type="button"
+            onClick={close}
+            className="absolute right-6 top-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-red-400/40 bg-red-950/40 text-red-100 transition hover:border-red-300/60 hover:bg-red-900/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+            aria-label={t("auth.modal.aria.close")}
+          >
+            <X className="h-5 w-5" aria-hidden />
+          </button>
+        )}
 
         <div className="grid flex-1 grid-cols-1 gap-8 overflow-y-auto p-10 lg:grid-cols-[1.1fr_0.9fr]">
           <section className="flex flex-col justify-between gap-10">
@@ -702,6 +723,7 @@ function AuthenticationExperienceModal() {
                     <input
                       type="email"
                       name="email"
+                      data-auth-modal-initial-focus
                       autoComplete="email"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                       placeholder={t("auth.modal.loginForm.email.placeholder")}
@@ -842,6 +864,7 @@ function AuthenticationExperienceModal() {
                     <input
                       type="text"
                       name="fullName"
+                      data-auth-modal-initial-focus
                       autoComplete="name"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                       placeholder={t(
