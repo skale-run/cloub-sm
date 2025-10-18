@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
+import Modal from "../../components/Modal";
 import RedSurface from "../../components/RedSurface";
 import { getLanguagePresentation } from "../../lib/i18n";
 import { calendarEvents, type CalendarEvent } from "./calendarEvents";
@@ -489,48 +490,6 @@ function CalendarSection(): ReactElement {
 
     setSelectedDayKey(fallbackOption.key);
   }, [dayOptions, selectedDayKey, today]);
-
-  useEffect(() => {
-    if (!activeEvent) {
-      return;
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closeEventModal();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [activeEvent, closeEventModal]);
-
-  useEffect(() => {
-    if (!activeEvent) {
-      return;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [activeEvent]);
-
-  useEffect(() => {
-    if (!activeEvent) {
-      return;
-    }
-
-    if (eventModalCloseButtonRef.current) {
-      eventModalCloseButtonRef.current.focus();
-    }
-  }, [activeEvent]);
 
   const selectedDay = dayOptions.find(
     (option) => option.key === selectedDayKey,
@@ -1246,138 +1205,133 @@ function CalendarSection(): ReactElement {
       ) : null}
     </section>
       {activeEvent ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6">
-          <div
-            className="absolute inset-0 bg-red-950/80 backdrop-blur-sm"
-            aria-hidden
-            onClick={closeEventModal}
-          />
-          <div className="relative z-10 w-full max-w-lg">
-            <RedSurface
-              tone="muted"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby={eventModalTitleId}
-              aria-describedby={eventModalDescriptionId}
-              className="relative overflow-hidden rounded-3xl p-6 text-left shadow-[0_30px_80px_rgba(127,29,29,0.55)]"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <span
-                    className={`inline-flex items-center rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] ${typeStyles[activeEvent.category]}`}
-                  >
-                    {t(`calendar.categories.${activeEvent.category}.badge`)}
-                  </span>
-                  <h3
-                    id={eventModalTitleId}
-                    className="mt-4 text-xl font-semibold text-red-50"
-                  >
-                    {t(activeEvent.titleKey)}
-                  </h3>
-                  {activeEventOccursOnLabel ? (
-                    <p
-                      id={eventModalDescriptionId}
-                      className="mt-2 text-sm text-red-200/75"
-                    >
-                      {activeEventOccursOnLabel}
-                    </p>
-                  ) : null}
-                </div>
-                <button
-                  ref={eventModalCloseButtonRef}
-                  type="button"
-                  onClick={closeEventModal}
-                  aria-label={t("calendar.eventModal.aria.close")}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-red-500/30 bg-red-900/40 text-lg text-red-200/80 transition hover:border-red-400/50 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+        <Modal
+          isOpen
+          onClose={closeEventModal}
+          labelledBy={eventModalTitleId}
+          describedBy={eventModalDescriptionId}
+          initialFocusRef={eventModalCloseButtonRef}
+        >
+          <RedSurface
+            tone="muted"
+            className="relative overflow-hidden rounded-3xl p-6 text-left shadow-[0_30px_80px_rgba(127,29,29,0.55)]"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <span
+                  className={`inline-flex items-center rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] ${typeStyles[activeEvent.category]}`}
                 >
-                  <span aria-hidden>&times;</span>
-                </button>
+                  {t(`calendar.categories.${activeEvent.category}.badge`)}
+                </span>
+                <h3
+                  id={eventModalTitleId}
+                  className="mt-4 text-xl font-semibold text-red-50"
+                >
+                  {t(activeEvent.titleKey)}
+                </h3>
+                {activeEventOccursOnLabel ? (
+                  <p
+                    id={eventModalDescriptionId}
+                    className="mt-2 text-sm text-red-200/75"
+                  >
+                    {activeEventOccursOnLabel}
+                  </p>
+                ) : null}
+              </div>
+              <button
+                ref={eventModalCloseButtonRef}
+                type="button"
+                onClick={closeEventModal}
+                aria-label={t("calendar.eventModal.aria.close")}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-red-500/30 bg-red-900/40 text-lg text-red-200/80 transition hover:border-red-400/50 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              >
+                <span aria-hidden>&times;</span>
+              </button>
+            </div>
+
+            <div className="mt-6 space-y-6">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
+                  {t("calendar.eventModal.schedule.heading")}
+                </p>
+                <dl className="mt-3 grid gap-4 sm:grid-cols-3">
+                  <div>
+                    <dt className="text-[11px] uppercase tracking-[0.3em] text-red-200/60">
+                      {t("calendar.eventModal.schedule.start")}
+                    </dt>
+                    <dd className="mt-1 text-sm font-semibold text-red-50">
+                      {activeEventStartTimeLabel}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[11px] uppercase tracking-[0.3em] text-red-200/60">
+                      {t("calendar.eventModal.schedule.end")}
+                    </dt>
+                    <dd className="mt-1 text-sm font-semibold text-red-50">
+                      {activeEventEndTimeLabel}
+                    </dd>
+                  </div>
+                  {activeEventDurationLabel ? (
+                    <div>
+                      <dt className="text-[11px] uppercase tracking-[0.3em] text-red-200/60">
+                        {t("calendar.eventModal.schedule.duration")}
+                      </dt>
+                      <dd className="mt-1 text-sm font-semibold text-red-50">
+                        {activeEventDurationLabel}
+                      </dd>
+                    </div>
+                  ) : null}
+                </dl>
               </div>
 
-              <div className="mt-6 space-y-6">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                    {t("calendar.eventModal.schedule.heading")}
-                  </p>
-                  <dl className="mt-3 grid gap-4 sm:grid-cols-3">
-                    <div>
-                      <dt className="text-[11px] uppercase tracking-[0.3em] text-red-200/60">
-                        {t("calendar.eventModal.schedule.start")}
-                      </dt>
-                      <dd className="mt-1 text-sm font-semibold text-red-50">
-                        {activeEventStartTimeLabel}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="text-[11px] uppercase tracking-[0.3em] text-red-200/60">
-                        {t("calendar.eventModal.schedule.end")}
-                      </dt>
-                      <dd className="mt-1 text-sm font-semibold text-red-50">
-                        {activeEventEndTimeLabel}
-                      </dd>
-                    </div>
-                    {activeEventDurationLabel ? (
-                      <div>
-                        <dt className="text-[11px] uppercase tracking-[0.3em] text-red-200/60">
-                          {t("calendar.eventModal.schedule.duration")}
-                        </dt>
-                        <dd className="mt-1 text-sm font-semibold text-red-50">
-                          {activeEventDurationLabel}
-                        </dd>
-                      </div>
-                    ) : null}
-                  </dl>
-                </div>
-
-                <div>
-                  <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
-                    {t("calendar.eventModal.details.heading")}
-                  </p>
-                  <dl className="mt-3 space-y-4 text-sm">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
+                  {t("calendar.eventModal.details.heading")}
+                </p>
+                <dl className="mt-3 space-y-4 text-sm">
+                  <div>
+                    <dt className="text-red-200/70">
+                      {t("calendar.eventModal.details.location")}
+                    </dt>
+                    <dd className="mt-1 text-red-50">
+                      {activeEventLocationLabel}
+                    </dd>
+                  </div>
+                  {activeEventCoachLabel ? (
                     <div>
                       <dt className="text-red-200/70">
-                        {t("calendar.eventModal.details.location")}
+                        {t("calendar.eventModal.details.coach")}
                       </dt>
                       <dd className="mt-1 text-red-50">
-                        {activeEventLocationLabel}
+                        {activeEventCoachLabel}
                       </dd>
                     </div>
-                    {activeEventCoachLabel ? (
-                      <div>
-                        <dt className="text-red-200/70">
-                          {t("calendar.eventModal.details.coach")}
-                        </dt>
-                        <dd className="mt-1 text-red-50">
-                          {activeEventCoachLabel}
-                        </dd>
-                      </div>
-                    ) : null}
-                    {activeEventLevelLabel ? (
-                      <div>
-                        <dt className="text-red-200/70">
-                          {t("calendar.eventModal.details.level")}
-                        </dt>
-                        <dd className="mt-1 text-red-50">
-                          {activeEventLevelLabel}
-                        </dd>
-                      </div>
-                    ) : null}
-                    {activeEventCheckInValue ? (
-                      <div>
-                        <dt className="text-red-200/70">
-                          {t("calendar.eventModal.details.checkInLabel")}
-                        </dt>
-                        <dd className="mt-1 text-red-50">
-                          {activeEventCheckInValue}
-                        </dd>
-                      </div>
-                    ) : null}
-                  </dl>
-                </div>
+                  ) : null}
+                  {activeEventLevelLabel ? (
+                    <div>
+                      <dt className="text-red-200/70">
+                        {t("calendar.eventModal.details.level")}
+                      </dt>
+                      <dd className="mt-1 text-red-50">
+                        {activeEventLevelLabel}
+                      </dd>
+                    </div>
+                  ) : null}
+                  {activeEventCheckInValue ? (
+                    <div>
+                      <dt className="text-red-200/70">
+                        {t("calendar.eventModal.details.checkInLabel")}
+                      </dt>
+                      <dd className="mt-1 text-red-50">
+                        {activeEventCheckInValue}
+                      </dd>
+                    </div>
+                  ) : null}
+                </dl>
               </div>
-            </RedSurface>
-          </div>
-        </div>
+            </div>
+          </RedSurface>
+        </Modal>
       ) : null}
     </>
   );
