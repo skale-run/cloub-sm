@@ -167,11 +167,15 @@ function GuardianPortalSection() {
         </div>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[1.75fr_1fr]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)]">
         <div className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {summaryCards.map((card) => (
-              <RedSurface key={card.key} tone="muted" className="space-y-2 p-5">
+              <RedSurface
+                key={card.key}
+                tone="muted"
+                className="space-y-2 p-4 sm:p-5"
+              >
                 <p className="text-xs uppercase tracking-[0.25em] text-red-200/70">
                   {card.label}
                 </p>
@@ -183,7 +187,7 @@ function GuardianPortalSection() {
             ))}
           </div>
 
-          <RedSurface tone="muted" className="space-y-6 p-6">
+          <RedSurface tone="muted" className="space-y-6 p-5 sm:p-6">
             <header className="space-y-1">
               <h2 className="text-lg font-semibold text-red-50">
                 {t("guardianPortal.feed.heading")}
@@ -197,10 +201,10 @@ function GuardianPortalSection() {
               {feedItems.map((item) => (
                 <li
                   key={item.key}
-                  className="rounded-2xl border border-red-500/20 bg-red-950/40 p-5"
+                  className="rounded-2xl border border-red-500/20 bg-red-950/40 p-4 sm:p-5"
                 >
-                  <div className="flex items-start gap-4">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-red-500/40 bg-red-500/15 text-red-100">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                    <span className="flex h-11 w-11 items-center justify-center self-start rounded-2xl border border-red-500/40 bg-red-500/15 text-red-100">
                       <item.Icon size={20} />
                     </span>
                     <div className="flex-1 space-y-3">
@@ -224,7 +228,7 @@ function GuardianPortalSection() {
                           <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
                             {t("guardianPortal.feed.items.attendance.patternLabel")}
                           </p>
-                          <div className="grid grid-cols-7 gap-2">
+                          <div className="grid grid-cols-4 gap-2 sm:grid-cols-7 sm:gap-3">
                             {attendancePattern.map((day) => (
                               <div
                                 key={day.dayKey}
@@ -301,7 +305,7 @@ function GuardianPortalSection() {
         </div>
 
         <div className="space-y-6">
-          <RedSurface tone="muted" className="flex h-full flex-col gap-5 p-6">
+          <RedSurface tone="muted" className="flex h-full flex-col gap-5 p-5 sm:p-6">
             <header className="space-y-1">
               <h2 className="flex items-center gap-2 text-lg font-semibold text-red-50">
                 <MessageCircle size={20} className="text-red-200/80" />
@@ -321,7 +325,7 @@ function GuardianPortalSection() {
                   }`}
                 >
                   <div
-                    className={`max-w-[260px] space-y-1 rounded-2xl border px-4 py-3 text-sm ${
+                    className={`max-w-[85%] space-y-1 rounded-2xl border px-4 py-3 text-sm sm:max-w-[260px] ${
                       message.tone === "guardian"
                         ? "border-red-400/40 bg-red-500/20 text-red-50"
                         : "border-red-500/20 bg-red-950/45 text-red-100"
