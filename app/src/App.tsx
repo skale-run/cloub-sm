@@ -481,6 +481,7 @@ function App() {
           userFullName={connectedUserName}
           hasCompletedProfile={hasCompletedProfile}
           onAvatarClick={handleAvatarClick}
+          onLogout={handleLogout}
         />
         <main className="relative flex-1 overflow-y-auto px-4 pb-16 pt-6 sm:px-6 lg:px-10">
           <div

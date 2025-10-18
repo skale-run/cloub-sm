@@ -62,6 +62,15 @@ export const en = {
           access: "Go to access management",
         },
       },
+      menu: {
+        label: "Account options",
+        profile: "Complete your profile",
+        profileDescription: "Finish your details to unlock full access.",
+        access: "Manage access",
+        accessDescription: "Update QR codes and share credentials.",
+        logout: "Log out",
+        logoutDescription: "Sign out of the dashboard.",
+      },
     },
     auth: {
       modal: {

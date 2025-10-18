@@ -65,6 +65,17 @@ export const fr = {
           access: "Ouvrir la gestion d'accès",
         },
       },
+      menu: {
+        label: "Options du compte",
+        profile: "Compléter votre profil",
+        profileDescription:
+          "Renseignez vos informations pour débloquer l'accès complet.",
+        access: "Gérer les accès",
+        accessDescription:
+          "Mettre à jour les QR codes et partager les identifiants.",
+        logout: "Se déconnecter",
+        logoutDescription: "Quitter le tableau de bord en toute sécurité.",
+      },
     },
     auth: {
       modal: {

@@ -60,6 +60,15 @@ export const ar = {
           access: "الانتقال إلى إدارة الوصول",
         },
       },
+      menu: {
+        label: "خيارات الحساب",
+        profile: "أكمل ملفك الشخصي",
+        profileDescription: "أضف بياناتك لفتح الوصول الكامل.",
+        access: "إدارة الوصول",
+        accessDescription: "حدّث رموز QR وشارك بيانات الاعتماد.",
+        logout: "تسجيل الخروج",
+        logoutDescription: "الخروج من لوحة التحكم بأمان.",
+      },
     },
     auth: {
       modal: {
