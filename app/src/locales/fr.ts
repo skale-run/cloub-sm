@@ -78,13 +78,13 @@ export const fr = {
           login: {
             heading: "Connectez-vous à votre QG du dojang",
             description:
-              "Retrouvez votre centre de commande taekwondo et alignez-vous sur l'objectif du jour.",
+              "Revenez à votre centre de commande taekwondo et alignez-vous sur l'objectif du jour.",
             cta: "Se connecter",
           },
           register: {
             heading: "Activez votre passeport taekwondo",
             description:
-              "Créez vos identifiants pour débloquer des séances de poomsae personnalisées et le soutien de l'équipe.",
+              "Créez votre compte pour débloquer des séances de poomsae personnalisées et le soutien de l'équipe.",
             cta: "Créer un compte",
           },
         },
@@ -142,7 +142,7 @@ export const fr = {
             "En créant un compte vous acceptez la charte du dojang et consentez au suivi des performances.",
         },
         highlights: {
-          heading: "Pourquoi les athlètes adorent",
+          heading: "Pourquoi les athlètes adorent le hub",
           items: {
             eliteTraining: {
               title: "Plans d'entraînement du dojo",
@@ -217,7 +217,7 @@ export const fr = {
             {
               to: "/billing",
               label: "Vue d'ensemble de la facturation",
-              description: "Suivez factures et paiements",
+              description: "Suivez les factures et les paiements",
               status: "soon",
             },
             {
@@ -229,7 +229,7 @@ export const fr = {
               to: "/guardian-portal",
               label: "Portail parents",
               description:
-                "Vue familiale des présences, paiements et événements",
+                "Vue familiale sur la présence, la facturation et les événements",
             },
           ],
         },
