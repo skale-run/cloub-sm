@@ -99,6 +99,14 @@ function Sidebar({
 
   const soonLabel = t("common.badges.soon");
 
+  const shouldCloseSidebarOnItemClick = () => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return !window.matchMedia("(min-width: 1024px)").matches;
+  };
+
   const handleItemClick = (
     event: MouseEvent<HTMLAnchorElement>,
     path: RoutePath,
@@ -116,6 +124,10 @@ function Sidebar({
 
     event.preventDefault();
     onNavigateTo(path);
+
+    if (shouldCloseSidebarOnItemClick()) {
+      onToggleSidebar();
+    }
   };
 
   return (
