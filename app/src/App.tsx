@@ -360,34 +360,7 @@ function App() {
                 profilePhotoUrl: trimmedProfile.profileImage || null,
               }),
             },
-            body: JSON.stringify({
-              fullName: trimmedProfile.fullName,
-              email: trimmedProfile.email,
-              role: trimmedProfile.role,
-              squad: trimmedProfile.squad,
-              emergencyContact: trimmedProfile.emergencyContact,
-              membershipId: trimmedProfile.membershipId,
-              profilePhotoUrl: trimmedProfile.profileImage || null,
-            }),
-          });
-
-          const payload = (await response.json().catch(() => null)) as {
-            member?: Member;
-            error?: string;
-          } | null;
-
-          if (!response.ok) {
-            if (response.status === 401 || response.status === 403) {
-              clearMember();
-              setStatusMessage(t("app.statusMessages.saveError"));
-              return;
-            }
-
-            setStatusMessage(
-              payload?.error ?? t("app.statusMessages.saveError"),
-            );
-            return;
-          }
+          );
 
           if (!payload?.member) {
             setStatusMessage(t("app.statusMessages.saveError"));
