@@ -1752,7 +1752,7 @@ export const en = {
           label: "Trusted by dojangs",
           value: "650+",
           description:
-            "martial arts programs coordinate their seasons with Cloub to elevate training quality and reduce admin overhead.",
+            "Taekwondo programs coordinate their seasons with Cloub to elevate training quality and reduce admin overhead.",
         },
       },
       contact: {
