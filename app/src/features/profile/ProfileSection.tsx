@@ -1,4 +1,15 @@
-import { CheckCircle2, Circle, Upload, X } from "lucide-react";
+import {
+  Activity,
+  Award,
+  CheckCircle2,
+  Circle,
+  Flag,
+  GaugeCircle,
+  Upload,
+  Users,
+  X,
+} from "lucide-react";
+import { cn } from "../../lib/cn";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type {
@@ -8,7 +19,15 @@ import type {
   KeyboardEvent,
 } from "react";
 import RedSurface from "../../components/RedSurface";
+import type { Achievement, AchievementDraft } from "./achievementTypes";
 import type { Profile } from "./profileTypes";
+
+type AchievementDraftChangeHandler = <K extends keyof AchievementDraft>(
+  key: K,
+  value: AchievementDraft[K],
+) => void;
+
+type AchievementFilter = "all" | Achievement["category"];
 
 type ProfileSectionProps = {
   profileDraft: Profile;
@@ -17,11 +36,11 @@ type ProfileSectionProps = {
   onResetProfile: () => void;
   onDeleteProfile: () => void;
   statusMessage: string;
-  achievements: string[];
-  newAchievement: string;
-  onNewAchievementChange: (value: string) => void;
+  achievements: Achievement[];
+  newAchievement: AchievementDraft;
+  onNewAchievementChange: AchievementDraftChangeHandler;
   onAddAchievement: () => void;
-  onRemoveAchievement: (index: number) => void;
+  onRemoveAchievement: (id: string) => void;
 };
 
 function ProfileSection({
@@ -41,6 +60,111 @@ function ProfileSection({
   const [isDragging, setIsDragging] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const { t } = useTranslation();
+  const [activeFilter, setActiveFilter] = useState<AchievementFilter>("all");
+  const [hasSharedCelebration, setHasSharedCelebration] = useState(false);
+
+  const categoryDetails = useMemo(
+    () =>
+      ({
+        tournament: {
+          label: t("profile.achievements.categories.tournament.label"),
+          description: t(
+            "profile.achievements.categories.tournament.description",
+          ),
+          Icon: Award,
+        },
+        leadership: {
+          label: t("profile.achievements.categories.leadership.label"),
+          description: t(
+            "profile.achievements.categories.leadership.description",
+          ),
+          Icon: Users,
+        },
+        communityService: {
+          label: t("profile.achievements.categories.communityService.label"),
+          description: t(
+            "profile.achievements.categories.communityService.description",
+          ),
+          Icon: Flag,
+        },
+        discipline: {
+          label: t("profile.achievements.categories.discipline.label"),
+          description: t(
+            "profile.achievements.categories.discipline.description",
+          ),
+          Icon: Activity,
+        },
+      }) satisfies Record<
+        Achievement["category"],
+        { label: string; description: string; Icon: typeof Award }
+      >,
+    [t],
+  );
+
+  const badgeCounts = useMemo(() => {
+    const counts: Record<AchievementFilter, number> = {
+      all: achievements.length,
+      tournament: 0,
+      leadership: 0,
+      communityService: 0,
+      discipline: 0,
+    };
+
+    for (const achievement of achievements) {
+      counts[achievement.category] += 1;
+    }
+
+    return counts;
+  }, [achievements]);
+
+  const filteredAchievements = useMemo(
+    () =>
+      activeFilter === "all"
+        ? achievements
+        : achievements.filter(
+            (achievement) => achievement.category === activeFilter,
+          ),
+    [achievements, activeFilter],
+  );
+
+  const filterOptions = useMemo(
+    () =>
+      [
+        {
+          value: "all" as AchievementFilter,
+          label: t("profile.achievements.filters.all"),
+          count: badgeCounts.all,
+          Icon: GaugeCircle,
+        },
+        {
+          value: "tournament" as AchievementFilter,
+          label: t("profile.achievements.filters.tournament"),
+          count: badgeCounts.tournament,
+          Icon: Award,
+        },
+        {
+          value: "leadership" as AchievementFilter,
+          label: t("profile.achievements.filters.leadership"),
+          count: badgeCounts.leadership,
+          Icon: Users,
+        },
+        {
+          value: "communityService" as AchievementFilter,
+          label: t("profile.achievements.filters.communityService"),
+          count: badgeCounts.communityService,
+          Icon: Flag,
+        },
+        {
+          value: "discipline" as AchievementFilter,
+          label: t("profile.achievements.filters.discipline"),
+          count: badgeCounts.discipline,
+          Icon: Activity,
+        },
+      ],
+    [badgeCounts, t],
+  );
+
+  const isAddDisabled = newAchievement.title.trim().length === 0;
 
   const profileFieldConfig = useMemo(
     () =>
@@ -439,10 +563,10 @@ function ProfileSection({
 
           <RedSurface
             tone="muted"
-            className="flex flex-col gap-4 rounded-3xl p-6 text-red-50"
+            className="flex flex-col gap-6 rounded-3xl p-6 text-red-50"
           >
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <div>
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="space-y-1">
                 <h3 className="text-lg font-semibold text-red-50">
                   {t("profile.achievements.heading")}
                 </h3>
@@ -450,50 +574,205 @@ function ProfileSection({
                   {t("profile.achievements.description")}
                 </p>
               </div>
-              <RedSurface
-                tone="glass"
-                className="flex w-full gap-2 rounded-2xl p-2 sm:w-auto"
-              >
-                <input
-                  value={newAchievement}
-                  onChange={(event) => onNewAchievementChange(event.target.value)}
-                  placeholder={t("profile.achievements.placeholder")}
-                  className="flex-1 rounded-xl border border-transparent bg-transparent px-3 py-2 text-sm text-red-50 placeholder:text-red-200/70 focus:border-red-400/60 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                />
-                <button
-                  type="button"
-                  onClick={onAddAchievement}
-                  className="inline-flex items-center justify-center rounded-xl bg-red-500/20 px-4 py-2 text-sm font-semibold text-red-100 transition hover:bg-red-400/30 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
-                >
-                  {t("profile.actions.add")}
-                </button>
-              </RedSurface>
+              <span className="inline-flex items-center gap-2 rounded-2xl border border-red-400/40 bg-red-950/40 px-3 py-1.5 text-xs font-medium text-red-100">
+                <GaugeCircle aria-hidden className="h-4 w-4" />
+                {t("profile.achievements.badgeWall.countLabel", {
+                  count: badgeCounts.all,
+                })}
+              </span>
             </div>
 
-            <ul className="space-y-3">
-              {achievements.length > 0 ? (
-                achievements.map((item, index) => (
-                  <li
-                    key={`${item}-${index}`}
-                    className="flex items-center justify-between gap-3 rounded-2xl border border-red-400/25 bg-red-950/35 px-4 py-3 text-sm"
+            <div className="grid gap-3 rounded-2xl border border-red-400/30 bg-red-950/30 p-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_auto] md:items-end">
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor="achievement-title"
+                  className="text-xs font-semibold uppercase tracking-[0.2em] text-red-200/70"
+                >
+                  {t("profile.achievements.newLabel")}
+                </label>
+                <input
+                  id="achievement-title"
+                  value={newAchievement.title}
+                  onChange={(event) =>
+                    onNewAchievementChange("title", event.target.value)
+                  }
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      onAddAchievement();
+                    }
+                  }}
+                  placeholder={t("profile.achievements.placeholder")}
+                  className="w-full rounded-xl border border-red-400/30 bg-red-950/40 px-3 py-2 text-sm text-red-50 placeholder:text-red-200/70 focus:border-red-400/60 focus:outline-none focus:ring-2 focus:ring-red-400/40"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor="achievement-category"
+                  className="text-xs font-semibold uppercase tracking-[0.2em] text-red-200/70"
+                >
+                  {t("profile.achievements.categoryLabel")}
+                </label>
+                <select
+                  id="achievement-category"
+                  value={newAchievement.category}
+                  onChange={(event) =>
+                    onNewAchievementChange(
+                      "category",
+                      event.target.value as AchievementDraft["category"],
+                    )
+                  }
+                  className="w-full rounded-xl border border-red-400/30 bg-red-950/40 px-3 py-2 text-sm text-red-50 focus:border-red-400/60 focus:outline-none focus:ring-2 focus:ring-red-400/40"
+                >
+                  {(Object.entries(categoryDetails) as Array<
+                    [
+                      Achievement["category"],
+                      (typeof categoryDetails)[Achievement["category"]],
+                    ]
+                  >).map(([value, detail]) => (
+                    <option key={value} value={value}>
+                      {detail.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <button
+                type="button"
+                onClick={onAddAchievement}
+                disabled={isAddDisabled}
+                className={cn(
+                  "inline-flex h-[42px] items-center justify-center rounded-xl border px-4 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300",
+                  isAddDisabled
+                    ? "cursor-not-allowed border-red-400/30 bg-red-900/40 text-red-200/50"
+                    : "border-red-400/40 bg-red-500/20 text-red-100 hover:border-red-400/60 hover:bg-red-500/30 hover:text-white",
+                )}
+              >
+                {t("profile.actions.add")}
+              </button>
+            </div>
+
+            <div className="space-y-4 rounded-2xl border border-red-400/25 bg-red-950/30 p-4">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-red-100">
+                    {t("profile.achievements.badgeWall.title")}
+                  </p>
+                  <p className="text-xs text-red-200/70">
+                    {t("profile.achievements.badgeWall.subtitle")}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {filterOptions.map(({ value, label, count, Icon }) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setActiveFilter(value)}
+                    aria-pressed={activeFilter === value}
+                    className={cn(
+                      "flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300",
+                      activeFilter === value
+                        ? "border-red-300/80 bg-red-500/20 text-red-50 shadow-[0_0_25px_rgba(248,113,113,0.15)]"
+                        : "border-red-400/30 bg-red-950/30 text-red-200/80 hover:border-red-400/50 hover:text-red-50",
+                    )}
                   >
-                    <span className="text-red-100">{item}</span>
-                    <button
-                      type="button"
-                      onClick={() => onRemoveAchievement(index)}
-                      aria-label={t("profile.achievements.removeAria")}
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-red-400/35 bg-red-950/50 text-red-200 transition hover:border-red-400/60 hover:bg-red-500/20 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
-                    >
-                      <X aria-hidden className="h-4 w-4" />
-                    </button>
-                  </li>
-                ))
-              ) : (
-                <li className="flex items-center justify-between gap-3 rounded-2xl border border-red-400/20 bg-red-950/35 px-4 py-3 text-sm text-red-200/70">
-                  <span>{t("profile.achievements.empty")}</span>
-                </li>
-              )}
-            </ul>
+                    <Icon aria-hidden className="h-4 w-4" />
+                    <span>{label}</span>
+                    <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-[0.65rem] font-semibold text-red-100">
+                      {count}
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <div className="space-y-3">
+                {filteredAchievements.length > 0 ? (
+                  <ul className="grid gap-3 sm:grid-cols-2">
+                    {filteredAchievements.map((achievement) => {
+                      const { label, description, Icon } =
+                        categoryDetails[achievement.category];
+                      const StatusIcon = achievement.verified
+                        ? CheckCircle2
+                        : Circle;
+                      const statusText = achievement.verified
+                        ? t("profile.achievements.status.verified")
+                        : t("profile.achievements.status.pending");
+
+                      return (
+                        <li
+                          key={achievement.id}
+                          className="space-y-3 rounded-2xl border border-red-400/30 bg-red-950/40 p-4"
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex items-start gap-3">
+                              <span className="inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-red-500/20 text-red-100">
+                                <Icon aria-hidden className="h-5 w-5" />
+                              </span>
+                              <div className="space-y-1 text-left">
+                                <p className="text-sm font-semibold text-red-50">
+                                  {achievement.title}
+                                </p>
+                                <p className="text-xs font-medium uppercase tracking-[0.2em] text-red-200/70">
+                                  {label}
+                                </p>
+                                <p className="text-xs text-red-200/70">
+                                  {description}
+                                </p>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => onRemoveAchievement(achievement.id)}
+                              aria-label={t("profile.achievements.removeAria")}
+                              className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-red-400/40 bg-red-950/50 text-red-200 transition hover:border-red-400/60 hover:bg-red-500/20 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+                            >
+                              <X aria-hidden className="h-4 w-4" />
+                            </button>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-red-200/75">
+                            <StatusIcon
+                              aria-hidden
+                              className={cn(
+                                "h-4 w-4",
+                                achievement.verified
+                                  ? "text-emerald-300"
+                                  : "text-red-200/60",
+                              )}
+                            />
+                            <span>{statusText}</span>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <div className="rounded-2xl border border-red-400/25 bg-red-950/30 p-6 text-sm text-red-200/80">
+                    {achievements.length === 0
+                      ? t("profile.achievements.badgeWall.empty")
+                      : t("profile.achievements.badgeWall.filterEmpty")}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-3 rounded-2xl border border-red-400/25 bg-red-950/30 p-4 text-sm text-red-200/80">
+              <p className="flex items-center gap-2 text-red-100">
+                <Upload aria-hidden className="h-4 w-4" />
+                {t("profile.achievements.submission.prompt")}
+              </p>
+              <button
+                type="button"
+                onClick={() => setHasSharedCelebration(true)}
+                className="inline-flex items-center gap-2 rounded-xl border border-red-400/40 bg-red-500/15 px-4 py-2 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-500/25 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              >
+                <Upload aria-hidden className="h-4 w-4" />
+                {t("profile.achievements.submission.cta")}
+              </button>
+              {hasSharedCelebration ? (
+                <p className="rounded-xl border border-red-400/35 bg-red-950/40 px-3 py-2 text-xs text-red-200/80">
+                  {t("profile.achievements.submission.confirmation")}
+                </p>
+              ) : null}
+            </div>
           </RedSurface>
         </div>
       </div>

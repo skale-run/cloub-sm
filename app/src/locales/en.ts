@@ -1829,10 +1829,58 @@ export const en = {
       },
       achievements: {
         heading: "Highlights & achievements",
-        description: "Capture belt tests and tournament wins to keep your motivation board updated.",
+        description:
+          "Capture belt tests and tournament wins to keep your motivation board updated.",
         placeholder: "Add new highlight",
         removeAria: "Remove highlight",
         empty: "No highlights yet. Start by celebrating a recent sparring or poomsae win.",
+        newLabel: "Badge highlight",
+        categoryLabel: "Badge category",
+        filters: {
+          all: "All badges",
+          tournament: "Tournaments",
+          leadership: "Leadership",
+          communityService: "Community service",
+          discipline: "Discipline",
+        },
+        categories: {
+          tournament: {
+            label: "Tournament badge",
+            description: "Celebrate competition performances and podium finishes.",
+          },
+          leadership: {
+            label: "Leadership badge",
+            description: "Spotlight the times you guided younger belts or led warm-ups.",
+          },
+          communityService: {
+            label: "Community service badge",
+            description:
+              "Document volunteer work and outreach that lifted up the wider community.",
+          },
+          discipline: {
+            label: "Discipline badge",
+            description: "Recognise streaks of focus, self-control, and relentless practice.",
+          },
+        },
+        badgeWall: {
+          title: "Dojo badge wall",
+          subtitle: "Filter by track to relive every milestone you’ve unlocked.",
+          countLabel: "{{count}} dojo badge",
+          countLabel_plural: "{{count}} dojo badges",
+          empty: "No badges yet. Add your first highlight to energise the wall.",
+          filterEmpty:
+            "No badges in this track yet. Add one to represent your journey.",
+        },
+        status: {
+          verified: "Verified badge",
+          pending: "Awaiting verification",
+        },
+        submission: {
+          prompt: "Share a story or photo so the masters can verify your badge.",
+          cta: "Submit story or photo",
+          confirmation:
+            "Thanks! Coaches will review your submission and mark the badge once confirmed.",
+        },
       },
     },
     access: {
