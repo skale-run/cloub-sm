@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
@@ -10,6 +10,7 @@ import {
   ScanQrCode,
   ShieldCheck,
   Users,
+  X,
 } from "../../lucide-react";
 import type { LucideIcon } from "../../lucide-react";
 import type { Profile } from "../profile/profileTypes";
@@ -59,6 +60,33 @@ function resolveArray<T>(primary: TFunction, fallback: TFunction, key: string): 
 function AccessSection({ savedProfile }: AccessSectionProps) {
   const { t, i18n } = useTranslation();
   const fallbackT = useMemo(() => getFallbackTranslator(i18n), [i18n]);
+  const [isQrPreviewOpen, setIsQrPreviewOpen] = useState(false);
+  const qrDialogTitleId = "dojang-access-qr-dialog-title";
+  const qrDialogDescriptionId = "dojang-access-qr-dialog-description";
+
+  useEffect(() => {
+    if (!savedProfile) {
+      setIsQrPreviewOpen(false);
+    }
+  }, [savedProfile]);
+
+  useEffect(() => {
+    if (!isQrPreviewOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsQrPreviewOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isQrPreviewOpen]);
 
   const qrCodeUrl = useMemo(() => {
     if (!savedProfile) {
@@ -260,11 +288,18 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
               tone="glass"
               className="flex flex-col items-center gap-5 p-6 sm:flex-row sm:items-start sm:justify-between"
             >
-              <img
-                src={qrCodeUrl}
-                alt={t("access.qr.alt")}
-                className="h-44 w-44 rounded-3xl border border-red-400/40 bg-red-950/40 p-3"
-              />
+              <button
+                type="button"
+                onClick={() => setIsQrPreviewOpen(true)}
+                className="group rounded-3xl border border-red-400/40 bg-red-950/40 p-3 transition hover:border-red-300/70 hover:bg-red-900/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+              >
+                <span className="sr-only">{t("access.qr.open")}</span>
+                <img
+                  src={qrCodeUrl}
+                  alt={t("access.qr.alt")}
+                  className="h-44 w-44 rounded-2xl bg-red-950/40 p-1 transition group-hover:scale-[1.02]"
+                />
+              </button>
               <div className="flex flex-col items-center gap-2 text-center sm:items-start sm:text-left">
                 <p className="text-lg font-semibold text-red-50">
                   {savedProfile.fullName}
@@ -510,6 +545,48 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
           </div>
         </RedSurface>
       </div>
+      {isQrPreviewOpen && savedProfile ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={qrDialogTitleId}
+          aria-describedby={qrDialogDescriptionId}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-red-950/90 p-6 backdrop-blur-md"
+          onClick={() => setIsQrPreviewOpen(false)}
+        >
+          <div
+            className="relative flex w-full max-w-2xl flex-col items-center gap-4 rounded-[28px] border border-red-400/30 bg-gradient-to-br from-red-950/95 via-red-950/85 to-red-900/70 p-10 text-center text-red-50 shadow-[0_45px_140px_rgba(127,29,29,0.55)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setIsQrPreviewOpen(false)}
+              className="absolute right-6 top-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-red-400/40 bg-red-950/40 text-red-100 transition hover:border-red-300/60 hover:bg-red-900/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              aria-label={t("access.qr.close")}
+            >
+              <X className="h-5 w-5" aria-hidden />
+            </button>
+            <h3 id={qrDialogTitleId} className="text-2xl font-semibold text-red-50 sm:text-3xl">
+              {t("access.heading.title")}
+            </h3>
+            <p id={qrDialogDescriptionId} className="max-w-xl text-sm text-red-100/80">
+              {t("access.instructions.showCode")}
+            </p>
+            <div className="rounded-[24px] border border-red-400/40 bg-red-950/50 p-6">
+              <img
+                src={qrCodeUrl}
+                alt={t("access.qr.alt")}
+                className="h-auto w-full max-w-sm rounded-2xl bg-red-950/40 p-4"
+              />
+            </div>
+            <div className="space-y-1 text-sm text-red-100/80">
+              <p className="text-lg font-semibold text-red-50">{savedProfile.fullName}</p>
+              <p>ID · {savedProfile.membershipId}</p>
+              <p>{savedProfile.squad || t("access.instructions.squadFallback")}</p>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

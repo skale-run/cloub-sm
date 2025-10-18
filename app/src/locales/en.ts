@@ -2035,6 +2035,8 @@ export const en = {
       },
       qr: {
         alt: "Dojang access QR code",
+        open: "Expand QR code",
+        close: "Close QR code preview",
       },
     },
     performanceTracking: {

@@ -912,6 +912,11 @@ export const fr = {
         instructions:
           "Ajoutez ou mettez à jour les contacts familiaux pouvant récupérer l'accès en cas de perte des identifiants.",
       },
+      qr: {
+        alt: "QR code d'accès au dojang",
+        open: "Agrandir le QR code",
+        close: "Fermer l'aperçu du QR code",
+      },
     },
   },
 };

@@ -883,6 +883,8 @@ export const ar = {
       },
       qr: {
         alt: "رمز QR للوصول إلى الدوجان",
+        open: "توسيع رمز QR",
+        close: "إغلاق معاينة رمز QR",
       },
     },
     performanceTracking: {
