@@ -7,6 +7,8 @@ type HeaderProps = {
   onToggleSidebar: () => void;
   pageTitle: string;
   userFullName: string;
+  hasCompletedProfile: boolean;
+  onAvatarClick: () => void;
 };
 
 const getInitials = (name: string) =>
@@ -23,12 +25,17 @@ function Header({
   onToggleSidebar,
   pageTitle,
   userFullName,
+  hasCompletedProfile,
+  onAvatarClick,
 }: HeaderProps) {
   const userInitials = getInitials(userFullName);
   const { t, i18n } = useTranslation("header");
   const isRTL = i18n.dir() === "rtl";
   const CollapseIcon = isRTL ? ChevronRight : ChevronLeft;
   const ExpandIcon = isRTL ? ChevronLeft : ChevronRight;
+  const avatarAriaLabel = hasCompletedProfile
+    ? t("aria.avatarNavigation.access")
+    : t("aria.avatarNavigation.profile");
 
   return (
     <header className="app-header sticky top-0 z-40 bg-gradient-to-r from-red-950/90 via-red-900/70 to-red-950/90 px-2 shadow-lg backdrop-blur-xl">
@@ -69,9 +76,14 @@ function Header({
           <span className="hidden text-sm font-medium text-red-100/80 sm:inline">
             {userFullName}
           </span>
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-red-900/70 via-red-800/60 to-red-700/55 text-base font-semibold uppercase tracking-wider text-red-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+          <button
+            type="button"
+            onClick={onAvatarClick}
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-red-900/70 via-red-800/60 to-red-700/55 text-base font-semibold uppercase tracking-wider text-red-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition hover:from-red-900/80 hover:via-red-800/70 hover:to-red-700/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-red-950"
+            aria-label={avatarAriaLabel}
+          >
             {userInitials}
-          </span>
+          </button>
         </div>
       </div>
     </header>
