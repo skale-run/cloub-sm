@@ -367,6 +367,27 @@ export const en = {
         coachLabel: "Lead master · {{name}}",
         checkIn: "Ring check-in at {{time}}",
       },
+      eventModal: {
+        aria: {
+          close: "Close event details",
+        },
+        occursOn: "{{date}} · {{relative}}",
+        occursOnWithoutRelative: "{{date}}",
+        schedule: {
+          heading: "Schedule",
+          start: "Starts",
+          end: "Ends",
+          duration: "Duration",
+        },
+        details: {
+          heading: "Details",
+          location: "Location",
+          coach: "Lead master",
+          level: "Tournament level",
+          checkInLabel: "Ring check-in",
+          checkInValue: "Check-in at {{time}}",
+        },
+      },
       relativeDay: {
         inDays_one: "In {{count}} day",
         inDays_other: "In {{count}} days",

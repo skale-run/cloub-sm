@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
@@ -287,6 +287,8 @@ function CalendarSection(): ReactElement {
 
   const [view, setView] = useState<CalendarView>("month");
   const [selectedDayKey, setSelectedDayKey] = useState<string>("");
+  const [activeEvent, setActiveEvent] = useState<CalendarEvent | null>(null);
+  const eventModalCloseButtonRef = useRef<HTMLButtonElement | null>(null);
   const [currentMonth, setCurrentMonth] = useState<Date>(() => {
     const initial = new Date();
     initial.setDate(1);
@@ -484,6 +486,48 @@ function CalendarSection(): ReactElement {
     setSelectedDayKey(fallbackOption.key);
   }, [dayOptions, selectedDayKey, today]);
 
+  useEffect(() => {
+    if (!activeEvent) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeEventModal();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeEvent, closeEventModal]);
+
+  useEffect(() => {
+    if (!activeEvent) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [activeEvent]);
+
+  useEffect(() => {
+    if (!activeEvent) {
+      return;
+    }
+
+    if (eventModalCloseButtonRef.current) {
+      eventModalCloseButtonRef.current.focus();
+    }
+  }, [activeEvent]);
+
   const selectedDay = dayOptions.find(
     (option) => option.key === selectedDayKey,
   );
@@ -492,6 +536,125 @@ function CalendarSection(): ReactElement {
         isSameDay(new Date(event.start), selectedDay.date),
       )
     : [];
+
+  const handleEventClick = (event: CalendarEvent) => {
+    setActiveEvent(event);
+  };
+
+  const closeEventModal = useCallback(() => {
+    setActiveEvent(null);
+  }, []);
+
+  const activeEventStart = useMemo(() => {
+    if (!activeEvent) {
+      return undefined;
+    }
+
+    return new Date(activeEvent.start);
+  }, [activeEvent]);
+
+  const activeEventEnd = useMemo(() => {
+    if (!activeEvent) {
+      return undefined;
+    }
+
+    return new Date(activeEvent.end);
+  }, [activeEvent]);
+
+  const activeEventStartTimeLabel = useMemo(() => {
+    if (!activeEventStart) {
+      return undefined;
+    }
+
+    return timeFormatter.format(activeEventStart);
+  }, [activeEventStart, timeFormatter]);
+
+  const activeEventEndTimeLabel = useMemo(() => {
+    if (!activeEventEnd) {
+      return undefined;
+    }
+
+    return timeFormatter.format(activeEventEnd);
+  }, [activeEventEnd, timeFormatter]);
+
+  const activeEventDurationLabel = useMemo(() => {
+    if (!activeEventStart || !activeEventEnd) {
+      return undefined;
+    }
+
+    const minutes = Math.max(
+      0,
+      Math.round(
+        (activeEventEnd.getTime() - activeEventStart.getTime()) / (1000 * 60),
+      ),
+    );
+
+    return formatDuration(minutes, t);
+  }, [activeEventEnd, activeEventStart, t]);
+
+  const activeEventOccursOnLabel = useMemo(() => {
+    if (!activeEventStart) {
+      return undefined;
+    }
+
+    const dateLabel = longDayFormatter.format(activeEventStart);
+    const relativeLabel = formatRelativeDay(activeEventStart, t);
+
+    if (relativeLabel) {
+      return t("calendar.eventModal.occursOn", {
+        date: dateLabel,
+        relative: relativeLabel,
+      });
+    }
+
+    return t("calendar.eventModal.occursOnWithoutRelative", {
+      date: dateLabel,
+    });
+  }, [activeEventStart, longDayFormatter, t]);
+
+  const activeEventLocationLabel = useMemo(() => {
+    if (!activeEvent) {
+      return undefined;
+    }
+
+    return t(activeEvent.locationKey);
+  }, [activeEvent, t]);
+
+  const activeEventCoachLabel = useMemo(() => {
+    if (!activeEvent || activeEvent.category !== "training") {
+      return undefined;
+    }
+
+    return t(activeEvent.coachKey);
+  }, [activeEvent, t]);
+
+  const activeEventLevelLabel = useMemo(() => {
+    if (!activeEvent || activeEvent.category !== "competition") {
+      return undefined;
+    }
+
+    return t(`calendar.levels.${activeEvent.level}`);
+  }, [activeEvent, t]);
+
+  const activeEventCheckInValue = useMemo(() => {
+    if (!activeEvent || activeEvent.category !== "competition") {
+      return undefined;
+    }
+
+    const checkIn = new Date(activeEvent.checkIn);
+
+    return t("calendar.eventModal.details.checkInValue", {
+      time: timeFormatter.format(checkIn),
+    });
+  }, [activeEvent, t, timeFormatter]);
+
+  const eventModalTitleId = activeEvent
+    ? `calendar-event-modal-title-${activeEvent.id}`
+    : undefined;
+  const eventModalDescriptionId =
+    activeEvent && activeEventOccursOnLabel
+      ? `calendar-event-modal-description-${activeEvent.id}`
+      : undefined;
 
   const upcomingEvent = useMemo(() => {
     if (filteredEvents.length === 0) {
@@ -546,7 +709,8 @@ function CalendarSection(): ReactElement {
   }, [filteredEvents.length, today, upcomingEventStart]);
 
   return (
-    <section id="calendar" className="space-y-6" dir={direction}>
+    <>
+      <section id="calendar" className="space-y-6" dir={direction}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
@@ -842,9 +1006,11 @@ function CalendarSection(): ReactElement {
                         const endDate = new Date(event.end);
 
                         return (
-                          <div
+                          <button
                             key={event.id}
-                            className="rounded-xl border border-red-500/25 bg-red-950/50 p-2"
+                            type="button"
+                            onClick={() => handleEventClick(event)}
+                            className="w-full rounded-xl border border-red-500/25 bg-red-950/50 p-2 text-left transition hover:border-red-400/45 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
                           >
                             <div className="flex items-start justify-between gap-2">
                               <p className="text-[11px] font-semibold text-red-50">
@@ -863,7 +1029,7 @@ function CalendarSection(): ReactElement {
                             <p className="mt-1 text-[11px] text-red-200/70">
                               {t(event.locationKey)}
                             </p>
-                          </div>
+                          </button>
                         );
                       })
                     ) : null}
@@ -933,8 +1099,11 @@ function CalendarSection(): ReactElement {
                           return (
                             <RedSurface
                               key={event.id}
+                              as="button"
+                              type="button"
                               tone="glass"
-                              className="rounded-xl p-3"
+                              onClick={() => handleEventClick(event)}
+                              className="w-full rounded-xl p-3 text-left transition hover:border-red-400/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
                             >
                               <p className="text-sm font-semibold text-red-50">
                                 {t(event.titleKey)}
@@ -1025,8 +1194,11 @@ function CalendarSection(): ReactElement {
                   return (
                     <RedSurface
                       key={event.id}
+                      as="button"
+                      type="button"
                       tone="glass"
-                      className="rounded-2xl p-5 transition hover:border-red-400/45"
+                      onClick={() => handleEventClick(event)}
+                      className="w-full rounded-2xl p-5 text-left transition hover:border-red-400/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-red-200/75">
                         <span>
@@ -1073,6 +1245,141 @@ function CalendarSection(): ReactElement {
         </div>
       ) : null}
     </section>
+      {activeEvent ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6">
+          <div
+            className="absolute inset-0 bg-red-950/80 backdrop-blur-sm"
+            aria-hidden
+            onClick={closeEventModal}
+          />
+          <div className="relative z-10 w-full max-w-lg">
+            <RedSurface
+              tone="muted"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={eventModalTitleId}
+              aria-describedby={eventModalDescriptionId}
+              className="relative overflow-hidden rounded-3xl p-6 text-left shadow-[0_30px_80px_rgba(127,29,29,0.55)]"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <span
+                    className={`inline-flex items-center rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] ${typeStyles[activeEvent.category]}`}
+                  >
+                    {t(`calendar.categories.${activeEvent.category}.badge`)}
+                  </span>
+                  <h3
+                    id={eventModalTitleId}
+                    className="mt-4 text-xl font-semibold text-red-50"
+                  >
+                    {t(activeEvent.titleKey)}
+                  </h3>
+                  {activeEventOccursOnLabel ? (
+                    <p
+                      id={eventModalDescriptionId}
+                      className="mt-2 text-sm text-red-200/75"
+                    >
+                      {activeEventOccursOnLabel}
+                    </p>
+                  ) : null}
+                </div>
+                <button
+                  ref={eventModalCloseButtonRef}
+                  type="button"
+                  onClick={closeEventModal}
+                  aria-label={t("calendar.eventModal.aria.close")}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-red-500/30 bg-red-900/40 text-lg text-red-200/80 transition hover:border-red-400/50 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+                >
+                  <span aria-hidden>&times;</span>
+                </button>
+              </div>
+
+              <div className="mt-6 space-y-6">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
+                    {t("calendar.eventModal.schedule.heading")}
+                  </p>
+                  <dl className="mt-3 grid gap-4 sm:grid-cols-3">
+                    <div>
+                      <dt className="text-[11px] uppercase tracking-[0.3em] text-red-200/60">
+                        {t("calendar.eventModal.schedule.start")}
+                      </dt>
+                      <dd className="mt-1 text-sm font-semibold text-red-50">
+                        {activeEventStartTimeLabel}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-[11px] uppercase tracking-[0.3em] text-red-200/60">
+                        {t("calendar.eventModal.schedule.end")}
+                      </dt>
+                      <dd className="mt-1 text-sm font-semibold text-red-50">
+                        {activeEventEndTimeLabel}
+                      </dd>
+                    </div>
+                    {activeEventDurationLabel ? (
+                      <div>
+                        <dt className="text-[11px] uppercase tracking-[0.3em] text-red-200/60">
+                          {t("calendar.eventModal.schedule.duration")}
+                        </dt>
+                        <dd className="mt-1 text-sm font-semibold text-red-50">
+                          {activeEventDurationLabel}
+                        </dd>
+                      </div>
+                    ) : null}
+                  </dl>
+                </div>
+
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-red-200/70">
+                    {t("calendar.eventModal.details.heading")}
+                  </p>
+                  <dl className="mt-3 space-y-4 text-sm">
+                    <div>
+                      <dt className="text-red-200/70">
+                        {t("calendar.eventModal.details.location")}
+                      </dt>
+                      <dd className="mt-1 text-red-50">
+                        {activeEventLocationLabel}
+                      </dd>
+                    </div>
+                    {activeEventCoachLabel ? (
+                      <div>
+                        <dt className="text-red-200/70">
+                          {t("calendar.eventModal.details.coach")}
+                        </dt>
+                        <dd className="mt-1 text-red-50">
+                          {activeEventCoachLabel}
+                        </dd>
+                      </div>
+                    ) : null}
+                    {activeEventLevelLabel ? (
+                      <div>
+                        <dt className="text-red-200/70">
+                          {t("calendar.eventModal.details.level")}
+                        </dt>
+                        <dd className="mt-1 text-red-50">
+                          {activeEventLevelLabel}
+                        </dd>
+                      </div>
+                    ) : null}
+                    {activeEventCheckInValue ? (
+                      <div>
+                        <dt className="text-red-200/70">
+                          {t("calendar.eventModal.details.checkInLabel")}
+                        </dt>
+                        <dd className="mt-1 text-red-50">
+                          {activeEventCheckInValue}
+                        </dd>
+                      </div>
+                    ) : null}
+                  </dl>
+                </div>
+              </div>
+            </RedSurface>
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }
 

@@ -363,6 +363,27 @@ export const ar = {
         coachLabel: "الماستر القائد · {{name}}",
         checkIn: "تسجيل الحلبة عند {{time}}",
       },
+      eventModal: {
+        aria: {
+          close: "إغلاق تفاصيل الحدث",
+        },
+        occursOn: "{{date}} · {{relative}}",
+        occursOnWithoutRelative: "{{date}}",
+        schedule: {
+          heading: "الجدول",
+          start: "البدء",
+          end: "الانتهاء",
+          duration: "المدة",
+        },
+        details: {
+          heading: "التفاصيل",
+          location: "الموقع",
+          coach: "الماستر القائد",
+          level: "مستوى البطولة",
+          checkInLabel: "تسجيل الحلبة",
+          checkInValue: "تسجيل عند {{time}}",
+        },
+      },
       relativeDay: {
         inDays_one: "خلال يوم",
         inDays_other: "خلال {{count}} أيام",
