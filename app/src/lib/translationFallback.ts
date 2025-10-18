@@ -1,4 +1,5 @@
 import type { TFunction, i18n as I18nInstance } from "i18next";
+import { isStringRecord } from "./objectGuards";
 
 const DEFAULT_FALLBACK_LANGUAGE = "en";
 const DEFAULT_NAMESPACE = "translation";
@@ -51,4 +52,40 @@ export function getFallbackTranslator(i18n: I18nInstance): TFunction {
   const fallbackLanguage = resolveFallbackLanguage(i18n.options.fallbackLng);
   const namespace = resolveNamespace(i18n.options.defaultNS);
   return i18n.getFixedT(fallbackLanguage, namespace);
+}
+
+export function resolveFallbackArray<T>(
+  primary: TFunction,
+  fallback: TFunction,
+  key: string,
+): T[] {
+  const translation = primary(key, { returnObjects: true });
+  if (Array.isArray(translation)) {
+    return translation as T[];
+  }
+
+  const fallbackTranslation = fallback(key, { returnObjects: true });
+  if (Array.isArray(fallbackTranslation)) {
+    return fallbackTranslation as T[];
+  }
+
+  return [];
+}
+
+export function resolveFallbackStringRecord(
+  primary: TFunction,
+  fallback: TFunction,
+  key: string,
+): Record<string, string> {
+  const translation = primary(key, { returnObjects: true });
+  if (isStringRecord(translation)) {
+    return translation;
+  }
+
+  const fallbackTranslation = fallback(key, { returnObjects: true });
+  if (isStringRecord(fallbackTranslation)) {
+    return fallbackTranslation;
+  }
+
+  return {};
 }

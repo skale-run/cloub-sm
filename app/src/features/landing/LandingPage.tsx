@@ -18,6 +18,7 @@ import {
   type LucideIcon,
 } from "../../lucide-react";
 import { cn } from "../../lib/cn";
+import { isRecord } from "../../lib/objectGuards";
 import { getFallbackTranslator } from "../../lib/translationFallback";
 
 interface LandingPageProps {
@@ -114,9 +115,6 @@ type CommandCenterContent = {
     }
   >;
 };
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null && !Array.isArray(value);
 
 function isCommandCenterContent(value: unknown): value is CommandCenterContent {
   if (!isRecord(value)) {
