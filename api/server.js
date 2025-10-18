@@ -14,7 +14,7 @@ const { pool } = require("./src/db/pool");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const MAX_REQUEST_SIZE = process.env.MAX_REQUEST_SIZE || "2mb";
+const MAX_REQUEST_SIZE = process.env.MAX_REQUEST_SIZE || "10mb";
 
 const API_BASE_PATH = "/v1";
 
@@ -50,7 +50,7 @@ app.disable("x-powered-by");
 app.use(
   helmet({
     contentSecurityPolicy: false,
-  }),
+  })
 );
 
 app.use(express.json({ limit: MAX_REQUEST_SIZE }));
