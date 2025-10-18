@@ -8,6 +8,7 @@ import {
   GaugeCircle,
   GraduationCap,
   LineChart,
+  LogOut,
   ScanQrCode,
   ShieldCheck,
   UserCircle,
@@ -51,6 +52,7 @@ type SidebarProps = {
   onToggleSidebar: () => void;
   onNavigateTo: (path: RoutePath) => void;
   onPrefetchSection?: (path: RoutePath) => void;
+  onLogout: () => void;
   currentPath: RoutePath;
 };
 
@@ -59,6 +61,7 @@ function Sidebar({
   onToggleSidebar,
   onNavigateTo,
   onPrefetchSection,
+  onLogout,
   currentPath,
 }: SidebarProps) {
   const { t, i18n } = useTranslation();
@@ -98,6 +101,9 @@ function Sidebar({
   }) as { line1: string; line2: string };
 
   const soonLabel = t("common.badges.soon");
+  const logoutCopy = t("sidebar.logout", {
+    returnObjects: true,
+  }) as { label: string; description: string; ariaLabel: string };
 
   const shouldCloseSidebarOnItemClick = () => {
     if (typeof window === "undefined") {
@@ -124,6 +130,14 @@ function Sidebar({
 
     event.preventDefault();
     onNavigateTo(path);
+
+    if (shouldCloseSidebarOnItemClick()) {
+      onToggleSidebar();
+    }
+  };
+
+  const handleLogoutClick = () => {
+    onLogout();
 
     if (shouldCloseSidebarOnItemClick()) {
       onToggleSidebar();
@@ -268,9 +282,28 @@ function Sidebar({
           </ul>
         </section>
 
-        <div className="mt-auto space-y-1 text-xs text-red-200/70">
-          <p>{seasonSummary.line1}</p>
-          <p className="font-semibold text-red-100">{seasonSummary.line2}</p>
+        <div className="mt-auto space-y-4">
+          <button
+            type="button"
+            onClick={handleLogoutClick}
+            aria-label={logoutCopy.ariaLabel}
+            className="group flex items-center gap-4 rounded-2xl border border-red-500/30 bg-red-950/40 px-4 py-3 text-left text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-900/60 hover:text-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-red-950"
+          >
+            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-500/10 text-red-200 transition group-hover:bg-red-500/20 group-hover:text-red-50">
+              <LogOut className="h-5 w-5" aria-hidden />
+            </span>
+            <span className="flex flex-col">
+              <span>{logoutCopy.label}</span>
+              <span className="text-xs font-normal text-red-200/70">
+                {logoutCopy.description}
+              </span>
+            </span>
+          </button>
+
+          <div className="space-y-1 text-xs text-red-200/70">
+            <p>{seasonSummary.line1}</p>
+            <p className="font-semibold text-red-100">{seasonSummary.line2}</p>
+          </div>
         </div>
       </div>
     </aside>

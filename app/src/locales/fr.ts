@@ -297,6 +297,11 @@ export const fr = {
         line1: "Saison 2025 · Équipe Dan élite",
         line2: "Prochain jour de repos : dim. 20 avr.",
       },
+      logout: {
+        label: "Se déconnecter",
+        description: "Revenir à l'écran de connexion du portail athlète.",
+        ariaLabel: "Se déconnecter du portail athlète",
+      },
     },
     calendar: {
       title: "Calendrier intégré du dojang",

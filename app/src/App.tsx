@@ -208,6 +208,15 @@ function App() {
     }
   }, []);
 
+  const handleLogout = useCallback(() => {
+    clearMember();
+    setCurrentPath(defaultPath);
+
+    if (typeof window !== "undefined") {
+      window.history.replaceState({ path: defaultPath }, "", defaultPath);
+    }
+  }, [clearMember]);
+
   const hasCompletedProfile = useMemo(() => {
     if (!savedProfile) {
       return false;
@@ -450,6 +459,7 @@ function App() {
         onToggleSidebar={toggleSidebar}
         onNavigateTo={handleNavigateTo}
         onPrefetchSection={prefetchSection}
+        onLogout={handleLogout}
         currentPath={currentPath}
       />
       <div

@@ -282,6 +282,11 @@ export const en = {
         line1: "Season 2025 · Elite Dan Team",
         line2: "Next rest day: Sun, 20 Apr",
       },
+      logout: {
+        label: "Log out",
+        description: "Return to the athlete portal sign-in screen.",
+        ariaLabel: "Log out of the athlete portal",
+      },
     },
     calendar: {
       title: "Integrated Dojang Calendar",
