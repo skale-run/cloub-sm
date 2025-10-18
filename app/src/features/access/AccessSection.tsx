@@ -221,7 +221,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
 
   return (
     <section id="access" className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
             {t("access.heading.title")}
@@ -230,12 +230,14 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
             {t("access.heading.description")}
           </p>
         </div>
-        <div className="flex flex-col items-end gap-2 text-right">
+        <div className="flex flex-col items-start gap-2 text-left sm:items-end sm:text-right">
           <span className="inline-flex items-center gap-2 rounded-full border border-red-400/50 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
             {t("access.heading.badge")}
           </span>
           <div className="flex flex-col text-[11px] text-red-200/70">
-            <span className="font-semibold text-red-100">{accessReadiness.label}</span>
+            <span className="font-semibold text-red-100">
+              {accessReadiness.label}
+            </span>
             <span>
               {t("access.readiness.percentageLabel", {
                 percentage: accessReadiness.percentage,
@@ -333,7 +335,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-red-200/70">
               {t("access.quickActions.heading")}
             </p>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {quickActions.map((action) => (
                 <button
                   key={action.id}
@@ -392,7 +394,43 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
                 ))}
               </div>
             </div>
-            <div className="overflow-x-auto">
+            <div className="space-y-3 md:hidden">
+              {permissionMatrix.map((row) => (
+                <RedSurface tone="glass" className="space-y-3 p-4" key={row.id}>
+                  <p className="text-sm font-semibold text-red-50">{row.role}</p>
+                  <div className="space-y-2">
+                    {capabilityOrder.map((capability) => {
+                      const level = row.permissions[capability] ?? "restricted";
+                      const badgeStyles =
+                        permissionLevelStyles[level] ??
+                        "border-red-300/30 bg-red-950/60 text-red-200/80";
+
+                      return (
+                        <div
+                          key={capability}
+                          className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-400/20 bg-red-950/40 px-3 py-2"
+                        >
+                          <span className="flex items-center gap-2 text-xs font-semibold text-red-100/80">
+                            <ClipboardList size={14} className="shrink-0" />
+                            {permissionLabels[capability]}
+                          </span>
+                          <span
+                            className={cn(
+                              "inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em]",
+                              badgeStyles,
+                            )}
+                          >
+                            {permissionLegend[level] ?? permissionLegend.restricted}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </RedSurface>
+              ))}
+            </div>
+
+            <div className="hidden overflow-x-auto md:block">
               <table className="min-w-full divide-y divide-red-400/20 text-left text-xs text-red-100/80">
                 <thead>
                   <tr className="text-[11px] uppercase tracking-[0.35em] text-red-200/70">
