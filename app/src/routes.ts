@@ -1,8 +1,6 @@
-export const landingPath = "/" as const;
 export const defaultPath = "/calendar" as const;
 
 export const routePaths = [
-  landingPath,
   defaultPath,
   "/academic-record",
   "/billing",
