@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
+import Modal from "../../components/Modal";
 import RedSurface from "../../components/RedSurface";
 import { cn } from "../../lib/cn";
 import { getFallbackTranslator } from "../../lib/translationFallback";
@@ -61,32 +62,18 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
   const { t, i18n } = useTranslation();
   const fallbackT = useMemo(() => getFallbackTranslator(i18n), [i18n]);
   const [isQrPreviewOpen, setIsQrPreviewOpen] = useState(false);
+  const qrCloseButtonRef = useRef<HTMLButtonElement | null>(null);
   const qrDialogTitleId = "dojang-access-qr-dialog-title";
   const qrDialogDescriptionId = "dojang-access-qr-dialog-description";
+  const closeQrPreview = useCallback(() => {
+    setIsQrPreviewOpen(false);
+  }, []);
 
   useEffect(() => {
     if (!savedProfile) {
-      setIsQrPreviewOpen(false);
+      closeQrPreview();
     }
-  }, [savedProfile]);
-
-  useEffect(() => {
-    if (!isQrPreviewOpen) {
-      return;
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsQrPreviewOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isQrPreviewOpen]);
+  }, [closeQrPreview, savedProfile]);
 
   const qrCodeUrl = useMemo(() => {
     if (!savedProfile) {
@@ -544,21 +531,23 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
         </RedSurface>
       </div>
       {isQrPreviewOpen && savedProfile ? (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={qrDialogTitleId}
-          aria-describedby={qrDialogDescriptionId}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-red-950/90 p-6 backdrop-blur-md"
-          onClick={() => setIsQrPreviewOpen(false)}
+        <Modal
+          isOpen
+          onClose={closeQrPreview}
+          labelledBy={qrDialogTitleId}
+          describedBy={qrDialogDescriptionId}
+          containerClassName="p-6"
+          overlayClassName="bg-red-950/90 backdrop-blur-md"
+          contentWrapperClassName="relative z-10 w-full max-w-2xl"
+          initialFocusRef={qrCloseButtonRef}
         >
           <div
-            className="relative flex w-full max-w-2xl flex-col items-center gap-4 rounded-[28px] border border-red-400/30 bg-gradient-to-br from-red-950/95 via-red-950/85 to-red-900/70 p-10 text-center text-red-50 shadow-[0_45px_140px_rgba(127,29,29,0.55)]"
-            onClick={(event) => event.stopPropagation()}
+            className="relative flex w-full flex-col items-center gap-4 rounded-[28px] border border-red-400/30 bg-gradient-to-br from-red-950/95 via-red-950/85 to-red-900/70 p-10 text-center text-red-50 shadow-[0_45px_140px_rgba(127,29,29,0.55)]"
           >
             <button
+              ref={qrCloseButtonRef}
               type="button"
-              onClick={() => setIsQrPreviewOpen(false)}
+              onClick={closeQrPreview}
               className="absolute right-6 top-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-red-400/40 bg-red-950/40 text-red-100 transition hover:border-red-300/60 hover:bg-red-900/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
               aria-label={t("access.qr.close")}
             >
@@ -583,7 +572,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
               <p>{savedProfile.squad || t("access.instructions.squadFallback")}</p>
             </div>
           </div>
-        </div>
+        </Modal>
       ) : null}
     </section>
   );
