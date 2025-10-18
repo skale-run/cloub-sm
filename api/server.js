@@ -15,6 +15,8 @@ const { pool } = require("./src/db/pool");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+const API_BASE_PATH = "/v1";
+
 const API_ROUTES = [
   {
     path: "/members",
@@ -59,19 +61,19 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.get("/api", (req, res) => {
+app.get(API_BASE_PATH, (req, res) => {
   res.json({
     status: "ok",
     timestamp: new Date().toISOString(),
     routes: API_ROUTES.map(({ path, description }) => ({
-      path: `/api${path}`,
+      path: `${API_BASE_PATH}${path}`,
       description,
     })),
   });
 });
 
 for (const { path, router } of API_ROUTES) {
-  app.use(`/api${path}`, router);
+  app.use(`${API_BASE_PATH}${path}`, router);
 }
 
 app.use(notFoundHandler);

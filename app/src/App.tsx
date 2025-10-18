@@ -28,7 +28,7 @@ import {
   type RoutePath,
 } from "./routes";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/v1";
 
 const CalendarSection = lazyWithPreload(
   () => import("./features/calendar/CalendarSection"),
