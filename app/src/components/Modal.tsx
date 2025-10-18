@@ -112,20 +112,24 @@ function Modal({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center px-4 py-6",
+        "fixed inset-0 z-50 flex min-h-full items-center justify-center overflow-y-auto p-4 sm:p-6 md:p-10",
         containerClassName,
       )}
     >
       <div
         className={cn(
-          "absolute inset-0 bg-red-950/80 backdrop-blur-sm",
+          "fixed inset-0 bg-red-950/80 backdrop-blur-sm transition-opacity duration-200 ease-out",
           overlayClassName,
         )}
         aria-hidden
         onClick={closeOnOverlayClick ? onClose : undefined}
       />
       <div
-        className={cn("relative z-10 w-full max-w-lg", contentWrapperClassName)}
+        className={cn(
+          "relative z-10 w-full max-w-lg rounded-3xl border border-red-400/20 bg-red-950/90 text-red-50 shadow-[0_40px_120px_rgba(127,29,29,0.45)]",
+          "pointer-events-auto",
+          contentWrapperClassName,
+        )}
       >
         {cloneElement(child, {
           role,

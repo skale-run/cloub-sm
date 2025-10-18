@@ -529,7 +529,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
           describedBy={qrDialogDescriptionId}
           containerClassName="p-6"
           overlayClassName="bg-red-950/90 backdrop-blur-md"
-          contentWrapperClassName="relative z-10 w-full max-w-2xl"
+          contentWrapperClassName="relative z-10 w-full max-w-2xl border-0 bg-transparent p-0 shadow-none"
           initialFocusRef={qrCloseButtonRef}
         >
           <div className="relative flex w-full flex-col items-center gap-4 rounded-[28px] border border-red-400/30 bg-gradient-to-br from-red-950/95 via-red-950/85 to-red-900/70 p-10 text-center text-red-50 shadow-[0_45px_140px_rgba(127,29,29,0.55)]">

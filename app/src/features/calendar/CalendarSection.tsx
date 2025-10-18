@@ -1215,6 +1215,7 @@ function CalendarSection(): ReactElement {
           labelledBy={eventModalTitleId}
           describedBy={eventModalDescriptionId}
           initialFocusRef={eventModalCloseButtonRef}
+          contentWrapperClassName="border-0 bg-transparent p-0 shadow-none"
         >
           <RedSurface
             tone="muted"
