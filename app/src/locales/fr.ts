@@ -1,4 +1,55 @@
-export const fr = {
+import { en } from "./en";
+
+const clone = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map((item) => clone(item));
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([key, nestedValue]) => [
+        key,
+        clone(nestedValue),
+      ]),
+    );
+  }
+
+  return value;
+};
+
+const mergeDeep = (
+  base: Record<string, unknown> | undefined,
+  override: Record<string, unknown> | undefined,
+): Record<string, unknown> => {
+  const baseClone =
+    base && typeof base === "object" ? (clone(base) as Record<string, unknown>) : {};
+
+  if (!override || typeof override !== "object") {
+    return baseClone;
+  }
+
+  for (const [key, value] of Object.entries(override)) {
+    if (
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      baseClone[key] &&
+      typeof baseClone[key] === "object" &&
+      !Array.isArray(baseClone[key])
+    ) {
+      baseClone[key] = mergeDeep(
+        baseClone[key] as Record<string, unknown>,
+        value as Record<string, unknown>,
+      );
+    } else {
+      baseClone[key] = clone(value);
+    }
+  }
+
+  return baseClone;
+};
+
+const overrides = {
   translation: {
     common: {
       languageSwitcher: {
@@ -378,6 +429,56 @@ export const fr = {
         actions: {
           addToCalendar: "Ajouter à mon agenda",
           copyLink: "Copier le lien",
+        },
+      },
+      relativeDay: {
+        inDays_one: "Dans {{count}} jour",
+        inDays_other: "Dans {{count}} jours",
+        tomorrow: "Demain",
+        today: "Aujourd'hui",
+        yesterday: "Hier",
+        daysAgo_one: "Il y a {{count}} jour",
+        daysAgo_other: "Il y a {{count}} jours",
+      },
+      duration: {
+        none: "0h",
+        hours_one: "{{count}} h",
+        hours_other: "{{count}} h",
+        minutes_one: "{{count}} min",
+        minutes_other: "{{count}} min",
+      },
+      levels: {
+        regional: "Régional",
+        national: "National",
+        international: "International",
+      },
+      events: {
+        ts1: {
+          title: "Coup de pied explosif & pliométrie",
+          location: "Studio Dojang 2",
+          coach: "Maître Amara Lewis",
+        },
+        ts2: {
+          title: "Sparring technique & mobilité",
+          location: "Dojang principal",
+          coach: "Maître Hugo Martín",
+        },
+        ts3: {
+          title: "Analyse vidéo & laboratoire stratégique",
+          location: "Salle de briefing HQ",
+          coach: "Équipe d'analyse",
+        },
+        cc1: {
+          title: "Open métropolitain de taekwondo",
+          location: "Arena New Crest",
+        },
+        cc2: {
+          title: "Sélections nationales d'été",
+          location: "Pavillon de la capitale",
+        },
+        cc3: {
+          title: "Grand Prix continental",
+          location: "Parc des arts martiaux de Lisbonne",
         },
       },
       detailPanel: {
@@ -914,4 +1015,8 @@ export const fr = {
       },
     },
   },
+};
+
+export const fr = {
+  translation: mergeDeep(en.translation, overrides.translation),
 };

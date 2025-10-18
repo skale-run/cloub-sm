@@ -1,4 +1,55 @@
-export const ar = {
+import { en } from "./en";
+
+const clone = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map((item) => clone(item));
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([key, nestedValue]) => [
+        key,
+        clone(nestedValue),
+      ]),
+    );
+  }
+
+  return value;
+};
+
+const mergeDeep = (
+  base: Record<string, unknown> | undefined,
+  override: Record<string, unknown> | undefined,
+): Record<string, unknown> => {
+  const baseClone =
+    base && typeof base === "object" ? (clone(base) as Record<string, unknown>) : {};
+
+  if (!override || typeof override !== "object") {
+    return baseClone;
+  }
+
+  for (const [key, value] of Object.entries(override)) {
+    if (
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      baseClone[key] &&
+      typeof baseClone[key] === "object" &&
+      !Array.isArray(baseClone[key])
+    ) {
+      baseClone[key] = mergeDeep(
+        baseClone[key] as Record<string, unknown>,
+        value as Record<string, unknown>,
+      );
+    } else {
+      baseClone[key] = clone(value);
+    }
+  }
+
+  return baseClone;
+};
+
+const overrides = {
   translation: {
     common: {
       languageSwitcher: {
@@ -346,6 +397,10 @@ export const ar = {
         eventsCount_zero: "لا أحداث",
         eventsCount_one: "حدث واحد",
         eventsCount_other: "{{count}} أحداث",
+        previous: "الشهر السابق",
+        next: "الشهر التالي",
+        previousShort: "السابق",
+        nextShort: "التالي",
       },
       weekView: {
         weekLabel: "أسبوع {{start}}",
@@ -786,6 +841,8 @@ export const ar = {
         badgeWall: {
           title: "جدار شارات الدوجو",
           subtitle: "رشّح حسب المسار لاستعادة كل محطة أنجزتها.",
+          countLabel: "{{count}} شارة دوجو",
+          countLabel_plural: "{{count}} شارات دوجو",
           countLabel_zero: "لا توجد شارات بعد",
           countLabel_one: "شارة دوجو واحدة",
           countLabel_two: "شارتا دوجو",
@@ -1410,4 +1467,8 @@ export const ar = {
       },
     },
   },
+};
+
+export const ar = {
+  translation: mergeDeep(en.translation, overrides.translation),
 };
