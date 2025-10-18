@@ -514,6 +514,51 @@ function AuthenticationExperienceModal() {
           return;
         }
 
+        const registeredMember = payload.member;
+        const registerPassword = registerForm.password;
+
+        let synchronizedMember: Member = registeredMember;
+        let synchronizedToken: string | undefined;
+
+        try {
+          const loginResponse = await fetch(`${API_BASE_URL}/members/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: trimmedEmail,
+              password: registerPassword,
+            }),
+            signal: controller.signal,
+          });
+
+          const loginPayload = (await loginResponse.json().catch(() => null)) as {
+            error?: string;
+            member?: Member;
+            token?: string;
+          } | null;
+
+          if (loginResponse.ok && loginPayload?.member && loginPayload.token) {
+            synchronizedMember = loginPayload.member;
+            synchronizedToken = loginPayload.token;
+          } else if (!loginResponse.ok) {
+            console.warn(
+              "Failed to synchronise newly registered member",
+              loginPayload?.error ?? `status ${loginResponse.status}`,
+            );
+          }
+        } catch (error) {
+          if (
+            !(
+              (error instanceof DOMException && error.name === "AbortError") ||
+              (error instanceof Error && error.name === "AbortError")
+            )
+          ) {
+            console.warn("Unable to automatically sign in after registration", error);
+          }
+        }
+
         setRegisterForm({
           fullName: "",
           email: "",
@@ -529,7 +574,7 @@ function AuthenticationExperienceModal() {
           ...previous,
           email: trimmedEmail,
         }));
-        setMember(payload.member);
+        setMember(synchronizedMember, synchronizedToken);
         close();
       } catch (error) {
         if (
