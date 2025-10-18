@@ -175,7 +175,8 @@ function PerformanceTrackingSection(): ReactElement {
   const attendanceRate = Math.round(
     normalizedAttendanceSummary.totalSessions > 0
       ? (normalizedAttendanceSummary.attended /
-          normalizedAttendanceSummary.totalSessions) * 100
+          normalizedAttendanceSummary.totalSessions) *
+          100
       : 0,
   );
 
@@ -256,7 +257,9 @@ function PerformanceTrackingSection(): ReactElement {
                 tone="glass"
                 className="flex items-center justify-between rounded-2xl px-4 py-2"
               >
-                <dt className="text-red-200/70">{attendance.labels.attended}</dt>
+                <dt className="text-red-200/70">
+                  {attendance.labels.attended}
+                </dt>
                 <dd className="font-semibold text-red-50">
                   {attendance.summary.attended}
                 </dd>
@@ -276,7 +279,9 @@ function PerformanceTrackingSection(): ReactElement {
                 tone="glass"
                 className="flex items-center justify-between rounded-2xl px-4 py-2"
               >
-                <dt className="text-red-200/70">{attendance.labels.unexcused}</dt>
+                <dt className="text-red-200/70">
+                  {attendance.labels.unexcused}
+                </dt>
                 <dd className="font-semibold text-red-50">
                   {attendance.summary.unexcused}
                 </dd>
@@ -388,9 +393,7 @@ function PerformanceTrackingSection(): ReactElement {
               </RedSurface>
             ))}
           </div>
-          <p className="text-sm text-red-100/80">
-            {weightTracking.rangeNote}
-          </p>
+          <p className="text-sm text-red-100/80">{weightTracking.rangeNote}</p>
         </RedSurface>
       </div>
     </section>

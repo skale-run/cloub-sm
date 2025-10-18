@@ -95,14 +95,12 @@ const checklistStatusStyles: Record<
   reviewNeeded: {
     badge: "border border-amber-400/40 bg-amber-500/15 text-amber-200",
     icon: Flag,
-    iconWrapper:
-      "border border-amber-400/40 bg-amber-500/15 text-amber-200",
+    iconWrapper: "border border-amber-400/40 bg-amber-500/15 text-amber-200",
   },
   scheduled: {
     badge: "border border-sky-400/40 bg-sky-500/15 text-sky-200",
     icon: CalendarDays,
-    iconWrapper:
-      "border border-sky-400/40 bg-sky-500/15 text-sky-200",
+    iconWrapper: "border border-sky-400/40 bg-sky-500/15 text-sky-200",
   },
 };
 
@@ -280,18 +278,14 @@ function ProgramInsightsCard({ t }: ProgramInsightsCardProps): ReactElement {
                 <insight.icon size={18} />
               </span>
               <dt className="text-sm text-red-200/70">
-                {t(
-                  `information.academic.summaryInsights.${insight.key}.label`,
-                )}
+                {t(`information.academic.summaryInsights.${insight.key}.label`)}
               </dt>
             </div>
             <dd className="text-lg font-semibold text-red-50">
               {t(`information.academic.summaryInsights.${insight.key}.value`)}
             </dd>
             <span className="text-xs text-red-200/70">
-              {t(
-                `information.academic.summaryInsights.${insight.key}.context`,
-              )}
+              {t(`information.academic.summaryInsights.${insight.key}.context`)}
             </span>
           </div>
         ))}
@@ -384,7 +378,9 @@ type UpcomingEvaluationsCardProps = {
   t: Translate;
 };
 
-function UpcomingEvaluationsCard({ t }: UpcomingEvaluationsCardProps): ReactElement {
+function UpcomingEvaluationsCard({
+  t,
+}: UpcomingEvaluationsCardProps): ReactElement {
   return (
     <RedSurface tone="muted" className="flex flex-col gap-4 p-6 text-red-50">
       <div className="flex items-center justify-between">
@@ -470,15 +466,11 @@ function ChecklistCard({ t }: ChecklistCardProps): ReactElement {
                 <span
                   className={`inline-flex items-center rounded-full px-3 py-1 text-[0.65rem] uppercase tracking-[0.3em] ${statusConfig.badge}`}
                 >
-                  {t(
-                    `information.academic.checklist.statuses.${item.status}`,
-                  )}
+                  {t(`information.academic.checklist.statuses.${item.status}`)}
                 </span>
               </div>
               <p className="text-xs text-red-200/70">
-                {t(
-                  `information.academic.checklist.items.${item.key}.detail`,
-                )}
+                {t(`information.academic.checklist.items.${item.key}.detail`)}
               </p>
             </li>
           );
@@ -512,9 +504,7 @@ function AdvisorGuidanceCard({ t }: AdvisorGuidanceCardProps): ReactElement {
             <div className="flex items-start justify-between gap-3">
               <div className="space-y-1">
                 <p className="text-sm font-semibold text-red-50">
-                  {t(
-                    `information.academic.advisor.notes.${note.key}.title`,
-                  )}
+                  {t(`information.academic.advisor.notes.${note.key}.title`)}
                 </p>
                 <p className="text-sm text-red-100/80">
                   {t(
@@ -524,9 +514,7 @@ function AdvisorGuidanceCard({ t }: AdvisorGuidanceCardProps): ReactElement {
               </div>
               {note.hasAction ? (
                 <span className="inline-flex items-center rounded-full border border-red-400/40 px-3 py-1 text-[0.65rem] uppercase tracking-[0.3em] text-red-200/70">
-                  {t(
-                    `information.academic.advisor.notes.${note.key}.action`,
-                  )}
+                  {t(`information.academic.advisor.notes.${note.key}.action`)}
                 </span>
               ) : null}
             </div>

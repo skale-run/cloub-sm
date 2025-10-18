@@ -12,12 +12,7 @@ import {
 import { cn } from "../../lib/cn";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import type {
-  ChangeEvent,
-  DragEvent,
-  FormEvent,
-  KeyboardEvent,
-} from "react";
+import type { ChangeEvent, DragEvent, FormEvent, KeyboardEvent } from "react";
 import RedSurface from "../../components/RedSurface";
 import type { Achievement, AchievementDraft } from "./achievementTypes";
 import type { Profile } from "./profileTypes";
@@ -128,109 +123,108 @@ function ProfileSection({
   );
 
   const filterOptions = useMemo(
-    () =>
-      [
-        {
-          value: "all" as AchievementFilter,
-          label: t("profile.achievements.filters.all"),
-          count: badgeCounts.all,
-          Icon: GaugeCircle,
-        },
-        {
-          value: "tournament" as AchievementFilter,
-          label: t("profile.achievements.filters.tournament"),
-          count: badgeCounts.tournament,
-          Icon: Award,
-        },
-        {
-          value: "leadership" as AchievementFilter,
-          label: t("profile.achievements.filters.leadership"),
-          count: badgeCounts.leadership,
-          Icon: Users,
-        },
-        {
-          value: "communityService" as AchievementFilter,
-          label: t("profile.achievements.filters.communityService"),
-          count: badgeCounts.communityService,
-          Icon: Flag,
-        },
-        {
-          value: "discipline" as AchievementFilter,
-          label: t("profile.achievements.filters.discipline"),
-          count: badgeCounts.discipline,
-          Icon: Activity,
-        },
-      ],
+    () => [
+      {
+        value: "all" as AchievementFilter,
+        label: t("profile.achievements.filters.all"),
+        count: badgeCounts.all,
+        Icon: GaugeCircle,
+      },
+      {
+        value: "tournament" as AchievementFilter,
+        label: t("profile.achievements.filters.tournament"),
+        count: badgeCounts.tournament,
+        Icon: Award,
+      },
+      {
+        value: "leadership" as AchievementFilter,
+        label: t("profile.achievements.filters.leadership"),
+        count: badgeCounts.leadership,
+        Icon: Users,
+      },
+      {
+        value: "communityService" as AchievementFilter,
+        label: t("profile.achievements.filters.communityService"),
+        count: badgeCounts.communityService,
+        Icon: Flag,
+      },
+      {
+        value: "discipline" as AchievementFilter,
+        label: t("profile.achievements.filters.discipline"),
+        count: badgeCounts.discipline,
+        Icon: Activity,
+      },
+    ],
     [badgeCounts, t],
   );
 
   const isAddDisabled = newAchievement.title.trim().length === 0;
 
   const profileFieldConfig = useMemo(
-    () =>
-      [
-        {
-          key: "fullName" as const,
-          label: t("profile.fields.fullName.label"),
-          placeholder: t("profile.fields.fullName.placeholder"),
-          required: true,
-          readinessLabel: t("profile.fields.fullName.readinessLabel"),
-        },
-        {
-          key: "role" as const,
-          label: t("profile.fields.role.label"),
-          placeholder: t("profile.fields.role.placeholder"),
-          readinessLabel: t("profile.fields.role.readinessLabel"),
-        },
-        {
-          key: "squad" as const,
-          label: t("profile.fields.squad.label"),
-          placeholder: t("profile.fields.squad.placeholder"),
-          readinessLabel: t("profile.fields.squad.readinessLabel"),
-        },
-        {
-          key: "email" as const,
-          label: t("profile.fields.email.label"),
-          type: "email",
-          placeholder: t("profile.fields.email.placeholder"),
-          readinessLabel: t("profile.fields.email.readinessLabel"),
-        },
-        {
-          key: "emergencyContact" as const,
-          label: t("profile.fields.emergencyContact.label"),
-          placeholder: t("profile.fields.emergencyContact.placeholder"),
-          readinessLabel: t("profile.fields.emergencyContact.readinessLabel"),
-        },
-        {
-          key: "membershipId" as const,
-          label: t("profile.fields.membershipId.label"),
-          placeholder: t("profile.fields.membershipId.placeholder"),
-          required: true,
-          helperText: t("profile.fields.membershipId.helperText"),
-          readinessLabel: t("profile.fields.membershipId.readinessLabel"),
-        },
-      ],
+    () => [
+      {
+        key: "fullName" as const,
+        label: t("profile.fields.fullName.label"),
+        placeholder: t("profile.fields.fullName.placeholder"),
+        required: true,
+        readinessLabel: t("profile.fields.fullName.readinessLabel"),
+      },
+      {
+        key: "role" as const,
+        label: t("profile.fields.role.label"),
+        placeholder: t("profile.fields.role.placeholder"),
+        readinessLabel: t("profile.fields.role.readinessLabel"),
+      },
+      {
+        key: "squad" as const,
+        label: t("profile.fields.squad.label"),
+        placeholder: t("profile.fields.squad.placeholder"),
+        readinessLabel: t("profile.fields.squad.readinessLabel"),
+      },
+      {
+        key: "email" as const,
+        label: t("profile.fields.email.label"),
+        type: "email",
+        placeholder: t("profile.fields.email.placeholder"),
+        readinessLabel: t("profile.fields.email.readinessLabel"),
+      },
+      {
+        key: "emergencyContact" as const,
+        label: t("profile.fields.emergencyContact.label"),
+        placeholder: t("profile.fields.emergencyContact.placeholder"),
+        readinessLabel: t("profile.fields.emergencyContact.readinessLabel"),
+      },
+      {
+        key: "membershipId" as const,
+        label: t("profile.fields.membershipId.label"),
+        placeholder: t("profile.fields.membershipId.placeholder"),
+        required: true,
+        helperText: t("profile.fields.membershipId.helperText"),
+        readinessLabel: t("profile.fields.membershipId.readinessLabel"),
+      },
+    ],
     [t],
   );
 
-  const { completionPercentage, completedFields, missingFields } = useMemo(() => {
-    const entries = profileFieldConfig.map((field) => {
-      const value = profileDraft[field.key];
-      const hasValue = typeof value === "string" && value.trim().length > 0;
+  const { completionPercentage, completedFields, missingFields } =
+    useMemo(() => {
+      const entries = profileFieldConfig.map((field) => {
+        const value = profileDraft[field.key];
+        const hasValue = typeof value === "string" && value.trim().length > 0;
 
-      return { field, hasValue };
-    });
+        return { field, hasValue };
+      });
 
-    const filled = entries.filter((entry) => entry.hasValue);
-    const missing = entries.filter((entry) => !entry.hasValue);
-    const percentage = Math.round((filled.length / entries.length) * 100);
+      const filled = entries.filter((entry) => entry.hasValue);
+      const missing = entries.filter((entry) => !entry.hasValue);
+      const percentage = Math.round((filled.length / entries.length) * 100);
 
-    return {
-      completionPercentage: Number.isNaN(percentage) ? 0 : percentage,
-      completedFields: filled.map((entry) => entry.field.key),
-      missingFields: missing.map((entry) => entry.field),
-    };
-  }, [profileDraft, profileFieldConfig]);
+      return {
+        completionPercentage: Number.isNaN(percentage) ? 0 : percentage,
+        completedFields: filled.map((entry) => entry.field.key),
+        missingFields: missing.map((entry) => entry.field),
+      };
+    }, [profileDraft, profileFieldConfig]);
 
   const suggestedNextField = missingFields[0];
 
@@ -416,7 +410,14 @@ function ProfileSection({
 
           <div className="grid gap-4 md:grid-cols-2">
             {profileFieldConfig.map(
-              ({ key, label, placeholder, type = "text", required, helperText }) => (
+              ({
+                key,
+                label,
+                placeholder,
+                type = "text",
+                required,
+                helperText,
+              }) => (
                 <label key={key} className="flex flex-col gap-2 text-sm">
                   <span className="font-semibold text-red-50">{label}</span>
                   <input
@@ -430,7 +431,9 @@ function ProfileSection({
                     className="rounded-2xl border border-red-400/35 bg-red-950/60 px-4 py-3 text-red-50 placeholder:text-red-200/60 focus:border-red-400/60 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                   />
                   {helperText ? (
-                    <span className="text-xs text-red-200/70">{helperText}</span>
+                    <span className="text-xs text-red-200/70">
+                      {helperText}
+                    </span>
                   ) : null}
                 </label>
               ),
@@ -510,10 +513,10 @@ function ProfileSection({
                   {missingFields.length === 0
                     ? t("profile.readiness.readyMessage")
                     : suggestedNextField
-                        ? t("profile.readiness.nextField", {
-                            field: suggestedNextField.readinessLabel,
-                          })
-                        : t("profile.readiness.remaining")}
+                      ? t("profile.readiness.nextField", {
+                          field: suggestedNextField.readinessLabel,
+                        })
+                      : t("profile.readiness.remaining")}
                 </span>
               </div>
               {missingFields.length > 0 ? (
@@ -553,8 +556,7 @@ function ProfileSection({
                 <div className="flex items-center justify-between gap-2">
                   <dt>{t("profile.summary.squadLabel")}</dt>
                   <dd className="font-medium text-red-100">
-                    {profileDraft.squad ||
-                      t("profile.summary.squadFallback")}
+                    {profileDraft.squad || t("profile.summary.squadFallback")}
                   </dd>
                 </div>
               </dl>
@@ -624,12 +626,14 @@ function ProfileSection({
                   }
                   className="w-full rounded-xl border border-red-400/30 bg-red-950/40 px-3 py-2 text-sm text-red-50 focus:border-red-400/60 focus:outline-none focus:ring-2 focus:ring-red-400/40"
                 >
-                  {(Object.entries(categoryDetails) as Array<
-                    [
-                      Achievement["category"],
-                      (typeof categoryDetails)[Achievement["category"]],
-                    ]
-                  >).map(([value, detail]) => (
+                  {(
+                    Object.entries(categoryDetails) as Array<
+                      [
+                        Achievement["category"],
+                        (typeof categoryDetails)[Achievement["category"]],
+                      ]
+                    >
+                  ).map(([value, detail]) => (
                     <option key={value} value={value}>
                       {detail.label}
                     </option>
@@ -721,7 +725,9 @@ function ProfileSection({
                             </div>
                             <button
                               type="button"
-                              onClick={() => onRemoveAchievement(achievement.id)}
+                              onClick={() =>
+                                onRemoveAchievement(achievement.id)
+                              }
                               aria-label={t("profile.achievements.removeAria")}
                               className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-red-400/40 bg-red-950/50 text-red-200 transition hover:border-red-400/60 hover:bg-red-500/20 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
                             >

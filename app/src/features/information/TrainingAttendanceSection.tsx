@@ -303,146 +303,13 @@ function TrainingAttendanceSection(): ReactElement {
     [locale],
   );
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    setIsLoadingInsights(true);
-    setInsightsError(null);
-
-    fetchJson<TrainingInsightsResponse>(`/training-insights?weeks=3`, {
-      signal: controller.signal,
-    })
-      .then((payload) => {
-        if (payload.trainingInsights) {
-          setInsightsData(payload.trainingInsights);
-        }
-        setIsLoadingInsights(false);
-      })
-      .catch((error) => {
-        if (controller.signal.aborted) {
-          return;
-        }
-        setInsightsError(error instanceof Error ? error.message : String(error));
-        setIsLoadingInsights(false);
-      });
-
-    return () => {
-      controller.abort();
-    };
-  }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    setIsLoadingAttendance(true);
-    setAttendanceError(null);
-
-    fetchJson<AttendanceLogsResponse>(`/training-attendance?limit=50`, {
-      signal: controller.signal,
-    })
-      .then((payload) => {
-        if (Array.isArray(payload.attendanceLogs)) {
-          setAttendanceLogs(payload.attendanceLogs);
-        }
-        setIsLoadingAttendance(false);
-      })
-      .catch((error) => {
-        if (controller.signal.aborted) {
-          return;
-        }
-        setAttendanceError(error instanceof Error ? error.message : String(error));
-        setIsLoadingAttendance(false);
-      });
-
-    return () => {
-      controller.abort();
-    };
-  }, []);
-
-  const attendanceWeeks = useMemo(() => {
-    const fallbackKeys = fallbackAttendanceWeeks.map((week) => week.key);
-
-    if (insightsData?.weeks?.length) {
-      return insightsData.weeks.map((week, index) => {
-        const fallbackWeek = fallbackAttendanceWeeks[index];
-        const key = fallbackWeek?.key ?? fallbackKeys[index] ?? week.weekKey ?? `week-${index}`;
-
-        const plannedSessions =
-          typeof week.plannedSessions === "number"
-            ? week.plannedSessions
-            : fallbackWeek?.plannedSessions ?? 0;
-        const attendedSessions =
-          (typeof week.attendedLogs === "number" ? week.attendedLogs : 0) +
-          (typeof week.supportiveLogs === "number" ? week.supportiveLogs : 0);
-
-        return {
-          key,
-          sourceKey: week.weekKey ?? key,
-          plannedSessions,
-          attendedSessions:
-            attendedSessions > 0
-              ? attendedSessions
-              : fallbackWeek?.attendedSessions ?? attendedSessions,
-          attendanceRate:
-            typeof week.attendanceRate === "number"
-              ? week.attendanceRate
-              : fallbackWeek?.attendanceRate ?? null,
-          rangeStart: week.rangeStart ?? fallbackWeek?.rangeStart ?? null,
-          rangeEnd: week.rangeEnd ?? fallbackWeek?.rangeEnd ?? null,
-          labelKey: fallbackWeek?.labelKey,
-          highlightKey: fallbackWeek?.highlightKey,
-        } satisfies AttendanceWeekRecord;
-      });
-    }
-
-    return fallbackAttendanceWeeks;
-  }, [insightsData]);
-
   const attendanceSummary = useMemo(() => {
-    if (insightsData?.summary) {
-      const {
-        totalPlannedSessions,
-        totalPositiveLogs,
-        attendanceRate,
-        previousAttendanceRate,
-        rateDelta,
-        bestWeekKey,
-        focusWeekKey,
-      } = insightsData.summary;
-
-      const derivedRate =
-        typeof attendanceRate === "number"
-          ? Math.round(attendanceRate)
-          : totalPlannedSessions
-          ? Math.round((totalPositiveLogs / Math.max(totalPlannedSessions, 1)) * 100)
-          : 0;
-
-      return {
-        totalPlanned: totalPlannedSessions ?? 0,
-        totalAttended: totalPositiveLogs ?? 0,
-        attendanceRate: derivedRate,
-        bestWeek:
-          attendanceWeeks.find((week) => week.sourceKey === bestWeekKey) ?? null,
-        focusWeek:
-          attendanceWeeks.find((week) => week.sourceKey === focusWeekKey) ?? null,
-        previousAttendanceRate:
-          typeof previousAttendanceRate === "number"
-            ? Math.round(previousAttendanceRate)
-            : null,
-        rateDelta:
-          typeof rateDelta === "number" ? Math.round(rateDelta * 10) / 10 : null,
-      };
-    }
-
-    const summary = attendanceWeeks.reduce(
+    const summary = attendanceByWeek.reduce(
       (accumulator, week) => {
         accumulator.totalPlanned += week.plannedSessions;
         accumulator.totalAttended += week.attendedSessions;
 
-        const weeklyRate =
-          week.plannedSessions > 0
-            ? week.attendedSessions / week.plannedSessions
-            : 0;
+        const weeklyRate = week.attendedSessions / week.plannedSessions;
         if (
           accumulator.bestWeek === null ||
           weeklyRate > accumulator.bestRate
@@ -463,9 +330,9 @@ function TrainingAttendanceSection(): ReactElement {
       {
         totalPlanned: 0,
         totalAttended: 0,
-        bestWeek: null as AttendanceWeekRecord | null,
+        bestWeek: null as (typeof attendanceByWeek)[number] | null,
         bestRate: -Infinity,
-        focusWeek: null as AttendanceWeekRecord | null,
+        focusWeek: null as (typeof attendanceByWeek)[number] | null,
         focusRate: Infinity,
       },
     );
@@ -473,6 +340,15 @@ function TrainingAttendanceSection(): ReactElement {
     const attendanceRate = summary.totalPlanned
       ? Math.round((summary.totalAttended / summary.totalPlanned) * 100)
       : 0;
+
+    return {
+      totalPlanned: summary.totalPlanned,
+      totalAttended: summary.totalAttended,
+      attendanceRate,
+      bestWeek: summary.bestWeek,
+      focusWeek: summary.focusWeek,
+    };
+  }, []);
 
     return {
       totalPlanned: summary.totalPlanned,
@@ -705,11 +581,11 @@ function TrainingAttendanceSection(): ReactElement {
           };
         })
         .filter(Boolean) as Array<{
-          id: "pending" | "medical";
-          icon: LucideIcon;
-          count: number;
-          translationKey: FollowUpActionDefinition["translationKey"];
-        }>,
+        id: "pending" | "medical";
+        icon: LucideIcon;
+        count: number;
+        translationKey: FollowUpActionDefinition["translationKey"];
+      }>,
     [rosterStatusCounts],
   );
 
@@ -835,9 +711,7 @@ function TrainingAttendanceSection(): ReactElement {
                   <p className="text-lg font-semibold text-red-50">
                     {insight.value}
                   </p>
-                  <p className="text-xs text-red-100/80">
-                    {insight.detail}
-                  </p>
+                  <p className="text-xs text-red-100/80">{insight.detail}</p>
                 </RedSurface>
               );
             })}
@@ -868,16 +742,13 @@ function TrainingAttendanceSection(): ReactElement {
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-red-100/80">
-                    {t(
-                      "information.trainingAttendance.byWeek.sessions",
-                      {
-                        attended: week.attendedSessions,
-                        planned: week.plannedSessions,
-                        highlight: t(
-                          `information.trainingAttendance.byWeek.items.${week.key}.highlight`,
-                        ),
-                      },
-                    )}
+                    {t("information.trainingAttendance.byWeek.sessions", {
+                      attended: week.attendedSessions,
+                      planned: week.plannedSessions,
+                      highlight: t(
+                        `information.trainingAttendance.byWeek.items.${week.key}.highlight`,
+                      ),
+                    })}
                   </p>
                   <div className="mt-3 h-2 rounded-full bg-red-950/45">
                     <div
@@ -925,7 +796,9 @@ function TrainingAttendanceSection(): ReactElement {
                     {t("training.lead", { coach: session.coach })}
                   </p>
                   {session.focus ? (
-                    <p className="mt-3 text-xs text-red-100/80">{session.focus}</p>
+                    <p className="mt-3 text-xs text-red-100/80">
+                      {session.focus}
+                    </p>
                   ) : null}
                   {session.emphasis ? (
                     <p className="text-[0.7rem] uppercase tracking-[0.35em] text-red-200/70">
@@ -952,7 +825,10 @@ function TrainingAttendanceSection(): ReactElement {
                     {t("information.trainingAttendance.followUp.helper")}
                   </p>
                 </div>
-                <ClipboardCheck className="h-5 w-5 text-red-200/75" aria-hidden />
+                <ClipboardCheck
+                  className="h-5 w-5 text-red-200/75"
+                  aria-hidden
+                />
               </div>
               <ul className="space-y-3">
                 {followUpActions.map((action) => {
@@ -1132,12 +1008,9 @@ function TrainingAttendanceSection(): ReactElement {
                     />
                   </div>
                   <p className="mt-2 text-xs text-red-100/75">
-                    {t(
-                      "information.trainingAttendance.statuses.percent",
-                      {
-                        percent: status.percent,
-                      },
-                    )}
+                    {t("information.trainingAttendance.statuses.percent", {
+                      percent: status.percent,
+                    })}
                   </p>
                 </RedSurface>
               ))}

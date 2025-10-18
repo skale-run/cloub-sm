@@ -236,7 +236,11 @@ function detectRole(role: string | null | undefined): RoleKey {
   return "default";
 }
 
-const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => {
+const LandingPage: FC<LandingPageProps> = ({
+  onSignup,
+  onLogin,
+  onContact,
+}) => {
   const { t, i18n } = useTranslation();
   const fallbackT = useMemo(() => getFallbackTranslator(i18n), [i18n]);
   const { member } = useMember();
@@ -330,7 +334,8 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
                         {commandCenter.notifications.title}
                       </p>
                       <span className="text-xs text-red-200/70">
-                        {notifications.length} {commandCenter.notifications.viewAll}
+                        {notifications.length}{" "}
+                        {commandCenter.notifications.viewAll}
                       </span>
                     </div>
                     <ul className="max-h-80 divide-y divide-red-300/10 overflow-y-auto">
@@ -358,7 +363,9 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
                                 <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-red-200/60">
                                   <span>{notification.category}</span>
                                   <span className="text-red-400/60">•</span>
-                                  <span className="text-red-100/80">{notification.time}</span>
+                                  <span className="text-red-100/80">
+                                    {notification.time}
+                                  </span>
                                 </div>
                               </div>
                             </li>
@@ -379,7 +386,9 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">
                 {commandCenter.roleSwitcherLabel}
               </p>
-              <p className="text-xs text-red-200/70">{commandCenter.subheading}</p>
+              <p className="text-xs text-red-200/70">
+                {commandCenter.subheading}
+              </p>
               <div className="flex flex-wrap gap-2">
                 {(commandCenter.roleOptions ?? []).map((option) => (
                   <button
@@ -396,8 +405,12 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
                         : "border-red-300/20 bg-red-900/50 hover:border-red-200/40 hover:bg-red-900/70",
                     )}
                   >
-                    <span className="font-semibold text-red-50">{option.label}</span>
-                    <span className="text-xs text-red-200/70">{option.description}</span>
+                    <span className="font-semibold text-red-50">
+                      {option.label}
+                    </span>
+                    <span className="text-xs text-red-200/70">
+                      {option.description}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -479,8 +492,12 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
                         ) : null}
                       </div>
                       <div className="space-y-2">
-                        <h3 className="text-base font-semibold text-red-50">{item.label}</h3>
-                        <p className="text-sm text-red-200/75">{item.description}</p>
+                        <h3 className="text-base font-semibold text-red-50">
+                          {item.label}
+                        </h3>
+                        <p className="text-sm text-red-200/75">
+                          {item.description}
+                        </p>
                       </div>
                       <button
                         type="button"
@@ -581,13 +598,17 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
                     </span>
                     <div className="flex flex-col gap-1 rounded-2xl border border-red-300/20 bg-red-900/60 p-4">
                       <div className="flex flex-wrap items-center gap-2">
-                        <p className="text-sm font-semibold text-red-50">{entry.label}</p>
+                        <p className="text-sm font-semibold text-red-50">
+                          {entry.label}
+                        </p>
                         <span className="text-xs text-red-200/70">•</span>
                         <span className="text-xs uppercase tracking-[0.25em] text-red-200/60">
                           {entry.time}
                         </span>
                       </div>
-                      <p className="text-sm text-red-200/75">{entry.description}</p>
+                      <p className="text-sm text-red-200/75">
+                        {entry.description}
+                      </p>
                     </div>
                   </li>
                 ))}
@@ -620,7 +641,9 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
                               {item.metric}
                             </span>
                           </div>
-                          <span className="text-xs text-red-200/70">{item.description}</span>
+                          <span className="text-xs text-red-200/70">
+                            {item.description}
+                          </span>
                         </div>
                       </li>
                     );
@@ -642,7 +665,9 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
                         <span className="text-sm font-semibold text-red-50">
                           {clip.title}
                         </span>
-                        <span className="text-xs text-red-200/70">{clip.description}</span>
+                        <span className="text-xs text-red-200/70">
+                          {clip.description}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-red-200/60">
                         <span>{clip.duration}</span>
@@ -723,9 +748,16 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
       <main className="mx-auto flex max-w-6xl flex-col gap-16 px-6 pb-24">
         <section className="grid gap-8 rounded-3xl border border-red-200/10 bg-red-950/60 p-8 shadow-[0_30px_80px_rgba(127,29,29,0.35)] sm:grid-cols-3">
           {features.map((feature) => (
-            <article key={feature.title} className="rounded-2xl bg-red-900/30 p-6">
-              <h2 className="text-xl font-semibold text-red-50">{feature.title}</h2>
-              <p className="mt-3 text-sm text-red-100/80">{feature.description}</p>
+            <article
+              key={feature.title}
+              className="rounded-2xl bg-red-900/30 p-6"
+            >
+              <h2 className="text-xl font-semibold text-red-50">
+                {feature.title}
+              </h2>
+              <p className="mt-3 text-sm text-red-100/80">
+                {feature.description}
+              </p>
             </article>
           ))}
         </section>
@@ -748,9 +780,15 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
             </ul>
           </div>
           <div className="rounded-3xl border border-red-300/20 bg-red-900/40 p-8 text-center shadow-[0_25px_60px_rgba(127,29,29,0.45)]">
-            <p className="text-sm uppercase tracking-[0.35em] text-red-200/70">{experience.stats.label}</p>
-            <p className="mt-6 text-5xl font-bold text-red-50">{experience.stats.value}</p>
-            <p className="mt-3 text-sm text-red-100/80">{experience.stats.description}</p>
+            <p className="text-sm uppercase tracking-[0.35em] text-red-200/70">
+              {experience.stats.label}
+            </p>
+            <p className="mt-6 text-5xl font-bold text-red-50">
+              {experience.stats.value}
+            </p>
+            <p className="mt-3 text-sm text-red-100/80">
+              {experience.stats.description}
+            </p>
           </div>
         </section>
 
@@ -758,7 +796,9 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
           id="landing-contact"
           className="rounded-3xl border border-red-200/20 bg-red-900/40 p-10 text-center shadow-[0_20px_60px_rgba(127,29,29,0.4)]"
         >
-          <h2 className="text-3xl font-semibold text-red-50">{t("landing.contact.title")}</h2>
+          <h2 className="text-3xl font-semibold text-red-50">
+            {t("landing.contact.title")}
+          </h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm text-red-100/80 sm:text-base">
             {t("landing.contact.description")}
           </p>
@@ -777,7 +817,9 @@ const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => 
 
       <footer className="border-t border-red-200/10 bg-red-950/80 py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 text-xs text-red-300/80 sm:flex-row">
-          <p>{t("landing.footer.copyright", { year: new Date().getFullYear() })}</p>
+          <p>
+            {t("landing.footer.copyright", { year: new Date().getFullYear() })}
+          </p>
           <div className="flex flex-wrap items-center gap-4">
             <a href="#" className="transition hover:text-red-200">
               {footerLinks.privacy}

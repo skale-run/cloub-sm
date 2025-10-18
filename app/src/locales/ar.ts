@@ -55,6 +55,10 @@ export const ar = {
           open: "فتح التنقّل",
           close: "إغلاق التنقّل",
         },
+        avatarNavigation: {
+          profile: "الانتقال إلى ملفك الشخصي",
+          access: "الانتقال إلى إدارة الوصول",
+        },
       },
     },
     auth: {
@@ -73,13 +77,12 @@ export const ar = {
           login: {
             heading: "سجّل الدخول إلى مقر الدوجان الخاص بك",
             description:
-              "عد إلى مركز قيادة التايكواندو الخاص بك ونسّق مع تركيز اليوم.",
+              "عد إلى مركز قيادة التايكواندو الخاص بك وواكب تركيز اليوم.",
             cta: "تسجيل الدخول",
           },
           register: {
             heading: "فعّل جواز التايكواندو الخاص بك",
-            description:
-              "أنشئ بيانات اعتمادك لفتح جلسات بومسي مخصّصة ودعم الفريق.",
+            description: "أنشئ حسابك لفتح جلسات بومسي مخصّصة ودعم السكواد.",
             cta: "إنشاء حساب",
           },
         },
@@ -137,7 +140,7 @@ export const ar = {
             "بإنشائك حسابًا، فإنك تقبل ميثاق الدوجان وتوافق على تتبّع الأداء.",
         },
         highlights: {
-          heading: "لماذا يحبها الرياضيون",
+          heading: "لماذا يحب الرياضيون المنصة",
           items: {
             eliteTraining: {
               title: "مخططات تدريب الدوجو",
@@ -163,7 +166,7 @@ export const ar = {
         },
         support: {
           heading: "هل تحتاج مساعدة للبدء؟",
-          intro: "أرسل رسالة إلى",
+          intro: "أرسل ملاحظة إلى",
           outro: "أو تواصل مع فريق التدريب في قناة السكواد.",
         },
         status: {
@@ -219,7 +222,7 @@ export const ar = {
             {
               to: "/guardian-portal",
               label: "بوابة الوالدين",
-              description: "عرض خفيف للحضور والفوترة والفعاليات للعائلة",
+              description: "عرض عائلي عبر الحضور والفوترة والفعاليات",
             },
           ],
         },
@@ -359,10 +362,10 @@ export const ar = {
         eventsCount_zero: "لا أحداث",
         eventsCount_one: "حدث واحد",
         eventsCount_other: "{{count}} أحداث",
-        previous: "Previous month",
-        next: "Next month",
-        previousShort: "Prev",
-        nextShort: "Next",
+        previous: "الشهر السابق",
+        next: "الشهر التالي",
+        previousShort: "السابق",
+        nextShort: "التالي",
       },
       weekView: {
         weekLabel: "أسبوع {{start}}",
@@ -664,12 +667,12 @@ export const ar = {
       },
     },
     landing: {
-      badge: "إدارة تايكواندو سحابية",
-      heroTitle: "وحّد دوجانك وامنح كل لاعب دفعة",
+      badge: "منصة حديثة لإدارة التايكواندو",
+      heroTitle: "أدر الدوجان بوضوح وثقة",
       heroDescription:
-        "توفر Cloub للماسترز والممارسين والمنسّقين مركزًا موحّدًا لجدولة الحصص وتقييم الأحزمة والتحضير للبطولات. قوِّ برنامجك برؤى تُبقي كل فريق حلبة متناغمًا.",
+        "تجمع Cloub بين الماسترز والممارسين والمنسقين في مساحة عمل واحدة لجدولة الحصص، وتقييم الأحزمة، والتحضير للبطولات. حوِّل بيانات الحضور والمالية والأداء إلى إجراءات لكل فريق.",
       ctas: {
-        primary: "إنشاء حساب",
+        primary: "ابدأ النسخة التجريبية المجانية",
         secondary: "تسجيل الدخول",
         tertiary: "تواصل معنا",
       },
@@ -677,37 +680,37 @@ export const ar = {
         {
           title: "تخطيط حصص متكامل",
           description:
-            "نظّم البومسي والسبارينغ والتهيئة مع تذكيرات تلقائية تبقي كل فئة أحزمة على اطلاع.",
+            "أنشئ مسارات البومسي والسبارينغ والتأهيل مع تذكيرات تلقائية تُبقي كل مجموعة أحزمة على المسار.",
         },
         {
           title: "ذكاء الأداء",
           description:
-            "تصوّر تقدّم الممارس بلوحات تجمع الحضور ودرجات التقنية وملاحظات التقييم.",
+            "اعرض التقدّم عبر لوحات تمزج اتجاهات الحضور ودرجات التقنية وملاحظات التقييم.",
         },
         {
-          title: "وصول آمن للجميع",
+          title: "وصول آمن لكل دور",
           description:
-            "أذونات قائمة على الأدوار تمنح الماسترز والرياضيين والأولياء رؤية مناسبة مع حماية البيانات الحساسة.",
+            "تمنح الأذونات المعتمدة على الدور الماسترز والرياضيين والأوصياء الرؤية المناسبة مع حماية البيانات الحساسة.",
         },
       ],
       commandCenter: {
-        heading: "Role-aware control center",
+        heading: "مركز قيادة لكل دور",
         subheading:
-          "Switch between personas to see how Cloub personalizes insight, tasks, and communication guardrails.",
-        roleSwitcherLabel: "Preview dashboards",
+          "استعرض كيف يقدّم Cloub رؤى موجّهة وقوائم مهام وضوابط تواصل لكل شخصية.",
+        roleSwitcherLabel: "تبديل لوحات التحكم",
         notifications: {
-          title: "Notification center",
-          empty: "You're all caught up across every ring team.",
-          viewAll: "active alerts",
+          title: "مركز التنبيهات",
+          empty: "أنت مطّلع على كل فرق الحلبة.",
+          viewAll: "عرض التنبيهات",
         },
         statusLabels: {
-          completed: "Completed",
-          upcoming: "Upcoming",
-          overdue: "Overdue",
+          completed: "مكتمل",
+          upcoming: "قادم",
+          overdue: "متأخر",
         },
-        focusTitle: "Immediate focus",
-        focusSubtitle: "Auto-prioritised from attendance + finance data",
-        shortcutsTitle: "Quick shortcuts",
+        focusTitle: "أولوية فورية",
+        focusSubtitle: "يتم تحديدها تلقائيًا من إشارات الحضور والفوترة",
+        shortcutsTitle: "إجراءات سريعة",
         roleOptions: [
           {
             id: "master",
@@ -1848,7 +1851,7 @@ export const ar = {
           label: "موثوق بها من الدوجانات",
           value: "650+",
           description:
-            "برنامجًا لفنون القتال ينسّق مواسمه مع Cloub لرفع جودة التدريب وتقليل الأعباء الإدارية.",
+            "برامج التايكواندو تنسّق مواسمها مع Cloub لرفع جودة التدريب وتقليل الأعباء الإدارية.",
         },
       },
       contact: {

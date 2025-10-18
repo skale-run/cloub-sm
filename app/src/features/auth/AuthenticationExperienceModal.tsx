@@ -10,8 +10,10 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { Activity, Award, BarChart3, Users, X } from "../../lucide-react";
-import { fetchJson, isApiError } from "../../lib/api";
-import { useAthletePortalModal, type AuthMode } from "./AthletePortalModalContext";
+import {
+  useAthletePortalModal,
+  type AuthMode,
+} from "./AthletePortalModalContext";
 import { useMember } from "./MemberContext";
 import type { Member } from "./MemberContext";
 
@@ -227,7 +229,8 @@ function AuthenticationExperienceModal() {
     [handleProfilePhotoSelect],
   );
 
-  const handleProfilePhotoDrop = useCallback((event: DragEvent<HTMLElement>) => {
+  const handleProfilePhotoDrop = useCallback(
+    (event: DragEvent<HTMLElement>) => {
       event.preventDefault();
       const [file] = event.dataTransfer.files ?? [];
       handleProfilePhotoSelect(file);
@@ -267,9 +270,12 @@ function AuthenticationExperienceModal() {
     );
   }, [registerForm]);
 
-  useEffect(() => () => {
-    activeRequestRef.current?.abort();
-  }, []);
+  useEffect(
+    () => () => {
+      activeRequestRef.current?.abort();
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!isOpen) {
@@ -383,7 +389,32 @@ function AuthenticationExperienceModal() {
             }),
             signal: controller.signal,
           },
-        );
+          body: JSON.stringify({
+            email: loginForm.email.trim(),
+            password: loginForm.password,
+          }),
+          signal: controller.signal,
+        });
+
+        const payload = (await response.json().catch(() => null)) as {
+          error?: string;
+          member?: Member;
+          token?: string;
+        } | null;
+
+        if (!response.ok) {
+          const message =
+            payload?.error ??
+            (response.status === 401
+              ? t("auth.modal.status.login.invalid")
+              : t("auth.modal.status.generic"));
+
+          setLoginState({
+            status: "error",
+            message,
+          });
+          return;
+        }
 
         if (!payload?.member || !payload.token) {
           setLoginState({
@@ -478,6 +509,25 @@ function AuthenticationExperienceModal() {
           }),
           signal: controller.signal,
         });
+
+        const payload = (await response.json().catch(() => null)) as {
+          error?: string;
+          member?: Member;
+        } | null;
+
+        if (!response.ok) {
+          const message =
+            payload?.error ??
+            (response.status === 409
+              ? t("auth.modal.status.register.duplicate")
+              : t("auth.modal.status.generic"));
+
+          setRegisterState({
+            status: "error",
+            message,
+          });
+          return;
+        }
 
         if (!payload?.member) {
           setRegisterState({
@@ -659,7 +709,9 @@ function AuthenticationExperienceModal() {
                       name="password"
                       autoComplete="current-password"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder={t("auth.modal.loginForm.password.placeholder")}
+                      placeholder={t(
+                        "auth.modal.loginForm.password.placeholder",
+                      )}
                       required
                       value={loginForm.password}
                       onChange={(event) =>
@@ -718,13 +770,17 @@ function AuthenticationExperienceModal() {
                       {registerForm.profilePhotoUrl ? (
                         <img
                           src={registerForm.profilePhotoUrl}
-                          alt={t("auth.modal.registerForm.profilePhoto.previewAlt")}
+                          alt={t(
+                            "auth.modal.registerForm.profilePhoto.previewAlt",
+                          )}
                           className="h-24 w-24 rounded-full object-cover"
                         />
                       ) : (
                         <div className="flex flex-col items-center gap-2 text-sm text-red-100/80">
                           <span className="text-base font-medium text-red-50">
-                            {t("auth.modal.registerForm.profilePhoto.dropLabel")}
+                            {t(
+                              "auth.modal.registerForm.profilePhoto.dropLabel",
+                            )}
                           </span>
                           <span className="text-xs text-red-100/70">
                             {t("auth.modal.registerForm.profilePhoto.helpText")}
@@ -740,8 +796,12 @@ function AuthenticationExperienceModal() {
                           className="rounded-xl border border-red-400/40 bg-red-500/20 px-4 py-2 text-sm font-medium text-red-50 transition hover:border-red-300/60 hover:bg-red-500/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
                         >
                           {registerForm.profilePhotoUrl
-                            ? t("auth.modal.registerForm.profilePhoto.changeButton")
-                            : t("auth.modal.registerForm.profilePhoto.uploadButton")}
+                            ? t(
+                                "auth.modal.registerForm.profilePhoto.changeButton",
+                              )
+                            : t(
+                                "auth.modal.registerForm.profilePhoto.uploadButton",
+                              )}
                         </button>
                         {registerForm.profilePhotoUrl && (
                           <button
@@ -749,7 +809,9 @@ function AuthenticationExperienceModal() {
                             onClick={handleProfilePhotoClear}
                             className="rounded-xl border border-red-400/30 px-4 py-2 text-sm font-medium text-red-100 transition hover:border-red-300/50 hover:text-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
                           >
-                            {t("auth.modal.registerForm.profilePhoto.removeButton")}
+                            {t(
+                              "auth.modal.registerForm.profilePhoto.removeButton",
+                            )}
                           </button>
                         )}
                       </div>
@@ -789,7 +851,9 @@ function AuthenticationExperienceModal() {
                       name="role"
                       autoComplete="organization-title"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder={t("auth.modal.registerForm.role.placeholder")}
+                      placeholder={t(
+                        "auth.modal.registerForm.role.placeholder",
+                      )}
                       value={registerForm.role}
                       onChange={(event) =>
                         setRegisterForm((previous) => ({
@@ -806,7 +870,9 @@ function AuthenticationExperienceModal() {
                       name="squad"
                       autoComplete="organization"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder={t("auth.modal.registerForm.squad.placeholder")}
+                      placeholder={t(
+                        "auth.modal.registerForm.squad.placeholder",
+                      )}
                       value={registerForm.squad}
                       onChange={(event) =>
                         setRegisterForm((previous) => ({
@@ -823,7 +889,9 @@ function AuthenticationExperienceModal() {
                       name="email"
                       autoComplete="email"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder={t("auth.modal.registerForm.email.placeholder")}
+                      placeholder={t(
+                        "auth.modal.registerForm.email.placeholder",
+                      )}
                       required
                       value={registerForm.email}
                       onChange={(event) =>
@@ -841,7 +909,9 @@ function AuthenticationExperienceModal() {
                       name="emergencyContact"
                       autoComplete="tel"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder={t("auth.modal.registerForm.emergencyContact.placeholder")}
+                      placeholder={t(
+                        "auth.modal.registerForm.emergencyContact.placeholder",
+                      )}
                       value={registerForm.emergencyContact}
                       onChange={(event) =>
                         setRegisterForm((previous) => ({
@@ -858,7 +928,9 @@ function AuthenticationExperienceModal() {
                       name="membershipId"
                       autoComplete="off"
                       className="mt-2 w-full rounded-2xl border border-red-400/30 bg-red-950/35 px-4 py-3 text-base text-red-50 placeholder:text-red-200/70 focus:border-red-400/50 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                      placeholder={t("auth.modal.registerForm.membershipId.placeholder")}
+                      placeholder={t(
+                        "auth.modal.registerForm.membershipId.placeholder",
+                      )}
                       required
                       value={registerForm.membershipId}
                       onChange={(event) =>
@@ -949,7 +1021,7 @@ function AuthenticationExperienceModal() {
                 {t("auth.modal.support.heading")}
               </p>
               <p className="mt-2 text-red-200/75">
-                {t("auth.modal.support.intro")} {" "}
+                {t("auth.modal.support.intro")}{" "}
                 <span className="font-medium text-red-200">{supportEmail}</span>{" "}
                 {t("auth.modal.support.outro")}
               </p>

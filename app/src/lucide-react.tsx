@@ -123,9 +123,7 @@ export const GaugeCircle = createLucideIcon(
   </>,
 );
 
-export const Circle = createLucideIcon(
-  <circle cx="12" cy="12" r="10" />,
-);
+export const Circle = createLucideIcon(<circle cx="12" cy="12" r="10" />);
 
 export const GraduationCap = createLucideIcon(
   <>
@@ -208,9 +206,7 @@ export const Bell = createLucideIcon(
   </>,
 );
 
-export const Play = createLucideIcon(
-  <polygon points="6 4 20 12 6 20 6 4" />,
-);
+export const Play = createLucideIcon(<polygon points="6 4 20 12 6 20 6 4" />);
 
 export const Sparkles = createLucideIcon(
   <>

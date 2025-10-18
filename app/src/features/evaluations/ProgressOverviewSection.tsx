@@ -84,7 +84,9 @@ function ProgressOverviewSection(): ReactElement {
               ) : null}
             </p>
             <p className="text-xs text-red-200/70">
-              <span className="font-semibold text-red-100">{metric.change}</span>{" "}
+              <span className="font-semibold text-red-100">
+                {metric.change}
+              </span>{" "}
               {metric.changeDescriptor}
             </p>
           </RedSurface>
@@ -182,7 +184,9 @@ function ProgressOverviewSection(): ReactElement {
                   tone="glass"
                   className="rounded-2xl p-4"
                 >
-                  <p className="text-sm font-semibold text-red-50">{focus.title}</p>
+                  <p className="text-sm font-semibold text-red-50">
+                    {focus.title}
+                  </p>
                   <p className="mt-1 text-sm text-red-100/80">{focus.detail}</p>
                 </RedSurface>
               ))}
@@ -201,7 +205,9 @@ function ProgressOverviewSection(): ReactElement {
                   tone="glass"
                   className="rounded-2xl p-4"
                 >
-                  <p className="text-sm font-semibold text-red-50">{alert.title}</p>
+                  <p className="text-sm font-semibold text-red-50">
+                    {alert.title}
+                  </p>
                   <p className="mt-1 text-sm text-red-100/80">{alert.detail}</p>
                 </RedSurface>
               ))}

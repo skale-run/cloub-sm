@@ -68,11 +68,15 @@ function CoachEvaluationSection(): ReactElement {
         </div>
         <span className="inline-flex items-center gap-2 rounded-3xl border border-amber-400/40 bg-amber-500/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-amber-100">
           <ChevronUp size={16} className="text-amber-200" aria-hidden />
-          {t("coachEvaluation.overallLabel")} · {evaluationSummary.overallScore.toFixed(1)} / 5
+          {t("coachEvaluation.overallLabel")} ·{" "}
+          {evaluationSummary.overallScore.toFixed(1)} / 5
         </span>
       </div>
 
-      <RedSurface tone="muted" className="space-y-6 rounded-3xl p-6 text-red-50">
+      <RedSurface
+        tone="muted"
+        className="space-y-6 rounded-3xl p-6 text-red-50"
+      >
         <header className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
@@ -92,7 +96,10 @@ function CoachEvaluationSection(): ReactElement {
         </header>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <RedSurface tone="glass" className="flex flex-col gap-1 rounded-2xl p-4">
+          <RedSurface
+            tone="glass"
+            className="flex flex-col gap-1 rounded-2xl p-4"
+          >
             <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
               {t("coachEvaluation.summary.leadCoach.label")}
             </p>
@@ -101,7 +108,10 @@ function CoachEvaluationSection(): ReactElement {
               {evaluationSummary.leadCoach}
             </div>
           </RedSurface>
-          <RedSurface tone="glass" className="flex flex-col gap-1 rounded-2xl p-4">
+          <RedSurface
+            tone="glass"
+            className="flex flex-col gap-1 rounded-2xl p-4"
+          >
             <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
               {t("coachEvaluation.summary.lastReview.label")}
             </p>
@@ -110,7 +120,10 @@ function CoachEvaluationSection(): ReactElement {
               {evaluationSummary.lastReview}
             </div>
           </RedSurface>
-          <RedSurface tone="glass" className="flex flex-col gap-1 rounded-2xl p-4">
+          <RedSurface
+            tone="glass"
+            className="flex flex-col gap-1 rounded-2xl p-4"
+          >
             <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
               {t("coachEvaluation.summary.nextTouchpoint.label")}
             </p>
@@ -119,7 +132,10 @@ function CoachEvaluationSection(): ReactElement {
               {evaluationSummary.nextReview}
             </div>
           </RedSurface>
-          <RedSurface tone="glass" className="flex flex-col gap-1 rounded-2xl p-4">
+          <RedSurface
+            tone="glass"
+            className="flex flex-col gap-1 rounded-2xl p-4"
+          >
             <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
               {t("coachEvaluation.summary.momentum.label")}
             </p>
@@ -186,14 +202,20 @@ function CoachEvaluationSection(): ReactElement {
                         {item.title}
                       </p>
                       <p className="text-xs text-red-100/70">
-                        {t("coachEvaluation.accountability.ownerPrefix", { owner: item.owner })}
+                        {t("coachEvaluation.accountability.ownerPrefix", {
+                          owner: item.owner,
+                        })}
                       </p>
                     </div>
                     <div className="text-right text-xs text-red-100/70">
                       <p className="font-semibold uppercase tracking-[0.25em] text-red-100">
                         {item.status}
                       </p>
-                      <p>{t("coachEvaluation.accountability.dueLabel", { date: item.due })}</p>
+                      <p>
+                        {t("coachEvaluation.accountability.dueLabel", {
+                          date: item.due,
+                        })}
+                      </p>
                     </div>
                   </li>
                 ))}

@@ -49,9 +49,7 @@ function CompetitionSection(): ReactElement {
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
             {t("heading")}
           </h2>
-          <p className="text-sm text-red-200/75">
-            {t("description")}
-          </p>
+          <p className="text-sm text-red-200/75">{t("description")}</p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full border border-red-400/40 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
           {t("badge")}

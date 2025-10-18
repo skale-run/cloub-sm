@@ -43,7 +43,9 @@ const languagePresentations: Record<LanguageKey, LanguagePresentation> = {
   },
 };
 
-export function getLanguagePresentation(language: string): LanguagePresentation {
+export function getLanguagePresentation(
+  language: string,
+): LanguagePresentation {
   return languagePresentations[language as LanguageKey] ?? englishPresentation;
 }
 
@@ -52,7 +54,10 @@ let initialLanguage: LanguageKey = "en";
 if (typeof window !== "undefined") {
   try {
     const storedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    if (storedLanguage && supportedLanguages.has(storedLanguage as LanguageKey)) {
+    if (
+      storedLanguage &&
+      supportedLanguages.has(storedLanguage as LanguageKey)
+    ) {
       initialLanguage = storedLanguage as LanguageKey;
     }
   } catch (error) {

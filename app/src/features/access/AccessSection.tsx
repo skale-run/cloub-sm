@@ -288,7 +288,11 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
   }, [t, fallbackT]);
 
   const eventDayChecklist = useMemo(() => {
-    return resolveFallbackArray<string>(t, fallbackT, "access.eventChecklist.items");
+    return resolveFallbackArray<string>(
+      t,
+      fallbackT,
+      "access.eventChecklist.items",
+    );
   }, [t, fallbackT]);
 
   type PermissionLevel = "full" | "manage" | "edit" | "view" | "restricted";
@@ -315,10 +319,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
         t,
         fallbackT,
         "access.permissions.legend",
-      ) as Record<
-        PermissionLevel,
-        string
-      >,
+      ) as Record<PermissionLevel, string>,
     [t, fallbackT],
   );
 
@@ -406,8 +407,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
                   ID · {savedProfile.membershipId}
                 </p>
                 <p className="text-sm text-red-200/70">
-                  {savedProfile.squad ||
-                    t("access.instructions.squadFallback")}
+                  {savedProfile.squad || t("access.instructions.squadFallback")}
                 </p>
               </div>
             </RedSurface>
@@ -429,7 +429,9 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
                 <p className="text-sm font-semibold text-red-50">
                   {t("access.readiness.heading")}
                 </p>
-                <p className="text-xs text-red-200/70">{accessReadiness.nextStep}</p>
+                <p className="text-xs text-red-200/70">
+                  {accessReadiness.nextStep}
+                </p>
               </div>
               <span className="inline-flex items-center rounded-full border border-red-400/40 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-100">
                 {t("access.readiness.percentageBadge", {
@@ -445,7 +447,10 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
             </div>
             <ul className="space-y-2 text-xs text-red-100/80">
               {accessReadiness.checks.map((check) => (
-                <li key={check.id} className="flex items-center justify-between gap-3">
+                <li
+                  key={check.id}
+                  className="flex items-center justify-between gap-3"
+                >
                   <span>{check.label}</span>
                   <span
                     className={cn(
@@ -485,7 +490,9 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
                     size={22}
                     className={cn(
                       "rounded-2xl border border-red-400/50 bg-red-900/50 p-1.5 text-red-100 transition",
-                      action.disabled ? "" : "group-hover:border-red-300/70 group-hover:text-red-50",
+                      action.disabled
+                        ? ""
+                        : "group-hover:border-red-300/70 group-hover:text-red-50",
                     )}
                   />
                   <div className="flex flex-col gap-1">
@@ -630,7 +637,9 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
             <div className="space-y-3 md:hidden">
               {permissionMatrix.map((row) => (
                 <RedSurface tone="glass" className="space-y-3 p-4" key={row.id}>
-                  <p className="text-sm font-semibold text-red-50">{row.role}</p>
+                  <p className="text-sm font-semibold text-red-50">
+                    {row.role}
+                  </p>
                   <div className="space-y-2">
                     {capabilityOrder.map((capability) => {
                       const level = row.permissions[capability] ?? "restricted";
@@ -653,7 +662,8 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
                               badgeStyles,
                             )}
                           >
-                            {permissionLegend[level] ?? permissionLegend.restricted}
+                            {permissionLegend[level] ??
+                              permissionLegend.restricted}
                           </span>
                         </div>
                       );
@@ -671,7 +681,10 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
                       {t("access.permissions.roleColumn")}
                     </th>
                     {capabilityOrder.map((capability) => (
-                      <th key={capability} className="px-4 py-3 font-semibold text-red-200/70">
+                      <th
+                        key={capability}
+                        className="px-4 py-3 font-semibold text-red-200/70"
+                      >
                         <div className="flex items-center gap-2">
                           <ClipboardList size={14} />
                           <span>{permissionLabels[capability]}</span>
@@ -683,11 +696,15 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
                 <tbody className="divide-y divide-red-400/10">
                   {permissionMatrix.map((row) => (
                     <tr key={row.id}>
-                      <th scope="row" className="px-4 py-3 text-sm font-semibold text-red-50">
+                      <th
+                        scope="row"
+                        className="px-4 py-3 text-sm font-semibold text-red-50"
+                      >
                         {row.role}
                       </th>
                       {capabilityOrder.map((capability) => {
-                        const level = row.permissions[capability] ?? "restricted";
+                        const level =
+                          row.permissions[capability] ?? "restricted";
                         const badgeStyles =
                           permissionLevelStyles[level] ??
                           "border-red-300/30 bg-red-950/60 text-red-200/80";
@@ -700,7 +717,8 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
                                 badgeStyles,
                               )}
                             >
-                              {permissionLegend[level] ?? permissionLegend.restricted}
+                              {permissionLegend[level] ??
+                                permissionLegend.restricted}
                             </span>
                           </td>
                         );
@@ -754,9 +772,7 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
           contentWrapperClassName="relative z-10 w-full max-w-2xl"
           initialFocusRef={qrCloseButtonRef}
         >
-          <div
-            className="relative flex w-full flex-col items-center gap-4 rounded-[28px] border border-red-400/30 bg-gradient-to-br from-red-950/95 via-red-950/85 to-red-900/70 p-10 text-center text-red-50 shadow-[0_45px_140px_rgba(127,29,29,0.55)]"
-          >
+          <div className="relative flex w-full flex-col items-center gap-4 rounded-[28px] border border-red-400/30 bg-gradient-to-br from-red-950/95 via-red-950/85 to-red-900/70 p-10 text-center text-red-50 shadow-[0_45px_140px_rgba(127,29,29,0.55)]">
             <button
               ref={qrCloseButtonRef}
               type="button"
@@ -766,10 +782,16 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
             >
               <X className="h-5 w-5" aria-hidden />
             </button>
-            <h3 id={qrDialogTitleId} className="text-2xl font-semibold text-red-50 sm:text-3xl">
+            <h3
+              id={qrDialogTitleId}
+              className="text-2xl font-semibold text-red-50 sm:text-3xl"
+            >
               {t("access.heading.title")}
             </h3>
-            <p id={qrDialogDescriptionId} className="max-w-xl text-sm text-red-100/80">
+            <p
+              id={qrDialogDescriptionId}
+              className="max-w-xl text-sm text-red-100/80"
+            >
               {t("access.instructions.showCode")}
             </p>
             <div className="rounded-[24px] border border-red-400/40 bg-red-950/50 p-6">
@@ -780,9 +802,13 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
               />
             </div>
             <div className="space-y-1 text-sm text-red-100/80">
-              <p className="text-lg font-semibold text-red-50">{savedProfile.fullName}</p>
+              <p className="text-lg font-semibold text-red-50">
+                {savedProfile.fullName}
+              </p>
               <p>ID · {savedProfile.membershipId}</p>
-              <p>{savedProfile.squad || t("access.instructions.squadFallback")}</p>
+              <p>
+                {savedProfile.squad || t("access.instructions.squadFallback")}
+              </p>
             </div>
           </div>
         </Modal>

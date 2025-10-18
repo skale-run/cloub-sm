@@ -60,6 +60,10 @@ export const fr = {
           open: "Ouvrir la navigation",
           close: "Fermer la navigation",
         },
+        avatarNavigation: {
+          profile: "Accéder à votre profil",
+          access: "Ouvrir la gestion d'accès",
+        },
       },
     },
     auth: {
@@ -78,13 +82,13 @@ export const fr = {
           login: {
             heading: "Connectez-vous à votre QG du dojang",
             description:
-              "Retrouvez votre centre de commande taekwondo et alignez-vous sur l'objectif du jour.",
+              "Revenez à votre centre de commande taekwondo et alignez-vous sur l'objectif du jour.",
             cta: "Se connecter",
           },
           register: {
             heading: "Activez votre passeport taekwondo",
             description:
-              "Créez vos identifiants pour débloquer des séances de poomsae personnalisées et le soutien de l'équipe.",
+              "Créez votre compte pour débloquer des séances de poomsae personnalisées et le soutien de l'équipe.",
             cta: "Créer un compte",
           },
         },
@@ -142,7 +146,7 @@ export const fr = {
             "En créant un compte vous acceptez la charte du dojang et consentez au suivi des performances.",
         },
         highlights: {
-          heading: "Pourquoi les athlètes adorent",
+          heading: "Pourquoi les athlètes adorent le hub",
           items: {
             eliteTraining: {
               title: "Plans d'entraînement du dojo",
@@ -217,7 +221,7 @@ export const fr = {
             {
               to: "/billing",
               label: "Vue d'ensemble de la facturation",
-              description: "Suivez factures et paiements",
+              description: "Suivez les factures et les paiements",
               status: "soon",
             },
             {
@@ -229,7 +233,7 @@ export const fr = {
               to: "/guardian-portal",
               label: "Portail parents",
               description:
-                "Vue familiale des présences, paiements et événements",
+                "Vue familiale sur la présence, la facturation et les événements",
             },
           ],
         },
@@ -683,50 +687,51 @@ export const fr = {
       },
     },
     landing: {
-      badge: "Cloud-based Taekwondo management",
-      heroTitle: "Unify your dojang and empower every martial artist",
+      badge: "Plateforme moderne de gestion taekwondo",
+      heroTitle: "Pilotez votre dojang avec clarté et confiance",
       heroDescription:
-        "Cloub equips masters, practitioners, and coordinators with a unified hub for class scheduling, belt assessments, and tournament preparation. Strengthen your program with insights that keep every ring team aligned.",
+        "Cloub réunit maîtres, pratiquants et coordinateurs dans un même espace pour planifier les cours, suivre les passages de ceinture et préparer les tournois. Transformez les données d'assiduité, de finances et de performance en actions pour chaque équipe.",
       ctas: {
-        primary: "Sign up",
-        secondary: "Log in",
-        tertiary: "Contact",
+        primary: "Commencer l'essai gratuit",
+        secondary: "Se connecter",
+        tertiary: "Nous contacter",
       },
       features: [
         {
-          title: "Integrated class planning",
+          title: "Planification de cours intégrée",
           description:
-            "Organize poomsae, sparring, and conditioning blocks with automated reminders that keep every belt group informed.",
+            "Créez des parcours de poomsae, sparring et préparation physique avec des rappels automatiques qui maintiennent chaque groupe de ceinture aligné.",
         },
         {
-          title: "Performance intelligence",
+          title: "Intelligence de performance",
           description:
-            "Visualize practitioner progress with dashboards that combine attendance, technique scores, and evaluation insights.",
+            "Visualisez la progression grâce à des tableaux de bord mêlant tendances d'assiduité, scores techniques et notes d'évaluation.",
         },
         {
-          title: "Secure access for all",
+          title: "Accès sécurisé pour chaque rôle",
           description:
-            "Role-based permissions give masters, athletes, and guardians the right visibility while protecting sensitive data.",
+            "Les permissions par rôle offrent aux maîtres, athlètes et tuteurs la bonne visibilité tout en protégeant les données sensibles.",
         },
       ],
       commandCenter: {
-        heading: "Role-aware control center",
+        heading: "Centre de commande pour chaque rôle",
         subheading:
-          "Switch between personas to see how Cloub personalizes insight, tasks, and communication guardrails.",
-        roleSwitcherLabel: "Preview dashboards",
+          "Apercevez comment chaque persona profite des insights guidés, des tâches et des garde-fous de communication de Cloub.",
+        roleSwitcherLabel: "Basculer de tableau de bord",
         notifications: {
-          title: "Notification center",
-          empty: "You're all caught up across every ring team.",
-          viewAll: "active alerts",
+          title: "Centre de notifications",
+          empty: "Vous êtes à jour sur toutes les équipes.",
+          viewAll: "voir les alertes",
         },
         statusLabels: {
-          completed: "Completed",
-          upcoming: "Upcoming",
-          overdue: "Overdue",
+          completed: "Terminé",
+          upcoming: "À venir",
+          overdue: "En retard",
         },
-        focusTitle: "Immediate focus",
-        focusSubtitle: "Auto-prioritised from attendance + finance data",
-        shortcutsTitle: "Quick shortcuts",
+        focusTitle: "Priorité immédiate",
+        focusSubtitle:
+          "Priorisé automatiquement selon l'assiduité et la facturation",
+        shortcutsTitle: "Actions rapides",
         roleOptions: [
           {
             id: "master",
@@ -1867,7 +1872,7 @@ export const fr = {
           label: "Trusted by dojangs",
           value: "650+",
           description:
-            "martial arts programs coordinate their seasons with Cloub to elevate training quality and reduce admin overhead.",
+            "Les programmes de taekwondo coordonnent leurs saisons avec Cloub pour renforcer la qualité de l'entraînement et alléger la charge administrative.",
         },
       },
       contact: {
@@ -2580,117 +2585,118 @@ export const fr = {
         },
       },
       guardianPortal: {
-        badge: "Guardian view",
-        title: "Stay aligned with your athlete",
+        badge: "Vue du tuteur",
+        title: "Restez aligné avec votre athlète",
         description:
-          "Monitor attendance momentum, keep billing on track, and prepare for upcoming commitments in one streamlined feed.",
+          "Suivez l'élan de présence, gardez la facturation à jour et préparez-vous aux prochains engagements dans un flux simplifié.",
         summaryCards: {
           attendance: {
-            label: "Attendance this month",
+            label: "Présence ce mois-ci",
             value: "12 / 14 sessions",
-            helper: "On track for the dojang attendance goal",
+            helper: "En bonne voie pour l'objectif de présence du dojang",
           },
           billing: {
-            label: "Outstanding balance",
+            label: "Solde à régler",
             value: "MAD 180",
-            helper: "Spring membership dues · due Apr 25",
+            helper: "Cotisation de printemps · échéance 25 avr.",
           },
           events: {
-            label: "Next commitments",
-            value: "2 upcoming events",
-            helper: "Regional invitational & guardian forum",
+            label: "Prochains engagements",
+            value: "2 événements à venir",
+            helper: "Invitational régional et forum des tuteurs",
           },
         },
         feed: {
-          heading: "Family activity feed",
+          heading: "Flux d'activité familial",
           helper:
-            "Attendance patterns, billing status, and upcoming events in one stream.",
+            "Tendances de présence, statut de facturation et prochains événements dans un seul flux.",
           items: {
             attendance: {
-              badge: "Attendance update",
-              title: "Five-session streak intact",
+              badge: "Mise à jour de présence",
+              title: "Série de cinq séances maintenue",
               description:
-                "Jordan has checked in for every dojang session this week. Energy notes remain strong.",
-              timestamp: "Updated 2 hours ago",
-              patternLabel: "Last 7 sessions",
+                "Jordan s'est enregistré à chaque séance de dojang cette semaine. Les notes d'énergie restent solides.",
+              timestamp: "Mis à jour il y a 2 heures",
+              patternLabel: "7 dernières séances",
               days: {
-                mon: "Mon",
-                tue: "Tue",
-                wed: "Wed",
-                thu: "Thu",
-                fri: "Fri",
-                sat: "Sat",
-                sun: "Sun",
+                mon: "Lun",
+                tue: "Mar",
+                wed: "Mer",
+                thu: "Jeu",
+                fri: "Ven",
+                sat: "Sam",
+                sun: "Dim",
               },
               callout:
-                "Keep Thursday’s active recovery window to protect the streak.",
+                "Conservez la plage de récupération active du jeudi pour préserver la série.",
             },
             billing: {
-              badge: "Billing status",
-              title: "Auto-pay set for Apr 25",
+              badge: "Statut de facturation",
+              title: "Prélèvement automatique prévu le 25 avr.",
               description:
-                "Remaining spring membership dues will draft automatically. No further action needed.",
-              timestamp: "Synced this morning",
-              balanceLabel: "Balance due",
-              balanceValue: "MAD 180 outstanding",
-              balanceHelper: "Invoice INV-2045 · due Apr 25",
-              autopayLabel: "Auto-pay",
-              autopayValue: "Runs Apr 25 at 09:00",
+                "Le solde de la cotisation de printemps sera prélevé automatiquement. Aucune action supplémentaire requise.",
+              timestamp: "Synchronisé ce matin",
+              balanceLabel: "Solde dû",
+              balanceValue: "MAD 180 restants",
+              balanceHelper: "Facture INV-2045 · échéance 25 avr.",
+              autopayLabel: "Prélèvement auto.",
+              autopayValue: "Traitement le 25 avr. à 09:00",
               autopayHelper: "Visa •••• 4298",
             },
             events: {
-              badge: "Upcoming events",
-              title: "Two commitments next week",
+              badge: "Événements à venir",
+              title: "Deux engagements la semaine prochaine",
               description:
-                "Regional sparring invitational and guardian forum are on the calendar.",
-              timestamp: "Updated just now",
+                "L'invitational régional de sparring et le forum des tuteurs sont au calendrier.",
+              timestamp: "Mis à jour à l'instant",
               list: {
                 regional: {
-                  title: "Regional sparring invitational",
-                  date: "Apr 21 · Arrival 08:00",
-                  helper: "Confirm travel check-in by Fri, Apr 18.",
+                  title: "Invitational régional de sparring",
+                  date: "21 avr. · Arrivée 08:00",
+                  helper: "Confirmez l'arrivée du voyage avant ven. 18 avr.",
                 },
                 parentForum: {
-                  title: "Guardian coordination forum",
-                  date: "Apr 24 · 19:00",
-                  helper: "In-person at the high performance studio.",
+                  title: "Forum de coordination des tuteurs",
+                  date: "24 avr. · 19:00",
+                  helper: "En présentiel au studio haute performance.",
                 },
               },
             },
           },
         },
         messaging: {
-          heading: "Message coaching staff",
-          helper: "Secure channel with the lead masters for quick updates.",
+          heading: "Message à l'équipe d'entraîneurs",
+          helper:
+            "Canal sécurisé avec les maîtres principaux pour des mises à jour rapides.",
           messages: {
             masterLewis: {
               author: "Master Amara Lewis",
-              role: "Lead coach",
-              body: "Jordan kept excellent pop through the plyometric ladder today. We’re seeing great focus.",
-              timestamp: "Sent 4:10 PM",
+              role: "Entraîneuse principale",
+              body: "Jordan a gardé une excellente explosivité sur l'échelle pliométrique aujourd'hui. Nous constatons une grande concentration.",
+              timestamp: "Envoyé à 16 h 10",
             },
             guardian: {
-              author: "You",
-              role: "Guardian",
-              body: "Thank you! We’ll reinforce hydration tonight before tomorrow’s morning block.",
-              timestamp: "Sent 4:18 PM",
+              author: "Vous",
+              role: "Tuteur",
+              body: "Merci ! Nous renforcerons l'hydratation ce soir avant le créneau du matin.",
+              timestamp: "Envoyé à 16 h 18",
             },
             masterLewisFollowUp: {
               author: "Master Amara Lewis",
-              role: "Lead coach",
-              body: "Perfect. We’ll send a short clip from the sparring preview once it’s uploaded.",
-              timestamp: "Sent 4:26 PM",
+              role: "Entraîneuse principale",
+              body: "Parfait. Nous enverrons un court extrait de l'aperçu de sparring une fois mis en ligne.",
+              timestamp: "Envoyé à 16 h 26",
             },
           },
           quickReplies: {
-            transport: "Share pickup update",
-            billing: "Question about invoice",
-            checkIn: "Confirm arrival time",
+            transport: "Partager une mise à jour de ramassage",
+            billing: "Question sur la facture",
+            checkIn: "Confirmer l'heure d'arrivée",
           },
           composer: {
-            label: "Write a message",
-            placeholder: "Type a quick update or question…",
-            cta: "Send message",
+            label: "Écrire un message",
+            placeholder: "Saisissez une mise à jour ou une question rapide…",
+            cta: "Envoyer le message",
           },
         },
       },

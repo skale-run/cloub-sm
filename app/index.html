@@ -1,69 +1,71 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Tajawal:wght@400;500;600;700&display=swap"
-    rel="stylesheet" />
-  <meta name="theme-color" content="#16000b" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: [
-              "Tajawal",
-              "Plus Jakarta Sans",
-              "Inter",
-              "system-ui",
-              "sans-serif",
-            ],
-            display: [
-              "Space Grotesk",
-              "Tajawal",
-              "Plus Jakarta Sans",
-              "system-ui",
-              "sans-serif",
-            ],
-          },
-          colors: {
-            ruby: {
-              50: "#fff1f5",
-              100: "#ffdce7",
-              200: "#ffb6cd",
-              300: "#ff86ad",
-              400: "#f35589",
-              500: "#de2f6f",
-              600: "#bf1356",
-              700: "#940c41",
-              800: "#68082c",
-              900: "#360415",
-              950: "#16000b",
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Tajawal:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="theme-color" content="#16000b" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: [
+                "Tajawal",
+                "Plus Jakarta Sans",
+                "Inter",
+                "system-ui",
+                "sans-serif",
+              ],
+              display: [
+                "Space Grotesk",
+                "Tajawal",
+                "Plus Jakarta Sans",
+                "system-ui",
+                "sans-serif",
+              ],
+            },
+            colors: {
+              ruby: {
+                50: "#fff1f5",
+                100: "#ffdce7",
+                200: "#ffb6cd",
+                300: "#ff86ad",
+                400: "#f35589",
+                500: "#de2f6f",
+                600: "#bf1356",
+                700: "#940c41",
+                800: "#68082c",
+                900: "#360415",
+                950: "#16000b",
+              },
+            },
+            boxShadow: {
+              glow: "0 38px 148px -34px rgba(193, 23, 84, 0.88)",
+            },
+            backgroundImage: {
+              "hero-glow":
+                "radial-gradient(circle at 20% 16%, rgba(222, 47, 111, 0.42), transparent 56%), radial-gradient(circle at 78% -8%, rgba(191, 19, 84, 0.32), transparent 64%)",
             },
           },
-          boxShadow: {
-            glow: "0 38px 148px -34px rgba(193, 23, 84, 0.88)",
-          },
-          backgroundImage: {
-            "hero-glow":
-              "radial-gradient(circle at 20% 16%, rgba(222, 47, 111, 0.42), transparent 56%), radial-gradient(circle at 78% -8%, rgba(191, 19, 84, 0.32), transparent 64%)",
-          },
         },
-      },
-    };
-  </script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1" />
-  <title>Wydad Taekwondo Dashboard</title>
-</head>
+      };
+    </script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1"
+    />
+    <title>Wydad Taekwondo Dashboard</title>
+  </head>
 
-<body class="bg-ruby-950 text-ruby-50">
-  <div id="root" class="app-root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  <body class="bg-ruby-950 text-ruby-50">
+    <div id="root" class="app-root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

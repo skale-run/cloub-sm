@@ -2,6 +2,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type FormEvent,
@@ -74,7 +75,10 @@ const pageTitleKeyMap = {
 } satisfies Record<RoutePath, string>;
 
 const dashboardSectionLoaders: Partial<
-  Record<Exclude<RoutePath, typeof landingPath>, { preload?: () => Promise<unknown> }>
+  Record<
+    Exclude<RoutePath, typeof landingPath>,
+    { preload?: () => Promise<unknown> }
+  >
 > = {
   "/calendar": CalendarSection,
   "/academic-record": AcademicRecordSection,
@@ -172,7 +176,8 @@ function App() {
     };
   }, []);
 
-  const pageTitleKey = pageTitleKeyMap[currentPath] ?? pageTitleKeyMap[defaultPath];
+  const pageTitleKey =
+    pageTitleKeyMap[currentPath] ?? pageTitleKeyMap[defaultPath];
   const pageTitle = t(`app.pageTitles.${pageTitleKey}`);
 
   useEffect(() => {
@@ -196,16 +201,27 @@ function App() {
     }
   }, []);
 
-  const handleSidebarNavigate = useCallback(() => {
-    setIsSidebarOpen(false);
-  }, []);
+  const hasCompletedProfile = useMemo(() => {
+    if (!savedProfile) {
+      return false;
+    }
+
+    const trimmedProfile = trimProfile(savedProfile);
+    return Boolean(trimmedProfile.fullName && trimmedProfile.membershipId);
+  }, [savedProfile]);
+
+  const handleAvatarClick = useCallback(() => {
+    const destination: RoutePath = hasCompletedProfile ? "/access" : "/profile";
+    handleNavigateTo(destination);
+  }, [handleNavigateTo, hasCompletedProfile]);
 
   const prefetchSection = useCallback((path: RoutePath) => {
     if (path === landingPath || prefetchedPathsRef.current.has(path)) {
       return;
     }
 
-    const loader = dashboardSectionLoaders[path as Exclude<RoutePath, typeof landingPath>];
+    const loader =
+      dashboardSectionLoaders[path as Exclude<RoutePath, typeof landingPath>];
     loader?.preload?.();
     prefetchedPathsRef.current.add(path);
   }, []);
@@ -284,7 +300,12 @@ function App() {
 
     const identifier = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     setAchievements((previous) => [
-      { id: identifier, title: trimmed, category: newAchievement.category, verified: false },
+      {
+        id: identifier,
+        title: trimmed,
+        category: newAchievement.category,
+        verified: false,
+      },
       ...previous,
     ]);
     setNewAchievement((previous) => ({ ...previous, title: "" }));
@@ -339,7 +360,34 @@ function App() {
                 profilePhotoUrl: trimmedProfile.profileImage || null,
               }),
             },
-          );
+            body: JSON.stringify({
+              fullName: trimmedProfile.fullName,
+              email: trimmedProfile.email,
+              role: trimmedProfile.role,
+              squad: trimmedProfile.squad,
+              emergencyContact: trimmedProfile.emergencyContact,
+              membershipId: trimmedProfile.membershipId,
+              profilePhotoUrl: trimmedProfile.profileImage || null,
+            }),
+          });
+
+          const payload = (await response.json().catch(() => null)) as {
+            member?: Member;
+            error?: string;
+          } | null;
+
+          if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+              clearMember();
+              setStatusMessage(t("app.statusMessages.saveError"));
+              return;
+            }
+
+            setStatusMessage(
+              payload?.error ?? t("app.statusMessages.saveError"),
+            );
+            return;
+          }
 
           if (!payload?.member) {
             setStatusMessage(t("app.statusMessages.saveError"));
@@ -444,7 +492,6 @@ function App() {
       <Sidebar
         open={isSidebarOpen}
         onToggleSidebar={toggleSidebar}
-        onNavigate={handleSidebarNavigate}
         onNavigateTo={handleNavigateTo}
         onPrefetchSection={prefetchSection}
         currentPath={currentPath}
@@ -466,6 +513,8 @@ function App() {
           onToggleSidebar={toggleSidebar}
           pageTitle={pageTitle}
           userFullName={connectedUserName}
+          hasCompletedProfile={hasCompletedProfile}
+          onAvatarClick={handleAvatarClick}
         />
         <main className="relative flex-1 overflow-y-auto px-4 pb-16 pt-6 sm:px-6 lg:px-10">
           <div
