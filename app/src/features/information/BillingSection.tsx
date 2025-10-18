@@ -13,10 +13,7 @@ type Invoice = {
     | "springMembershipDues"
     | "strengthLabAccess"
     | "travelContribution";
-  dueDateKey:
-    | "apr252025"
-    | "mar182025"
-    | "feb022025";
+  dueDateKey: "apr252025" | "mar182025" | "feb022025";
   amount: number;
   status: InvoiceStatus;
 };
@@ -70,7 +67,10 @@ const summaryCards: SummaryCardConfig[] = [
   },
 ];
 
-type UpcomingChargeKey = "physiotherapyBlock" | "facilityLevy" | "summerTravelFund";
+type UpcomingChargeKey =
+  | "physiotherapyBlock"
+  | "facilityLevy"
+  | "summerTravelFund";
 
 const upcomingCharges: Array<{
   id: string;
@@ -121,9 +121,8 @@ const paymentMethods: Array<{
 
 function BillingSection(): ReactElement {
   const { t, i18n } = useTranslation();
-  const [statusFilter, setStatusFilter] = useState<(typeof filters)[number]>(
-    "all",
-  );
+  const [statusFilter, setStatusFilter] =
+    useState<(typeof filters)[number]>("all");
 
   const locale = i18n.language.startsWith("ar") ? "ar-EG" : "en-US";
 
@@ -277,7 +276,9 @@ function BillingSection(): ReactElement {
             <span className="text-xs uppercase tracking-[0.32em] text-red-200/70">
               {card.label}
             </span>
-            <span className="text-2xl font-semibold text-red-50">{card.value}</span>
+            <span className="text-2xl font-semibold text-red-50">
+              {card.value}
+            </span>
             <span className="text-sm text-red-100/80">{card.helper}</span>
           </div>
         ))}
@@ -396,7 +397,9 @@ function BillingSection(): ReactElement {
                       <td className="px-4 py-3 font-semibold text-red-50">
                         {invoice.label}
                       </td>
-                      <td className="px-4 py-3 text-red-100/80">{invoice.dueDate}</td>
+                      <td className="px-4 py-3 text-red-100/80">
+                        {invoice.dueDate}
+                      </td>
                       <td className="px-4 py-3 font-medium text-red-100">
                         {invoice.amount}
                       </td>
@@ -453,7 +456,9 @@ function BillingSection(): ReactElement {
                     <CreditCard size={18} />
                   </div>
                   <div className="flex-1 space-y-1">
-                    <p className="text-sm font-semibold text-red-50">{method.label}</p>
+                    <p className="text-sm font-semibold text-red-50">
+                      {method.label}
+                    </p>
                     <p className="text-sm text-red-100/80">{method.detail}</p>
                     {method.expires ? (
                       <p className="text-xs uppercase tracking-[0.28em] text-red-200/70">
@@ -487,7 +492,9 @@ function BillingSection(): ReactElement {
                   className="flex items-center justify-between gap-3 rounded-2xl border border-red-500/20 bg-red-950/40 px-4 py-3"
                 >
                   <div>
-                    <p className="text-sm font-semibold text-red-50">{charge.label}</p>
+                    <p className="text-sm font-semibold text-red-50">
+                      {charge.label}
+                    </p>
                     <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
                       {charge.date}
                     </p>

@@ -77,9 +77,8 @@ function Modal({
       return;
     }
 
-    const previouslyFocusedElement = document.activeElement as
-      | HTMLElement
-      | null;
+    const previouslyFocusedElement =
+      document.activeElement as HTMLElement | null;
 
     if (initialFocusRef?.current) {
       initialFocusRef.current.focus();
@@ -126,10 +125,7 @@ function Modal({
         onClick={closeOnOverlayClick ? onClose : undefined}
       />
       <div
-        className={cn(
-          "relative z-10 w-full max-w-lg",
-          contentWrapperClassName,
-        )}
+        className={cn("relative z-10 w-full max-w-lg", contentWrapperClassName)}
       >
         {cloneElement(child, {
           role,

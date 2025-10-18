@@ -75,74 +75,75 @@ function GuardianPortalSection() {
   );
 
   const feedItems = useMemo<readonly FeedItem[]>(
-    () =>
-      [
-        {
-          key: "attendance",
-          badge: t("guardianPortal.feed.items.attendance.badge"),
-          title: t("guardianPortal.feed.items.attendance.title"),
-          description: t("guardianPortal.feed.items.attendance.description"),
-          timestamp: t("guardianPortal.feed.items.attendance.timestamp"),
-          Icon: ClipboardCheck,
-        },
-        {
-          key: "billing",
-          badge: t("guardianPortal.feed.items.billing.badge"),
-          title: t("guardianPortal.feed.items.billing.title"),
-          description: t("guardianPortal.feed.items.billing.description"),
-          timestamp: t("guardianPortal.feed.items.billing.timestamp"),
-          Icon: CreditCard,
-        },
-        {
-          key: "events",
-          badge: t("guardianPortal.feed.items.events.badge"),
-          title: t("guardianPortal.feed.items.events.title"),
-          description: t("guardianPortal.feed.items.events.description"),
-          timestamp: t("guardianPortal.feed.items.events.timestamp"),
-          Icon: CalendarDays,
-        },
-      ],
+    () => [
+      {
+        key: "attendance",
+        badge: t("guardianPortal.feed.items.attendance.badge"),
+        title: t("guardianPortal.feed.items.attendance.title"),
+        description: t("guardianPortal.feed.items.attendance.description"),
+        timestamp: t("guardianPortal.feed.items.attendance.timestamp"),
+        Icon: ClipboardCheck,
+      },
+      {
+        key: "billing",
+        badge: t("guardianPortal.feed.items.billing.badge"),
+        title: t("guardianPortal.feed.items.billing.title"),
+        description: t("guardianPortal.feed.items.billing.description"),
+        timestamp: t("guardianPortal.feed.items.billing.timestamp"),
+        Icon: CreditCard,
+      },
+      {
+        key: "events",
+        badge: t("guardianPortal.feed.items.events.badge"),
+        title: t("guardianPortal.feed.items.events.title"),
+        description: t("guardianPortal.feed.items.events.description"),
+        timestamp: t("guardianPortal.feed.items.events.timestamp"),
+        Icon: CalendarDays,
+      },
+    ],
     [t],
   );
 
   const messages = useMemo<readonly Message[]>(
-    () =>
-      [
-        {
-          id: "coach-1",
-          author: t("guardianPortal.messaging.messages.masterLewis.author"),
-          role: t("guardianPortal.messaging.messages.masterLewis.role"),
-          body: t("guardianPortal.messaging.messages.masterLewis.body"),
-          timestamp: t("guardianPortal.messaging.messages.masterLewis.timestamp"),
-          tone: "coach",
-        },
-        {
-          id: "guardian-1",
-          author: t("guardianPortal.messaging.messages.guardian.author"),
-          role: t("guardianPortal.messaging.messages.guardian.role"),
-          body: t("guardianPortal.messaging.messages.guardian.body"),
-          timestamp: t("guardianPortal.messaging.messages.guardian.timestamp"),
-          tone: "guardian",
-        },
-        {
-          id: "coach-2",
-          author: t("guardianPortal.messaging.messages.masterLewisFollowUp.author"),
-          role: t("guardianPortal.messaging.messages.masterLewisFollowUp.role"),
-          body: t("guardianPortal.messaging.messages.masterLewisFollowUp.body"),
-          timestamp: t("guardianPortal.messaging.messages.masterLewisFollowUp.timestamp"),
-          tone: "coach",
-        },
-      ],
+    () => [
+      {
+        id: "coach-1",
+        author: t("guardianPortal.messaging.messages.masterLewis.author"),
+        role: t("guardianPortal.messaging.messages.masterLewis.role"),
+        body: t("guardianPortal.messaging.messages.masterLewis.body"),
+        timestamp: t("guardianPortal.messaging.messages.masterLewis.timestamp"),
+        tone: "coach",
+      },
+      {
+        id: "guardian-1",
+        author: t("guardianPortal.messaging.messages.guardian.author"),
+        role: t("guardianPortal.messaging.messages.guardian.role"),
+        body: t("guardianPortal.messaging.messages.guardian.body"),
+        timestamp: t("guardianPortal.messaging.messages.guardian.timestamp"),
+        tone: "guardian",
+      },
+      {
+        id: "coach-2",
+        author: t(
+          "guardianPortal.messaging.messages.masterLewisFollowUp.author",
+        ),
+        role: t("guardianPortal.messaging.messages.masterLewisFollowUp.role"),
+        body: t("guardianPortal.messaging.messages.masterLewisFollowUp.body"),
+        timestamp: t(
+          "guardianPortal.messaging.messages.masterLewisFollowUp.timestamp",
+        ),
+        tone: "coach",
+      },
+    ],
     [t],
   );
 
   const quickReplies = useMemo(
-    () =>
-      [
-        t("guardianPortal.messaging.quickReplies.transport"),
-        t("guardianPortal.messaging.quickReplies.billing"),
-        t("guardianPortal.messaging.quickReplies.checkIn"),
-      ],
+    () => [
+      t("guardianPortal.messaging.quickReplies.transport"),
+      t("guardianPortal.messaging.quickReplies.billing"),
+      t("guardianPortal.messaging.quickReplies.checkIn"),
+    ],
     [t],
   );
 
@@ -212,7 +213,9 @@ function GuardianPortalSection() {
                         <p className="text-xs uppercase tracking-[0.25em] text-red-200/70">
                           {item.badge}
                         </p>
-                        <p className="text-xs text-red-200/60">{item.timestamp}</p>
+                        <p className="text-xs text-red-200/60">
+                          {item.timestamp}
+                        </p>
                       </div>
                       <div className="space-y-2">
                         <h3 className="text-base font-semibold text-red-50">
@@ -226,7 +229,9 @@ function GuardianPortalSection() {
                       {item.key === "attendance" ? (
                         <div className="space-y-3">
                           <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-                            {t("guardianPortal.feed.items.attendance.patternLabel")}
+                            {t(
+                              "guardianPortal.feed.items.attendance.patternLabel",
+                            )}
                           </p>
                           <div className="grid grid-cols-4 gap-2 sm:grid-cols-7 sm:gap-3">
                             {attendancePattern.map((day) => (
@@ -241,7 +246,9 @@ function GuardianPortalSection() {
                                   />
                                 </div>
                                 <p className="text-[11px] uppercase tracking-[0.28em] text-red-200/70">
-                                  {t(`guardianPortal.feed.items.attendance.days.${day.dayKey}`)}
+                                  {t(
+                                    `guardianPortal.feed.items.attendance.days.${day.dayKey}`,
+                                  )}
                                 </p>
                               </div>
                             ))}
@@ -256,24 +263,36 @@ function GuardianPortalSection() {
                         <div className="grid gap-3 rounded-2xl border border-red-500/20 bg-red-950/40 p-4 text-sm text-red-100/85 sm:grid-cols-2">
                           <div className="space-y-1">
                             <p className="text-xs uppercase tracking-[0.28em] text-red-200/70">
-                              {t("guardianPortal.feed.items.billing.balanceLabel")}
+                              {t(
+                                "guardianPortal.feed.items.billing.balanceLabel",
+                              )}
                             </p>
                             <p className="text-base font-semibold text-red-50">
-                              {t("guardianPortal.feed.items.billing.balanceValue")}
+                              {t(
+                                "guardianPortal.feed.items.billing.balanceValue",
+                              )}
                             </p>
                             <p className="text-xs text-red-200/70">
-                              {t("guardianPortal.feed.items.billing.balanceHelper")}
+                              {t(
+                                "guardianPortal.feed.items.billing.balanceHelper",
+                              )}
                             </p>
                           </div>
                           <div className="space-y-1">
                             <p className="text-xs uppercase tracking-[0.28em] text-red-200/70">
-                              {t("guardianPortal.feed.items.billing.autopayLabel")}
+                              {t(
+                                "guardianPortal.feed.items.billing.autopayLabel",
+                              )}
                             </p>
                             <p className="text-base font-semibold text-red-50">
-                              {t("guardianPortal.feed.items.billing.autopayValue")}
+                              {t(
+                                "guardianPortal.feed.items.billing.autopayValue",
+                              )}
                             </p>
                             <p className="text-xs text-red-200/70">
-                              {t("guardianPortal.feed.items.billing.autopayHelper")}
+                              {t(
+                                "guardianPortal.feed.items.billing.autopayHelper",
+                              )}
                             </p>
                           </div>
                         </div>
@@ -284,13 +303,19 @@ function GuardianPortalSection() {
                           {upcomingEvents.map((event) => (
                             <li key={event.id} className="space-y-1">
                               <p className="font-semibold text-red-50">
-                                {t(`guardianPortal.feed.items.events.list.${event.labelKey}.title`)}
+                                {t(
+                                  `guardianPortal.feed.items.events.list.${event.labelKey}.title`,
+                                )}
                               </p>
                               <p className="text-xs uppercase tracking-[0.28em] text-red-200/70">
-                                {t(`guardianPortal.feed.items.events.list.${event.labelKey}.date`)}
+                                {t(
+                                  `guardianPortal.feed.items.events.list.${event.labelKey}.date`,
+                                )}
                               </p>
                               <p className="text-xs text-red-200/70">
-                                {t(`guardianPortal.feed.items.events.list.${event.labelKey}.helper`)}
+                                {t(
+                                  `guardianPortal.feed.items.events.list.${event.labelKey}.helper`,
+                                )}
                               </p>
                             </li>
                           ))}
@@ -305,7 +330,10 @@ function GuardianPortalSection() {
         </div>
 
         <div className="space-y-6">
-          <RedSurface tone="muted" className="flex h-full flex-col gap-5 p-5 sm:p-6">
+          <RedSurface
+            tone="muted"
+            className="flex h-full flex-col gap-5 p-5 sm:p-6"
+          >
             <header className="space-y-1">
               <h2 className="flex items-center gap-2 text-lg font-semibold text-red-50">
                 <MessageCircle size={20} className="text-red-200/80" />
@@ -321,7 +349,9 @@ function GuardianPortalSection() {
                 <div
                   key={message.id}
                   className={`flex ${
-                    message.tone === "guardian" ? "justify-end" : "justify-start"
+                    message.tone === "guardian"
+                      ? "justify-end"
+                      : "justify-start"
                   }`}
                 >
                   <div
@@ -358,7 +388,9 @@ function GuardianPortalSection() {
                 name="guardian-message"
                 rows={3}
                 className="w-full rounded-2xl border border-red-500/25 bg-red-950/50 px-4 py-3 text-sm text-red-50 placeholder:text-red-200/50 focus:border-red-400/60 focus:outline-none focus:ring-2 focus:ring-red-400/30"
-                placeholder={t("guardianPortal.messaging.composer.placeholder") ?? ""}
+                placeholder={
+                  t("guardianPortal.messaging.composer.placeholder") ?? ""
+                }
               />
               <div className="flex flex-wrap items-center gap-2">
                 {quickReplies.map((reply) => (

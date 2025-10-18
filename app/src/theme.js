@@ -61,14 +61,10 @@ const themeColorTokens = cloneTokens(designTokenManifest.color?.themes ?? {});
 const lightTheme = themeColorTokens.light ?? {};
 const darkTheme = themeColorTokens.dark ?? {};
 
-const {
-  components: lightComponentTokens = {},
-  ...lightThemePrimitives
-} = lightTheme;
-const {
-  components: darkComponentTokens = {},
-  ...darkThemePrimitives
-} = darkTheme;
+const { components: lightComponentTokens = {}, ...lightThemePrimitives } =
+  lightTheme;
+const { components: darkComponentTokens = {}, ...darkThemePrimitives } =
+  darkTheme;
 
 const componentDesignTokens = {
   button: {
@@ -450,7 +446,7 @@ function readStoredMode() {
   try {
     const stored = window.localStorage?.getItem(THEME_STORAGE_KEY);
     const normalized =
-      typeof stored === "string" ? stored.toLowerCase() : stored ?? undefined;
+      typeof stored === "string" ? stored.toLowerCase() : (stored ?? undefined);
     if (typeof normalized === "string" && VALID_THEME_MODES.has(normalized)) {
       return normalized;
     }
@@ -615,7 +611,12 @@ export function useTheme() {
       hasExplicitMode: themeState.hasExplicitMode,
       source: themeState.hasExplicitMode ? "explicit" : "system",
     }),
-    [themeState.mode, themeState.hasExplicitMode, setMode, toggleMode, resetMode],
+    [
+      themeState.mode,
+      themeState.hasExplicitMode,
+      setMode,
+      toggleMode,
+      resetMode,
+    ],
   );
 }
-

@@ -150,9 +150,9 @@ export function MemberProvider({ children }: MemberProviderProps) {
           throw new Error(`Failed to refresh member (${response.status})`);
         }
 
-        const payload = (await response.json().catch(() => null)) as
-          | { member?: Member }
-          | null;
+        const payload = (await response.json().catch(() => null)) as {
+          member?: Member;
+        } | null;
 
         if (payload?.member) {
           setMemberState(payload.member);
@@ -201,7 +201,9 @@ export function MemberProvider({ children }: MemberProviderProps) {
     [member, authToken, setMember, clearMember],
   );
 
-  return <MemberContext.Provider value={value}>{children}</MemberContext.Provider>;
+  return (
+    <MemberContext.Provider value={value}>{children}</MemberContext.Provider>
+  );
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -209,9 +211,7 @@ export function useMember() {
   const context = useContext(MemberContext);
 
   if (!context) {
-    throw new Error(
-      "useMember must be used within a MemberProvider",
-    );
+    throw new Error("useMember must be used within a MemberProvider");
   }
 
   return context;

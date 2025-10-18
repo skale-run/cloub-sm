@@ -729,7 +729,8 @@ export const fr = {
           overdue: "En retard",
         },
         focusTitle: "Priorité immédiate",
-        focusSubtitle: "Priorisé automatiquement selon l'assiduité et la facturation",
+        focusSubtitle:
+          "Priorisé automatiquement selon l'assiduité et la facturation",
         shortcutsTitle: "Actions rapides",
         roleOptions: [
           {
@@ -2665,7 +2666,8 @@ export const fr = {
         },
         messaging: {
           heading: "Message à l'équipe d'entraîneurs",
-          helper: "Canal sécurisé avec les maîtres principaux pour des mises à jour rapides.",
+          helper:
+            "Canal sécurisé avec les maîtres principaux pour des mises à jour rapides.",
           messages: {
             masterLewis: {
               author: "Master Amara Lewis",

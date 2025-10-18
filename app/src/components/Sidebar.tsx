@@ -124,7 +124,11 @@ function Sidebar({
       className={cn(
         "fixed inset-y-0 z-50 lg:z-40 flex w-full max-w-sm shrink-0 flex-col overflow-hidden bg-gradient-to-b from-red-950/95 via-red-950/85 to-red-900/80 shadow-[0_30px_80px_rgba(59,9,9,0.55)] backdrop-blur-xl transition-transform duration-300 ease-out lg:max-w-none lg:w-80",
         isRTL ? "right-0" : "left-0",
-        open ? "translate-x-0" : isRTL ? "translate-x-full" : "-translate-x-full",
+        open
+          ? "translate-x-0"
+          : isRTL
+            ? "translate-x-full"
+            : "-translate-x-full",
       )}
       aria-label={t("common.navigation.primary")}
     >
@@ -154,7 +158,10 @@ function Sidebar({
           </div>
         </div>
 
-        <section className="space-y-5" aria-label={t("common.navigation.primary")}>
+        <section
+          className="space-y-5"
+          aria-label={t("common.navigation.primary")}
+        >
           {navSections.map((section) => (
             <div key={section.heading} className="space-y-2">
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-red-200/70">
@@ -182,7 +189,9 @@ function Sidebar({
                           : () => onPrefetchSection?.(item.to)
                       }
                       onFocus={
-                        isComingSoon ? undefined : () => onPrefetchSection?.(item.to)
+                        isComingSoon
+                          ? undefined
+                          : () => onPrefetchSection?.(item.to)
                       }
                       aria-current={isActive ? "page" : undefined}
                       aria-disabled={isComingSoon || undefined}

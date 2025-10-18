@@ -42,8 +42,10 @@ export const en = {
         reverted: "Draft reverted to the last saved profile.",
         cleared: "Profile draft cleared.",
         deleted: "Profile deleted. Create a new one to generate a QR code.",
-        saveError: "Couldn't update the profile. Check your connection and try again.",
-        deleteError: "We couldn't remove the profile right now. Please try again shortly.",
+        saveError:
+          "Couldn't update the profile. Check your connection and try again.",
+        deleteError:
+          "We couldn't remove the profile right now. Please try again shortly.",
       },
       defaults: {
         teamMember: "Taekwondo practitioner",
@@ -171,14 +173,17 @@ export const en = {
           outro: "or chat with your coaching team in the squad channel.",
         },
         status: {
-          network: "We couldn't reach the server. Please try again in a moment.",
+          network:
+            "We couldn't reach the server. Please try again in a moment.",
           generic: "Something went wrong. Please try again.",
           login: {
             success: "Welcome back! You're signed in.",
-            invalid: "We couldn't find an account with that email and password.",
+            invalid:
+              "We couldn't find an account with that email and password.",
           },
           register: {
-            success: "Account created. You can sign in with your new credentials.",
+            success:
+              "Account created. You can sign in with your new credentials.",
             duplicate: "An account with that email already exists.",
           },
         },
@@ -451,19 +456,22 @@ export const en = {
     },
     training: {
       title: "Dojo Session Calendar",
-      description: "Stay aligned with the squad and confirm your availability early.",
+      description:
+        "Stay aligned with the squad and confirm your availability early.",
       weekLabel: "Week {{week}}",
       lead: "Lead · {{coach}}",
       confirmAvailability: "Confirm availability",
     },
     coachEvaluation: {
       heading: "Master evaluation",
-      description: "Snapshot from the latest bi-weekly meeting with the coaching staff.",
+      description:
+        "Snapshot from the latest bi-weekly meeting with the coaching staff.",
       overallLabel: "Overall",
       focusLabel: "Focus for next review",
       addNote: "Add coach note",
       summary: {
-        focusStatement: "Sharpen spinning heel kick accuracy ahead of national championships in May.",
+        focusStatement:
+          "Sharpen spinning heel kick accuracy ahead of national championships in May.",
         leadCoach: {
           label: "Head master",
           value: "Master Amara Lewis",
@@ -642,8 +650,7 @@ export const en = {
           },
           {
             title: "Strength progression",
-            detail:
-              "Back squat at 1.8x BW · maintain 3-week wave loading.",
+            detail: "Back squat at 1.8x BW · maintain 3-week wave loading.",
           },
         ],
       },
@@ -697,7 +704,8 @@ export const en = {
           {
             id: "master",
             label: "Master instructor",
-            description: "Testing cadence, tuition health, and dojang broadcasts",
+            description:
+              "Testing cadence, tuition health, and dojang broadcasts",
           },
           {
             id: "coach",
@@ -762,7 +770,8 @@ export const en = {
               {
                 id: "leadershipClass",
                 label: "Leadership poomsae block",
-                description: "Finalize drills and assign assistant coverage for tonight's 6:00pm session.",
+                description:
+                  "Finalize drills and assign assistant coverage for tonight's 6:00pm session.",
                 action: "Review class plan",
                 tag: "Tonight",
                 icon: "calendar",
@@ -770,7 +779,8 @@ export const en = {
               {
                 id: "redBeltPrep",
                 label: "Red belt promotion window",
-                description: "Twelve athletes cleared conditioning. Confirm board setup and judging panel.",
+                description:
+                  "Twelve athletes cleared conditioning. Confirm board setup and judging panel.",
                 action: "Confirm grading lineup",
                 tag: "Testing",
                 icon: "award",
@@ -778,7 +788,8 @@ export const en = {
               {
                 id: "outstandingInvoices",
                 label: "Outstanding tuition",
-                description: "$820 overdue across four families. Send reminder before Friday statements.",
+                description:
+                  "$820 overdue across four families. Send reminder before Friday statements.",
                 action: "Send reminders",
                 tag: "Billing",
                 icon: "creditCard",
@@ -786,7 +797,8 @@ export const en = {
               {
                 id: "coachReviews",
                 label: "Coach evaluations",
-                description: "Three assistant reviews awaiting signature to unlock their next classes.",
+                description:
+                  "Three assistant reviews awaiting signature to unlock their next classes.",
                 action: "Sign evaluations",
                 tag: "Staff",
                 icon: "clipboardCheck",
@@ -796,19 +808,22 @@ export const en = {
               {
                 id: "masterSchedule",
                 label: "Open master schedule",
-                description: "Adjust ring assignments and instructor coverage in one view.",
+                description:
+                  "Adjust ring assignments and instructor coverage in one view.",
                 icon: "calendar",
               },
               {
                 id: "broadcastUpdate",
                 label: "Broadcast update",
-                description: "Send SMS or email to every squad with two clicks.",
+                description:
+                  "Send SMS or email to every squad with two clicks.",
                 icon: "users",
               },
               {
                 id: "testingPacket",
                 label: "Download testing packet",
-                description: "Print scorecards, boards, and scoring rubric for Saturday.",
+                description:
+                  "Print scorecards, boards, and scoring rubric for Saturday.",
                 icon: "clipboardList",
               },
             ],
@@ -819,7 +834,8 @@ export const en = {
                 category: "Testing",
                 time: "Due in 4h",
                 icon: "award",
-                description: "Blue belts Mia and Jordan still need parental consent forms.",
+                description:
+                  "Blue belts Mia and Jordan still need parental consent forms.",
               },
               {
                 id: "notifyRsvp",
@@ -827,7 +843,8 @@ export const en = {
                 category: "Event",
                 time: "Updated 1h ago",
                 icon: "calendar",
-                description: "Winter showcase RSVP closes tonight for front-row seating.",
+                description:
+                  "Winter showcase RSVP closes tonight for front-row seating.",
               },
               {
                 id: "notifyMedical",
@@ -835,7 +852,8 @@ export const en = {
                 category: "Compliance",
                 time: "Flagged yesterday",
                 icon: "shieldCheck",
-                description: "Ethan Park needs updated sparring clearance before contact drills.",
+                description:
+                  "Ethan Park needs updated sparring clearance before contact drills.",
               },
             ],
             timeline: {
@@ -846,28 +864,32 @@ export const en = {
                   label: "Sparring audit complete",
                   time: "Today · 3:30pm",
                   status: "completed",
-                  description: "Coach Kim submitted 5th kup sparring assessments to the board.",
+                  description:
+                    "Coach Kim submitted 5th kup sparring assessments to the board.",
                 },
                 {
                   id: "timelinePretest",
                   label: "Red belt pretest",
                   time: "Tomorrow · 5:00pm",
                   status: "upcoming",
-                  description: "Joint session covers poomsae sequencing and breaking combinations.",
+                  description:
+                    "Joint session covers poomsae sequencing and breaking combinations.",
                 },
                 {
                   id: "timelineBoard",
                   label: "Board review",
                   time: "Fri · 2:00pm",
                   status: "upcoming",
-                  description: "Finalize judging panel assignments and ring layout notes.",
+                  description:
+                    "Finalize judging panel assignments and ring layout notes.",
                 },
                 {
                   id: "timelinePayments",
                   label: "Payment deadline",
                   time: "Fri · 6:00pm",
                   status: "overdue",
-                  description: "Two families still need to submit testing fees before check-in.",
+                  description:
+                    "Two families still need to submit testing fees before check-in.",
                 },
               ],
             },
@@ -878,21 +900,24 @@ export const en = {
                   id: "highlightSparring",
                   title: "Elite sparring streak",
                   metric: "7 bouts",
-                  description: "Competition team undefeated since April invitational.",
+                  description:
+                    "Competition team undefeated since April invitational.",
                   icon: "activity",
                 },
                 {
                   id: "highlightReadiness",
                   title: "Testing readiness",
                   metric: "92%",
-                  description: "Students meeting form and conditioning thresholds ahead of exams.",
+                  description:
+                    "Students meeting form and conditioning thresholds ahead of exams.",
                   icon: "gauge",
                 },
                 {
                   id: "highlightCommunity",
                   title: "Community reach",
                   metric: "42 families",
-                  description: "New parent portal invites activated this month.",
+                  description:
+                    "New parent portal invites activated this month.",
                   icon: "users",
                 },
               ],
@@ -904,19 +929,22 @@ export const en = {
                   id: "reelExam",
                   title: "Belt exam spotlight",
                   duration: "00:34",
-                  description: "Recap of last weekend's dan promotions and highlights.",
+                  description:
+                    "Recap of last weekend's dan promotions and highlights.",
                 },
                 {
                   id: "reelLeadership",
                   title: "Leadership spotlight",
                   duration: "00:21",
-                  description: "Junior leaders mentoring white belts on blocking drills.",
+                  description:
+                    "Junior leaders mentoring white belts on blocking drills.",
                 },
                 {
                   id: "reelAnalytics",
                   title: "Sparring analytics",
                   duration: "00:45",
-                  description: "Breakdown of counter-attacks landed during camp.",
+                  description:
+                    "Breakdown of counter-attacks landed during camp.",
                 },
               ],
             },
@@ -967,7 +995,8 @@ export const en = {
               {
                 id: "sparringPlan",
                 label: "Advanced sparring lab",
-                description: "Upload counter-attack drills for Thursday's competition team block.",
+                description:
+                  "Upload counter-attack drills for Thursday's competition team block.",
                 action: "Upload drills",
                 tag: "Prep",
                 icon: "sparkles",
@@ -975,7 +1004,8 @@ export const en = {
               {
                 id: "evaluationRun",
                 label: "Green belt evaluations",
-                description: "Score combinations and add coaching notes before tomorrow's review.",
+                description:
+                  "Score combinations and add coaching notes before tomorrow's review.",
                 action: "Open scorecards",
                 tag: "Due tomorrow",
                 icon: "clipboardList",
@@ -983,7 +1013,8 @@ export const en = {
               {
                 id: "missedClass",
                 label: "Missed class follow-up",
-                description: "Send recovery plan to Liam · Junior 2 who missed the last two sessions.",
+                description:
+                  "Send recovery plan to Liam · Junior 2 who missed the last two sessions.",
                 action: "Message family",
                 tag: "Attendance",
                 icon: "users",
@@ -991,7 +1022,8 @@ export const en = {
               {
                 id: "equipmentCheck",
                 label: "Gear check",
-                description: "Confirm mitts and hogus for the weekend sparring scrimmage.",
+                description:
+                  "Confirm mitts and hogus for the weekend sparring scrimmage.",
                 action: "View inventory",
                 tag: "Logistics",
                 icon: "shieldCheck",
@@ -1001,19 +1033,22 @@ export const en = {
               {
                 id: "startAttendance",
                 label: "Start attendance",
-                description: "Launch roster tracking with smart absence alerts.",
+                description:
+                  "Launch roster tracking with smart absence alerts.",
                 icon: "clipboardCheck",
               },
               {
                 id: "coachNotes",
                 label: "Log coaching notes",
-                description: "Capture combinations, corrections, and wins in seconds.",
+                description:
+                  "Capture combinations, corrections, and wins in seconds.",
                 icon: "sparkles",
               },
               {
                 id: "feedbackLoop",
                 label: "Share athlete feedback",
-                description: "Push evaluation summaries to parents and athletes.",
+                description:
+                  "Push evaluation summaries to parents and athletes.",
                 icon: "users",
               },
             ],
@@ -1032,7 +1067,8 @@ export const en = {
                 category: "Attendance",
                 time: "Flagged 2h ago",
                 icon: "calendar",
-                description: "Avery Chen absent for second consecutive red belt class.",
+                description:
+                  "Avery Chen absent for second consecutive red belt class.",
               },
               {
                 id: "coachMedical",
@@ -1040,7 +1076,8 @@ export const en = {
                 category: "Compliance",
                 time: "Posted 30m ago",
                 icon: "shieldCheck",
-                description: "Maya Ortiz cleared for light-contact sparring only.",
+                description:
+                  "Maya Ortiz cleared for light-contact sparring only.",
               },
             ],
             timeline: {
@@ -1051,28 +1088,32 @@ export const en = {
                   label: "Lesson plan drafted",
                   time: "Today · 9:00am",
                   status: "completed",
-                  description: "Uploaded combinations and conditioning ladder for white belts.",
+                  description:
+                    "Uploaded combinations and conditioning ladder for white belts.",
                 },
                 {
                   id: "timelineReview",
                   label: "Master review",
                   time: "Today · 4:30pm",
                   status: "upcoming",
-                  description: "Master Youssef will review tomorrow's sparring lesson.",
+                  description:
+                    "Master Youssef will review tomorrow's sparring lesson.",
                 },
                 {
                   id: "timelineRoster",
                   label: "Roster sync",
                   time: "Tomorrow · 7:45am",
                   status: "upcoming",
-                  description: "Attendance list updates with new makeup bookings.",
+                  description:
+                    "Attendance list updates with new makeup bookings.",
                 },
                 {
                   id: "timelineEval",
                   label: "Eval deadline",
                   time: "Tomorrow · 8:00pm",
                   status: "overdue",
-                  description: "Complete green belt scoring to release feedback.",
+                  description:
+                    "Complete green belt scoring to release feedback.",
                 },
               ],
             },
@@ -1083,14 +1124,16 @@ export const en = {
                   id: "highlightSparringCoach",
                   title: "Sparring conversions",
                   metric: "68%",
-                  description: "Counter-attack success rate improved week-over-week.",
+                  description:
+                    "Counter-attack success rate improved week-over-week.",
                   icon: "activity",
                 },
                 {
                   id: "highlightTechnique",
                   title: "Technique mastery",
                   metric: "14 badges",
-                  description: "Athletes awarded new technique badges this cycle.",
+                  description:
+                    "Athletes awarded new technique badges this cycle.",
                   icon: "sparkles",
                 },
                 {
@@ -1121,7 +1164,8 @@ export const en = {
                   id: "reelCoaching",
                   title: "Coaching wins",
                   duration: "00:19",
-                  description: "Shout-outs from parents and athletes this week.",
+                  description:
+                    "Shout-outs from parents and athletes this week.",
                 },
               ],
             },
@@ -1172,7 +1216,8 @@ export const en = {
               {
                 id: "classPrep",
                 label: "Friday family class",
-                description: "Arrive 15 min early for leadership photos at check-in.",
+                description:
+                  "Arrive 15 min early for leadership photos at check-in.",
                 action: "Add to calendar",
                 tag: "Tomorrow",
                 icon: "calendar",
@@ -1180,7 +1225,8 @@ export const en = {
               {
                 id: "beltExamFees",
                 label: "Belt exam fee",
-                description: "Submit $65 testing fee for Ava before the weekend.",
+                description:
+                  "Submit $65 testing fee for Ava before the weekend.",
                 action: "Pay now",
                 tag: "Billing",
                 icon: "creditCard",
@@ -1188,7 +1234,8 @@ export const en = {
               {
                 id: "rsvpShowcase",
                 label: "Showcase RSVP",
-                description: "Confirm seats for the June showcase—two RSVPs still open.",
+                description:
+                  "Confirm seats for the June showcase—two RSVPs still open.",
                 action: "Complete RSVP",
                 tag: "Event",
                 icon: "users",
@@ -1196,7 +1243,8 @@ export const en = {
               {
                 id: "coachMessage",
                 label: "Coach follow-up",
-                description: "Read Coach Lina's note about flexibility drills at home.",
+                description:
+                  "Read Coach Lina's note about flexibility drills at home.",
                 action: "View note",
                 tag: "Feedback",
                 icon: "sparkles",
@@ -1206,19 +1254,22 @@ export const en = {
               {
                 id: "familySchedule",
                 label: "See family schedule",
-                description: "Sync every class, exam, and event with your calendar.",
+                description:
+                  "Sync every class, exam, and event with your calendar.",
                 icon: "calendar",
               },
               {
                 id: "managePayments",
                 label: "Manage payments",
-                description: "Update billing info or download your latest invoice.",
+                description:
+                  "Update billing info or download your latest invoice.",
                 icon: "creditCard",
               },
               {
                 id: "messageCoach",
                 label: "Message coaches",
-                description: "Send quick updates or health notes to the instructor team.",
+                description:
+                  "Send quick updates or health notes to the instructor team.",
                 icon: "users",
               },
             ],
@@ -1229,7 +1280,8 @@ export const en = {
                 category: "Event",
                 time: "Tomorrow",
                 icon: "calendar",
-                description: "Arrive 15 minutes early for the family photo wall.",
+                description:
+                  "Arrive 15 minutes early for the family photo wall.",
               },
               {
                 id: "parentInvoice",
@@ -1237,7 +1289,8 @@ export const en = {
                 category: "Billing",
                 time: "Sent 3h ago",
                 icon: "creditCard",
-                description: "Tournament registration fee for Noah is ready to pay.",
+                description:
+                  "Tournament registration fee for Noah is ready to pay.",
               },
               {
                 id: "parentFeedback",
@@ -1245,7 +1298,8 @@ export const en = {
                 category: "Feedback",
                 time: "Shared today",
                 icon: "sparkles",
-                description: "Coach Lina praised Ava's improved kicking control.",
+                description:
+                  "Coach Lina praised Ava's improved kicking control.",
               },
             ],
             timeline: {
@@ -1256,28 +1310,32 @@ export const en = {
                   label: "Class check-in",
                   time: "Today · 4:00pm",
                   status: "completed",
-                  description: "Noah completed conditioning with perfect attendance.",
+                  description:
+                    "Noah completed conditioning with perfect attendance.",
                 },
                 {
                   id: "timelineExam",
                   label: "Belt exam payment",
                   time: "Tomorrow · 10:00am",
                   status: "upcoming",
-                  description: "Auto-pay will draft for Ava's orange belt test.",
+                  description:
+                    "Auto-pay will draft for Ava's orange belt test.",
                 },
                 {
                   id: "timelineShowcase",
                   label: "Showcase RSVP",
                   time: "Sun · 6:00pm",
                   status: "upcoming",
-                  description: "Confirm seats and volunteer slot for refreshments.",
+                  description:
+                    "Confirm seats and volunteer slot for refreshments.",
                 },
                 {
                   id: "timelineMakeup",
                   label: "Makeup lesson",
                   time: "Mon · 5:30pm",
                   status: "overdue",
-                  description: "Book a catch-up class for Liam after this week's absence.",
+                  description:
+                    "Book a catch-up class for Liam after this week's absence.",
                 },
               ],
             },
@@ -1288,7 +1346,8 @@ export const en = {
                   id: "highlightConsistency",
                   title: "Consistency streak",
                   metric: "5 in a row",
-                  description: "Every family member checked in on time this week.",
+                  description:
+                    "Every family member checked in on time this week.",
                   icon: "calendar",
                 },
                 {
@@ -1302,7 +1361,8 @@ export const en = {
                   id: "highlightCommunityParent",
                   title: "Community points",
                   metric: "120 pts",
-                  description: "Earned from volunteering and referral shout-outs.",
+                  description:
+                    "Earned from volunteering and referral shout-outs.",
                   icon: "users",
                 },
               ],
@@ -1377,7 +1437,8 @@ export const en = {
               {
                 id: "classTonight",
                 label: "Competition team",
-                description: "Bring sparring gear—focus is on ring control drills.",
+                description:
+                  "Bring sparring gear—focus is on ring control drills.",
                 action: "View lesson goals",
                 tag: "Tonight",
                 icon: "calendar",
@@ -1385,7 +1446,8 @@ export const en = {
               {
                 id: "beltPrep",
                 label: "Belt prep checklist",
-                description: "Record a clean run of Poomsae 4 and upload before Sunday.",
+                description:
+                  "Record a clean run of Poomsae 4 and upload before Sunday.",
                 action: "Upload video",
                 tag: "Testing",
                 icon: "play",
@@ -1393,7 +1455,8 @@ export const en = {
               {
                 id: "conditioning",
                 label: "Conditioning challenge",
-                description: "Complete 3 rounds of plyometric ladder shared by Coach Lina.",
+                description:
+                  "Complete 3 rounds of plyometric ladder shared by Coach Lina.",
                 action: "Mark as done",
                 tag: "Training",
                 icon: "activity",
@@ -1401,7 +1464,8 @@ export const en = {
               {
                 id: "parentNote",
                 label: "Parent support",
-                description: "Ask your parent to review tomorrow's ride share plan.",
+                description:
+                  "Ask your parent to review tomorrow's ride share plan.",
                 action: "Send reminder",
                 tag: "Logistics",
                 icon: "users",
@@ -1417,7 +1481,8 @@ export const en = {
               {
                 id: "journal",
                 label: "Update training journal",
-                description: "Log wins and questions for your next coaching check-in.",
+                description:
+                  "Log wins and questions for your next coaching check-in.",
                 icon: "sparkles",
               },
               {
@@ -1434,7 +1499,8 @@ export const en = {
                 category: "Progress",
                 time: "Posted 2h ago",
                 icon: "clipboardCheck",
-                description: "Coach Lina left sparring tips from yesterday's class.",
+                description:
+                  "Coach Lina left sparring tips from yesterday's class.",
               },
               {
                 id: "athleteRSVP",
@@ -1450,7 +1516,8 @@ export const en = {
                 category: "Milestone",
                 time: "Today",
                 icon: "sparkles",
-                description: "Completed the endurance ladder for your testing badge.",
+                description:
+                  "Completed the endurance ladder for your testing badge.",
               },
             ],
             timeline: {
@@ -1468,7 +1535,8 @@ export const en = {
                   label: "Home drill reminder",
                   time: "Tonight · 8:00pm",
                   status: "upcoming",
-                  description: "Record conditioning challenge and sync with journal.",
+                  description:
+                    "Record conditioning challenge and sync with journal.",
                 },
                 {
                   id: "timelineSeminar",
@@ -1525,7 +1593,8 @@ export const en = {
                   id: "reelPoomsae",
                   title: "Poomsae progression",
                   duration: "00:29",
-                  description: "Side-by-side compare of your form from March vs. now.",
+                  description:
+                    "Side-by-side compare of your form from March vs. now.",
                 },
                 {
                   id: "reelJourney",
@@ -1582,7 +1651,8 @@ export const en = {
               {
                 id: "defaultTask",
                 label: "Review upcoming classes",
-                description: "See which squads have new notes or attendance trends to address.",
+                description:
+                  "See which squads have new notes or attendance trends to address.",
                 action: "Open planner",
                 tag: "Priority",
                 icon: "calendar",
@@ -1590,7 +1660,8 @@ export const en = {
               {
                 id: "defaultInvoices",
                 label: "Check billing alerts",
-                description: "Identify overdue balances and set up automated nudges.",
+                description:
+                  "Identify overdue balances and set up automated nudges.",
                 action: "View billing queue",
                 tag: "Billing",
                 icon: "creditCard",
@@ -1598,7 +1669,8 @@ export const en = {
               {
                 id: "defaultEvaluations",
                 label: "Evaluation insights",
-                description: "Spot athletes who need feedback before the next belt exam.",
+                description:
+                  "Spot athletes who need feedback before the next belt exam.",
                 action: "Open evaluations",
                 tag: "Coaching",
                 icon: "clipboardCheck",
@@ -1606,7 +1678,8 @@ export const en = {
               {
                 id: "defaultStories",
                 label: "Share progress stories",
-                description: "Select clips to showcase on the lobby display this week.",
+                description:
+                  "Select clips to showcase on the lobby display this week.",
                 action: "Curate reel",
                 tag: "Community",
                 icon: "sparkles",
@@ -1622,13 +1695,15 @@ export const en = {
               {
                 id: "defaultCommunicate",
                 label: "Send update",
-                description: "Compose a message to targeted squads or families.",
+                description:
+                  "Compose a message to targeted squads or families.",
                 icon: "users",
               },
               {
                 id: "defaultReports",
                 label: "Open insights",
-                description: "Launch analytics with attendance and billing trends.",
+                description:
+                  "Launch analytics with attendance and billing trends.",
                 icon: "barChart",
               },
             ],
@@ -1639,7 +1714,8 @@ export const en = {
                 category: "Coaching",
                 time: "Review today",
                 icon: "clipboardCheck",
-                description: "Masters assigned new scoring requests for the red belt cohort.",
+                description:
+                  "Masters assigned new scoring requests for the red belt cohort.",
               },
               {
                 id: "defaultRSVP",
@@ -1647,7 +1723,8 @@ export const en = {
                 category: "Event",
                 time: "Updated 2h ago",
                 icon: "calendar",
-                description: "Send a reminder to boost attendance for the showcase.",
+                description:
+                  "Send a reminder to boost attendance for the showcase.",
               },
               {
                 id: "defaultInvoice",
@@ -1655,7 +1732,8 @@ export const en = {
                 category: "Billing",
                 time: "Flagged this morning",
                 icon: "creditCard",
-                description: "Auto-pay failed for two family accounts—review before retry.",
+                description:
+                  "Auto-pay failed for two family accounts—review before retry.",
               },
             ],
             timeline: {
@@ -1666,14 +1744,16 @@ export const en = {
                   label: "Performance sync",
                   time: "Today · 12:00pm",
                   status: "completed",
-                  description: "Coaches aligned on upcoming sparring goals and testing focus.",
+                  description:
+                    "Coaches aligned on upcoming sparring goals and testing focus.",
                 },
                 {
                   id: "defaultTimeline2",
                   label: "Belt exam briefing",
                   time: "Tomorrow · 3:00pm",
                   status: "upcoming",
-                  description: "Review candidate readiness and confirm volunteer roles.",
+                  description:
+                    "Review candidate readiness and confirm volunteer roles.",
                 },
                 {
                   id: "defaultTimeline3",
@@ -1687,7 +1767,8 @@ export const en = {
                   label: "Billing reconciliation",
                   time: "Mon · 8:00am",
                   status: "overdue",
-                  description: "Close the loop on outstanding tuition variance.",
+                  description:
+                    "Close the loop on outstanding tuition variance.",
                 },
               ],
             },
@@ -1698,7 +1779,8 @@ export const en = {
                   id: "defaultHighlight1",
                   title: "Community growth",
                   metric: "+18 members",
-                  description: "New students joined through referral drives this quarter.",
+                  description:
+                    "New students joined through referral drives this quarter.",
                   icon: "users",
                 },
                 {
@@ -1712,7 +1794,8 @@ export const en = {
                   id: "defaultHighlight3",
                   title: "Engagement clips",
                   metric: "12 reels",
-                  description: "Fresh stories ready for lobby and social media.",
+                  description:
+                    "Fresh stories ready for lobby and social media.",
                   icon: "sparkles",
                 },
               ],
@@ -1736,7 +1819,8 @@ export const en = {
                   id: "defaultReel3",
                   title: "Athlete wins",
                   duration: "00:27",
-                  description: "Share top performances from the last scrimmage.",
+                  description:
+                    "Share top performances from the last scrimmage.",
                 },
               ],
             },
@@ -1767,8 +1851,7 @@ export const en = {
         schedule: "Schedule a discovery call: Mon–Fri · 9am–6pm PT",
       },
       footer: {
-        copyright:
-          "© {{year}} Cloub Sports Management. All rights reserved.",
+        copyright: "© {{year}} Cloub Sports Management. All rights reserved.",
         links: {
           privacy: "Privacy",
           terms: "Terms",
@@ -1843,7 +1926,8 @@ export const en = {
       readiness: {
         heading: "Profile readiness",
         completeDescription: "Every detail is in place.",
-        incompleteDescription: "Complete the profile to unlock the full experience.",
+        incompleteDescription:
+          "Complete the profile to unlock the full experience.",
         readyMessage: "You're ready to share this profile with masters.",
         nextField: "Next up: add {{field}}.",
         remaining: "Add the remaining details to finish your profile.",
@@ -1864,7 +1948,8 @@ export const en = {
           "Capture belt tests and tournament wins to keep your motivation board updated.",
         placeholder: "Add new highlight",
         removeAria: "Remove highlight",
-        empty: "No highlights yet. Start by celebrating a recent sparring or poomsae win.",
+        empty:
+          "No highlights yet. Start by celebrating a recent sparring or poomsae win.",
         newLabel: "Badge highlight",
         categoryLabel: "Badge category",
         filters: {
@@ -1877,11 +1962,13 @@ export const en = {
         categories: {
           tournament: {
             label: "Tournament badge",
-            description: "Celebrate competition performances and podium finishes.",
+            description:
+              "Celebrate competition performances and podium finishes.",
           },
           leadership: {
             label: "Leadership badge",
-            description: "Spotlight the times you guided younger belts or led warm-ups.",
+            description:
+              "Spotlight the times you guided younger belts or led warm-ups.",
           },
           communityService: {
             label: "Community service badge",
@@ -1890,15 +1977,18 @@ export const en = {
           },
           discipline: {
             label: "Discipline badge",
-            description: "Recognise streaks of focus, self-control, and relentless practice.",
+            description:
+              "Recognise streaks of focus, self-control, and relentless practice.",
           },
         },
         badgeWall: {
           title: "Dojo badge wall",
-          subtitle: "Filter by track to relive every milestone you’ve unlocked.",
+          subtitle:
+            "Filter by track to relive every milestone you’ve unlocked.",
           countLabel: "{{count}} dojo badge",
           countLabel_plural: "{{count}} dojo badges",
-          empty: "No badges yet. Add your first highlight to energise the wall.",
+          empty:
+            "No badges yet. Add your first highlight to energise the wall.",
           filterEmpty:
             "No badges in this track yet. Add one to represent your journey.",
         },
@@ -1907,7 +1997,8 @@ export const en = {
           pending: "Awaiting verification",
         },
         submission: {
-          prompt: "Share a story or photo so the masters can verify your badge.",
+          prompt:
+            "Share a story or photo so the masters can verify your badge.",
           cta: "Submit story or photo",
           confirmation:
             "Thanks! Coaches will review your submission and mark the badge once confirmed.",
@@ -1974,7 +2065,8 @@ export const en = {
       },
       permissions: {
         heading: "Granular permissions",
-        description: "Review how responsibilities and controls shift for each role.",
+        description:
+          "Review how responsibilities and controls shift for each role.",
         roleColumn: "Role access",
         capabilityLabels: {
           communications: "Communications",
@@ -2110,9 +2202,17 @@ export const en = {
         title: "Training statistics",
         subtitle: "Block summary",
         items: [
-          { label: "Sparring rounds", value: "118", trend: "+6% vs last block" },
+          {
+            label: "Sparring rounds",
+            value: "118",
+            trend: "+6% vs last block",
+          },
           { label: "Video reviews", value: "16", trend: "Target: 20 reviews" },
-          { label: "Explosive kick score", value: "Moderate", trend: "Maintain during taper" },
+          {
+            label: "Explosive kick score",
+            value: "Moderate",
+            trend: "Maintain during taper",
+          },
         ],
       },
       competitionResults: {
@@ -2173,8 +2273,7 @@ export const en = {
         },
         creditLoad: {
           heading: "Credit load overview",
-          caption:
-            "{{current}} of {{target}} credits confirmed for this term",
+          caption: "{{current}} of {{target}} credits confirmed for this term",
           helper:
             "{{available}} elective credits remain to personalise your schedule.",
         },
@@ -2228,13 +2327,13 @@ export const en = {
           },
           dataVisualizationLab: {
             title: "Data visualisation lab",
-            focus:
-              "Finalise dashboard deliverables and peer review results.",
+            focus: "Finalise dashboard deliverables and peer review results.",
             nextEvaluationDate: "Apr 28",
           },
           communityImpactSeminar: {
             title: "Community impact seminar",
-            focus: "Submit reflective brief documenting service-learning outcomes.",
+            focus:
+              "Submit reflective brief documenting service-learning outcomes.",
             nextEvaluationDate: "—",
           },
         },
@@ -2437,124 +2536,125 @@ export const en = {
               },
             },
           },
-      },
-    },
-    guardianPortal: {
-      badge: "Guardian view",
-      title: "Stay aligned with your athlete",
-      description:
-        "Monitor attendance momentum, keep billing on track, and prepare for upcoming commitments in one streamlined feed.",
-      summaryCards: {
-        attendance: {
-          label: "Attendance this month",
-          value: "12 / 14 sessions",
-          helper: "On track for the dojang attendance goal",
-        },
-        billing: {
-          label: "Outstanding balance",
-          value: "MAD 180",
-          helper: "Spring membership dues · due Apr 25",
-        },
-        events: {
-          label: "Next commitments",
-          value: "2 upcoming events",
-          helper: "Regional invitational & guardian forum",
         },
       },
-      feed: {
-        heading: "Family activity feed",
-        helper:
-          "Attendance patterns, billing status, and upcoming events in one stream.",
-        items: {
+      guardianPortal: {
+        badge: "Guardian view",
+        title: "Stay aligned with your athlete",
+        description:
+          "Monitor attendance momentum, keep billing on track, and prepare for upcoming commitments in one streamlined feed.",
+        summaryCards: {
           attendance: {
-            badge: "Attendance update",
-            title: "Five-session streak intact",
-            description:
-              "Jordan has checked in for every dojang session this week. Energy notes remain strong.",
-            timestamp: "Updated 2 hours ago",
-            patternLabel: "Last 7 sessions",
-            days: {
-              mon: "Mon",
-              tue: "Tue",
-              wed: "Wed",
-              thu: "Thu",
-              fri: "Fri",
-              sat: "Sat",
-              sun: "Sun",
-            },
-            callout: "Keep Thursday’s active recovery window to protect the streak.",
+            label: "Attendance this month",
+            value: "12 / 14 sessions",
+            helper: "On track for the dojang attendance goal",
           },
           billing: {
-            badge: "Billing status",
-            title: "Auto-pay set for Apr 25",
-            description:
-              "Remaining spring membership dues will draft automatically. No further action needed.",
-            timestamp: "Synced this morning",
-            balanceLabel: "Balance due",
-            balanceValue: "MAD 180 outstanding",
-            balanceHelper: "Invoice INV-2045 · due Apr 25",
-            autopayLabel: "Auto-pay",
-            autopayValue: "Runs Apr 25 at 09:00",
-            autopayHelper: "Visa •••• 4298",
+            label: "Outstanding balance",
+            value: "MAD 180",
+            helper: "Spring membership dues · due Apr 25",
           },
           events: {
-            badge: "Upcoming events",
-            title: "Two commitments next week",
-            description:
-              "Regional sparring invitational and guardian forum are on the calendar.",
-            timestamp: "Updated just now",
-            list: {
-              regional: {
-                title: "Regional sparring invitational",
-                date: "Apr 21 · Arrival 08:00",
-                helper: "Confirm travel check-in by Fri, Apr 18.",
+            label: "Next commitments",
+            value: "2 upcoming events",
+            helper: "Regional invitational & guardian forum",
+          },
+        },
+        feed: {
+          heading: "Family activity feed",
+          helper:
+            "Attendance patterns, billing status, and upcoming events in one stream.",
+          items: {
+            attendance: {
+              badge: "Attendance update",
+              title: "Five-session streak intact",
+              description:
+                "Jordan has checked in for every dojang session this week. Energy notes remain strong.",
+              timestamp: "Updated 2 hours ago",
+              patternLabel: "Last 7 sessions",
+              days: {
+                mon: "Mon",
+                tue: "Tue",
+                wed: "Wed",
+                thu: "Thu",
+                fri: "Fri",
+                sat: "Sat",
+                sun: "Sun",
               },
-              parentForum: {
-                title: "Guardian coordination forum",
-                date: "Apr 24 · 19:00",
-                helper: "In-person at the high performance studio.",
+              callout:
+                "Keep Thursday’s active recovery window to protect the streak.",
+            },
+            billing: {
+              badge: "Billing status",
+              title: "Auto-pay set for Apr 25",
+              description:
+                "Remaining spring membership dues will draft automatically. No further action needed.",
+              timestamp: "Synced this morning",
+              balanceLabel: "Balance due",
+              balanceValue: "MAD 180 outstanding",
+              balanceHelper: "Invoice INV-2045 · due Apr 25",
+              autopayLabel: "Auto-pay",
+              autopayValue: "Runs Apr 25 at 09:00",
+              autopayHelper: "Visa •••• 4298",
+            },
+            events: {
+              badge: "Upcoming events",
+              title: "Two commitments next week",
+              description:
+                "Regional sparring invitational and guardian forum are on the calendar.",
+              timestamp: "Updated just now",
+              list: {
+                regional: {
+                  title: "Regional sparring invitational",
+                  date: "Apr 21 · Arrival 08:00",
+                  helper: "Confirm travel check-in by Fri, Apr 18.",
+                },
+                parentForum: {
+                  title: "Guardian coordination forum",
+                  date: "Apr 24 · 19:00",
+                  helper: "In-person at the high performance studio.",
+                },
               },
             },
           },
         },
+        messaging: {
+          heading: "Message coaching staff",
+          helper: "Secure channel with the lead masters for quick updates.",
+          messages: {
+            masterLewis: {
+              author: "Master Amara Lewis",
+              role: "Lead coach",
+              body: "Jordan kept excellent pop through the plyometric ladder today. We’re seeing great focus.",
+              timestamp: "Sent 4:10 PM",
+            },
+            guardian: {
+              author: "You",
+              role: "Guardian",
+              body: "Thank you! We’ll reinforce hydration tonight before tomorrow’s morning block.",
+              timestamp: "Sent 4:18 PM",
+            },
+            masterLewisFollowUp: {
+              author: "Master Amara Lewis",
+              role: "Lead coach",
+              body: "Perfect. We’ll send a short clip from the sparring preview once it’s uploaded.",
+              timestamp: "Sent 4:26 PM",
+            },
+          },
+          quickReplies: {
+            transport: "Share pickup update",
+            billing: "Question about invoice",
+            checkIn: "Confirm arrival time",
+          },
+          composer: {
+            label: "Write a message",
+            placeholder: "Type a quick update or question…",
+            cta: "Send message",
+          },
+        },
       },
-      messaging: {
-        heading: "Message coaching staff",
-        helper: "Secure channel with the lead masters for quick updates.",
-        messages: {
-          masterLewis: {
-            author: "Master Amara Lewis",
-            role: "Lead coach",
-            body: "Jordan kept excellent pop through the plyometric ladder today. We’re seeing great focus.",
-            timestamp: "Sent 4:10 PM",
-          },
-          guardian: {
-            author: "You",
-            role: "Guardian",
-            body: "Thank you! We’ll reinforce hydration tonight before tomorrow’s morning block.",
-            timestamp: "Sent 4:18 PM",
-          },
-          masterLewisFollowUp: {
-            author: "Master Amara Lewis",
-            role: "Lead coach",
-            body: "Perfect. We’ll send a short clip from the sparring preview once it’s uploaded.",
-            timestamp: "Sent 4:26 PM",
-          },
-        },
-        quickReplies: {
-          transport: "Share pickup update",
-          billing: "Question about invoice",
-          checkIn: "Confirm arrival time",
-        },
-        composer: {
-          label: "Write a message",
-          placeholder: "Type a quick update or question…",
-          cta: "Send message",
-        },
-      },
-    },
-    trainingAttendance: {
-      heading: "Training attendance",
+      trainingAttendance: {
+        heading: "Training attendance",
         description:
           "Weekly overview of confirmed dojang check-ins and key staff notes.",
         seasonRate: {
@@ -2619,7 +2719,8 @@ export const en = {
                 "{{count}} practitioner is awaiting travel desk confirmation and ring assignment briefing.",
               detail_other:
                 "{{count}} practitioners are awaiting travel desk confirmation and ring assignment briefings.",
-              emphasis_one: "Send reminder before Thursday noon logistics call.",
+              emphasis_one:
+                "Send reminder before Thursday noon logistics call.",
               emphasis_other:
                 "Send reminders before Thursday noon logistics call.",
             },
@@ -2646,8 +2747,7 @@ export const en = {
           ts2: {
             focus:
               "Travel squad tune-up with individualized mobility protocols staged on arrival.",
-            emphasis:
-              "Ensure hydration scans are logged before main warm-up.",
+            emphasis: "Ensure hydration scans are logged before main warm-up.",
           },
           ts3: {
             focus:

@@ -76,7 +76,10 @@ const pageTitleKeyMap = {
 } satisfies Record<RoutePath, string>;
 
 const dashboardSectionLoaders: Partial<
-  Record<Exclude<RoutePath, typeof landingPath>, { preload?: () => Promise<unknown> }>
+  Record<
+    Exclude<RoutePath, typeof landingPath>,
+    { preload?: () => Promise<unknown> }
+  >
 > = {
   "/calendar": CalendarSection,
   "/academic-record": AcademicRecordSection,
@@ -174,7 +177,8 @@ function App() {
     };
   }, []);
 
-  const pageTitleKey = pageTitleKeyMap[currentPath] ?? pageTitleKeyMap[defaultPath];
+  const pageTitleKey =
+    pageTitleKeyMap[currentPath] ?? pageTitleKeyMap[defaultPath];
   const pageTitle = t(`app.pageTitles.${pageTitleKey}`);
 
   useEffect(() => {
@@ -217,7 +221,8 @@ function App() {
       return;
     }
 
-    const loader = dashboardSectionLoaders[path as Exclude<RoutePath, typeof landingPath>];
+    const loader =
+      dashboardSectionLoaders[path as Exclude<RoutePath, typeof landingPath>];
     loader?.preload?.();
     prefetchedPathsRef.current.add(path);
   }, []);
@@ -292,7 +297,12 @@ function App() {
 
     const identifier = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     setAchievements((previous) => [
-      { id: identifier, title: trimmed, category: newAchievement.category, verified: false },
+      {
+        id: identifier,
+        title: trimmed,
+        category: newAchievement.category,
+        verified: false,
+      },
       ...previous,
     ]);
     setNewAchievement((previous) => ({ ...previous, title: "" }));
@@ -346,9 +356,10 @@ function App() {
             }),
           });
 
-          const payload = (await response.json().catch(() => null)) as
-            | { member?: Member; error?: string }
-            | null;
+          const payload = (await response.json().catch(() => null)) as {
+            member?: Member;
+            error?: string;
+          } | null;
 
           if (!response.ok) {
             if (response.status === 401 || response.status === 403) {

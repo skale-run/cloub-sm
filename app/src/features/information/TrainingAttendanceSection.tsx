@@ -167,55 +167,52 @@ function TrainingAttendanceSection(): ReactElement {
     [locale],
   );
 
-  const attendanceSummary = useMemo(
-    () => {
-      const summary = attendanceByWeek.reduce(
-        (accumulator, week) => {
-          accumulator.totalPlanned += week.plannedSessions;
-          accumulator.totalAttended += week.attendedSessions;
+  const attendanceSummary = useMemo(() => {
+    const summary = attendanceByWeek.reduce(
+      (accumulator, week) => {
+        accumulator.totalPlanned += week.plannedSessions;
+        accumulator.totalAttended += week.attendedSessions;
 
-          const weeklyRate = week.attendedSessions / week.plannedSessions;
-          if (
-            accumulator.bestWeek === null ||
-            weeklyRate > accumulator.bestRate
-          ) {
-            accumulator.bestWeek = week;
-            accumulator.bestRate = weeklyRate;
-          }
-          if (
-            accumulator.focusWeek === null ||
-            weeklyRate < accumulator.focusRate
-          ) {
-            accumulator.focusWeek = week;
-            accumulator.focusRate = weeklyRate;
-          }
+        const weeklyRate = week.attendedSessions / week.plannedSessions;
+        if (
+          accumulator.bestWeek === null ||
+          weeklyRate > accumulator.bestRate
+        ) {
+          accumulator.bestWeek = week;
+          accumulator.bestRate = weeklyRate;
+        }
+        if (
+          accumulator.focusWeek === null ||
+          weeklyRate < accumulator.focusRate
+        ) {
+          accumulator.focusWeek = week;
+          accumulator.focusRate = weeklyRate;
+        }
 
-          return accumulator;
-        },
-        {
-          totalPlanned: 0,
-          totalAttended: 0,
-          bestWeek: null as (typeof attendanceByWeek)[number] | null,
-          bestRate: -Infinity,
-          focusWeek: null as (typeof attendanceByWeek)[number] | null,
-          focusRate: Infinity,
-        },
-      );
+        return accumulator;
+      },
+      {
+        totalPlanned: 0,
+        totalAttended: 0,
+        bestWeek: null as (typeof attendanceByWeek)[number] | null,
+        bestRate: -Infinity,
+        focusWeek: null as (typeof attendanceByWeek)[number] | null,
+        focusRate: Infinity,
+      },
+    );
 
-      const attendanceRate = summary.totalPlanned
-        ? Math.round((summary.totalAttended / summary.totalPlanned) * 100)
-        : 0;
+    const attendanceRate = summary.totalPlanned
+      ? Math.round((summary.totalAttended / summary.totalPlanned) * 100)
+      : 0;
 
-      return {
-        totalPlanned: summary.totalPlanned,
-        totalAttended: summary.totalAttended,
-        attendanceRate,
-        bestWeek: summary.bestWeek,
-        focusWeek: summary.focusWeek,
-      };
-    },
-    [],
-  );
+    return {
+      totalPlanned: summary.totalPlanned,
+      totalAttended: summary.totalAttended,
+      attendanceRate,
+      bestWeek: summary.bestWeek,
+      focusWeek: summary.focusWeek,
+    };
+  }, []);
 
   const { totalAttended, totalPlanned, attendanceRate, bestWeek, focusWeek } =
     attendanceSummary;
@@ -328,11 +325,11 @@ function TrainingAttendanceSection(): ReactElement {
           };
         })
         .filter(Boolean) as Array<{
-          id: "pending" | "medical";
-          icon: LucideIcon;
-          count: number;
-          translationKey: FollowUpActionDefinition["translationKey"];
-        }>,
+        id: "pending" | "medical";
+        icon: LucideIcon;
+        count: number;
+        translationKey: FollowUpActionDefinition["translationKey"];
+      }>,
     [rosterStatusCounts],
   );
 
@@ -446,9 +443,7 @@ function TrainingAttendanceSection(): ReactElement {
                   <p className="text-lg font-semibold text-red-50">
                     {insight.value}
                   </p>
-                  <p className="text-xs text-red-100/80">
-                    {insight.detail}
-                  </p>
+                  <p className="text-xs text-red-100/80">{insight.detail}</p>
                 </RedSurface>
               );
             })}
@@ -479,16 +474,13 @@ function TrainingAttendanceSection(): ReactElement {
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-red-100/80">
-                    {t(
-                      "information.trainingAttendance.byWeek.sessions",
-                      {
-                        attended: week.attendedSessions,
-                        planned: week.plannedSessions,
-                        highlight: t(
-                          `information.trainingAttendance.byWeek.items.${week.key}.highlight`,
-                        ),
-                      },
-                    )}
+                    {t("information.trainingAttendance.byWeek.sessions", {
+                      attended: week.attendedSessions,
+                      planned: week.plannedSessions,
+                      highlight: t(
+                        `information.trainingAttendance.byWeek.items.${week.key}.highlight`,
+                      ),
+                    })}
                   </p>
                   <div className="mt-3 h-2 rounded-full bg-red-950/45">
                     <div
@@ -536,7 +528,9 @@ function TrainingAttendanceSection(): ReactElement {
                     {t("training.lead", { coach: session.coach })}
                   </p>
                   {session.focus ? (
-                    <p className="mt-3 text-xs text-red-100/80">{session.focus}</p>
+                    <p className="mt-3 text-xs text-red-100/80">
+                      {session.focus}
+                    </p>
                   ) : null}
                   {session.emphasis ? (
                     <p className="text-[0.7rem] uppercase tracking-[0.35em] text-red-200/70">
@@ -563,7 +557,10 @@ function TrainingAttendanceSection(): ReactElement {
                     {t("information.trainingAttendance.followUp.helper")}
                   </p>
                 </div>
-                <ClipboardCheck className="h-5 w-5 text-red-200/75" aria-hidden />
+                <ClipboardCheck
+                  className="h-5 w-5 text-red-200/75"
+                  aria-hidden
+                />
               </div>
               <ul className="space-y-3">
                 {followUpActions.map((action) => {
@@ -652,12 +649,9 @@ function TrainingAttendanceSection(): ReactElement {
                     />
                   </div>
                   <p className="mt-2 text-xs text-red-100/75">
-                    {t(
-                      "information.trainingAttendance.statuses.percent",
-                      {
-                        percent: status.percent,
-                      },
-                    )}
+                    {t("information.trainingAttendance.statuses.percent", {
+                      percent: status.percent,
+                    })}
                   </p>
                 </RedSurface>
               ))}
