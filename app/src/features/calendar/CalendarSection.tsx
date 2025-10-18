@@ -486,6 +486,10 @@ function CalendarSection(): ReactElement {
     setSelectedDayKey(fallbackOption.key);
   }, [dayOptions, selectedDayKey, today]);
 
+  const closeEventModal = useCallback(() => {
+    setActiveEvent(null);
+  }, []);
+
   useEffect(() => {
     if (!activeEvent) {
       return;
@@ -540,10 +544,6 @@ function CalendarSection(): ReactElement {
   const handleEventClick = (event: CalendarEvent) => {
     setActiveEvent(event);
   };
-
-  const closeEventModal = useCallback(() => {
-    setActiveEvent(null);
-  }, []);
 
   const activeEventStart = useMemo(() => {
     if (!activeEvent) {
