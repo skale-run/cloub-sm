@@ -46,15 +46,6 @@ async function getSessionById(sessionId) {
   return result.rows[0] ?? null;
 }
 
-async function revokeSession(sessionId) {
-  await query(
-    `UPDATE auth_sessions
-        SET revoked_at = NOW()
-      WHERE id = $1 AND revoked_at IS NULL`,
-    [sessionId],
-  );
-}
-
 function signSessionToken({ sessionId, memberId }) {
   return jwt.sign(
     {
@@ -77,7 +68,6 @@ module.exports = {
   SESSION_TTL_SECONDS,
   createSession,
   getSessionById,
-  revokeSession,
   signSessionToken,
   verifyToken,
 };

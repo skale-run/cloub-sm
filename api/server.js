@@ -15,6 +15,34 @@ const { pool } = require("./src/db/pool");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+const API_ROUTES = [
+  {
+    path: "/members",
+    router: membersRouter,
+    description: "Member CRUD, authentication, and session management.",
+  },
+  {
+    path: "/calendar-events",
+    router: calendarEventsRouter,
+    description: "Manage calendar events and scheduling metadata.",
+  },
+  {
+    path: "/access-logs",
+    router: accessLogsRouter,
+    description: "Query facility access logs with filtering support.",
+  },
+  {
+    path: "/training-attendance",
+    router: trainingAttendanceRouter,
+    description: "Record and list training attendance logs.",
+  },
+  {
+    path: "/training-insights",
+    router: trainingInsightsRouter,
+    description: "Aggregated training insights and roster summaries.",
+  },
+];
+
 app.disable("x-powered-by");
 app.use(
   helmet({
@@ -31,11 +59,20 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.use("/api/members", membersRouter);
-app.use("/api/calendar-events", calendarEventsRouter);
-app.use("/api/access-logs", accessLogsRouter);
-app.use("/api/training-attendance", trainingAttendanceRouter);
-app.use("/api/training-insights", trainingInsightsRouter);
+app.get("/api", (req, res) => {
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    routes: API_ROUTES.map(({ path, description }) => ({
+      path: `/api${path}`,
+      description,
+    })),
+  });
+});
+
+for (const { path, router } of API_ROUTES) {
+  app.use(`/api${path}`, router);
+}
 
 app.use(notFoundHandler);
 app.use(errorHandler);
