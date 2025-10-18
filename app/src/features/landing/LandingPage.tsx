@@ -18,6 +18,7 @@ import {
   type LucideIcon,
 } from "../../lucide-react";
 import { cn } from "../../lib/cn";
+import { getFallbackTranslator } from "../../lib/translationFallback";
 
 interface LandingPageProps {
   onSignup: () => void;
@@ -114,6 +115,80 @@ type CommandCenterContent = {
   >;
 };
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+function isCommandCenterContent(value: unknown): value is CommandCenterContent {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  if (
+    typeof value.heading !== "string" ||
+    typeof value.subheading !== "string" ||
+    typeof value.focusTitle !== "string" ||
+    typeof value.focusSubtitle !== "string" ||
+    typeof value.shortcutsTitle !== "string"
+  ) {
+    return false;
+  }
+
+  if (!isRecord(value.notifications)) {
+    return false;
+  }
+
+  if (!isRecord(value.statusLabels)) {
+    return false;
+  }
+
+  if (!Array.isArray(value.roleOptions)) {
+    return false;
+  }
+
+  if (!isRecord(value.roleVariants)) {
+    return false;
+  }
+
+  const notifications = value.notifications as Record<string, unknown>;
+
+  return (
+    typeof notifications.title === "string" &&
+    typeof notifications.empty === "string" &&
+    typeof notifications.viewAll === "string"
+  );
+}
+
+const EMPTY_ROLE_VARIANT: CommandCenterContent["roleVariants"][RoleKey] = {
+  welcome: "",
+  tagline: "",
+  kpis: [],
+  focus: [],
+  shortcuts: [],
+  notifications: [],
+  timeline: { title: "", entries: [] },
+  highlights: { title: "", items: [] },
+  reels: { title: "", clips: [] },
+};
+
+const EMPTY_COMMAND_CENTER: CommandCenterContent = {
+  heading: "",
+  subheading: "",
+  notifications: { title: "", empty: "", viewAll: "" },
+  statusLabels: {},
+  roleSwitcherLabel: "",
+  roleOptions: [],
+  focusTitle: "",
+  focusSubtitle: "",
+  shortcutsTitle: "",
+  roleVariants: {
+    master: { ...EMPTY_ROLE_VARIANT },
+    coach: { ...EMPTY_ROLE_VARIANT },
+    parent: { ...EMPTY_ROLE_VARIANT },
+    athlete: { ...EMPTY_ROLE_VARIANT },
+    default: { ...EMPTY_ROLE_VARIANT },
+  },
+};
+
 const iconLookup: Record<string, LucideIcon> = {
   calendar: CalendarDays,
   award: Award,
@@ -164,17 +239,30 @@ function detectRole(role: string | null | undefined): RoleKey {
 }
 
 const LandingPage: FC<LandingPageProps> = ({ onSignup, onLogin, onContact }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const fallbackT = useMemo(() => getFallbackTranslator(i18n), [i18n]);
   const { member } = useMember();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
-  const commandCenter = useMemo(
-    () =>
-      t("landing.commandCenter", {
-        returnObjects: true,
-      }) as CommandCenterContent,
-    [t],
-  );
+  const commandCenter = useMemo(() => {
+    const fallbackValue = fallbackT("landing.commandCenter", {
+      returnObjects: true,
+    });
+
+    const fallbackContent = isCommandCenterContent(fallbackValue)
+      ? (fallbackValue as CommandCenterContent)
+      : EMPTY_COMMAND_CENTER;
+
+    const primaryValue = t("landing.commandCenter", {
+      returnObjects: true,
+    });
+
+    if (isCommandCenterContent(primaryValue)) {
+      return primaryValue as CommandCenterContent;
+    }
+
+    return fallbackContent;
+  }, [t, fallbackT]);
 
   const [activeRole, setActiveRole] = useState<RoleKey>(() =>
     detectRole(member?.role ?? null),
