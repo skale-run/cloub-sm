@@ -463,6 +463,10 @@ function CalendarSection(): ReactElement {
     }));
   };
 
+  const closeEventModal = useCallback(() => {
+    setActiveEvent(null);
+  }, []);
+
   useEffect(() => {
     if (dayOptions.length === 0) {
       setSelectedDayKey("");
@@ -485,10 +489,6 @@ function CalendarSection(): ReactElement {
 
     setSelectedDayKey(fallbackOption.key);
   }, [dayOptions, selectedDayKey, today]);
-
-  const closeEventModal = useCallback(() => {
-    setActiveEvent(null);
-  }, []);
 
   useEffect(() => {
     if (!activeEvent) {
