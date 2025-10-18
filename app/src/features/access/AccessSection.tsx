@@ -1,7 +1,9 @@
 import { useMemo } from "react";
+import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import { cn } from "../../lib/cn";
+import { getFallbackTranslator } from "../../lib/translationFallback";
 import {
   ClipboardCheck,
   ClipboardList,
@@ -16,8 +18,47 @@ type AccessSectionProps = {
   savedProfile: Profile | null;
 };
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const isStringRecord = (value: unknown): value is Record<string, string> =>
+  isRecord(value) && Object.values(value).every((entry) => typeof entry === "string");
+
+function resolveStringRecord(
+  primary: TFunction,
+  fallback: TFunction,
+  key: string,
+): Record<string, string> {
+  const translation = primary(key, { returnObjects: true });
+  if (isStringRecord(translation)) {
+    return translation;
+  }
+
+  const fallbackTranslation = fallback(key, { returnObjects: true });
+  if (isStringRecord(fallbackTranslation)) {
+    return fallbackTranslation;
+  }
+
+  return {};
+}
+
+function resolveArray<T>(primary: TFunction, fallback: TFunction, key: string): T[] {
+  const translation = primary(key, { returnObjects: true });
+  if (Array.isArray(translation)) {
+    return translation as T[];
+  }
+
+  const fallbackTranslation = fallback(key, { returnObjects: true });
+  if (Array.isArray(fallbackTranslation)) {
+    return fallbackTranslation as T[];
+  }
+
+  return [];
+}
+
 function AccessSection({ savedProfile }: AccessSectionProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const fallbackT = useMemo(() => getFallbackTranslator(i18n), [i18n]);
 
   const qrCodeUrl = useMemo(() => {
     if (!savedProfile) {
@@ -123,13 +164,13 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
   }, [savedProfile, t]);
 
   const accessTips = useMemo(
-    () => t("access.tips.items", { returnObjects: true }) as string[],
-    [t],
+    () => resolveArray<string>(t, fallbackT, "access.tips.items"),
+    [t, fallbackT],
   );
 
   const eventDayChecklist = useMemo(
-    () => t("access.eventChecklist.items", { returnObjects: true }) as string[],
-    [t],
+    () => resolveArray<string>(t, fallbackT, "access.eventChecklist.items"),
+    [t, fallbackT],
   );
 
   type PermissionLevel = "full" | "manage" | "edit" | "view" | "restricted";
@@ -142,26 +183,27 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
 
   const permissionLabels = useMemo(
     () =>
-      t("access.permissions.capabilityLabels", {
-        returnObjects: true,
-      }) as Record<string, string>,
-    [t],
+      resolveStringRecord(t, fallbackT, "access.permissions.capabilityLabels"),
+    [t, fallbackT],
   );
 
   const permissionLegend = useMemo(
     () =>
-      t("access.permissions.legend", {
-        returnObjects: true,
-      }) as Record<PermissionLevel, string>,
-    [t],
+      resolveStringRecord(t, fallbackT, "access.permissions.legend") as Record<
+        PermissionLevel,
+        string
+      >,
+    [t, fallbackT],
   );
 
   const permissionMatrix = useMemo(
     () =>
-      t("access.permissions.matrix", {
-        returnObjects: true,
-      }) as PermissionMatrixRow[],
-    [t],
+      resolveArray<PermissionMatrixRow>(
+        t,
+        fallbackT,
+        "access.permissions.matrix",
+      ),
+    [t, fallbackT],
   );
 
   const capabilityOrder = useMemo(
