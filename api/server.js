@@ -11,6 +11,7 @@ const trainingInsightsRouter = require("./src/routes/training-insights");
 const { errorHandler } = require("./src/middleware/error-handler");
 const { notFoundHandler } = require("./src/middleware/not-found");
 const { pool } = require("./src/db/pool");
+const { runMigrations } = require("./src/db/migrate");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -83,6 +84,7 @@ app.use(errorHandler);
 
 async function start() {
   try {
+    await runMigrations();
     await pool.query("SELECT 1");
   } catch (error) {
     console.error("Failed to connect to the database", error);
