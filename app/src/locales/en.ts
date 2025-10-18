@@ -645,50 +645,50 @@ export const en = {
       },
     },
     landing: {
-      badge: "Cloud-based Taekwondo management",
-      heroTitle: "Unify your dojang and empower every martial artist",
+      badge: "Modern Taekwondo operations platform",
+      heroTitle: "Run your dojang with clarity and confidence",
       heroDescription:
-        "Cloub equips masters, practitioners, and coordinators with a unified hub for class scheduling, belt assessments, and tournament preparation. Strengthen your program with insights that keep every ring team aligned.",
+        "Cloub unites masters, practitioners, and coordinators in one workspace for class scheduling, belt evaluations, and tournament preparation. Turn attendance, finance, and performance insights into next steps for every team.",
       ctas: {
-        primary: "Sign up",
+        primary: "Start free trial",
         secondary: "Log in",
-        tertiary: "Contact",
+        tertiary: "Talk to us",
       },
       features: [
         {
           title: "Integrated class planning",
           description:
-            "Organize poomsae, sparring, and conditioning blocks with automated reminders that keep every belt group informed.",
+            "Build poomsae, sparring, and conditioning tracks with automated reminders that keep every belt team aligned.",
         },
         {
           title: "Performance intelligence",
           description:
-            "Visualize practitioner progress with dashboards that combine attendance, technique scores, and evaluation insights.",
+            "Visualize progress with dashboards that blend attendance trends, technical scores, and evaluation notes.",
         },
         {
-          title: "Secure access for all",
+          title: "Secure access for every role",
           description:
             "Role-based permissions give masters, athletes, and guardians the right visibility while protecting sensitive data.",
         },
       ],
       commandCenter: {
-        heading: "Role-aware control center",
+        heading: "Command center for every role",
         subheading:
-          "Switch between personas to see how Cloub personalizes insight, tasks, and communication guardrails.",
-        roleSwitcherLabel: "Preview dashboards",
+          "Preview how each persona experiences Cloub's guided insights, task lists, and communication guardrails.",
+        roleSwitcherLabel: "Toggle dashboards",
         notifications: {
-          title: "Notification center",
-          empty: "You're all caught up across every ring team.",
-          viewAll: "active alerts",
+          title: "Notification hub",
+          empty: "You're caught up across every ring team.",
+          viewAll: "view alerts",
         },
         statusLabels: {
           completed: "Completed",
-          upcoming: "Upcoming",
-          overdue: "Overdue",
+          upcoming: "Next up",
+          overdue: "Past due",
         },
-        focusTitle: "Immediate focus",
-        focusSubtitle: "Auto-prioritised from attendance + finance data",
-        shortcutsTitle: "Quick shortcuts",
+        focusTitle: "Priority focus",
+        focusSubtitle: "Auto-prioritized from attendance and billing signals",
+        shortcutsTitle: "Quick actions",
         roleOptions: [
           {
             id: "master",

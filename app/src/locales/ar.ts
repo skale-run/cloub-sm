@@ -664,12 +664,12 @@ export const ar = {
       },
     },
     landing: {
-      badge: "إدارة تايكواندو سحابية",
-      heroTitle: "وحّد دوجانك وامنح كل لاعب دفعة",
+      badge: "منصة حديثة لإدارة التايكواندو",
+      heroTitle: "أدر الدوجان بوضوح وثقة",
       heroDescription:
-        "توفر Cloub للماسترز والممارسين والمنسّقين مركزًا موحّدًا لجدولة الحصص وتقييم الأحزمة والتحضير للبطولات. قوِّ برنامجك برؤى تُبقي كل فريق حلبة متناغمًا.",
+        "تجمع Cloub بين الماسترز والممارسين والمنسقين في مساحة عمل واحدة لجدولة الحصص، وتقييم الأحزمة، والتحضير للبطولات. حوِّل بيانات الحضور والمالية والأداء إلى إجراءات لكل فريق.",
       ctas: {
-        primary: "إنشاء حساب",
+        primary: "ابدأ النسخة التجريبية المجانية",
         secondary: "تسجيل الدخول",
         tertiary: "تواصل معنا",
       },
@@ -677,37 +677,37 @@ export const ar = {
         {
           title: "تخطيط حصص متكامل",
           description:
-            "نظّم البومسي والسبارينغ والتهيئة مع تذكيرات تلقائية تبقي كل فئة أحزمة على اطلاع.",
+            "أنشئ مسارات البومسي والسبارينغ والتأهيل مع تذكيرات تلقائية تُبقي كل مجموعة أحزمة على المسار.",
         },
         {
           title: "ذكاء الأداء",
           description:
-            "تصوّر تقدّم الممارس بلوحات تجمع الحضور ودرجات التقنية وملاحظات التقييم.",
+            "اعرض التقدّم عبر لوحات تمزج اتجاهات الحضور ودرجات التقنية وملاحظات التقييم.",
         },
         {
-          title: "وصول آمن للجميع",
+          title: "وصول آمن لكل دور",
           description:
-            "أذونات قائمة على الأدوار تمنح الماسترز والرياضيين والأولياء رؤية مناسبة مع حماية البيانات الحساسة.",
+            "تمنح الأذونات المعتمدة على الدور الماسترز والرياضيين والأوصياء الرؤية المناسبة مع حماية البيانات الحساسة.",
         },
       ],
       commandCenter: {
-        heading: "Role-aware control center",
+        heading: "مركز قيادة لكل دور",
         subheading:
-          "Switch between personas to see how Cloub personalizes insight, tasks, and communication guardrails.",
-        roleSwitcherLabel: "Preview dashboards",
+          "استعرض كيف يقدّم Cloub رؤى موجّهة وقوائم مهام وضوابط تواصل لكل شخصية.",
+        roleSwitcherLabel: "تبديل لوحات التحكم",
         notifications: {
-          title: "Notification center",
-          empty: "You're all caught up across every ring team.",
-          viewAll: "active alerts",
+          title: "مركز التنبيهات",
+          empty: "أنت مطّلع على كل فرق الحلبة.",
+          viewAll: "عرض التنبيهات",
         },
         statusLabels: {
-          completed: "Completed",
-          upcoming: "Upcoming",
-          overdue: "Overdue",
+          completed: "مكتمل",
+          upcoming: "قادم",
+          overdue: "متأخر",
         },
-        focusTitle: "Immediate focus",
-        focusSubtitle: "Auto-prioritised from attendance + finance data",
-        shortcutsTitle: "Quick shortcuts",
+        focusTitle: "أولوية فورية",
+        focusSubtitle: "يتم تحديدها تلقائيًا من إشارات الحضور والفوترة",
+        shortcutsTitle: "إجراءات سريعة",
         roleOptions: [
           {
             id: "master",
