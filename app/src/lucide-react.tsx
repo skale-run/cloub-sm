@@ -226,3 +226,9 @@ export const ShieldCheck = createLucideIcon(
     <path d="m9 12 2 2 4-4" />
   </>,
 );
+
+export const MessageCircle = createLucideIcon(
+  <>
+    <path d="M3 11a8 8 0 1 1 3.89 6.83L3 21l1.17-3.51A7.96 7.96 0 0 1 3 11Z" />
+  </>,
+);

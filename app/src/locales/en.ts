@@ -31,6 +31,7 @@ export const en = {
         progressOverview: "Progress overview",
         performanceTracking: "Taekwondo performance tracking",
         profile: "Practitioner profile",
+        guardianPortal: "Parent & guardian portal",
         access: "Access management",
         overview: "Overview",
       },
@@ -213,6 +214,11 @@ export const en = {
               to: "/training-attendance",
               label: "Training attendance",
               description: "See dojang check-ins by week",
+            },
+            {
+              to: "/guardian-portal",
+              label: "Guardian portal",
+              description: "Family view across attendance, billing & events",
             },
           ],
         },
@@ -2425,10 +2431,124 @@ export const en = {
               },
             },
           },
+      },
+    },
+    guardianPortal: {
+      badge: "Guardian view",
+      title: "Stay aligned with your athlete",
+      description:
+        "Monitor attendance momentum, keep billing on track, and prepare for upcoming commitments in one streamlined feed.",
+      summaryCards: {
+        attendance: {
+          label: "Attendance this month",
+          value: "12 / 14 sessions",
+          helper: "On track for the dojang attendance goal",
+        },
+        billing: {
+          label: "Outstanding balance",
+          value: "MAD 180",
+          helper: "Spring membership dues · due Apr 25",
+        },
+        events: {
+          label: "Next commitments",
+          value: "2 upcoming events",
+          helper: "Regional invitational & guardian forum",
         },
       },
-      trainingAttendance: {
-        heading: "Training attendance",
+      feed: {
+        heading: "Family activity feed",
+        helper:
+          "Attendance patterns, billing status, and upcoming events in one stream.",
+        items: {
+          attendance: {
+            badge: "Attendance update",
+            title: "Five-session streak intact",
+            description:
+              "Jordan has checked in for every dojang session this week. Energy notes remain strong.",
+            timestamp: "Updated 2 hours ago",
+            patternLabel: "Last 7 sessions",
+            days: {
+              mon: "Mon",
+              tue: "Tue",
+              wed: "Wed",
+              thu: "Thu",
+              fri: "Fri",
+              sat: "Sat",
+              sun: "Sun",
+            },
+            callout: "Keep Thursday’s active recovery window to protect the streak.",
+          },
+          billing: {
+            badge: "Billing status",
+            title: "Auto-pay set for Apr 25",
+            description:
+              "Remaining spring membership dues will draft automatically. No further action needed.",
+            timestamp: "Synced this morning",
+            balanceLabel: "Balance due",
+            balanceValue: "MAD 180 outstanding",
+            balanceHelper: "Invoice INV-2045 · due Apr 25",
+            autopayLabel: "Auto-pay",
+            autopayValue: "Runs Apr 25 at 09:00",
+            autopayHelper: "Visa •••• 4298",
+          },
+          events: {
+            badge: "Upcoming events",
+            title: "Two commitments next week",
+            description:
+              "Regional sparring invitational and guardian forum are on the calendar.",
+            timestamp: "Updated just now",
+            list: {
+              regional: {
+                title: "Regional sparring invitational",
+                date: "Apr 21 · Arrival 08:00",
+                helper: "Confirm travel check-in by Fri, Apr 18.",
+              },
+              parentForum: {
+                title: "Guardian coordination forum",
+                date: "Apr 24 · 19:00",
+                helper: "In-person at the high performance studio.",
+              },
+            },
+          },
+        },
+      },
+      messaging: {
+        heading: "Message coaching staff",
+        helper: "Secure channel with the lead masters for quick updates.",
+        messages: {
+          masterLewis: {
+            author: "Master Amara Lewis",
+            role: "Lead coach",
+            body: "Jordan kept excellent pop through the plyometric ladder today. We’re seeing great focus.",
+            timestamp: "Sent 4:10 PM",
+          },
+          guardian: {
+            author: "You",
+            role: "Guardian",
+            body: "Thank you! We’ll reinforce hydration tonight before tomorrow’s morning block.",
+            timestamp: "Sent 4:18 PM",
+          },
+          masterLewisFollowUp: {
+            author: "Master Amara Lewis",
+            role: "Lead coach",
+            body: "Perfect. We’ll send a short clip from the sparring preview once it’s uploaded.",
+            timestamp: "Sent 4:26 PM",
+          },
+        },
+        quickReplies: {
+          transport: "Share pickup update",
+          billing: "Question about invoice",
+          checkIn: "Confirm arrival time",
+        },
+        composer: {
+          label: "Write a message",
+          placeholder: "Type a quick update or question…",
+          cta: "Send message",
+        },
+      },
+    },
+    trainingAttendance: {
+      heading: "Training attendance",
         description:
           "Weekly overview of confirmed dojang check-ins and key staff notes.",
         seasonRate: {
