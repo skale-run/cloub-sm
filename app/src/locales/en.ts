@@ -55,6 +55,10 @@ export const en = {
           open: "Open navigation",
           close: "Close navigation",
         },
+        avatarNavigation: {
+          profile: "Go to your profile",
+          access: "Go to access management",
+        },
       },
     },
     auth: {

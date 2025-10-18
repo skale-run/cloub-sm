@@ -55,6 +55,10 @@ export const ar = {
           open: "فتح التنقّل",
           close: "إغلاق التنقّل",
         },
+        avatarNavigation: {
+          profile: "الانتقال إلى ملفك الشخصي",
+          access: "الانتقال إلى إدارة الوصول",
+        },
       },
     },
     auth: {

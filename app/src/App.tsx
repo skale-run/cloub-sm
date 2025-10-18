@@ -2,6 +2,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type FormEvent,
@@ -200,6 +201,20 @@ function App() {
   const handleSidebarNavigate = useCallback(() => {
     setIsSidebarOpen(false);
   }, []);
+
+  const hasCompletedProfile = useMemo(() => {
+    if (!savedProfile) {
+      return false;
+    }
+
+    const trimmedProfile = trimProfile(savedProfile);
+    return Boolean(trimmedProfile.fullName && trimmedProfile.membershipId);
+  }, [savedProfile]);
+
+  const handleAvatarClick = useCallback(() => {
+    const destination: RoutePath = hasCompletedProfile ? "/access" : "/profile";
+    handleNavigateTo(destination);
+  }, [handleNavigateTo, hasCompletedProfile]);
 
   const prefetchSection = useCallback((path: RoutePath) => {
     if (path === landingPath || prefetchedPathsRef.current.has(path)) {
@@ -466,6 +481,8 @@ function App() {
           onToggleSidebar={toggleSidebar}
           pageTitle={pageTitle}
           userFullName={connectedUserName}
+          hasCompletedProfile={hasCompletedProfile}
+          onAvatarClick={handleAvatarClick}
         />
         <main className="relative flex-1 overflow-y-auto px-4 pb-16 pt-6 sm:px-6 lg:px-10">
           <div

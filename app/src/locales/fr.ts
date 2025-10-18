@@ -60,6 +60,10 @@ export const fr = {
           open: "Ouvrir la navigation",
           close: "Fermer la navigation",
         },
+        avatarNavigation: {
+          profile: "Accéder à votre profil",
+          access: "Ouvrir la gestion d'accès",
+        },
       },
     },
     auth: {
