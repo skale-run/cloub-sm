@@ -14,6 +14,7 @@ const { pool } = require("./src/db/pool");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+const MAX_REQUEST_SIZE = process.env.MAX_REQUEST_SIZE || "2mb";
 
 const API_BASE_PATH = "/v1";
 
@@ -52,7 +53,8 @@ app.use(
   }),
 );
 
-app.use(express.json());
+app.use(express.json({ limit: MAX_REQUEST_SIZE }));
+app.use(express.urlencoded({ extended: true, limit: MAX_REQUEST_SIZE }));
 
 app.get("/health", (req, res) => {
   res.json({
