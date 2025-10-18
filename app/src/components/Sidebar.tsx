@@ -9,6 +9,7 @@ import {
   GraduationCap,
   LineChart,
   ScanQrCode,
+  ShieldCheck,
   UserCircle,
   Users,
   X,
@@ -41,6 +42,7 @@ const iconMap: Record<RoutePath, typeof Activity> = {
   "/progress-overview": LineChart,
   "/performance-tracking": GaugeCircle,
   "/profile": UserCircle,
+  "/guardian-portal": ShieldCheck,
   "/access": ScanQrCode,
 };
 

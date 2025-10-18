@@ -31,6 +31,7 @@ export const fr = {
         progressOverview: "Vue d'ensemble de la progression",
         performanceTracking: "Suivi des performances taekwondo",
         profile: "Profil du pratiquant",
+        guardianPortal: "Portail parents & tuteurs",
         access: "Gestion des accès",
         overview: "Vue d'ensemble",
       },
@@ -215,6 +216,11 @@ export const fr = {
               to: "/training-attendance",
               label: "Présence à l'entraînement",
               description: "Voyez les passages au dojang par semaine",
+            },
+            {
+              to: "/guardian-portal",
+              label: "Portail parents",
+              description: "Vue familiale des présences, paiements et événements",
             },
           ],
         },
@@ -559,6 +565,121 @@ export const fr = {
       notes: {
         heading: "Notes de facturation",
         placeholder: "Ajouter des notes internes ou des observations de suivi",
+      },
+    },
+    guardianPortal: {
+      badge: "Vue parents",
+      title: "Restez aligné avec votre athlète",
+      description:
+        "Surveillez la dynamique de présence, gardez la facturation à jour et préparez les prochains engagements dans un flux unique.",
+      summaryCards: {
+        attendance: {
+          label: "Présence ce mois-ci",
+          value: "12 / 14 séances",
+          helper: "Objectif de présence du dojang respecté",
+        },
+        billing: {
+          label: "Solde restant",
+          value: "MAD 180",
+          helper: "Cotisation printemps · échéance 25 avr.",
+        },
+        events: {
+          label: "Prochains engagements",
+          value: "2 événements à venir",
+          helper: "Invitational régional & forum parents",
+        },
+      },
+      feed: {
+        heading: "Fil d’activité famille",
+        helper:
+          "Présence, facturation et événements réunis en un seul flux.",
+        items: {
+          attendance: {
+            badge: "Mise à jour présence",
+            title: "Série de cinq séances maintenue",
+            description:
+              "Jordan a pointé à chaque séance du dojang cette semaine. Les notes d'énergie restent élevées.",
+            timestamp: "Mis à jour il y a 2 h",
+            patternLabel: "7 dernières séances",
+            days: {
+              mon: "Lun",
+              tue: "Mar",
+              wed: "Mer",
+              thu: "Jeu",
+              fri: "Ven",
+              sat: "Sam",
+              sun: "Dim",
+            },
+            callout:
+              "Conservez la fenêtre de récupération active du jeudi pour protéger la série.",
+          },
+          billing: {
+            badge: "État de facturation",
+            title: "Prélèvement prévu le 25 avr.",
+            description:
+              "La cotisation de printemps sera prélevée automatiquement. Aucune action supplémentaire requise.",
+            timestamp: "Synchronisé ce matin",
+            balanceLabel: "Solde dû",
+            balanceValue: "MAD 180 restant",
+            balanceHelper: "Facture INV-2045 · échéance 25 avr.",
+            autopayLabel: "Prélèvement auto",
+            autopayValue: "Traitement le 25 avr. à 09h00",
+            autopayHelper: "Visa •••• 4298",
+          },
+          events: {
+            badge: "Événements à venir",
+            title: "Deux rendez-vous la semaine prochaine",
+            description:
+              "L'invitational régional et le forum parents figurent au calendrier.",
+            timestamp: "Mis à jour à l’instant",
+            list: {
+              regional: {
+                title: "Invitational régional de sparring",
+                date: "21 avr. · Arrivée 08h00",
+                helper: "Confirmez l'enregistrement voyage avant ven. 18 avr.",
+              },
+              parentForum: {
+                title: "Forum de coordination parents",
+                date: "24 avr. · 19h00",
+                helper: "Sur place dans le studio haute performance.",
+              },
+            },
+          },
+        },
+      },
+      messaging: {
+        heading: "Écrire aux entraîneurs",
+        helper: "Canal sécurisé avec les maîtres pour des nouvelles rapides.",
+        messages: {
+          masterLewis: {
+            author: "Maître Amara Lewis",
+            role: "Entraîneur principal",
+            body: "Jordan a gardé une excellente explosivité sur l'échelle plyométrique aujourd'hui. Concentration au top.",
+            timestamp: "Envoyé 16:10",
+          },
+          guardian: {
+            author: "Vous",
+            role: "Parent",
+            body: "Merci ! Nous renforcerons l'hydratation ce soir avant le bloc de demain matin.",
+            timestamp: "Envoyé 16:18",
+          },
+          masterLewisFollowUp: {
+            author: "Maître Amara Lewis",
+            role: "Entraîneur principal",
+            body: "Parfait. Nous enverrons un court extrait de l'aperçu sparring dès sa mise en ligne.",
+            timestamp: "Envoyé 16:26",
+          },
+        },
+        quickReplies: {
+          transport: "Partager l'heure de récupération",
+          billing: "Question sur la facture",
+          checkIn: "Confirmer l'arrivée",
+        },
+        composer: {
+          label: "Écrire un message",
+          placeholder: "Saisissez une mise à jour ou une question rapide…",
+          cta: "Envoyer",
+        },
       },
     },
     trainingAttendance: {

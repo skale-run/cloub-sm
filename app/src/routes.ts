@@ -11,6 +11,7 @@ export const routePaths = [
   "/progress-overview",
   "/performance-tracking",
   "/profile",
+  "/guardian-portal",
   "/access",
 ] as const;
 

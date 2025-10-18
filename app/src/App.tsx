@@ -53,6 +53,9 @@ const PerformanceTrackingSection = lazyWithPreload(
 const ProfileSection = lazyWithPreload(
   () => import("./features/profile/ProfileSection"),
 );
+const GuardianPortalSection = lazyWithPreload(
+  () => import("./features/guardian/GuardianPortalSection"),
+);
 const AccessSection = lazyWithPreload(
   () => import("./features/access/AccessSection"),
 );
@@ -67,6 +70,7 @@ const pageTitleKeyMap = {
   "/progress-overview": "progressOverview",
   "/performance-tracking": "performanceTracking",
   "/profile": "profile",
+  "/guardian-portal": "guardianPortal",
   "/access": "access",
 } satisfies Record<RoutePath, string>;
 
@@ -81,6 +85,7 @@ const dashboardSectionLoaders: Partial<
   "/progress-overview": ProgressOverviewSection,
   "/performance-tracking": PerformanceTrackingSection,
   "/profile": ProfileSection,
+  "/guardian-portal": GuardianPortalSection,
   "/access": AccessSection,
 };
 
@@ -427,6 +432,8 @@ function App() {
         );
       case "/access":
         return <AccessSection savedProfile={savedProfile} />;
+      case "/guardian-portal":
+        return <GuardianPortalSection />;
       default:
         return <CalendarSection />;
     }
