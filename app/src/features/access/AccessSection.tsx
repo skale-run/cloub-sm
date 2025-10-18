@@ -163,15 +163,13 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
     ];
   }, [savedProfile, t]);
 
-  const accessTips = useMemo(
-    () => resolveArray<string>(t, fallbackT, "access.tips.items"),
-    [t, fallbackT],
-  );
+  const accessTips = useMemo(() => {
+    return resolveArray<string>(t, fallbackT, "access.tips.items");
+  }, [t, fallbackT]);
 
-  const eventDayChecklist = useMemo(
-    () => resolveArray<string>(t, fallbackT, "access.eventChecklist.items"),
-    [t, fallbackT],
-  );
+  const eventDayChecklist = useMemo(() => {
+    return resolveArray<string>(t, fallbackT, "access.eventChecklist.items");
+  }, [t, fallbackT]);
 
   type PermissionLevel = "full" | "manage" | "edit" | "view" | "restricted";
 
