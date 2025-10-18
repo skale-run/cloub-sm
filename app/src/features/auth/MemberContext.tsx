@@ -8,10 +8,10 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { fetchJson, isApiError } from "../../lib/api";
 
 const STORAGE_KEY = "cloub-auth-member" as const;
 const TOKEN_STORAGE_KEY = "cloub-auth-token" as const;
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
 
 export type Member = {
   id: string;
@@ -124,8 +124,8 @@ export function MemberProvider({ children }: MemberProviderProps) {
 
     async function refreshMemberProfile() {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/members/${initialMember.id}`,
+        const payload = await fetchJson<{ member?: Member }>(
+          `/members/${initialMember.id}`,
           {
             signal: controller.signal,
             headers: {
@@ -160,6 +160,14 @@ export function MemberProvider({ children }: MemberProviderProps) {
       } catch (error) {
         if (controller.signal.aborted) {
           return;
+        }
+
+        if (isApiError(error)) {
+          if (error.status === 404 || error.status === 401 || error.status === 403) {
+            setMemberState(null);
+            setAuthToken(null);
+            return;
+          }
         }
 
         console.warn("Failed to refresh member profile", error);

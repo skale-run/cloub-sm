@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
 import RedSurface from "../../components/RedSurface";
 import { getLanguagePresentation } from "../../lib/i18n";
-import { calendarEvents, type CalendarEvent } from "./calendarEvents";
+import { useCalendarEvents, type CalendarEvent } from "./calendarEvents";
 import { ChevronLeft, ChevronRight } from "../../lucide-react";
 
 type CalendarView = "month" | "week" | "day";
@@ -133,6 +133,11 @@ function isSameDay(a: Date, b: Date): boolean {
 
 function CalendarSection(): ReactElement {
   const { t, i18n } = useTranslation();
+  const {
+    events: calendarEvents,
+    isLoading: isLoadingEvents,
+    error: calendarEventsError,
+  } = useCalendarEvents();
 
   const languagePresentation = useMemo(
     () => getLanguagePresentation(i18n.language),
@@ -219,7 +224,7 @@ function CalendarSection(): ReactElement {
         (first, second) =>
           new Date(first.start).getTime() - new Date(second.start).getTime(),
       ),
-    [],
+    [calendarEvents],
   );
 
   const today = useMemo(() => {

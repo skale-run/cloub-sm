@@ -1,7 +1,16 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
 import RedSurface from "../../components/RedSurface";
+import { fetchJson } from "../../lib/api";
 import { cn } from "../../lib/cn";
 import {
   getFallbackTranslator,
@@ -18,6 +27,7 @@ import {
 } from "../../lucide-react";
 import type { LucideIcon } from "../../lucide-react";
 import type { Profile } from "../profile/profileTypes";
+import { useMember } from "../auth/MemberContext";
 
 type AccessSectionProps = {
   savedProfile: Profile | null;
@@ -26,6 +36,7 @@ type AccessSectionProps = {
 function AccessSection({ savedProfile }: AccessSectionProps) {
   const { t, i18n } = useTranslation();
   const fallbackT = useMemo(() => getFallbackTranslator(i18n), [i18n]);
+  const locale = i18n.language.startsWith("ar") ? "ar-EG" : "en-US";
   const [isQrPreviewOpen, setIsQrPreviewOpen] = useState(false);
   const qrCloseButtonRef = useRef<HTMLButtonElement | null>(null);
   const qrDialogTitleId = "dojang-access-qr-dialog-title";
@@ -100,12 +111,34 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
     };
   }, [savedProfile, t]);
 
+  const accessDateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }),
+    [locale],
+  );
+
   type QuickAction = {
     id: string;
     label: string;
     description: string;
     icon: LucideIcon;
     disabled?: boolean;
+  };
+
+  type AccessLog = {
+    id: string;
+    memberId: string;
+    accessedAt: string | null;
+    accessPoint: string | null;
+    note: string | null;
+    createdAt: string | null;
+  };
+
+  type AccessLogsResponse = {
+    accessLogs?: AccessLog[];
   };
 
   const quickActions: QuickAction[] = useMemo(() => {
@@ -142,6 +175,113 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
       },
     ];
   }, [savedProfile, t]);
+
+  const { member, authToken } = useMember();
+  const [accessLogs, setAccessLogs] = useState<AccessLog[]>([]);
+  const [isLoadingLogs, setIsLoadingLogs] = useState(false);
+  const [logsError, setLogsError] = useState<string | null>(null);
+  const [logNote, setLogNote] = useState("");
+  const [logFeedback, setLogFeedback] = useState<string | null>(null);
+  const [isSubmittingLog, setIsSubmittingLog] = useState(false);
+
+  useEffect(() => {
+    if (!member?.id) {
+      setAccessLogs([]);
+      setIsLoadingLogs(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    setIsLoadingLogs(true);
+    setLogsError(null);
+
+    fetchJson<AccessLogsResponse>(
+      `/access-logs?memberId=${member.id}&limit=5`,
+      {
+        signal: controller.signal,
+        headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined,
+      },
+    )
+      .then((payload) => {
+        setAccessLogs(Array.isArray(payload.accessLogs) ? payload.accessLogs : []);
+        setIsLoadingLogs(false);
+      })
+      .catch((error) => {
+        if (controller.signal.aborted) {
+          return;
+        }
+        setLogsError(error instanceof Error ? error.message : String(error));
+        setIsLoadingLogs(false);
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, [authToken, member?.id]);
+
+  const handleLogNoteChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setLogNote(event.target.value);
+      setLogFeedback(null);
+    },
+    [],
+  );
+
+  const handleLogEntry = useCallback(async () => {
+    if (!member?.id) {
+      setLogFeedback(
+        t("access.logs.missingMember", {
+          defaultValue: "Sign in to record an access entry.",
+        }),
+      );
+      return;
+    }
+
+    setIsSubmittingLog(true);
+    setLogFeedback(null);
+
+    try {
+      const payload = await fetchJson<{ accessLog?: AccessLog }>("/access-logs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+        },
+        body: JSON.stringify({
+          memberId: member.id,
+          accessPoint: "athlete-portal",
+          note: logNote.trim() ? logNote.trim() : null,
+        }),
+      });
+
+      if (payload?.accessLog) {
+        setAccessLogs((previous) => [payload.accessLog, ...previous].slice(0, 5));
+      }
+
+      setLogNote("");
+      setLogFeedback(
+        t("access.logs.success", {
+          defaultValue: "Access entry recorded successfully.",
+        }),
+      );
+    } catch (error) {
+      setLogFeedback(
+        t("access.logs.error", {
+          defaultValue: "We couldn't record the access entry. Please try again.",
+        }),
+      );
+    } finally {
+      setIsSubmittingLog(false);
+    }
+  }, [authToken, logNote, member?.id, t]);
+
+  const handleSubmitLog = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      void handleLogEntry();
+    },
+    [handleLogEntry],
+  );
 
   const accessTips = useMemo(() => {
     return resolveFallbackArray<string>(t, fallbackT, "access.tips.items");
@@ -367,6 +507,106 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
               ))}
             </div>
           </div>
+
+          <RedSurface tone="glass" className="flex flex-col gap-4 rounded-2xl p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-red-50">
+                  {t("access.logs.heading", { defaultValue: "Access activity" })}
+                </p>
+                <p className="text-xs text-red-200/70">
+                  {t("access.logs.helper", {
+                    defaultValue: "Track your latest smart gate scans",
+                  })}
+                </p>
+              </div>
+              <ClipboardCheck className="h-5 w-5 text-red-200/75" aria-hidden />
+            </div>
+            <form
+              onSubmit={handleSubmitLog}
+              className="flex flex-col gap-2 sm:flex-row"
+            >
+              <label htmlFor="access-log-note" className="sr-only">
+                {t("access.logs.noteLabel", { defaultValue: "Add note" })}
+              </label>
+              <input
+                id="access-log-note"
+                type="text"
+                value={logNote}
+                onChange={handleLogNoteChange}
+                placeholder={t("access.logs.notePlaceholder", {
+                  defaultValue: "Add an optional note",
+                })}
+                className="w-full rounded-xl border border-red-400/30 bg-red-950/40 px-3 py-2 text-sm text-red-50 outline-none ring-red-400/40 transition focus:border-red-300/60 focus:ring"
+              />
+              <button
+                type="submit"
+                disabled={isSubmittingLog || !member}
+                className={cn(
+                  "inline-flex items-center justify-center rounded-xl border border-red-400/40 px-4 py-2 text-sm font-semibold transition",
+                  isSubmittingLog || !member
+                    ? "cursor-not-allowed bg-red-500/10 text-red-200/60"
+                    : "bg-red-500/20 text-red-50 hover:border-red-300/60 hover:bg-red-400/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300",
+                )}
+              >
+                {isSubmittingLog
+                  ? t("access.logs.submitting", { defaultValue: "Logging…" })
+                  : t("access.logs.submit", { defaultValue: "Log entry" })}
+              </button>
+            </form>
+            {logFeedback ? (
+              <p className="text-xs text-red-100/80">{logFeedback}</p>
+            ) : null}
+            {logsError ? (
+              <p className="text-xs text-red-100/75">
+                {t("access.logs.fetchError", {
+                  defaultValue:
+                    "We couldn't refresh your access history. Showing the most recent snapshot.",
+                })}
+              </p>
+            ) : null}
+            {isLoadingLogs ? (
+              <p className="text-xs text-red-200/70">
+                {t("access.logs.loading", { defaultValue: "Loading access activity…" })}
+              </p>
+            ) : accessLogs.length === 0 ? (
+              <p className="text-xs text-red-200/70">
+                {t("access.logs.empty", {
+                  defaultValue: "No access entries recorded yet.",
+                })}
+              </p>
+            ) : (
+              <ul className="space-y-2 text-xs text-red-100/80">
+                {accessLogs.map((log) => {
+                  const timestampSource = log.accessedAt ?? log.createdAt;
+                  const timestampLabel = timestampSource
+                    ? accessDateFormatter.format(new Date(timestampSource))
+                    : t("access.logs.timeFallback", { defaultValue: "Time not recorded" });
+
+                  return (
+                    <li
+                      key={log.id}
+                      className="flex flex-col gap-1 rounded-2xl border border-red-400/20 bg-red-500/10 p-3"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="font-semibold text-red-50">
+                          {savedProfile?.fullName ||
+                            t("access.logs.memberFallback", { defaultValue: "Member" })}
+                        </span>
+                        <span className="rounded-full border border-red-400/30 bg-red-500/15 px-2 py-0.5 text-[11px] uppercase tracking-[0.25em] text-red-100">
+                          {log.accessPoint || "—"}
+                        </span>
+                      </div>
+                      <span className="text-red-200/70">{timestampLabel}</span>
+                      {log.note ? (
+                        <span className="text-red-100/80">{log.note}</span>
+                      ) : null}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </RedSurface>
 
           <RedSurface tone="glass" className="flex flex-col gap-4 p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">

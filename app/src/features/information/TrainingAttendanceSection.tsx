@@ -1,4 +1,10 @@
-import { useMemo, type ReactElement } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactElement,
+} from "react";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import type { LucideIcon } from "../../lucide-react";
@@ -9,19 +15,42 @@ import {
   LineChart,
   Users,
 } from "../../lucide-react";
-import { trainingCalendarEvents } from "../calendar/calendarEvents";
+import { fetchJson } from "../../lib/api";
+import {
+  getFallbackCalendarEvents,
+  type TrainingCalendarEvent,
+} from "../calendar/calendarEvents";
 
 type AttendanceWeekKey = "week14" | "week15" | "week16";
 
-const attendanceByWeek: Array<{
-  key: AttendanceWeekKey;
+type AttendanceWeekRecord = {
+  key: string;
+  sourceKey: string;
   plannedSessions: number;
   attendedSessions: number;
-}> = [
+  attendanceRate: number | null;
+  rangeStart: string | null;
+  rangeEnd: string | null;
+  labelKey?: string;
+  highlightKey?: string;
+};
+
+const fallbackAttendanceWeeks: AttendanceWeekRecord[] = [
   { key: "week14", plannedSessions: 4, attendedSessions: 4 },
   { key: "week15", plannedSessions: 5, attendedSessions: 4 },
   { key: "week16", plannedSessions: 3, attendedSessions: 2 },
-];
+].map((week) => ({
+  ...week,
+  sourceKey: week.key,
+  attendanceRate:
+    week.plannedSessions > 0
+      ? Math.round((week.attendedSessions / week.plannedSessions) * 100)
+      : null,
+  rangeStart: null,
+  rangeEnd: null,
+  labelKey: `information.trainingAttendance.byWeek.items.${week.key}.label`,
+  highlightKey: `information.trainingAttendance.byWeek.items.${week.key}.highlight`,
+}));
 
 type AttendanceInsightKey =
   | "consistencyStreak"
@@ -41,7 +70,23 @@ type RosterStatus = "confirmed" | "pending" | "medicalHold";
 
 type RosterEntryKey = "linaReyes" | "noahPetrov" | "aishaKato" | "jonahHill";
 
-const rosterAttendance: Array<{
+type RosterEntry = {
+  id: string;
+  status: RosterStatus;
+  name?: string | null;
+  nameKey?: string;
+  role?: string | null;
+  roleKey?: string;
+  note?: string | null;
+  noteKey?: string;
+  membershipId?: string | null;
+  attendanceRate?: number | null;
+  plannedSessions?: number;
+  attendedSessions?: number;
+  supportiveSessions?: number;
+};
+
+const fallbackRosterAttendance: Array<{
   key: RosterEntryKey;
   roleKey: string;
   status: RosterStatus;
@@ -125,7 +170,7 @@ const followUpActionDefinitions: FollowUpActionDefinition[] = [
 ];
 
 const sessionFocusNotes: Record<
-  (typeof trainingCalendarEvents)[number]["id"],
+  string,
   { focusKey: string; emphasisKey: string }
 > = {
   "ts-1": {
@@ -144,9 +189,100 @@ const sessionFocusNotes: Record<
 
 const PREVIOUS_ATTENDANCE_RATE = 82;
 
+const fallbackTrainingSessions = getFallbackCalendarEvents().filter(
+  (event): event is TrainingCalendarEvent => event.category === "training",
+);
+
+type TrainingInsightsWeek = {
+  weekKey: string;
+  plannedSessions: number;
+  attendedLogs: number;
+  supportiveLogs: number;
+  totalAttendanceLogs: number;
+  attendanceRate: number | null;
+  rangeStart: string | null;
+  rangeEnd: string | null;
+};
+
+type TrainingInsightsSummary = {
+  totalPlannedSessions: number;
+  totalAttendanceLogs: number;
+  totalPositiveLogs: number;
+  attendanceRate: number | null;
+  previousAttendanceRate: number | null;
+  rateDelta: number | null;
+  bestWeekKey: string | null;
+  focusWeekKey: string | null;
+};
+
+type TrainingInsightsRosterMember = {
+  memberId: string;
+  fullName: string;
+  role: string | null;
+  squad: string | null;
+  membershipId: string | null;
+  status: RosterStatus;
+  lastAttendanceStatus: string | null;
+  lastRecordedAt: string | null;
+  note: string | null;
+  attendanceRate: number | null;
+  plannedSessions: number;
+  attendedSessions: number;
+  supportiveSessions: number;
+};
+
+type TrainingInsightsSession = {
+  id: string;
+  titleKey: string;
+  locationKey: string;
+  coachKey: string | null;
+  start: string;
+  end: string;
+  focusKey: string | null;
+  emphasisKey: string | null;
+};
+
+type TrainingInsights = {
+  weeks: TrainingInsightsWeek[];
+  summary: TrainingInsightsSummary;
+  roster: {
+    statusCounts: Record<string, number>;
+    members: TrainingInsightsRosterMember[];
+  };
+  sessions: TrainingInsightsSession[];
+};
+
+type SessionSource = TrainingInsightsSession | TrainingCalendarEvent;
+
+type TrainingInsightsResponse = {
+  trainingInsights?: TrainingInsights;
+};
+
+type AttendanceLog = {
+  id: string;
+  calendarEventId: string;
+  memberId: string;
+  status: string;
+  recordedAt: string | null;
+  note: string | null;
+  createdAt: string | null;
+};
+
+type AttendanceLogsResponse = {
+  attendanceLogs?: AttendanceLog[];
+};
+
 function TrainingAttendanceSection(): ReactElement {
   const { t, i18n } = useTranslation();
   const locale = i18n.language.startsWith("ar") ? "ar-EG" : "en-US";
+
+  const [insightsData, setInsightsData] = useState<TrainingInsights | null>(null);
+  const [isLoadingInsights, setIsLoadingInsights] = useState(true);
+  const [insightsError, setInsightsError] = useState<string | null>(null);
+
+  const [attendanceLogs, setAttendanceLogs] = useState<AttendanceLog[]>([]);
+  const [isLoadingAttendance, setIsLoadingAttendance] = useState(true);
+  const [attendanceError, setAttendanceError] = useState<string | null>(null);
 
   const dateFormatter = useMemo(
     () =>
@@ -214,16 +350,94 @@ function TrainingAttendanceSection(): ReactElement {
     };
   }, []);
 
-  const { totalAttended, totalPlanned, attendanceRate, bestWeek, focusWeek } =
-    attendanceSummary;
+    return {
+      totalPlanned: summary.totalPlanned,
+      totalAttended: summary.totalAttended,
+      attendanceRate,
+      bestWeek: summary.bestWeek,
+      focusWeek: summary.focusWeek,
+      previousAttendanceRate: PREVIOUS_ATTENDANCE_RATE,
+      rateDelta: attendanceRate - PREVIOUS_ATTENDANCE_RATE,
+    };
+  }, [attendanceWeeks, insightsData]);
+
+  const {
+    totalAttended,
+    totalPlanned,
+    attendanceRate,
+    bestWeek,
+    focusWeek,
+    previousAttendanceRate,
+    rateDelta,
+  } = attendanceSummary;
 
   const rateDeltaLabel = useMemo(() => {
-    const rateDelta = attendanceRate - PREVIOUS_ATTENDANCE_RATE;
-    const formattedDelta = `${rateDelta >= 0 ? "+" : ""}${rateDelta}`;
+    const baseline =
+      typeof previousAttendanceRate === "number"
+        ? previousAttendanceRate
+        : PREVIOUS_ATTENDANCE_RATE;
+    const computedDelta =
+      typeof rateDelta === "number" ? rateDelta : attendanceRate - baseline;
+    const formattedDelta = `${computedDelta >= 0 ? "+" : ""}${computedDelta}`;
     return t("information.trainingAttendance.rateDelta", {
       value: formattedDelta,
     });
-  }, [attendanceRate, t]);
+  }, [attendanceRate, previousAttendanceRate, rateDelta, t]);
+
+  const formatWeekLabel = useCallback(
+    (week: AttendanceWeekRecord) => {
+      if (week.labelKey) {
+        return t(week.labelKey);
+      }
+
+      if (week.rangeStart) {
+        const start = new Date(week.rangeStart);
+        if (week.rangeEnd) {
+          const end = new Date(week.rangeEnd);
+          return t("information.trainingAttendance.byWeek.rangeLabel", {
+            start: dateFormatter.format(start),
+            end: dateFormatter.format(end),
+            defaultValue: `${dateFormatter.format(start)} – ${dateFormatter.format(end)}`,
+          });
+        }
+
+        return t("information.trainingAttendance.byWeek.singleDayLabel", {
+          date: dateFormatter.format(start),
+          defaultValue: dateFormatter.format(start),
+        });
+      }
+
+      return t("information.trainingAttendance.byWeek.fallbackLabel", {
+        defaultValue: t("information.trainingAttendance.byWeek.heading"),
+      });
+    },
+    [dateFormatter, t],
+  );
+
+  const formatWeekHighlight = useCallback(
+    (week: AttendanceWeekRecord) => {
+      if (week.highlightKey) {
+        return t(week.highlightKey);
+      }
+
+      if (typeof week.attendanceRate === "number") {
+        return t("information.trainingAttendance.byWeek.rateHighlight", {
+          percent: Math.round(week.attendanceRate),
+          defaultValue: `${Math.round(week.attendanceRate)}% attendance`,
+        });
+      }
+
+      return t("information.trainingAttendance.byWeek.rateHighlight", {
+        percent: Math.round(
+          week.plannedSessions > 0
+            ? (week.attendedSessions / week.plannedSessions) * 100
+            : 0,
+        ),
+        defaultValue: `${week.attendedSessions}/${week.plannedSessions} sessions`,
+      });
+    },
+    [t],
+  );
 
   const bestWeekContent = useMemo(() => {
     if (!bestWeek) {
@@ -231,14 +445,10 @@ function TrainingAttendanceSection(): ReactElement {
     }
 
     return {
-      label: t(
-        `information.trainingAttendance.byWeek.items.${bestWeek.key}.label`,
-      ),
-      highlight: t(
-        `information.trainingAttendance.byWeek.items.${bestWeek.key}.highlight`,
-      ),
+      label: formatWeekLabel(bestWeek),
+      highlight: formatWeekHighlight(bestWeek),
     };
-  }, [bestWeek, t]);
+  }, [bestWeek, formatWeekHighlight, formatWeekLabel]);
 
   const focusWeekContent = useMemo(() => {
     if (!focusWeek) {
@@ -246,47 +456,93 @@ function TrainingAttendanceSection(): ReactElement {
     }
 
     return {
-      label: t(
-        `information.trainingAttendance.byWeek.items.${focusWeek.key}.label`,
-      ),
-      highlight: t(
-        `information.trainingAttendance.byWeek.items.${focusWeek.key}.highlight`,
-      ),
+      label: formatWeekLabel(focusWeek),
+      highlight: formatWeekHighlight(focusWeek),
     };
-  }, [focusWeek, t]);
+  }, [focusWeek, formatWeekHighlight, formatWeekLabel]);
+
+  const sessionsSource = useMemo<SessionSource[]>(() => {
+    if (insightsData?.sessions?.length) {
+      return insightsData.sessions;
+    }
+
+    return fallbackTrainingSessions;
+  }, [insightsData]);
 
   const upcomingSessions = useMemo(
     () =>
-      trainingCalendarEvents.slice(0, 3).map((session) => {
+      sessionsSource.slice(0, 3).map((session) => {
         const start = new Date(session.start);
-        const focus = sessionFocusNotes[session.id];
+        const focusKey =
+          ("focusKey" in session && session.focusKey) ||
+          sessionFocusNotes[session.id]?.focusKey;
+        const emphasisKey =
+          ("emphasisKey" in session && session.emphasisKey) ||
+          sessionFocusNotes[session.id]?.emphasisKey;
+        const coachKey = (session as { coachKey?: string | null }).coachKey ?? null;
         return {
           id: session.id,
           title: t(session.titleKey),
           dateLabel: dateFormatter.format(start),
           timeLabel: timeFormatter.format(start),
-          coach: t(session.coachKey),
+          coach: coachKey ? t(coachKey) : undefined,
           location: t(session.locationKey),
-          focus: focus ? t(focus.focusKey) : undefined,
-          emphasis: focus ? t(focus.emphasisKey) : undefined,
+          focus: focusKey ? t(focusKey) : undefined,
+          emphasis: emphasisKey ? t(emphasisKey) : undefined,
         };
       }),
-    [dateFormatter, t, timeFormatter],
+    [dateFormatter, sessionsSource, t, timeFormatter],
   );
 
-  const rosterStatusCounts = useMemo(
-    () =>
-      rosterAttendance.reduce(
-        (accumulator, entry) => {
-          accumulator[entry.status] = (accumulator[entry.status] ?? 0) + 1;
-          return accumulator;
-        },
-        {} as Partial<Record<RosterStatus, number>>,
-      ),
-    [],
-  );
+  const rosterEntries = useMemo<RosterEntry[]>(() => {
+    if (insightsData?.roster?.members?.length) {
+      return insightsData.roster.members.map((member) => ({
+        id: member.memberId ?? member.membershipId ?? member.fullName,
+        status: (member.status ?? "pending") as RosterStatus,
+        name: member.fullName,
+        role: member.role ?? member.squad ?? null,
+        note: member.note,
+        membershipId: member.membershipId,
+        attendanceRate: member.attendanceRate,
+        plannedSessions: member.plannedSessions,
+        attendedSessions: member.attendedSessions,
+        supportiveSessions: member.supportiveSessions,
+      }));
+    }
 
-  const totalRoster = rosterAttendance.length;
+    return fallbackRosterAttendance.map((entry) => ({
+      id: entry.key,
+      status: entry.status,
+      nameKey: `information.trainingAttendance.roster.names.${entry.key}`,
+      roleKey: entry.roleKey,
+      noteKey: entry.noteKey,
+    }));
+  }, [insightsData]);
+
+  const rosterStatusCounts = useMemo(() => {
+    if (insightsData?.roster?.statusCounts) {
+      return {
+        confirmed: insightsData.roster.statusCounts.confirmed ?? 0,
+        pending: insightsData.roster.statusCounts.pending ?? 0,
+        medicalHold: insightsData.roster.statusCounts.medicalHold ?? 0,
+      } satisfies Partial<Record<RosterStatus, number>>;
+    }
+
+    return rosterEntries.reduce(
+      (accumulator, entry) => {
+        accumulator[entry.status] = (accumulator[entry.status] ?? 0) + 1;
+        return accumulator;
+      },
+      {} as Partial<Record<RosterStatus, number>>,
+    );
+  }, [insightsData, rosterEntries]);
+
+  const totalRoster = rosterEntries.length;
+
+  const recentAttendanceLogs = useMemo(
+    () => attendanceLogs.slice(0, 6),
+    [attendanceLogs],
+  );
 
   const statusBreakdown = useMemo(
     () =>
@@ -364,7 +620,11 @@ function TrainingAttendanceSection(): ReactElement {
   );
 
   return (
-    <section id="training-attendance" className="space-y-6">
+    <section
+      id="training-attendance"
+      className="space-y-6"
+      aria-busy={isLoadingInsights}
+    >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
@@ -390,6 +650,14 @@ function TrainingAttendanceSection(): ReactElement {
           </span>
         </span>
       </div>
+      {insightsError ? (
+        <div className="rounded-2xl border border-red-400/40 bg-red-950/50 p-4 text-sm text-red-100">
+          {t("information.trainingAttendance.errors.insights", {
+            defaultValue:
+              "We couldn't refresh the latest attendance insights. Showing your most recent saved overview.",
+          })}
+        </div>
+      ) : null}
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.25fr)]">
         <RedSurface tone="muted" className="space-y-4 p-6">
@@ -598,6 +866,97 @@ function TrainingAttendanceSection(): ReactElement {
           ) : null}
 
           <RedSurface
+            tone="muted"
+            className="flex flex-col gap-4 p-6 text-red-50"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h3 className="text-lg font-semibold text-red-50">
+                  {t("information.trainingAttendance.logs.heading", {
+                    defaultValue: "Recent attendance logs",
+                  })}
+                </h3>
+                <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                  {t("information.trainingAttendance.logs.helper", {
+                    defaultValue: "Latest check-ins recorded across sessions",
+                  })}
+                </p>
+              </div>
+              <ClipboardCheck className="h-5 w-5 text-red-200/75" aria-hidden />
+            </div>
+            {attendanceError ? (
+              <p className="text-xs text-red-100/75">
+                {t("information.trainingAttendance.logs.error", {
+                  defaultValue:
+                    "We couldn't refresh attendance logs right now. Showing the most recent snapshot.",
+                })}
+              </p>
+            ) : null}
+            {recentAttendanceLogs.length === 0 ? (
+              <p className="text-xs text-red-100/75">
+                {isLoadingAttendance
+                  ? t("information.trainingAttendance.logs.loading", {
+                      defaultValue: "Loading attendance activity…",
+                    })
+                  : t("information.trainingAttendance.logs.empty", {
+                      defaultValue: "No attendance has been recorded for this period.",
+                    })}
+              </p>
+            ) : (
+              <ul className="space-y-3">
+                {recentAttendanceLogs.map((log) => {
+                  const recordedAt = log.recordedAt
+                    ? new Date(log.recordedAt)
+                    : log.createdAt
+                    ? new Date(log.createdAt)
+                    : null;
+                  const rosterMatch = rosterEntries.find(
+                    (entry) => entry.id === log.memberId || entry.membershipId === log.memberId,
+                  );
+                  const memberName = rosterMatch
+                    ? rosterMatch.nameKey
+                      ? t(rosterMatch.nameKey)
+                      : rosterMatch.name ??
+                        rosterMatch.membershipId ??
+                        log.memberId
+                    : log.memberId;
+                  const statusLabel = t(
+                    `information.trainingAttendance.logs.status.${log.status}`,
+                    {
+                      defaultValue: log.status.replace(/^(.)/, (char) => char.toUpperCase()),
+                    },
+                  );
+                  const timestampLabel = recordedAt
+                    ? `${dateFormatter.format(recordedAt)} · ${timeFormatter.format(recordedAt)}`
+                    : t("information.trainingAttendance.logs.recordedFallback", {
+                        defaultValue: "Time not recorded",
+                      });
+
+                  return (
+                    <li
+                      key={log.id}
+                      className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-red-50">{memberName}</p>
+                          <p className="text-xs text-red-200/75">{timestampLabel}</p>
+                        </div>
+                        <span className="inline-flex items-center rounded-full border border-red-400/40 bg-red-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-red-100">
+                          {statusLabel}
+                        </span>
+                      </div>
+                      {log.note ? (
+                        <p className="mt-2 text-xs text-red-100/75">{log.note}</p>
+                      ) : null}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </RedSurface>
+
+          <RedSurface
             as="section"
             tone="muted"
             className="flex flex-col gap-4 p-6 text-red-50"
@@ -657,35 +1016,51 @@ function TrainingAttendanceSection(): ReactElement {
               ))}
             </div>
             <ul className="space-y-3">
-              {rosterAttendance.map((entry) => (
-                <li
-                  key={entry.key}
-                  className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-red-50">
+              {rosterEntries.map((entry) => {
+                const name = entry.nameKey
+                  ? t(entry.nameKey)
+                  : entry.name ??
+                    entry.membershipId ??
+                    t("information.trainingAttendance.roster.unknownMember", {
+                      defaultValue: "Roster member",
+                    });
+                const roleLabel = entry.roleKey
+                  ? t(entry.roleKey)
+                  : entry.role ??
+                    t("information.trainingAttendance.roster.roleFallback", {
+                      defaultValue: "Squad member",
+                    });
+                const note = entry.noteKey
+                  ? t(entry.noteKey)
+                  : entry.note ??
+                    t("information.trainingAttendance.roster.noNote", {
+                      defaultValue: "No recent updates recorded.",
+                    });
+
+                return (
+                  <li
+                    key={entry.id}
+                    className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-semibold text-red-50">{name}</p>
+                        <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                          {roleLabel}
+                        </p>
+                      </div>
+                      <span
+                        className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] ${statusBadgeStyles[entry.status]}`}
+                      >
                         {t(
-                          `information.trainingAttendance.roster.names.${entry.key}`,
+                          `information.trainingAttendance.statuses.${entry.status}.label`,
                         )}
-                      </p>
-                      <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
-                        {t(entry.roleKey)}
-                      </p>
+                      </span>
                     </div>
-                    <span
-                      className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] ${statusBadgeStyles[entry.status]}`}
-                    >
-                      {t(
-                        `information.trainingAttendance.statuses.${entry.status}.label`,
-                      )}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-xs text-red-100/75">
-                    {t(entry.noteKey)}
-                  </p>
-                </li>
-              ))}
+                    <p className="mt-2 text-xs text-red-100/75">{note}</p>
+                  </li>
+                );
+              })}
             </ul>
           </RedSurface>
         </div>

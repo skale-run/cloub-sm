@@ -42,10 +42,16 @@ const highlightConfig = [
   },
 ];
 
+function isAbortError(error: unknown): boolean {
+  if (typeof DOMException !== "undefined" && error instanceof DOMException) {
+    return error.name === "AbortError";
+  }
+
+  return error instanceof Error && error.name === "AbortError";
+}
+
 const LOGIN_FORM_STORAGE_KEY = "cloub-auth-login-form" as const;
 const REGISTER_FORM_STORAGE_KEY = "cloub-auth-register-form" as const;
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
 
 type SubmissionState =
   | { status: "idle" }
@@ -370,10 +376,18 @@ function AuthenticationExperienceModal() {
       setLoginState({ status: "submitting" });
 
       try {
-        const response = await fetch(`${API_BASE_URL}/members/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+        const payload = await fetchJson<{ member?: Member; token?: string }>(
+          "/members/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: loginForm.email.trim(),
+              password: loginForm.password,
+            }),
+            signal: controller.signal,
           },
           body: JSON.stringify({
             email: loginForm.email.trim(),
@@ -419,18 +433,27 @@ function AuthenticationExperienceModal() {
 
         close();
       } catch (error) {
-        if (
-          (error instanceof DOMException && error.name === "AbortError") ||
-          (error instanceof Error && error.name === "AbortError")
-        ) {
+        if (isAbortError(error)) {
           return;
         }
 
-        console.error("Failed to sign in", error);
-        setLoginState({
-          status: "error",
-          message: t("auth.modal.status.network"),
-        });
+        if (isApiError(error)) {
+          const message =
+            error.status === 401
+              ? t("auth.modal.status.login.invalid")
+              : error.message || t("auth.modal.status.generic");
+
+          setLoginState({
+            status: "error",
+            message,
+          });
+        } else {
+          console.error("Failed to sign in", error);
+          setLoginState({
+            status: "error",
+            message: t("auth.modal.status.network"),
+          });
+        }
       } finally {
         if (activeRequestRef.current === controller) {
           activeRequestRef.current = null;
@@ -469,7 +492,7 @@ function AuthenticationExperienceModal() {
       setRegisterState({ status: "submitting" });
 
       try {
-        const response = await fetch(`${API_BASE_URL}/members`, {
+        const payload = await fetchJson<{ member?: Member }>("/members", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -532,18 +555,27 @@ function AuthenticationExperienceModal() {
         setMember(payload.member);
         close();
       } catch (error) {
-        if (
-          (error instanceof DOMException && error.name === "AbortError") ||
-          (error instanceof Error && error.name === "AbortError")
-        ) {
+        if (isAbortError(error)) {
           return;
         }
 
-        console.error("Failed to create account", error);
-        setRegisterState({
-          status: "error",
-          message: t("auth.modal.status.network"),
-        });
+        if (isApiError(error)) {
+          const message =
+            error.status === 409
+              ? t("auth.modal.status.register.duplicate")
+              : error.message || t("auth.modal.status.generic");
+
+          setRegisterState({
+            status: "error",
+            message,
+          });
+        } else {
+          console.error("Failed to create account", error);
+          setRegisterState({
+            status: "error",
+            message: t("auth.modal.status.network"),
+          });
+        }
       } finally {
         if (activeRequestRef.current === controller) {
           activeRequestRef.current = null;
