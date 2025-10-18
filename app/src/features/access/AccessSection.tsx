@@ -12,12 +12,150 @@ import {
 import type { LucideIcon } from "../../lucide-react";
 import type { Profile } from "../profile/profileTypes";
 
+type InventoryStatus = "healthy" | "monitor" | "restock";
+
+type InventoryItem = {
+  id: string;
+  itemKey: "doboks" | "belts" | "pads" | "merch";
+  categoryKey: string;
+  onHand: number;
+  allocated: number;
+  reorderPoint: number;
+  status: InventoryStatus;
+};
+
+const inventoryItems: InventoryItem[] = [
+  {
+    id: "inventory-doboks",
+    itemKey: "doboks",
+    categoryKey: "access.proShop.inventory.items.doboks.category",
+    onHand: 42,
+    allocated: 18,
+    reorderPoint: 16,
+    status: "monitor",
+  },
+  {
+    id: "inventory-belts",
+    itemKey: "belts",
+    categoryKey: "access.proShop.inventory.items.belts.category",
+    onHand: 60,
+    allocated: 14,
+    reorderPoint: 20,
+    status: "healthy",
+  },
+  {
+    id: "inventory-pads",
+    itemKey: "pads",
+    categoryKey: "access.proShop.inventory.items.pads.category",
+    onHand: 28,
+    allocated: 12,
+    reorderPoint: 12,
+    status: "restock",
+  },
+  {
+    id: "inventory-merch",
+    itemKey: "merch",
+    categoryKey: "access.proShop.inventory.items.merch.category",
+    onHand: 35,
+    allocated: 9,
+    reorderPoint: 10,
+    status: "monitor",
+  },
+];
+
+type PreOrderStatus = "open" | "packing" | "fulfilled";
+
+type PreOrder = {
+  id: string;
+  kitKey: "grandPrix" | "regional" | "sparringAddOn";
+  quantity: number;
+  deadlineKey: string;
+  status: PreOrderStatus;
+};
+
+const preOrders: PreOrder[] = [
+  {
+    id: "preorder-grand-prix",
+    kitKey: "grandPrix",
+    quantity: 18,
+    deadlineKey: "may052025",
+    status: "open",
+  },
+  {
+    id: "preorder-regional",
+    kitKey: "regional",
+    quantity: 12,
+    deadlineKey: "apr282025",
+    status: "packing",
+  },
+  {
+    id: "preorder-sparring",
+    kitKey: "sparringAddOn",
+    quantity: 9,
+    deadlineKey: "may152025",
+    status: "fulfilled",
+  },
+];
+
+type ReconciliationEntry = {
+  id: string;
+  eventKey: "springOpen" | "beltCamp" | "teamTravel";
+  sold: number;
+  returned: number;
+  adjustments: number;
+  noteKey: string;
+};
+
+const reconciliationEntries: ReconciliationEntry[] = [
+  {
+    id: "reconcile-spring-open",
+    eventKey: "springOpen",
+    sold: 22,
+    returned: 6,
+    adjustments: -2,
+    noteKey: "access.proShop.reconciliation.items.springOpen.note",
+  },
+  {
+    id: "reconcile-belt-camp",
+    eventKey: "beltCamp",
+    sold: 15,
+    returned: 4,
+    adjustments: 3,
+    noteKey: "access.proShop.reconciliation.items.beltCamp.note",
+  },
+  {
+    id: "reconcile-team-travel",
+    eventKey: "teamTravel",
+    sold: 12,
+    returned: 2,
+    adjustments: 0,
+    noteKey: "access.proShop.reconciliation.items.teamTravel.note",
+  },
+];
+
+const inventoryStatusTone: Record<InventoryStatus, string> = {
+  healthy: "border-emerald-400/45 bg-emerald-500/10 text-emerald-100",
+  monitor: "border-amber-400/45 bg-amber-500/10 text-amber-100",
+  restock: "border-red-400/45 bg-red-500/15 text-red-50",
+};
+
+const preOrderStatusTone: Record<PreOrderStatus, string> = {
+  open: "border-amber-400/45 bg-amber-500/10 text-amber-100",
+  packing: "border-red-400/30 bg-red-950/45 text-red-100",
+  fulfilled: "border-emerald-400/40 bg-emerald-500/10 text-emerald-100",
+};
+
 type AccessSectionProps = {
   savedProfile: Profile | null;
 };
 
 function AccessSection({ savedProfile }: AccessSectionProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language || "en";
+  const numberFormatter = useMemo(
+    () => new Intl.NumberFormat(locale),
+    [locale],
+  );
 
   const qrCodeUrl = useMemo(() => {
     if (!savedProfile) {
@@ -176,6 +314,85 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
     view: "border-red-300/30 bg-red-950/60 text-red-200/80",
     restricted: "border-red-400/30 bg-red-950/40 text-red-200/60",
   };
+
+  const inventoryRows = useMemo(
+    () =>
+      inventoryItems.map((item) => {
+        const available = item.onHand - item.allocated;
+
+        return {
+          id: item.id,
+          label: t(`access.proShop.inventory.items.${item.itemKey}.label`),
+          category: t(item.categoryKey),
+          onHand: numberFormatter.format(item.onHand),
+          allocated: numberFormatter.format(item.allocated),
+          available: numberFormatter.format(Math.max(available, 0)),
+          status: t(`access.proShop.inventory.status.${item.status}`),
+          tone: inventoryStatusTone[item.status],
+        };
+      }),
+    [numberFormatter, t],
+  );
+
+  const inventorySummary = useMemo(() => {
+    const totals = inventoryItems.reduce(
+      (accumulator, item) => {
+        const available = item.onHand - item.allocated;
+
+        return {
+          onHand: accumulator.onHand + item.onHand,
+          allocated: accumulator.allocated + item.allocated,
+          available: accumulator.available + available,
+          restockCount:
+            accumulator.restockCount + (item.status === "restock" ? 1 : 0),
+        };
+      },
+      { onHand: 0, allocated: 0, available: 0, restockCount: 0 },
+    );
+
+    return {
+      onHand: numberFormatter.format(totals.onHand),
+      allocated: numberFormatter.format(totals.allocated),
+      available: numberFormatter.format(totals.available),
+      restockCount: totals.restockCount,
+    };
+  }, [numberFormatter]);
+
+  const preOrderItems = useMemo(() => {
+    return preOrders.map((order) => ({
+      id: order.id,
+      label: t(`access.proShop.preOrders.items.${order.kitKey}.label`),
+      deadline: t(
+        `access.proShop.preOrders.items.${order.kitKey}.deadline.${order.deadlineKey}`,
+      ),
+      quantity: t("access.proShop.preOrders.quantity", {
+        count: order.quantity,
+      }),
+      status: t(`access.proShop.preOrders.status.${order.status}`),
+      tone: preOrderStatusTone[order.status],
+    }));
+  }, [t]);
+
+  const reconciliationItems = useMemo(() => {
+    return reconciliationEntries.map((entry) => {
+      const adjustmentLabel = entry.adjustments >= 0
+        ? `+${numberFormatter.format(entry.adjustments)}`
+        : numberFormatter.format(entry.adjustments);
+
+      return {
+        id: entry.id,
+        event: t(`access.proShop.reconciliation.items.${entry.eventKey}.label`),
+        sold: t("access.proShop.reconciliation.sold", { count: entry.sold }),
+        returned: t("access.proShop.reconciliation.returned", {
+          count: entry.returned,
+        }),
+        adjustments: t("access.proShop.reconciliation.adjustments", {
+          amount: adjustmentLabel,
+        }),
+        note: t(entry.noteKey),
+      };
+    });
+  }, [numberFormatter, t]);
 
   return (
     <section id="access" className="space-y-6">
@@ -429,6 +646,180 @@ function AccessSection({ savedProfile }: AccessSectionProps) {
             </div>
           </div>
         </RedSurface>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <RedSurface tone="muted" className="space-y-5 p-6">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                {t("access.proShop.inventory.heading")}
+              </p>
+              <p className="text-sm text-red-100/80">
+                {t("access.proShop.inventory.helper")}
+              </p>
+            </div>
+            <div className="text-right text-xs text-red-200/70">
+              <p>
+                {t("access.proShop.inventory.summary", {
+                  available: inventorySummary.available,
+                })}
+              </p>
+              <p>
+                {t("access.proShop.inventory.restockCount", {
+                  count: inventorySummary.restockCount,
+                })}
+              </p>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-red-400/20 text-left text-sm text-red-50">
+              <thead className="text-[11px] uppercase tracking-[0.3em] text-red-200/70">
+                <tr>
+                  <th className="px-4 py-3 font-semibold">
+                    {t("access.proShop.inventory.table.item")}
+                  </th>
+                  <th className="px-4 py-3 font-semibold">
+                    {t("access.proShop.inventory.table.category")}
+                  </th>
+                  <th className="px-4 py-3 font-semibold text-right">
+                    {t("access.proShop.inventory.table.onHand")}
+                  </th>
+                  <th className="px-4 py-3 font-semibold text-right">
+                    {t("access.proShop.inventory.table.reserved")}
+                  </th>
+                  <th className="px-4 py-3 font-semibold text-right">
+                    {t("access.proShop.inventory.table.available")}
+                  </th>
+                  <th className="px-4 py-3 font-semibold text-right">
+                    {t("access.proShop.inventory.table.status")}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-red-400/10">
+                {inventoryRows.map((row) => (
+                  <tr key={row.id}>
+                    <th scope="row" className="px-4 py-3 text-sm font-semibold text-red-50">
+                      {row.label}
+                    </th>
+                    <td className="px-4 py-3 text-sm text-red-200/80">{row.category}</td>
+                    <td className="px-4 py-3 text-right text-sm text-red-100">
+                      {row.onHand}
+                    </td>
+                    <td className="px-4 py-3 text-right text-sm text-red-100">
+                      {row.allocated}
+                    </td>
+                    <td className="px-4 py-3 text-right text-sm text-red-100">
+                      {row.available}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <span
+                        className={cn(
+                          "inline-flex items-center justify-end gap-2 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em]",
+                          row.tone,
+                        )}
+                      >
+                        {row.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-red-500/20 bg-red-950/35 p-3 text-xs text-red-200/75">
+              <p className="uppercase tracking-[0.28em]">
+                {t("access.proShop.inventory.summaryOnHand")}
+              </p>
+              <p className="mt-1 text-lg font-semibold text-red-50">
+                {inventorySummary.onHand}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-red-500/20 bg-red-950/35 p-3 text-xs text-red-200/75">
+              <p className="uppercase tracking-[0.28em]">
+                {t("access.proShop.inventory.summaryAllocated")}
+              </p>
+              <p className="mt-1 text-lg font-semibold text-red-50">
+                {inventorySummary.allocated}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-red-500/20 bg-red-950/35 p-3 text-xs text-red-200/75">
+              <p className="uppercase tracking-[0.28em]">
+                {t("access.proShop.inventory.summaryAvailable")}
+              </p>
+              <p className="mt-1 text-lg font-semibold text-red-50">
+                {inventorySummary.available}
+              </p>
+            </div>
+          </div>
+        </RedSurface>
+
+        <div className="space-y-6">
+          <RedSurface tone="muted" className="space-y-5 p-6">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                  {t("access.proShop.preOrders.heading")}
+                </p>
+                <p className="text-sm text-red-100/80">
+                  {t("access.proShop.preOrders.helper")}
+                </p>
+              </div>
+            </div>
+            <ul className="space-y-3">
+              {preOrderItems.map((order) => (
+                <li
+                  key={order.id}
+                  className={cn(
+                    "rounded-2xl border px-4 py-3 text-sm",
+                    order.tone,
+                  )}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="font-semibold">{order.label}</p>
+                    <span className="text-xs uppercase tracking-[0.28em]">
+                      {order.status}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs uppercase tracking-[0.28em]">
+                    {order.deadline}
+                  </p>
+                  <p className="text-xs text-red-200/80">{order.quantity}</p>
+                </li>
+              ))}
+            </ul>
+          </RedSurface>
+
+          <RedSurface tone="muted" className="space-y-5 p-6">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                {t("access.proShop.reconciliation.heading")}
+              </p>
+              <p className="text-sm text-red-100/80">
+                {t("access.proShop.reconciliation.helper")}
+              </p>
+            </div>
+            <ul className="space-y-3 text-sm text-red-100/85">
+              {reconciliationItems.map((entry) => (
+                <li
+                  key={entry.id}
+                  className="rounded-2xl border border-red-500/20 bg-red-950/35 p-4"
+                >
+                  <p className="text-sm font-semibold text-red-50">
+                    {entry.event}
+                  </p>
+                  <div className="mt-2 grid gap-2 text-xs text-red-200/75 sm:grid-cols-3">
+                    <span>{entry.sold}</span>
+                    <span>{entry.returned}</span>
+                    <span>{entry.adjustments}</span>
+                  </div>
+                  <p className="mt-2 text-xs text-red-200/70">{entry.note}</p>
+                </li>
+              ))}
+            </ul>
+          </RedSurface>
+        </div>
       </div>
     </section>
   );
