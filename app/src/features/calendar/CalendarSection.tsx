@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
 import RedSurface from "../../components/RedSurface";
 import { getLanguagePresentation } from "../../lib/i18n";
-import { calendarEvents, type CalendarEvent } from "./calendarEvents";
+import { useCalendarEvents, type CalendarEvent } from "./calendarEvents";
 import { ChevronLeft, ChevronRight } from "../../lucide-react";
 
 type CalendarView = "month" | "week" | "day";
@@ -141,6 +141,11 @@ function isSameDay(a: Date, b: Date): boolean {
 
 function CalendarSection(): ReactElement {
   const { t, i18n } = useTranslation();
+  const {
+    events: calendarEvents,
+    isLoading: isLoadingEvents,
+    error: calendarEventsError,
+  } = useCalendarEvents();
 
   const languagePresentation = useMemo(
     () => getLanguagePresentation(i18n.language),
@@ -227,7 +232,7 @@ function CalendarSection(): ReactElement {
         (first, second) =>
           new Date(first.start).getTime() - new Date(second.start).getTime(),
       ),
-    [],
+    [calendarEvents],
   );
 
   const today = useMemo(() => {
@@ -669,33 +674,47 @@ function CalendarSection(): ReactElement {
 
   return (
     <>
-      <section id="calendar" className="space-y-6" dir={direction}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
-            {t("calendar.title")}
-          </h2>
-          <p className="text-sm text-red-200/75">
-            {t("calendar.description")}
-          </p>
+      <section
+        id="calendar"
+        className="space-y-6"
+        dir={direction}
+        aria-busy={isLoadingEvents}
+      >
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
+              {t("calendar.title")}
+            </h2>
+            <p className="text-sm text-red-200/75">
+              {t("calendar.description")}
+            </p>
+          </div>
+          <div className="inline-flex rounded-full border border-red-500/35 bg-red-950/60 p-1 text-xs font-semibold text-red-100">
+            {calendarViewOptions.map((option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => setView(option)}
+                className={`rounded-full px-4 py-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 ${
+                  view === option
+                    ? "bg-red-500/25 text-red-50 shadow-[0_8px_20px_rgba(220,38,38,0.25)]"
+                    : "text-red-200/70 hover:text-red-100"
+                }`}
+              >
+                {t(`calendar.viewOptions.${option}`)}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="inline-flex rounded-full border border-red-500/35 bg-red-950/60 p-1 text-xs font-semibold text-red-100">
-          {calendarViewOptions.map((option) => (
-            <button
-              key={option}
-              type="button"
-              onClick={() => setView(option)}
-              className={`rounded-full px-4 py-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 ${
-                view === option
-                  ? "bg-red-500/25 text-red-50 shadow-[0_8px_20px_rgba(220,38,38,0.25)]"
-                  : "text-red-200/70 hover:text-red-100"
-              }`}
-            >
-              {t(`calendar.viewOptions.${option}`)}
-            </button>
-          ))}
-        </div>
-      </div>
+
+        {calendarEventsError ? (
+          <div className="rounded-2xl border border-red-400/40 bg-red-950/50 p-4 text-sm text-red-100">
+            {t("calendar.loadError", {
+              defaultValue:
+                "We couldn't refresh the latest events. Showing the most recent schedule snapshot.",
+            })}
+          </div>
+        ) : null}
 
       {filteredEvents.length > 0 ? (
         <RedSurface

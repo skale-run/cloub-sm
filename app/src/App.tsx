@@ -18,6 +18,7 @@ import {
 } from "./features/profile/achievementTypes";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import { fetchJson, isApiError } from "./lib/api";
 import { cn } from "./lib/cn";
 import { lazyWithPreload } from "./lib/lazyWithPreload";
 import {
@@ -26,8 +27,6 @@ import {
   normalizePath,
   type RoutePath,
 } from "./routes";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
 
 const CalendarSection = lazyWithPreload(
   () => import("./features/calendar/CalendarSection"),
@@ -239,29 +238,33 @@ function App() {
 
     void (async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/members/${member.id}`, {
+        await fetchJson<unknown>(`/members/${member.id}`, {
           method: "DELETE",
           headers: authToken
             ? { Authorization: `Bearer ${authToken}` }
             : undefined,
         });
 
-        if (!response.ok) {
-          if (response.status === 401 || response.status === 403) {
-            clearMember();
-          }
-
-          setStatusMessage(t("app.statusMessages.deleteError"));
-          return;
-        }
-
         clearMember();
         setSavedProfile(null);
         setProfileDraft(emptyProfile);
         setStatusMessage(t("app.statusMessages.deleted"));
       } catch (error) {
-        console.error("Failed to delete member profile", error);
-        setStatusMessage(t("app.statusMessages.deleteError"));
+        if (isApiError(error)) {
+          if (error.status === 401 || error.status === 403) {
+            clearMember();
+            setStatusMessage(t("app.statusMessages.deleteError"));
+          } else {
+            setStatusMessage(
+              error.message || t("app.statusMessages.deleteError"),
+            );
+          }
+
+          console.error("Failed to delete member profile", error);
+        } else {
+          console.error("Failed to delete member profile", error);
+          setStatusMessage(t("app.statusMessages.deleteError"));
+        }
       }
     })();
   }, [authToken, clearMember, member, t]);
@@ -318,39 +321,25 @@ function App() {
 
       void (async () => {
         try {
-          const response = await fetch(`${API_BASE_URL}/members/${member.id}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+          const payload = await fetchJson<{ member?: Member }>(
+            `/members/${member.id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+              },
+              body: JSON.stringify({
+                fullName: trimmedProfile.fullName,
+                email: trimmedProfile.email,
+                role: trimmedProfile.role,
+                squad: trimmedProfile.squad,
+                emergencyContact: trimmedProfile.emergencyContact,
+                membershipId: trimmedProfile.membershipId,
+                profilePhotoUrl: trimmedProfile.profileImage || null,
+              }),
             },
-            body: JSON.stringify({
-              fullName: trimmedProfile.fullName,
-              email: trimmedProfile.email,
-              role: trimmedProfile.role,
-              squad: trimmedProfile.squad,
-              emergencyContact: trimmedProfile.emergencyContact,
-              membershipId: trimmedProfile.membershipId,
-              profilePhotoUrl: trimmedProfile.profileImage || null,
-            }),
-          });
-
-          const payload = (await response.json().catch(() => null)) as
-            | { member?: Member; error?: string }
-            | null;
-
-          if (!response.ok) {
-            if (response.status === 401 || response.status === 403) {
-              clearMember();
-              setStatusMessage(t("app.statusMessages.saveError"));
-              return;
-            }
-
-            setStatusMessage(
-              payload?.error ?? t("app.statusMessages.saveError"),
-            );
-            return;
-          }
+          );
 
           if (!payload?.member) {
             setStatusMessage(t("app.statusMessages.saveError"));
@@ -361,8 +350,19 @@ function App() {
           setSavedProfile(memberToProfile(payload.member));
           setStatusMessage(t("app.statusMessages.saved"));
         } catch (error) {
-          console.error("Failed to save member profile", error);
-          setStatusMessage(t("app.statusMessages.saveError"));
+          if (isApiError(error)) {
+            if (error.status === 401 || error.status === 403) {
+              clearMember();
+              setStatusMessage(t("app.statusMessages.saveError"));
+              return;
+            }
+
+            setStatusMessage(error.message || t("app.statusMessages.saveError"));
+            console.error("Failed to save member profile", error);
+          } else {
+            console.error("Failed to save member profile", error);
+            setStatusMessage(t("app.statusMessages.saveError"));
+          }
         }
       })();
     },

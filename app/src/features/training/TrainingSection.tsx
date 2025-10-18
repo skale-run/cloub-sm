@@ -2,11 +2,16 @@ import { useMemo, type ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import { getLanguagePresentation } from "../../lib/i18n";
-import { trainingCalendarEvents } from "../calendar/calendarEvents";
+import { useTrainingCalendarEvents } from "../calendar/calendarEvents";
 
 function TrainingSection(): ReactElement {
   const { t, i18n } = useTranslation();
   const { locale } = getLanguagePresentation(i18n.language);
+  const {
+    events: trainingCalendarEvents,
+    isLoading,
+    error,
+  } = useTrainingCalendarEvents();
 
   const dateFormatter = useMemo(
     () =>
@@ -47,7 +52,11 @@ function TrainingSection(): ReactElement {
   });
 
   return (
-    <section id="training" className="space-y-6">
+    <section
+      id="training"
+      className="space-y-6"
+      aria-busy={isLoading}
+    >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold text-red-50 sm:text-2xl">
@@ -61,6 +70,14 @@ function TrainingSection(): ReactElement {
           {weekLabel}
         </span>
       </div>
+      {error ? (
+        <div className="rounded-2xl border border-red-400/40 bg-red-950/50 p-4 text-sm text-red-100">
+          {t("training.loadError", {
+            defaultValue:
+              "We couldn't refresh the training schedule. Showing the latest saved version.",
+          })}
+        </div>
+      ) : null}
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {sessions.map((session) => (
           <RedSurface
