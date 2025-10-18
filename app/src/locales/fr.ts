@@ -380,6 +380,27 @@ export const fr = {
           copyLink: "Copier le lien",
         },
       },
+      eventModal: {
+        aria: {
+          close: "Fermer les détails de l'événement",
+        },
+        occursOn: "{{date}} · {{relative}}",
+        occursOnWithoutRelative: "{{date}}",
+        schedule: {
+          heading: "Programme",
+          start: "Début",
+          end: "Fin",
+          duration: "Durée",
+        },
+        details: {
+          heading: "Détails",
+          location: "Lieu",
+          coach: "Maître principal",
+          level: "Niveau du tournoi",
+          checkInLabel: "Contrôle de ring",
+          checkInValue: "Contrôle à {{time}}",
+        },
+      },
       detailPanel: {
         status: {
           active: "Actif",
