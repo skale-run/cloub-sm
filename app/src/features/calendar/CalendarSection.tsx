@@ -5,7 +5,11 @@ import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
 import RedSurface from "../../components/RedSurface";
 import { getLanguagePresentation } from "../../lib/i18n";
-import { calendarEvents, type CalendarEvent } from "./calendarEvents";
+import {
+  calendarEvents as fallbackCalendarEvents,
+  fetchCalendarEvents,
+  type CalendarEvent,
+} from "./calendarEvents";
 import { ChevronLeft, ChevronRight } from "../../lucide-react";
 
 type CalendarView = "month" | "week" | "day";
@@ -213,13 +217,54 @@ function CalendarSection(): ReactElement {
     [dateLocale, numberingSystem],
   );
 
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(true);
+  const [hasEventsError, setHasEventsError] = useState<boolean>(false);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    async function loadEvents(): Promise<void> {
+      setIsLoadingEvents(true);
+      setHasEventsError(false);
+
+      try {
+        const fetchedEvents = await fetchCalendarEvents({
+          signal: abortController.signal,
+        });
+
+        if (!abortController.signal.aborted) {
+          setEvents(fetchedEvents);
+        }
+      } catch (error) {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        console.error("Failed to fetch calendar events", error);
+        setHasEventsError(true);
+        setEvents(fallbackCalendarEvents);
+      } finally {
+        if (!abortController.signal.aborted) {
+          setIsLoadingEvents(false);
+        }
+      }
+    }
+
+    void loadEvents();
+
+    return () => {
+      abortController.abort();
+    };
+  }, []);
+
   const sortedEvents = useMemo(
     () =>
-      [...calendarEvents].sort(
+      [...events].sort(
         (first, second) =>
           new Date(first.start).getTime() - new Date(second.start).getTime(),
       ),
-    [],
+    [events],
   );
 
   const today = useMemo(() => {
@@ -749,6 +794,27 @@ function CalendarSection(): ReactElement {
           </RedSurface>
         ) : null}
 
+        {isLoadingEvents ? (
+          <RedSurface
+            tone="muted"
+            className="rounded-3xl p-6 text-sm text-red-200/80"
+            role="status"
+            aria-live="polite"
+          >
+            {t("calendar.states.loading")}
+          </RedSurface>
+        ) : null}
+
+        {!isLoadingEvents && hasEventsError ? (
+          <RedSurface
+            tone="muted"
+            className="rounded-3xl border border-red-500/35 bg-red-950/60 p-6 text-sm text-red-200/80"
+            role="alert"
+          >
+            {t("calendar.states.loadFailed")}
+          </RedSurface>
+        ) : null}
+
         <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <RedSurface
             tone="muted"
@@ -877,7 +943,7 @@ function CalendarSection(): ReactElement {
           </RedSurface>
         </div>
 
-        {filteredEvents.length === 0 ? (
+        {!isLoadingEvents && filteredEvents.length === 0 ? (
           <RedSurface
             tone="muted"
             className="rounded-3xl p-6 text-sm text-red-200/80"

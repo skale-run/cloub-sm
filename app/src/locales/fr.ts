@@ -382,6 +382,9 @@ export const fr = {
         },
       },
       states: {
+        loading: "Chargement du planning le plus récent...",
+        loadFailed:
+          "Impossible d'actualiser le planning. Affichage des événements en cache.",
         noEventsFiltered:
           "Aucun événement ne correspond aux filtres actuels. Réactivez une catégorie ou ajustez votre sélection pour revoir le planning de l'équipe.",
         noDaySelected: "Aucun jour sélectionné",
