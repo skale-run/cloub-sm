@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight, LogOut, Menu } from "lucide-react";
-import { ComponentType, useCallback, useMemo } from "react";
+import { ComponentType, useCallback, useId, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "../lib/cn";
 
@@ -45,12 +45,27 @@ type HeaderAvatarButtonProps = {
   imageUrl?: string;
   onClick: () => void;
   ariaLabel: string;
+  ariaDescription?: string;
 };
 
 type HeaderLogoutButtonProps = {
   onClick: () => void;
   label: string;
   description: string;
+};
+
+type HeaderUserActionsProps = {
+  fullName: string;
+  statusLabel: string;
+  statusDescription: string;
+  avatarAriaLabel: string;
+  avatarAriaDescription: string;
+  avatarInitials: string;
+  avatarImageUrl?: string;
+  onAvatarClick: () => void;
+  logoutLabel: string;
+  logoutDescription: string;
+  onLogoutClick: () => void;
 };
 
 const headerContainerClasses =
@@ -90,7 +105,13 @@ function HeaderToggleButton({
   );
 }
 
-function HeaderAvatarButton({ ariaLabel, initials, imageUrl, onClick }: HeaderAvatarButtonProps) {
+function HeaderAvatarButton({
+  ariaDescription,
+  ariaLabel,
+  initials,
+  imageUrl,
+  onClick,
+}: HeaderAvatarButtonProps) {
   const shouldShowImage = Boolean(imageUrl);
 
   return (
@@ -99,6 +120,7 @@ function HeaderAvatarButton({ ariaLabel, initials, imageUrl, onClick }: HeaderAv
       onClick={onClick}
       className={avatarButtonClasses}
       aria-label={ariaLabel}
+      aria-description={ariaDescription}
     >
       {shouldShowImage ? (
         <img
@@ -135,6 +157,68 @@ function HeaderLogoutButton({ description, label, onClick }: HeaderLogoutButtonP
   );
 }
 
+function HeaderUserActions({
+  avatarAriaDescription,
+  avatarAriaLabel,
+  avatarImageUrl,
+  avatarInitials,
+  fullName,
+  logoutDescription,
+  logoutLabel,
+  onAvatarClick,
+  onLogoutClick,
+  statusLabel,
+  statusDescription,
+}: HeaderUserActionsProps) {
+  const titleId = useId();
+  const descriptionId = useId();
+  const srDescriptionId = useId();
+
+  return (
+    <section
+      aria-labelledby={titleId}
+      aria-describedby={`${descriptionId} ${srDescriptionId}`.trim()}
+      className="flex flex-none items-center gap-3 text-red-50"
+    >
+      <div className="flex min-w-0 flex-col text-right">
+        <span id={titleId} className="sr-only">
+          {fullName}
+        </span>
+        <span id={descriptionId} className="sr-only">
+          {statusLabel}
+        </span>
+        <span id={srDescriptionId} className="sr-only">
+          {statusDescription}
+        </span>
+        <span
+          aria-hidden
+          className="hidden truncate text-sm font-medium text-red-100/90 sm:block"
+        >
+          {fullName}
+        </span>
+        <span
+          aria-hidden
+          className="hidden truncate text-xs font-normal text-red-100/65 sm:block"
+        >
+          {statusLabel}
+        </span>
+      </div>
+      <HeaderAvatarButton
+        ariaDescription={avatarAriaDescription}
+        ariaLabel={avatarAriaLabel}
+        imageUrl={avatarImageUrl}
+        initials={avatarInitials}
+        onClick={onAvatarClick}
+      />
+      <HeaderLogoutButton
+        description={logoutDescription}
+        label={logoutLabel}
+        onClick={onLogoutClick}
+      />
+    </section>
+  );
+}
+
 function Header({
   isSidebarOpen,
   onToggleSidebar,
@@ -157,6 +241,12 @@ function Header({
   const avatarAriaLabel = hasCompletedProfile
     ? t("aria.avatarNavigation.access")
     : t("aria.avatarNavigation.profile");
+  const avatarStatusLabel = hasCompletedProfile
+    ? t("menu.access")
+    : t("menu.profile");
+  const avatarDescription = hasCompletedProfile
+    ? t("menu.accessDescription")
+    : t("menu.profileDescription");
   const handleAvatarNavigation = useCallback(() => {
     onAvatarClick();
   }, [onAvatarClick]);
@@ -187,20 +277,19 @@ function Header({
           <h1 className="text-lg font-semibold leading-tight text-red-50 sm:text-2xl">{pageTitle}</h1>
         </div>
 
-        <div className="flex flex-none items-center gap-3 text-red-50">
-          <span className="hidden text-sm font-medium text-red-100/80 sm:inline">{userFullName}</span>
-          <HeaderAvatarButton
-            ariaLabel={avatarAriaLabel}
-            initials={userInitials}
-            imageUrl={profileImageUrl || undefined}
-            onClick={handleAvatarNavigation}
-          />
-          <HeaderLogoutButton
-            description={t("menu.logoutDescription")}
-            label={t("menu.logout")}
-            onClick={handleLogoutClick}
-          />
-        </div>
+        <HeaderUserActions
+          avatarAriaDescription={avatarDescription}
+          avatarAriaLabel={avatarAriaLabel}
+          avatarImageUrl={profileImageUrl || undefined}
+          avatarInitials={userInitials}
+          fullName={userFullName}
+          logoutDescription={t("menu.logoutDescription")}
+          logoutLabel={t("menu.logout")}
+          onAvatarClick={handleAvatarNavigation}
+          onLogoutClick={handleLogoutClick}
+          statusLabel={avatarStatusLabel}
+          statusDescription={avatarDescription}
+        />
       </div>
     </header>
   );
