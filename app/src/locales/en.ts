@@ -306,6 +306,10 @@ export const en = {
         week: "Week",
         day: "Day",
       },
+      actions: {
+        addEvent: "New event",
+        editEvent: "Edit event",
+      },
       workload: {
         heading: "Workload snapshot",
         summary_zero: "No upcoming squad commitments",
@@ -418,6 +422,29 @@ export const en = {
           level: "Tournament level",
           checkInLabel: "Ring check-in",
           checkInValue: "Check-in at {{time}}",
+        },
+      },
+      eventForm: {
+        aria: {
+          close: "Close event form",
+        },
+        createTitle: "Create new event",
+        createDescription:
+          "Capture the key details for a new training session or tournament appearance.",
+        editTitle: "Edit event",
+        editDescription:
+          "Update the schedule information for this calendar entry.",
+        fields: {
+          title: "Event title",
+          start: "Starts",
+          end: "Ends",
+          location: "Location",
+          category: "Category",
+        },
+        actions: {
+          cancel: "Cancel",
+          createEvent: "Create event",
+          saveChanges: "Save changes",
         },
       },
       relativeDay: {
