@@ -7,8 +7,10 @@ import RedSurface from "../../components/RedSurface";
 import { getLanguagePresentation } from "../../lib/i18n";
 import {
   calendarEvents as fallbackCalendarEvents,
+  createCalendarEvent,
   fetchCalendarEvents,
   type CalendarEvent,
+  type CompetitionCalendarEvent,
 } from "./calendarEvents";
 import { ChevronLeft, ChevronRight } from "../../lucide-react";
 
@@ -38,6 +40,18 @@ type MonthDay = {
   date: Date;
   inCurrentMonth: boolean;
   events: CalendarEvent[];
+};
+
+type EventFormData = {
+  title: string;
+  start: string;
+  end: string;
+  location: string;
+  category: CalendarEvent["category"];
+  eventType: string;
+  coach: string;
+  level: CompetitionCalendarEvent["level"];
+  checkIn: string;
 };
 
 const typeStyles: Record<CalendarEvent["category"], string> = {
@@ -77,6 +91,17 @@ const categoryOrder = [
   "training",
   "competition",
 ] satisfies readonly CalendarEvent["category"][];
+const eventTypeOptions = [
+  "training",
+  "competition",
+  "meet",
+  "other",
+] as const;
+const competitionLevelOrder: CompetitionCalendarEvent["level"][] = [
+  "regional",
+  "national",
+  "international",
+];
 
 function formatRelativeDay(target: Date, t: TFunction<"translation">): string {
   const today = new Date();
@@ -334,16 +359,20 @@ function CalendarSection(): ReactElement {
   const [eventFormMode, setEventFormMode] = useState<"create" | "edit">(
     "create",
   );
-  const [eventBeingEdited, setEventBeingEdited] =
-    useState<CalendarEvent | null>(null);
   const eventFormTitleInputRef = useRef<HTMLInputElement | null>(null);
-  const [eventFormData, setEventFormData] = useState({
+  const [eventFormData, setEventFormData] = useState<EventFormData>({
     title: "",
     start: "",
     end: "",
     location: "",
-    category: "training" as CalendarEvent["category"],
+    category: "training",
+    eventType: "training",
+    coach: "",
+    level: "regional",
+    checkIn: "",
   });
+  const [isSubmittingEvent, setIsSubmittingEvent] = useState(false);
+  const [eventFormError, setEventFormError] = useState<string | null>(null);
   const [currentMonth, setCurrentMonth] = useState<Date>(() => {
     const initial = new Date();
     initial.setDate(1);
@@ -561,7 +590,8 @@ function CalendarSection(): ReactElement {
 
   const closeEventForm = useCallback(() => {
     setIsEventFormOpen(false);
-    setEventBeingEdited(null);
+    setEventFormError(null);
+    setIsSubmittingEvent(false);
   }, []);
 
   const openCreateEventForm = useCallback(() => {
@@ -574,14 +604,19 @@ function CalendarSection(): ReactElement {
     endDate.setMinutes(baseDate.getMinutes() + 60);
 
     setEventFormMode("create");
-    setEventBeingEdited(null);
     setEventFormData({
       title: "",
       start: formatDateForInput(baseDate),
       end: formatDateForInput(endDate),
       location: "",
       category: "training",
+      eventType: "training",
+      coach: "",
+      level: "regional",
+      checkIn: formatDateForInput(baseDate),
     });
+    setEventFormError(null);
+    setIsSubmittingEvent(false);
     setIsEventFormOpen(true);
   }, [selectedDay, today]);
 
@@ -589,9 +624,9 @@ function CalendarSection(): ReactElement {
     (eventToEdit: CalendarEvent) => {
       const startDate = new Date(eventToEdit.start);
       const endDate = new Date(eventToEdit.end);
+      const defaultCheckIn = formatDateForInput(startDate);
 
       setEventFormMode("edit");
-      setEventBeingEdited(eventToEdit);
       setActiveEvent(null);
       setEventFormData({
         title: t(eventToEdit.titleKey),
@@ -599,41 +634,185 @@ function CalendarSection(): ReactElement {
         end: formatDateForInput(endDate),
         location: t(eventToEdit.locationKey),
         category: eventToEdit.category,
+        eventType:
+          eventToEdit.eventType ??
+          (eventToEdit.category === "training" ? "training" : "competition"),
+        coach:
+          eventToEdit.category === "training"
+            ? t(eventToEdit.coachKey)
+            : "",
+        level:
+          eventToEdit.category === "competition"
+            ? eventToEdit.level
+            : "regional",
+        checkIn:
+          eventToEdit.category === "competition"
+            ? formatDateForInput(new Date(eventToEdit.checkIn))
+            : defaultCheckIn,
       });
+      setEventFormError(null);
+      setIsSubmittingEvent(false);
       setIsEventFormOpen(true);
     },
     [t],
   );
 
   const handleEventFormFieldChange = (
-    field: "title" | "start" | "end" | "location",
+    field: "title" | "start" | "end" | "location" | "coach" | "checkIn",
   ) =>
     (event: ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
+
       setEventFormData((previous) => ({
         ...previous,
-        [field]: event.target.value,
+        [field]: value,
       }));
+      setEventFormError(null);
     };
 
   const handleEventFormCategoryChange = (
     event: ChangeEvent<HTMLSelectElement>,
   ) => {
-    setEventFormData((previous) => ({
-      ...previous,
-      category: event.target.value as CalendarEvent["category"],
-    }));
+    const nextCategory = event.target.value as CalendarEvent["category"];
+
+    setEventFormData((previous) => {
+      const nextEventType =
+        nextCategory === "training"
+          ? "training"
+          : previous.eventType === "training"
+            ? "competition"
+            : previous.eventType;
+
+      return {
+        ...previous,
+        category: nextCategory,
+        eventType: nextEventType,
+        coach: nextCategory === "training" ? previous.coach : "",
+        level:
+          nextCategory === "competition" ? previous.level : "regional",
+        checkIn:
+          nextCategory === "competition"
+            ? previous.checkIn || previous.start
+            : previous.start,
+      } satisfies EventFormData;
+    });
+    setEventFormError(null);
   };
 
-  const handleEventFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleEventFormEventTypeChange = (
+    event: ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setEventFormData((previous) => ({
+      ...previous,
+      eventType: event.target.value,
+    }));
+    setEventFormError(null);
+  };
+
+  const handleEventFormLevelChange = (
+    event: ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setEventFormData((previous) => ({
+      ...previous,
+      level: event.target.value as CompetitionCalendarEvent["level"],
+    }));
+    setEventFormError(null);
+  };
+
+  const handleEventFormSubmit = async (
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     event.preventDefault();
 
-    console.info("Event form submitted", {
-      mode: eventFormMode,
-      eventBeingEdited,
-      values: eventFormData,
-    });
+    if (isSubmittingEvent) {
+      return;
+    }
 
-    closeEventForm();
+    setEventFormError(null);
+
+    const title = eventFormData.title.trim();
+    const location = eventFormData.location.trim();
+    const startDate = new Date(eventFormData.start);
+    const endDate = new Date(eventFormData.end);
+
+    if (!title) {
+      setEventFormError(t("calendar.eventForm.status.missingTitle"));
+      return;
+    }
+
+    if (!location) {
+      setEventFormError(t("calendar.eventForm.status.missingLocation"));
+      return;
+    }
+
+    if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+      setEventFormError(t("calendar.eventForm.status.invalidDates"));
+      return;
+    }
+
+    if (endDate.getTime() <= startDate.getTime()) {
+      setEventFormError(t("calendar.eventForm.status.invalidRange"));
+      return;
+    }
+
+    const normalizedEventType = eventFormData.eventType.trim() || undefined;
+
+    const basePayload = {
+      category: eventFormData.category,
+      titleKey: title,
+      locationKey: location,
+      start: startDate.toISOString(),
+      end: endDate.toISOString(),
+      eventType: normalizedEventType,
+    } as const;
+
+    setIsSubmittingEvent(true);
+
+    try {
+      if (eventFormData.category === "training") {
+        const coachKey = eventFormData.coach.trim();
+
+        if (!coachKey) {
+          setEventFormError(t("calendar.eventForm.status.missingCoach"));
+          return;
+        }
+
+        const createdEvent = await createCalendarEvent({
+          ...basePayload,
+          category: "training",
+          coachKey,
+        });
+
+        setEvents((previous) => [...previous, createdEvent]);
+        setSelectedDayKey(getDateKey(new Date(createdEvent.start)));
+        closeEventForm();
+        return;
+      }
+
+      const checkInValue = eventFormData.checkIn || eventFormData.start;
+      const checkInDate = new Date(checkInValue);
+
+      if (Number.isNaN(checkInDate.getTime())) {
+        setEventFormError(t("calendar.eventForm.status.missingCheckIn"));
+        return;
+      }
+
+      const createdEvent = await createCalendarEvent({
+        ...basePayload,
+        category: "competition",
+        level: eventFormData.level,
+        checkIn: checkInDate.toISOString(),
+      });
+
+      setEvents((previous) => [...previous, createdEvent]);
+      setSelectedDayKey(getDateKey(new Date(createdEvent.start)));
+      closeEventForm();
+    } catch (error) {
+      console.error("Failed to create calendar event", error);
+      setEventFormError(t("calendar.eventForm.status.requestError"));
+    } finally {
+      setIsSubmittingEvent(false);
+    }
   };
 
   const activeEventStart = useMemo(() => {
@@ -814,6 +993,10 @@ function CalendarSection(): ReactElement {
       end: `${eventFormTitleId}-end`,
       location: `${eventFormTitleId}-location`,
       category: `${eventFormTitleId}-category`,
+      eventType: `${eventFormTitleId}-event-type`,
+      coach: `${eventFormTitleId}-coach`,
+      level: `${eventFormTitleId}-level`,
+      checkIn: `${eventFormTitleId}-check-in`,
     }),
     [eventFormTitleId],
   );
@@ -1465,6 +1648,7 @@ function CalendarSection(): ReactElement {
               onSubmit={handleEventFormSubmit}
               aria-labelledby={eventFormTitleId}
               aria-describedby={eventFormDescriptionId}
+              aria-busy={isSubmittingEvent}
               className="space-y-6"
             >
               <div className="flex items-start justify-between gap-4">
@@ -1505,6 +1689,7 @@ function CalendarSection(): ReactElement {
                     value={eventFormData.title}
                     onChange={handleEventFormFieldChange("title")}
                     required
+                    disabled={isSubmittingEvent}
                     className="w-full rounded-2xl border border-red-400/40 bg-red-950/40 px-4 py-2 text-sm text-red-50 shadow-inner focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-400/60"
                   />
                 </label>
@@ -1518,6 +1703,7 @@ function CalendarSection(): ReactElement {
                     value={eventFormData.start}
                     onChange={handleEventFormFieldChange("start")}
                     required
+                    disabled={isSubmittingEvent}
                     className="w-full rounded-2xl border border-red-400/40 bg-red-950/40 px-4 py-2 text-sm text-red-50 shadow-inner focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-400/60"
                   />
                 </label>
@@ -1531,6 +1717,7 @@ function CalendarSection(): ReactElement {
                     value={eventFormData.end}
                     onChange={handleEventFormFieldChange("end")}
                     required
+                    disabled={isSubmittingEvent}
                     className="w-full rounded-2xl border border-red-400/40 bg-red-950/40 px-4 py-2 text-sm text-red-50 shadow-inner focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-400/60"
                   />
                 </label>
@@ -1544,6 +1731,7 @@ function CalendarSection(): ReactElement {
                     value={eventFormData.location}
                     onChange={handleEventFormFieldChange("location")}
                     required
+                    disabled={isSubmittingEvent}
                     className="w-full rounded-2xl border border-red-400/40 bg-red-950/40 px-4 py-2 text-sm text-red-50 shadow-inner focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-400/60"
                   />
                 </label>
@@ -1555,6 +1743,7 @@ function CalendarSection(): ReactElement {
                     id={eventFormFieldIds.category}
                     value={eventFormData.category}
                     onChange={handleEventFormCategoryChange}
+                    disabled={isSubmittingEvent}
                     className="w-full rounded-2xl border border-red-400/40 bg-red-950/40 px-4 py-2 text-sm text-red-50 shadow-inner focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-400/60"
                   >
                     {categoryOrder.map((category) => (
@@ -1564,7 +1753,85 @@ function CalendarSection(): ReactElement {
                     ))}
                   </select>
                 </label>
+                <label className="block text-sm text-red-200/75" htmlFor={eventFormFieldIds.eventType}>
+                  <span className="mb-1 block text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">
+                    {t("calendar.eventForm.fields.eventType")}
+                  </span>
+                  <select
+                    id={eventFormFieldIds.eventType}
+                    value={eventFormData.eventType}
+                    onChange={handleEventFormEventTypeChange}
+                    disabled={isSubmittingEvent}
+                    className="w-full rounded-2xl border border-red-400/40 bg-red-950/40 px-4 py-2 text-sm text-red-50 shadow-inner focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-400/60"
+                  >
+                    {eventTypeOptions.map((eventType) => (
+                      <option key={eventType} value={eventType}>
+                        {t(`calendar.eventTypes.${eventType}`)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {eventFormData.category === "training" ? (
+                  <label className="block text-sm text-red-200/75" htmlFor={eventFormFieldIds.coach}>
+                    <span className="mb-1 block text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">
+                      {t("calendar.eventForm.fields.coach")}
+                    </span>
+                    <input
+                      id={eventFormFieldIds.coach}
+                      type="text"
+                      value={eventFormData.coach}
+                      onChange={handleEventFormFieldChange("coach")}
+                      disabled={isSubmittingEvent}
+                      className="w-full rounded-2xl border border-red-400/40 bg-red-950/40 px-4 py-2 text-sm text-red-50 shadow-inner focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-400/60"
+                    />
+                  </label>
+                ) : null}
+                {eventFormData.category === "competition" ? (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <label className="block text-sm text-red-200/75" htmlFor={eventFormFieldIds.level}>
+                      <span className="mb-1 block text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">
+                        {t("calendar.eventForm.fields.level")}
+                      </span>
+                      <select
+                        id={eventFormFieldIds.level}
+                        value={eventFormData.level}
+                        onChange={handleEventFormLevelChange}
+                        disabled={isSubmittingEvent}
+                        className="w-full rounded-2xl border border-red-400/40 bg-red-950/40 px-4 py-2 text-sm text-red-50 shadow-inner focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-400/60"
+                      >
+                        {competitionLevelOrder.map((level) => (
+                          <option key={level} value={level}>
+                            {t(`calendar.levels.${level}`)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="block text-sm text-red-200/75" htmlFor={eventFormFieldIds.checkIn}>
+                      <span className="mb-1 block text-xs font-semibold uppercase tracking-[0.3em] text-red-200/70">
+                        {t("calendar.eventForm.fields.checkIn")}
+                      </span>
+                      <input
+                        id={eventFormFieldIds.checkIn}
+                        type="datetime-local"
+                        value={eventFormData.checkIn || eventFormData.start}
+                        onChange={handleEventFormFieldChange("checkIn")}
+                        disabled={isSubmittingEvent}
+                        className="w-full rounded-2xl border border-red-400/40 bg-red-950/40 px-4 py-2 text-sm text-red-50 shadow-inner focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-400/60"
+                      />
+                    </label>
+                  </div>
+                ) : null}
               </div>
+
+              {eventFormError ? (
+                <p
+                  role="alert"
+                  className="text-sm font-medium text-red-200/80"
+                  aria-live="polite"
+                >
+                  {eventFormError}
+                </p>
+              ) : null}
 
               <div className="flex flex-wrap justify-end gap-3">
                 <button
@@ -1576,6 +1843,7 @@ function CalendarSection(): ReactElement {
                 </button>
                 <button
                   type="submit"
+                  disabled={isSubmittingEvent}
                   className="rounded-full border border-red-400/55 bg-red-500/25 px-5 py-2 text-sm font-semibold uppercase tracking-[0.35em] text-red-50 shadow-[0_12px_30px_rgba(220,38,38,0.25)] transition hover:border-red-300 hover:bg-red-500/35 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
                 >
                   {eventFormMode === "edit"

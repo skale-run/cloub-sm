@@ -35,6 +35,30 @@ export type CompetitionCalendarEvent = BaseCalendarEvent & {
 
 export type CalendarEvent = TrainingCalendarEvent | CompetitionCalendarEvent;
 
+type CreateCalendarEventBase = {
+  titleKey: string;
+  locationKey: string;
+  start: string;
+  end: string;
+  eventType?: string;
+  members?: string[];
+};
+
+export type CreateTrainingCalendarEventPayload = CreateCalendarEventBase & {
+  category: "training";
+  coachKey: string;
+};
+
+export type CreateCompetitionCalendarEventPayload = CreateCalendarEventBase & {
+  category: "competition";
+  level: CompetitionCalendarEvent["level"];
+  checkIn: string;
+};
+
+export type CreateCalendarEventPayload =
+  | CreateTrainingCalendarEventPayload
+  | CreateCompetitionCalendarEventPayload;
+
 export const calendarEvents: CalendarEvent[] = [
   {
     id: "ts-1",
@@ -172,7 +196,7 @@ function normalizeMember(member: unknown): CalendarEventMember | null {
   };
 }
 
-function normalizeCalendarEvent(event: unknown): CalendarEvent | null {
+export function normalizeCalendarEvent(event: unknown): CalendarEvent | null {
   if (!event || typeof event !== "object") {
     return null;
   }
@@ -264,4 +288,31 @@ export async function fetchCalendarEvents(
   return events
     .map(normalizeCalendarEvent)
     .filter((event): event is CalendarEvent => event !== null);
+}
+
+export async function createCalendarEvent(
+  payload: CreateCalendarEventPayload,
+): Promise<CalendarEvent> {
+  const response = await fetch(`${API_BASE_URL}/calendar-events`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to create calendar event: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  const payloadBody = (await response.json()) as { event?: unknown };
+  const normalized = normalizeCalendarEvent(payloadBody.event);
+
+  if (!normalized) {
+    throw new Error("Invalid calendar event payload received after creation.");
+  }
+
+  return normalized;
 }
