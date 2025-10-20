@@ -323,6 +323,10 @@ export const fr = {
         week: "Semaine",
         day: "Jour",
       },
+      actions: {
+        addEvent: "Nouvel événement",
+        editEvent: "Modifier l'événement",
+      },
       workload: {
         heading: "Aperçu de la charge",
         summary_zero: "Aucun engagement d'équipe à venir",
@@ -435,6 +439,29 @@ export const fr = {
           level: "Niveau du tournoi",
           checkInLabel: "Contrôle de ring",
           checkInValue: "Contrôle à {{time}}",
+        },
+      },
+      eventForm: {
+        aria: {
+          close: "Fermer le formulaire d'événement",
+        },
+        createTitle: "Créer un nouvel événement",
+        createDescription:
+          "Saisissez les informations essentielles pour un nouvel entraînement ou tournoi.",
+        editTitle: "Modifier l'événement",
+        editDescription:
+          "Mettez à jour les informations de planning pour cet élément du calendrier.",
+        fields: {
+          title: "Titre de l'événement",
+          start: "Début",
+          end: "Fin",
+          location: "Lieu",
+          category: "Catégorie",
+        },
+        actions: {
+          cancel: "Annuler",
+          createEvent: "Créer l'événement",
+          saveChanges: "Enregistrer",
         },
       },
       relativeDay: {

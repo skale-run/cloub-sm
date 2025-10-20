@@ -310,6 +310,10 @@ export const ar = {
         week: "أسبوع",
         day: "يوم",
       },
+      actions: {
+        addEvent: "حدث جديد",
+        editEvent: "تعديل الحدث",
+      },
       workload: {
         heading: "لمحة الحمل",
         summary_zero: "لا التزامات قادمة للسكواد",
@@ -418,6 +422,29 @@ export const ar = {
           level: "مستوى البطولة",
           checkInLabel: "تسجيل الحلبة",
           checkInValue: "تسجيل عند {{time}}",
+        },
+      },
+      eventForm: {
+        aria: {
+          close: "إغلاق نموذج الحدث",
+        },
+        createTitle: "إنشاء حدث جديد",
+        createDescription:
+          "أدخل التفاصيل الأساسية لحصة تدريبية أو بطولة جديدة.",
+        editTitle: "تعديل الحدث",
+        editDescription:
+          "حدّث معلومات الجدول لهذا الحدث في التقويم.",
+        fields: {
+          title: "عنوان الحدث",
+          start: "البدء",
+          end: "الانتهاء",
+          location: "الموقع",
+          category: "الفئة",
+        },
+        actions: {
+          cancel: "إلغاء",
+          createEvent: "إنشاء الحدث",
+          saveChanges: "حفظ التغييرات",
         },
       },
       relativeDay: {
