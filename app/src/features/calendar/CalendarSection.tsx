@@ -160,6 +160,60 @@ function isSameDay(a: Date, b: Date): boolean {
   );
 }
 
+function normalizeDateToStartOfDay(date: Date): Date {
+  const normalized = new Date(date);
+  normalized.setHours(0, 0, 0, 0);
+  return normalized;
+}
+
+function getEventOccurrenceDates(event: CalendarEvent): Date[] {
+  const rawStart = new Date(event.start);
+
+  if (Number.isNaN(rawStart.getTime())) {
+    return [];
+  }
+
+  const startDate = normalizeDateToStartOfDay(rawStart);
+  const rawEnd = new Date(event.end);
+  const endDate = Number.isNaN(rawEnd.getTime())
+    ? new Date(startDate)
+    : normalizeDateToStartOfDay(rawEnd);
+
+  const startTime = startDate.getTime();
+  const endTime = Math.max(startTime, endDate.getTime());
+  const days: Date[] = [];
+  const cursor = new Date(startDate);
+
+  while (cursor.getTime() <= endTime) {
+    days.push(new Date(cursor));
+    cursor.setDate(cursor.getDate() + 1);
+    cursor.setHours(0, 0, 0, 0);
+  }
+
+  return days;
+}
+
+function doesEventOccurOnDate(event: CalendarEvent, targetDate: Date): boolean {
+  const rawStart = new Date(event.start);
+
+  if (Number.isNaN(rawStart.getTime())) {
+    return false;
+  }
+
+  const eventStart = normalizeDateToStartOfDay(rawStart);
+  const rawEnd = new Date(event.end);
+  const eventEnd = Number.isNaN(rawEnd.getTime())
+    ? new Date(eventStart)
+    : normalizeDateToStartOfDay(rawEnd);
+  const normalizedTarget = normalizeDateToStartOfDay(targetDate);
+
+  const startTime = eventStart.getTime();
+  const endTime = Math.max(startTime, eventEnd.getTime());
+  const targetTime = normalizedTarget.getTime();
+
+  return targetTime >= startTime && targetTime <= endTime;
+}
+
 function formatDateForInput(date: Date): string {
   const offset = date.getTimezoneOffset();
   const adjusted = new Date(date.getTime() - offset * 60 * 1000);
@@ -405,7 +459,7 @@ function CalendarSection(): ReactElement {
       const dayDate = new Date(cursor);
       const key = getDateKey(dayDate);
       const eventsOnDay = filteredEvents.filter((event) =>
-        isSameDay(new Date(event.start), dayDate),
+        doesEventOccurOnDate(event, dayDate),
       );
 
       days.push({
@@ -443,45 +497,49 @@ function CalendarSection(): ReactElement {
     const weekBuckets = new Map<string, WeekBucket>();
 
     filteredEvents.forEach((event) => {
-      const startDate = new Date(event.start);
-      const weekStart = startOfWeek(startDate);
-      const weekKey = getDateKey(weekStart);
+      const occurrenceDates = getEventOccurrenceDates(event);
 
-      if (!weekBuckets.has(weekKey)) {
-        const weekEnd = endOfWeek(new Date(weekStart));
+      occurrenceDates.forEach((occurrenceDate) => {
+        const weekStart = startOfWeek(occurrenceDate);
+        const weekKey = getDateKey(weekStart);
 
-        weekBuckets.set(weekKey, {
-          id: weekKey,
-          label: t("calendar.weekView.weekLabel", {
-            start: rangeFormatter.format(weekStart),
-          }),
-          range: `${rangeFormatter.format(weekStart)} – ${rangeFormatter.format(weekEnd)}`,
-          days: Array.from({ length: 7 }).map((_, index) => {
-            const dayDate = new Date(weekStart);
-            dayDate.setDate(weekStart.getDate() + index);
-            dayDate.setHours(0, 0, 0, 0);
+        if (!weekBuckets.has(weekKey)) {
+          const weekEnd = endOfWeek(new Date(weekStart));
 
-            return {
-              key: getDateKey(dayDate),
-              date: dayDate,
-              label: dayFormatter.format(dayDate),
-              events: [],
-            };
-          }),
-        });
-      }
+          weekBuckets.set(weekKey, {
+            id: weekKey,
+            label: t("calendar.weekView.weekLabel", {
+              start: rangeFormatter.format(weekStart),
+            }),
+            range: `${rangeFormatter.format(weekStart)} – ${rangeFormatter.format(weekEnd)}`,
+            days: Array.from({ length: 7 }).map((_, index) => {
+              const dayDate = new Date(weekStart);
+              dayDate.setDate(weekStart.getDate() + index);
+              dayDate.setHours(0, 0, 0, 0);
 
-      const bucket = weekBuckets.get(weekKey);
+              return {
+                key: getDateKey(dayDate),
+                date: dayDate,
+                label: dayFormatter.format(dayDate),
+                events: [],
+              };
+            }),
+          });
+        }
 
-      if (!bucket) return;
+        const bucket = weekBuckets.get(weekKey);
 
-      const matchingDay = bucket.days.find(
-        (day) => day.key === getDateKey(startDate),
-      );
+        if (!bucket) return;
 
-      if (matchingDay) {
-        matchingDay.events.push(event);
-      }
+        const occurrenceKey = getDateKey(occurrenceDate);
+        const matchingDay = bucket.days.find(
+          (day) => day.key === occurrenceKey,
+        );
+
+        if (matchingDay) {
+          matchingDay.events.push(event);
+        }
+      });
     });
 
     return Array.from(weekBuckets.values()).map((bucket) => ({
@@ -500,17 +558,22 @@ function CalendarSection(): ReactElement {
     const seen = new Map<string, DayOption>();
 
     filteredEvents.forEach((event) => {
-      const startDate = new Date(event.start);
-      const key = getDateKey(startDate);
+      const occurrenceDates = getEventOccurrenceDates(event);
 
-      if (!seen.has(key)) {
-        seen.set(key, {
-          key,
-          date: startDate,
-          label: longDayFormatter.format(startDate),
-          shortLabel: dayFormatter.format(startDate),
-        });
-      }
+      occurrenceDates.forEach((occurrenceDate) => {
+        const key = getDateKey(occurrenceDate);
+
+        if (!seen.has(key)) {
+          const labelDate = new Date(occurrenceDate);
+
+          seen.set(key, {
+            key,
+            date: labelDate,
+            label: longDayFormatter.format(labelDate),
+            shortLabel: dayFormatter.format(labelDate),
+          });
+        }
+      });
     });
 
     return Array.from(seen.values()).sort(
@@ -580,7 +643,7 @@ function CalendarSection(): ReactElement {
   );
   const eventsOnSelectedDay = selectedDay
     ? filteredEvents.filter((event) =>
-        isSameDay(new Date(event.start), selectedDay.date),
+        doesEventOccurOnDate(event, selectedDay.date),
       )
     : [];
 
