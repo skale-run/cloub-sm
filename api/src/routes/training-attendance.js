@@ -26,13 +26,20 @@ function formatAttendanceLog(row) {
 
 router.get("/", async (req, res, next) => {
   try {
-    const { memberId, calendarEventId, status: statusFilter, limit: limitParam } = req.query;
+    const {
+      memberId,
+      calendarEventId,
+      status: statusFilter,
+      limit: limitParam,
+    } = req.query;
 
     const filterBuilder = createFilterBuilder();
 
     if (memberId !== undefined) {
       if (!isValidUuid(memberId)) {
-        return res.status(400).json({ error: "memberId must be a valid UUID." });
+        return res
+          .status(400)
+          .json({ error: "memberId must be a valid UUID." });
       }
 
       filterBuilder.addEquality("member_id", memberId);
@@ -40,7 +47,9 @@ router.get("/", async (req, res, next) => {
 
     if (calendarEventId !== undefined) {
       if (!isValidUuid(calendarEventId)) {
-        return res.status(400).json({ error: "calendarEventId must be a valid UUID." });
+        return res
+          .status(400)
+          .json({ error: "calendarEventId must be a valid UUID." });
       }
 
       filterBuilder.addEquality("calendar_event_id", calendarEventId);
@@ -48,7 +57,11 @@ router.get("/", async (req, res, next) => {
 
     if (statusFilter !== undefined) {
       if (!ALLOWED_STATUSES.has(statusFilter)) {
-        return res.status(400).json({ error: "status must be one of present, absent, late, or excused." });
+        return res
+          .status(400)
+          .json({
+            error: "status must be one of present, absent, late, or excused.",
+          });
       }
 
       filterBuilder.addEquality("status", statusFilter);
@@ -78,22 +91,29 @@ router.get("/", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { calendarEventId, memberId, status, recordedAt, note } = req.body ?? {};
+    const { calendarEventId, memberId, status, recordedAt, note } =
+      req.body ?? {};
 
     if (!calendarEventId || !isValidUuid(calendarEventId)) {
       return res
         .status(400)
-        .json({ error: "calendarEventId is required and must be a valid UUID." });
+        .json({
+          error: "calendarEventId is required and must be a valid UUID.",
+        });
     }
 
     if (!memberId || !isValidUuid(memberId)) {
-      return res.status(400).json({ error: "memberId is required and must be a valid UUID." });
+      return res
+        .status(400)
+        .json({ error: "memberId is required and must be a valid UUID." });
     }
 
     if (!status || !ALLOWED_STATUSES.has(status)) {
       return res
         .status(400)
-        .json({ error: "status must be one of present, absent, late, or excused." });
+        .json({
+          error: "status must be one of present, absent, late, or excused.",
+        });
     }
 
     const normalizedNote = normalizeOptionalString(note);
@@ -112,22 +132,34 @@ router.post("/", async (req, res, next) => {
       ],
     );
 
-    res.status(201).json({ attendanceLog: formatAttendanceLog(result.rows[0]) });
+    res
+      .status(201)
+      .json({ attendanceLog: formatAttendanceLog(result.rows[0]) });
   } catch (error) {
     if (error.code === "23503") {
       if (error.detail && error.detail.includes("calendar_event_id")) {
         return res
           .status(400)
-          .json({ error: "calendarEventId does not reference an existing calendar event." });
+          .json({
+            error:
+              "calendarEventId does not reference an existing calendar event.",
+          });
       }
 
       if (error.detail && error.detail.includes("member_id")) {
-        return res.status(400).json({ error: "memberId does not reference an existing member." });
+        return res
+          .status(400)
+          .json({ error: "memberId does not reference an existing member." });
       }
     }
 
     if (error.code === "23505") {
-      return res.status(409).json({ error: "Attendance has already been recorded for this member and event." });
+      return res
+        .status(409)
+        .json({
+          error:
+            "Attendance has already been recorded for this member and event.",
+        });
     }
 
     next(error);

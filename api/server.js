@@ -19,7 +19,7 @@ app.disable("x-powered-by");
 app.use(
   helmet({
     contentSecurityPolicy: false,
-  })
+  }),
 );
 
 app.use(express.json({ limit: MAX_REQUEST_SIZE }));

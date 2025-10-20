@@ -37,11 +37,17 @@ function parseIntegerParam(value, { name, min, max }) {
   }
 
   if (typeof min === "number" && parsed < min) {
-    return { ok: false, error: `${name} must be greater than or equal to ${min}.` };
+    return {
+      ok: false,
+      error: `${name} must be greater than or equal to ${min}.`,
+    };
   }
 
   if (typeof max === "number" && parsed > max) {
-    return { ok: false, error: `${name} must be less than or equal to ${max}.` };
+    return {
+      ok: false,
+      error: `${name} must be less than or equal to ${max}.`,
+    };
   }
 
   return { ok: true, value: parsed };
@@ -96,11 +102,13 @@ router.get("/", authenticate, async (req, res, next) => {
   const baseQuery = `FROM members ${whereClause}`;
 
   try {
-    const totalResult = await query(`SELECT COUNT(*) AS total ${baseQuery}`, filterValues);
+    const totalResult = await query(
+      `SELECT COUNT(*) AS total ${baseQuery}`,
+      filterValues,
+    );
 
     const dataValues = [...filterValues];
-    let dataQuery =
-      `SELECT id, full_name, email, role, squad, emergency_contact, membership_id, profile_photo_url, created_at, updated_at ${baseQuery} ORDER BY created_at DESC, id DESC`;
+    let dataQuery = `SELECT id, full_name, email, role, squad, emergency_contact, membership_id, profile_photo_url, created_at, updated_at ${baseQuery} ORDER BY created_at DESC, id DESC`;
 
     if (limitResult.value !== undefined) {
       dataValues.push(limitResult.value);
@@ -111,8 +119,8 @@ router.get("/", authenticate, async (req, res, next) => {
       offsetResult.value !== undefined
         ? offsetResult.value
         : limitResult.value !== undefined
-        ? 0
-        : undefined;
+          ? 0
+          : undefined;
 
     if (effectiveOffset !== undefined) {
       dataValues.push(effectiveOffset);
@@ -171,7 +179,9 @@ router.post("/", async (req, res, next) => {
   if (!fullName || !email || !password || !membershipId) {
     return res
       .status(400)
-      .json({ error: "Full name, email, password, and membership ID are required." });
+      .json({
+        error: "Full name, email, password, and membership ID are required.",
+      });
   }
 
   const normalizedFullName = fullName.trim();
@@ -189,7 +199,9 @@ router.post("/", async (req, res, next) => {
   }
 
   if (!EMAIL_REGEX.test(normalizedEmail)) {
-    return res.status(400).json({ error: "A valid email address is required." });
+    return res
+      .status(400)
+      .json({ error: "A valid email address is required." });
   }
 
   if (!normalizedMembershipId) {
@@ -290,7 +302,9 @@ router.get("/:id", authenticate, async (req, res, next) => {
   }
 
   if (req.auth?.memberId !== id) {
-    return res.status(403).json({ error: "You do not have access to this member." });
+    return res
+      .status(403)
+      .json({ error: "You do not have access to this member." });
   }
 
   try {
@@ -329,7 +343,9 @@ router.put("/:id", authenticate, async (req, res, next) => {
   }
 
   if (req.auth?.memberId !== id) {
-    return res.status(403).json({ error: "You do not have access to update this member." });
+    return res
+      .status(403)
+      .json({ error: "You do not have access to update this member." });
   }
 
   const updates = [];
@@ -344,7 +360,9 @@ router.put("/:id", authenticate, async (req, res, next) => {
     const normalizedEmail = email.trim().toLowerCase();
 
     if (!EMAIL_REGEX.test(normalizedEmail)) {
-      return res.status(400).json({ error: "A valid email address is required." });
+      return res
+        .status(400)
+        .json({ error: "A valid email address is required." });
     }
 
     values.push(normalizedEmail);
@@ -404,7 +422,9 @@ router.put("/:id", authenticate, async (req, res, next) => {
   }
 
   if (updates.length === 0) {
-    return res.status(400).json({ error: "At least one field must be provided for update." });
+    return res
+      .status(400)
+      .json({ error: "At least one field must be provided for update." });
   }
 
   updates.push("updated_at = NOW()");
@@ -447,7 +467,9 @@ router.delete("/:id", authenticate, async (req, res, next) => {
   }
 
   if (req.auth?.memberId !== id) {
-    return res.status(403).json({ error: "You do not have access to delete this member." });
+    return res
+      .status(403)
+      .json({ error: "You do not have access to delete this member." });
   }
 
   try {

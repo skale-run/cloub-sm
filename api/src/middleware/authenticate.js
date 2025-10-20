@@ -1,7 +1,4 @@
-const {
-  getSessionById,
-  verifyToken,
-} = require("../services/auth");
+const { getSessionById, verifyToken } = require("../services/auth");
 
 function extractBearerToken(headerValue) {
   if (typeof headerValue !== "string") {
@@ -49,7 +46,10 @@ async function authenticate(req, res, next) {
       return res.status(401).json({ error: "Session has been revoked." });
     }
 
-    if (session.expires_at && new Date(session.expires_at).getTime() <= Date.now()) {
+    if (
+      session.expires_at &&
+      new Date(session.expires_at).getTime() <= Date.now()
+    ) {
       return res.status(401).json({ error: "Session has expired." });
     }
 

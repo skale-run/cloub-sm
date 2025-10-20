@@ -34,10 +34,9 @@ async function runMigration(client, file) {
 
   console.log(`Applying migration ${migrationName}...`);
   await client.query(sql);
-  await client.query(
-    `INSERT INTO ${MIGRATIONS_TABLE} (name) VALUES ($1)`,
-    [migrationName],
-  );
+  await client.query(`INSERT INTO ${MIGRATIONS_TABLE} (name) VALUES ($1)`, [
+    migrationName,
+  ]);
   console.log(`Migration ${migrationName} applied.`);
 }
 
@@ -82,4 +81,3 @@ async function runMigrations() {
 module.exports = {
   runMigrations,
 };
-

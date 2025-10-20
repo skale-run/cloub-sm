@@ -5,7 +5,9 @@ function errorHandler(error, req, res, next) {
 
   const status = typeof error.status === "number" ? error.status : 500;
   const expose =
-    typeof error.expose === "boolean" ? error.expose : status >= 400 && status < 500;
+    typeof error.expose === "boolean"
+      ? error.expose
+      : status >= 400 && status < 500;
   const message = expose ? error.message : "Internal server error";
 
   if (!expose) {

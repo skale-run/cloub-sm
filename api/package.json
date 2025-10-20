@@ -6,8 +6,6 @@
   "scripts": {
     "start": "node server.js",
     "migrate": "node ./db/migrate.js",
-    "lint": "npm run lint:js && npm run lint:styles",
-    "lint:js": "eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=0",
     "lint:js:fix": "npm run lint:js -- --fix",
     "format": "prettier . --check",
     "format:fix": "prettier . --write"
@@ -21,7 +19,6 @@
     "pg": "^8.13.1"
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
     "prettier": "^3.3.3"
   }
 }

@@ -7,7 +7,12 @@ const router = express.Router();
 
 const ALLOWED_CATEGORIES = new Set(["training", "competition"]);
 const ALLOWED_LEVELS = new Set(["regional", "national", "international"]);
-const ALLOWED_EVENT_TYPES = new Set(["competition", "entrainment", "meet", "other"]);
+const ALLOWED_EVENT_TYPES = new Set([
+  "competition",
+  "entrainment",
+  "meet",
+  "other",
+]);
 
 const EVENT_TYPE_CLIENT_TO_DB = new Map([
   ["competition", "competition"],
@@ -241,7 +246,8 @@ router.post("/", async (req, res, next) => {
     members,
   } = req.body ?? {};
 
-  const normalizedCategory = typeof category === "string" ? category.trim().toLowerCase() : "";
+  const normalizedCategory =
+    typeof category === "string" ? category.trim().toLowerCase() : "";
   const eventTypeWasProvided = eventType !== undefined;
   let normalizedEventType = null;
 
@@ -255,11 +261,15 @@ router.post("/", async (req, res, next) => {
     normalizedEventType = defaultEventTypeForCategory(normalizedCategory);
   }
 
-  const normalizedTitleKey = typeof titleKey === "string" ? titleKey.trim() : "";
-  const normalizedLocationKey = typeof locationKey === "string" ? locationKey.trim() : "";
+  const normalizedTitleKey =
+    typeof titleKey === "string" ? titleKey.trim() : "";
+  const normalizedLocationKey =
+    typeof locationKey === "string" ? locationKey.trim() : "";
 
   if (!ALLOWED_CATEGORIES.has(normalizedCategory)) {
-    return res.status(400).json({ error: "Category must be training or competition." });
+    return res
+      .status(400)
+      .json({ error: "Category must be training or competition." });
   }
 
   if (!normalizedEventType || !ALLOWED_EVENT_TYPES.has(normalizedEventType)) {
@@ -276,7 +286,9 @@ router.post("/", async (req, res, next) => {
   const endDate = new Date(end ?? "");
 
   if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
-    return res.status(400).json({ error: "Valid start and end times are required." });
+    return res
+      .status(400)
+      .json({ error: "Valid start and end times are required." });
   }
 
   if (endDate.getTime() <= startDate.getTime()) {
@@ -289,20 +301,26 @@ router.post("/", async (req, res, next) => {
 
   if (members !== undefined) {
     if (!Array.isArray(members)) {
-      return res.status(400).json({ error: "Members must be an array of UUID strings." });
+      return res
+        .status(400)
+        .json({ error: "Members must be an array of UUID strings." });
     }
 
     const normalizedMembers = [];
 
     for (const memberId of members) {
       if (typeof memberId !== "string") {
-        return res.status(400).json({ error: "Member IDs must be UUID strings." });
+        return res
+          .status(400)
+          .json({ error: "Member IDs must be UUID strings." });
       }
 
       const trimmed = memberId.trim();
 
       if (!isValidUuid(trimmed)) {
-        return res.status(400).json({ error: "One or more member IDs are invalid." });
+        return res
+          .status(400)
+          .json({ error: "One or more member IDs are invalid." });
       }
 
       normalizedMembers.push(trimmed);
@@ -318,7 +336,9 @@ router.post("/", async (req, res, next) => {
     );
 
     if (memberCheck.rowCount !== memberIds.length) {
-      return res.status(400).json({ error: "One or more member IDs do not exist." });
+      return res
+        .status(400)
+        .json({ error: "One or more member IDs do not exist." });
     }
   }
 
@@ -335,7 +355,8 @@ router.post("/", async (req, res, next) => {
         .json({ error: "Coach key is required for training events." });
     }
   } else {
-    normalizedLevel = typeof level === "string" ? level.trim().toLowerCase() : "";
+    normalizedLevel =
+      typeof level === "string" ? level.trim().toLowerCase() : "";
     checkInDate = new Date(checkIn ?? "");
 
     if (!ALLOWED_LEVELS.has(normalizedLevel)) {
@@ -453,7 +474,9 @@ router.put("/:id", async (req, res, next) => {
     const normalized = category.trim().toLowerCase();
 
     if (!ALLOWED_CATEGORIES.has(normalized)) {
-      return res.status(400).json({ error: "Category must be training or competition." });
+      return res
+        .status(400)
+        .json({ error: "Category must be training or competition." });
     }
 
     if (normalized !== existingRow.category) {
@@ -516,7 +539,9 @@ router.put("/:id", async (req, res, next) => {
     startDate = new Date(start);
 
     if (Number.isNaN(startDate.getTime())) {
-      return res.status(400).json({ error: "Start time must be a valid date." });
+      return res
+        .status(400)
+        .json({ error: "Start time must be a valid date." });
     }
 
     values.push(startDate.toISOString());
@@ -559,20 +584,26 @@ router.put("/:id", async (req, res, next) => {
 
   if (members !== undefined) {
     if (!Array.isArray(members)) {
-      return res.status(400).json({ error: "Members must be an array of UUID strings." });
+      return res
+        .status(400)
+        .json({ error: "Members must be an array of UUID strings." });
     }
 
     const collected = [];
 
     for (const memberId of members) {
       if (typeof memberId !== "string") {
-        return res.status(400).json({ error: "Member IDs must be UUID strings." });
+        return res
+          .status(400)
+          .json({ error: "Member IDs must be UUID strings." });
       }
 
       const trimmed = memberId.trim();
 
       if (!isValidUuid(trimmed)) {
-        return res.status(400).json({ error: "One or more member IDs are invalid." });
+        return res
+          .status(400)
+          .json({ error: "One or more member IDs are invalid." });
       }
 
       collected.push(trimmed);
@@ -587,7 +618,9 @@ router.put("/:id", async (req, res, next) => {
       );
 
       if (memberCheck.rowCount !== normalizedMemberIds.length) {
-        return res.status(400).json({ error: "One or more member IDs do not exist." });
+        return res
+          .status(400)
+          .json({ error: "One or more member IDs do not exist." });
       }
     }
   }
@@ -624,7 +657,8 @@ router.put("/:id", async (req, res, next) => {
     }
   } else {
     if (level !== undefined) {
-      const normalized = typeof level === "string" ? level.trim().toLowerCase() : "";
+      const normalized =
+        typeof level === "string" ? level.trim().toLowerCase() : "";
 
       if (!ALLOWED_LEVELS.has(normalized)) {
         return res.status(400).json({ error: "Invalid competition level." });
@@ -659,7 +693,9 @@ router.put("/:id", async (req, res, next) => {
       if (Number.isNaN(parsedCheckIn.getTime())) {
         return res
           .status(400)
-          .json({ error: "Check-in time is required when changing to competition." });
+          .json({
+            error: "Check-in time is required when changing to competition.",
+          });
       }
 
       nextLevel = normalizedLevel;

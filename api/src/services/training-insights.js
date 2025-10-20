@@ -68,7 +68,9 @@ function determineRosterStatus(lastStatus) {
 async function getTrainingInsights(options = {}, executor = query) {
   const { weeks: weeksOption, referenceDate: referenceDateOption } = options;
   const weeks = clampWeeks(weeksOption);
-  const referenceDate = referenceDateOption ? toDate(referenceDateOption) : new Date();
+  const referenceDate = referenceDateOption
+    ? toDate(referenceDateOption)
+    : new Date();
 
   if (Number.isNaN(referenceDate.getTime())) {
     throw new TypeError("Invalid reference date");
@@ -87,7 +89,8 @@ async function getTrainingInsights(options = {}, executor = query) {
   }
 
   const firstWeekStart = weekWindows[0]?.start ?? referenceWeekStart;
-  const lastWeekEnd = weekWindows[weekWindows.length - 1]?.end ?? addDays(referenceWeekStart, 7);
+  const lastWeekEnd =
+    weekWindows[weekWindows.length - 1]?.end ?? addDays(referenceWeekStart, 7);
 
   const eventsResult = await executor(
     `SELECT ce.id, ce.title_key, ce.location_key, ce.start_time, ce.end_time, ted.coach_key
@@ -193,7 +196,8 @@ async function getTrainingInsights(options = {}, executor = query) {
 
   const attendanceRate = calculateAttendanceRate(totals);
 
-  const previousWeek = weekMetrics.length > 1 ? weekMetrics[weekMetrics.length - 2] : null;
+  const previousWeek =
+    weekMetrics.length > 1 ? weekMetrics[weekMetrics.length - 2] : null;
   const previousAttendanceRate = previousWeek?.attendanceRate ?? null;
   const rateDelta =
     attendanceRate !== null && previousAttendanceRate !== null
@@ -225,7 +229,9 @@ async function getTrainingInsights(options = {}, executor = query) {
       return current;
     }
 
-    if ((current.attendanceRate ?? Infinity) < (focus.attendanceRate ?? Infinity)) {
+    if (
+      (current.attendanceRate ?? Infinity) < (focus.attendanceRate ?? Infinity)
+    ) {
       return current;
     }
 
@@ -234,7 +240,9 @@ async function getTrainingInsights(options = {}, executor = query) {
 
   const latestWeek = weekSummaries[weekSummaries.length - 1];
   const latestEventIds = latestWeek?.eventIds ?? [];
-  const rosterLogs = attendanceRows.filter((log) => latestEventIds.includes(log.calendar_event_id));
+  const rosterLogs = attendanceRows.filter((log) =>
+    latestEventIds.includes(log.calendar_event_id),
+  );
 
   const logsByMember = new Map();
   for (const log of rosterLogs) {
@@ -267,9 +275,14 @@ async function getTrainingInsights(options = {}, executor = query) {
 
     logs.sort((a, b) => new Date(b.recorded_at) - new Date(a.recorded_at));
     const totalLogs = logs.length;
-    const attendedLogs = logs.filter((log) => ATTENDED_STATUSES.has(log.status)).length;
-    const supportiveLogs = logs.filter((log) => SUPPORTIVE_STATUSES.has(log.status)).length;
-    const plannedSessions = new Set(logs.map((log) => log.calendar_event_id)).size;
+    const attendedLogs = logs.filter((log) =>
+      ATTENDED_STATUSES.has(log.status),
+    ).length;
+    const supportiveLogs = logs.filter((log) =>
+      SUPPORTIVE_STATUSES.has(log.status),
+    ).length;
+    const plannedSessions = new Set(logs.map((log) => log.calendar_event_id))
+      .size;
     const status = determineRosterStatus(logs[0]?.status);
 
     statusCounts[status] += 1;

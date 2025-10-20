@@ -20,12 +20,12 @@ This command downloads the dependencies declared in `package.json` and prepares 
 
 The service reads configuration from environment variables (optionally via a local `.env` file). The defaults support local development, but production deployments should supply explicit values.
 
-| Variable | Description | Default |
-| --- | --- | --- |
-| `PORT` | Port that the HTTP server listens on. | `4000` |
-| `DATABASE_URL` | PostgreSQL connection string, including username, password, host, and database. | `postgres://postgres:postgres@localhost:5432/cloub_sm` |
-| `PGSSLMODE` | Set to `require` to enable SSL with `rejectUnauthorized: false`. Leave unset for local development. | _unset_ |
-| `JWT_SECRET` | Secret used to sign authentication tokens. | _required for protected routes_ |
+| Variable       | Description                                                                                         | Default                                                |
+| -------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `PORT`         | Port that the HTTP server listens on.                                                               | `4000`                                                 |
+| `DATABASE_URL` | PostgreSQL connection string, including username, password, host, and database.                     | `postgres://postgres:postgres@localhost:5432/cloub_sm` |
+| `PGSSLMODE`    | Set to `require` to enable SSL with `rejectUnauthorized: false`. Leave unset for local development. | _unset_                                                |
+| `JWT_SECRET`   | Secret used to sign authentication tokens.                                                          | _required for protected routes_                        |
 
 Create a `.env` file in the project root (`api/.env`) when running locally:
 
@@ -65,21 +65,21 @@ Authentication uses bearer tokens obtained from the member login endpoint. Inclu
 
 ### Health & discovery
 
-| Method | Path | Protected | Description |
-| --- | --- | --- | --- |
-| GET | `/health` | No | Lightweight readiness check returning API status and timestamp. |
-| GET | `/v1` | No | Lists top-level resource routes and descriptions. |
+| Method | Path      | Protected | Description                                                     |
+| ------ | --------- | --------- | --------------------------------------------------------------- |
+| GET    | `/health` | No        | Lightweight readiness check returning API status and timestamp. |
+| GET    | `/v1`     | No        | Lists top-level resource routes and descriptions.               |
 
 ### Members (`/v1/members`)
 
-| Method | Path | Protected | Description |
-| --- | --- | --- | --- |
-| GET | `/` | Yes | List members with optional search, squad, and role filters. Supports `limit` (1-100) and `offset` pagination. |
-| POST | `/` | No | Create a member. Requires `fullName`, `email`, `password` (≥ 8 characters), and `membershipId`. |
-| POST | `/login` | No | Authenticate a member by email and password, returning profile details, bearer token, and session metadata. |
-| GET | `/:id` | Yes | Retrieve the authenticated member by UUID. |
-| PUT | `/:id` | Yes | Update the authenticated member. Fields include name, email, password, role, squad, emergency contact, membership ID, and `profilePhotoUrl`. |
-| DELETE | `/:id` | Yes | Delete the authenticated member profile. |
+| Method | Path     | Protected | Description                                                                                                                                  |
+| ------ | -------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/`      | Yes       | List members with optional search, squad, and role filters. Supports `limit` (1-100) and `offset` pagination.                                |
+| POST   | `/`      | No        | Create a member. Requires `fullName`, `email`, `password` (≥ 8 characters), and `membershipId`.                                              |
+| POST   | `/login` | No        | Authenticate a member by email and password, returning profile details, bearer token, and session metadata.                                  |
+| GET    | `/:id`   | Yes       | Retrieve the authenticated member by UUID.                                                                                                   |
+| PUT    | `/:id`   | Yes       | Update the authenticated member. Fields include name, email, password, role, squad, emergency contact, membership ID, and `profilePhotoUrl`. |
+| DELETE | `/:id`   | Yes       | Delete the authenticated member profile.                                                                                                     |
 
 **Query parameters**
 
@@ -91,13 +91,13 @@ Authentication uses bearer tokens obtained from the member login endpoint. Inclu
 
 ### Calendar events (`/v1/calendar-events`)
 
-| Method | Path | Protected | Description |
-| --- | --- | --- | --- |
-| GET | `/` | No | List all calendar events with embedded member rosters and event metadata. |
-| GET | `/:id` | No | Retrieve a single event by UUID. |
-| POST | `/` | No | Create a calendar event. `category` must be `training` or `competition`; `eventType` must be one of `competition`, `entrainment`, `meet`, or `other`. |
-| PUT | `/:id` | No | Update an existing event. Supports all fields accepted on create, with validation for date ranges and membership assignments. |
-| DELETE | `/:id` | No | Delete an event by UUID. |
+| Method | Path   | Protected | Description                                                                                                                                           |
+| ------ | ------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/`    | No        | List all calendar events with embedded member rosters and event metadata.                                                                             |
+| GET    | `/:id` | No        | Retrieve a single event by UUID.                                                                                                                      |
+| POST   | `/`    | No        | Create a calendar event. `category` must be `training` or `competition`; `eventType` must be one of `competition`, `entrainment`, `meet`, or `other`. |
+| PUT    | `/:id` | No        | Update an existing event. Supports all fields accepted on create, with validation for date ranges and membership assignments.                         |
+| DELETE | `/:id` | No        | Delete an event by UUID.                                                                                                                              |
 
 **Payload rules**
 
@@ -117,10 +117,10 @@ Additional rules:
 
 ### Access logs (`/v1/access-logs`)
 
-| Method | Path | Protected | Description |
-| --- | --- | --- | --- |
-| GET | `/` | No | List access logs ordered by access time. Supports `memberId` filters and `limit` (default 100, max 500). |
-| POST | `/` | No | Record an access event for a member, optionally specifying timestamp, access point, and note. |
+| Method | Path | Protected | Description                                                                                              |
+| ------ | ---- | --------- | -------------------------------------------------------------------------------------------------------- |
+| GET    | `/`  | No        | List access logs ordered by access time. Supports `memberId` filters and `limit` (default 100, max 500). |
+| POST   | `/`  | No        | Record an access event for a member, optionally specifying timestamp, access point, and note.            |
 
 **Parameters**
 
@@ -131,16 +131,16 @@ Additional rules:
 
 ### Training attendance (`/v1/training-attendance`)
 
-| Method | Path | Protected | Description |
-| --- | --- | --- | --- |
-| GET | `/` | No | List attendance logs ordered by recorded time. Filters include `memberId`, `calendarEventId`, `status`, and `limit` (default 100, max 500). |
-| POST | `/` | No | Record attendance for a member at a calendar event. Requires `calendarEventId`, `memberId`, and `status` (`present`, `absent`, `late`, or `excused`). Optional `recordedAt` and `note`. |
+| Method | Path | Protected | Description                                                                                                                                                                             |
+| ------ | ---- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/`  | No        | List attendance logs ordered by recorded time. Filters include `memberId`, `calendarEventId`, `status`, and `limit` (default 100, max 500).                                             |
+| POST   | `/`  | No        | Record attendance for a member at a calendar event. Requires `calendarEventId`, `memberId`, and `status` (`present`, `absent`, `late`, or `excused`). Optional `recordedAt` and `note`. |
 
 ### Training insights (`/v1/training-insights`)
 
-| Method | Path | Protected | Description |
-| --- | --- | --- | --- |
-| GET | `/` | No | Calculate aggregated training insights. Accepts optional `weeks` (integer 1-12, default 3) and `referenceDate` (ISO 8601) query parameters. |
+| Method | Path | Protected | Description                                                                                                                                 |
+| ------ | ---- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/`  | No        | Calculate aggregated training insights. Accepts optional `weeks` (integer 1-12, default 3) and `referenceDate` (ISO 8601) query parameters. |
 
 Responses provide attendance metrics for the requested window, including weekly breakdowns and aggregate attendance rates.
 

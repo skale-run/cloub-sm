@@ -42,13 +42,19 @@ router.get("/", async (req, res, next) => {
 
     res.json({ trainingInsights: insights });
   } catch (error) {
-    if (error instanceof TypeError && /Invalid reference date/i.test(error.message)) {
+    if (
+      error instanceof TypeError &&
+      /Invalid reference date/i.test(error.message)
+    ) {
       return res.status(400).json({
         error: "referenceDate must be a valid ISO 8601 date.",
       });
     }
 
-    if (error instanceof TypeError && /Invalid date value|Invalid date string/i.test(error.message)) {
+    if (
+      error instanceof TypeError &&
+      /Invalid date value|Invalid date string/i.test(error.message)
+    ) {
       return res.status(400).json({
         error: "referenceDate must be a valid ISO 8601 date.",
       });

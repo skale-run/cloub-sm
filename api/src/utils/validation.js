@@ -29,7 +29,9 @@ function parseIsoDate(value, fieldName) {
   const parsed = new Date(value);
 
   if (Number.isNaN(parsed.getTime())) {
-    throw createValidationError(`${fieldName} must be a valid ISO 8601 date-time string.`);
+    throw createValidationError(
+      `${fieldName} must be a valid ISO 8601 date-time string.`,
+    );
   }
 
   return parsed.toISOString();

@@ -29,7 +29,9 @@ router.get("/", async (req, res, next) => {
 
     if (memberId !== undefined) {
       if (!isValidUuid(memberId)) {
-        return res.status(400).json({ error: "memberId must be a valid UUID." });
+        return res
+          .status(400)
+          .json({ error: "memberId must be a valid UUID." });
       }
 
       filterBuilder.addEquality("member_id", memberId);
@@ -62,7 +64,9 @@ router.post("/", async (req, res, next) => {
     const { memberId, accessedAt, accessPoint, note } = req.body ?? {};
 
     if (!memberId || !isValidUuid(memberId)) {
-      return res.status(400).json({ error: "memberId is required and must be a valid UUID." });
+      return res
+        .status(400)
+        .json({ error: "memberId is required and must be a valid UUID." });
     }
 
     const normalizedAccessPoint = normalizeOptionalString(accessPoint);
@@ -85,7 +89,9 @@ router.post("/", async (req, res, next) => {
     res.status(201).json({ accessLog: formatAccessLog(result.rows[0]) });
   } catch (error) {
     if (error.code === "23503") {
-      return res.status(400).json({ error: "memberId does not reference an existing member." });
+      return res
+        .status(400)
+        .json({ error: "memberId does not reference an existing member." });
     }
 
     next(error);
