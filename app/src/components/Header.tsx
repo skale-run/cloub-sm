@@ -103,11 +103,17 @@ function HeaderAvatarButton({ ariaLabel, initials, onClick }: HeaderAvatarButton
 
 function HeaderLogoutButton({ description, label, onClick }: HeaderLogoutButtonProps) {
   return (
-    <button type="button" onClick={onClick} className={actionButtonBaseClasses}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={actionButtonBaseClasses}
+      aria-label={label}
+      aria-description={description}
+    >
       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red-900/40 text-red-200">
         <LogOut aria-hidden className="h-4 w-4" />
       </span>
-      <span className="flex flex-col text-left">
+      <span className="hidden flex-col text-left sm:flex">
         <span>{label}</span>
         <span className="text-xs font-normal text-red-200/70">{description}</span>
       </span>
