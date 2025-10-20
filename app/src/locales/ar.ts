@@ -2773,11 +2773,31 @@ export const ar = {
             label: "مؤشر الجاهزية",
             value: "92٪",
             detail: "ملاحظات الماستر وموافقة الفيزيائي تتحسن",
-          },
         },
-        upcoming: {
-          heading: "تسجيلات الدخول القادمة",
+      },
+      logs: {
+        heading: "سجل الحضور الأخير",
+        description: "أحدث تأكيدات التسجيل لحسابك",
+        requireAuth: "سجّل الدخول لعرض سجل حضورك.",
+        empty: "لم يتم تسجيل أي حضور لملفك بعد.",
+        error: "تعذّر تحميل سجل الحضور الآن.",
+        status: {
+          present: "حاضر",
+          late: "متأخر",
+          excused: "مُعذَر",
+          absent: "غائب",
         },
+        recordedAt: {
+          label: "تم التسجيل",
+          missing: "لم يُسجّل الوقت",
+        },
+        noteLabel: "ملاحظة",
+        unknownSession: "حصة تدريب",
+        unknownSchedule: "الجدول غير متوفر",
+      },
+      upcoming: {
+        heading: "تسجيلات الدخول القادمة",
+      },
         followUp: {
           heading: "إجراءات المتابعة",
           helper: "أولويات هذا الأسبوع",
