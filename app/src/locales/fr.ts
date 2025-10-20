@@ -457,11 +457,26 @@ export const fr = {
           end: "Fin",
           location: "Lieu",
           category: "Catégorie",
+          eventType: "Type d'événement",
+          coach: "Coach référent",
+          level: "Niveau de compétition",
+          checkIn: "Heure de contrôle",
         },
         actions: {
           cancel: "Annuler",
           createEvent: "Créer l'événement",
           saveChanges: "Enregistrer",
+        },
+        status: {
+          missingTitle: "Ajoutez un titre pour l'événement.",
+          missingLocation: "Indiquez le lieu de l'événement.",
+          invalidDates: "Les horaires doivent être des dates valides.",
+          invalidRange:
+            "L'heure de fin doit être postérieure à l'heure de début.",
+          missingCoach: "Les entraînements doivent avoir un coach assigné.",
+          missingCheckIn: "Les compétitions nécessitent une heure de contrôle.",
+          requestError:
+            "Enregistrement impossible. Vérifiez votre connexion et réessayez.",
         },
       },
       relativeDay: {
@@ -484,6 +499,12 @@ export const fr = {
         regional: "Regional",
         national: "National",
         international: "International",
+      },
+      eventTypes: {
+        training: "Séance d'entraînement",
+        competition: "Compétition",
+        meet: "Rencontre",
+        other: "Autre",
       },
       events: {
         ts1: {

@@ -440,11 +440,24 @@ export const ar = {
           end: "الانتهاء",
           location: "الموقع",
           category: "الفئة",
+          eventType: "نوع الحدث",
+          coach: "المدرب المسؤول",
+          level: "مستوى المنافسة",
+          checkIn: "وقت التسجيل",
         },
         actions: {
           cancel: "إلغاء",
           createEvent: "إنشاء الحدث",
           saveChanges: "حفظ التغييرات",
+        },
+        status: {
+          missingTitle: "يرجى إضافة عنوان للحدث.",
+          missingLocation: "حدد مكان إقامة الحدث.",
+          invalidDates: "يجب أن تكون أوقات البدء والانتهاء صالحة.",
+          invalidRange: "يجب أن يكون وقت الانتهاء بعد وقت البدء.",
+          missingCoach: "أحداث التدريب تحتاج إلى مدرب مسؤول.",
+          missingCheckIn: "أحداث المنافسة تحتاج إلى وقت تسجيل.",
+          requestError: "تعذّر حفظ الحدث. تحقق من الاتصال وحاول مرة أخرى.",
         },
       },
       relativeDay: {
@@ -467,6 +480,12 @@ export const ar = {
         regional: "إقليمي",
         national: "وطني",
         international: "دولي",
+      },
+      eventTypes: {
+        training: "حصة تدريبية",
+        competition: "منافسة",
+        meet: "لقاء",
+        other: "أخرى",
       },
       events: {
         ts1: {

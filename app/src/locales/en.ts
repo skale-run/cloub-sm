@@ -440,11 +440,25 @@ export const en = {
           end: "Ends",
           location: "Location",
           category: "Category",
+          eventType: "Event type",
+          coach: "Lead coach",
+          level: "Competition level",
+          checkIn: "Check-in",
         },
         actions: {
           cancel: "Cancel",
           createEvent: "Create event",
           saveChanges: "Save changes",
+        },
+        status: {
+          missingTitle: "Please add a title for the event.",
+          missingLocation: "Enter where the event will take place.",
+          invalidDates: "Start and end times must be valid dates.",
+          invalidRange: "The end time needs to be after the start time.",
+          missingCoach: "Training events need a coach or lead assigned.",
+          missingCheckIn: "Competition events need a check-in time.",
+          requestError:
+            "We couldn't save the event. Check your connection and try again.",
         },
       },
       relativeDay: {
@@ -467,6 +481,12 @@ export const en = {
         regional: "Regional",
         national: "National",
         international: "International",
+      },
+      eventTypes: {
+        training: "Training session",
+        competition: "Competition",
+        meet: "Meet & greet",
+        other: "Other",
       },
       events: {
         ts1: {
