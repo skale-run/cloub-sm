@@ -1,4 +1,9 @@
-import type { ChangeEvent, FormEvent, ReactElement } from "react";
+import type {
+  ChangeEvent,
+  CSSProperties,
+  FormEvent,
+  ReactElement,
+} from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
@@ -54,15 +59,90 @@ type EventFormData = {
   checkIn: string;
 };
 
-const typeStyles: Record<CalendarEvent["category"], string> = {
-  training: "border-red-400/40 bg-red-500/15 text-red-100",
-  competition: "border-fuchsia-400/40 bg-fuchsia-500/15 text-fuchsia-100",
-};
-
 const categoryAccentMap: Record<CalendarEvent["category"], string> = {
   training: "bg-red-400",
   competition: "bg-fuchsia-400",
 };
+
+type EventAccentScheme = {
+  base: string;
+  chipBackground: string;
+  chipText: string;
+  chipBorder: string;
+  surfaceBackground: string;
+  surfaceBorder: string;
+  surfaceBorderStrong: string;
+  shadow: string;
+  ring: string;
+};
+
+function createEventAccentScheme(
+  token: string,
+  fallback: string,
+): EventAccentScheme {
+  const base = `var(${token}, ${fallback})`;
+  const textInverse = "var(--color-text-inverse, #fff9fa)";
+
+  return {
+    base,
+    chipBackground: `color-mix(in srgb, ${base} 22%, transparent)`,
+    chipText: `color-mix(in srgb, ${base} 72%, ${textInverse} 28%)`,
+    chipBorder: `color-mix(in srgb, ${base} 48%, transparent)`,
+    surfaceBackground: `color-mix(in srgb, ${base} 14%, transparent)`,
+    surfaceBorder: `color-mix(in srgb, ${base} 36%, transparent)`,
+    surfaceBorderStrong: `color-mix(in srgb, ${base} 58%, transparent)`,
+    shadow: `0 18px 48px color-mix(in srgb, ${base} 20%, transparent)`,
+    ring: `color-mix(in srgb, ${base} 45%, transparent)`,
+  } satisfies EventAccentScheme;
+}
+
+const eventAccentPalette = [
+  createEventAccentScheme("--color-primary", "#C8183A"),
+  createEventAccentScheme("--color-accent", "#F26F3E"),
+  createEventAccentScheme("--color-success", "#10B981"),
+  createEventAccentScheme("--color-info", "#0EA5E9"),
+  createEventAccentScheme("--color-warning", "#F59E0B"),
+  createEventAccentScheme("--color-danger", "#BB1F32"),
+] as const;
+
+function hashString(value: string): number {
+  let hash = 0;
+
+  for (let index = 0; index < value.length; index += 1) {
+    hash = (hash << 5) - hash + value.charCodeAt(index);
+    hash |= 0;
+  }
+
+  return hash;
+}
+
+function getEventAccentSchemeForId(identifier: string): EventAccentScheme {
+  const paletteIndex =
+    Math.abs(hashString(identifier)) % eventAccentPalette.length;
+
+  return eventAccentPalette[paletteIndex] ?? defaultEventAccentScheme;
+}
+
+function createAccentStyleVariables(
+  scheme: EventAccentScheme,
+): CSSProperties {
+  return {
+    "--event-accent-base": scheme.base,
+    "--event-accent-chip-bg": scheme.chipBackground,
+    "--event-accent-chip-text": scheme.chipText,
+    "--event-accent-border": scheme.chipBorder,
+    "--event-accent-border-strong": scheme.surfaceBorderStrong,
+    "--event-accent-surface-bg": scheme.surfaceBackground,
+    "--event-accent-surface-border": scheme.surfaceBorder,
+    "--event-accent-shadow": scheme.shadow,
+    "--event-accent-ring": scheme.ring,
+  } satisfies CSSProperties;
+}
+
+const defaultEventAccentScheme = eventAccentPalette[0];
+const defaultEventAccentStyle = createAccentStyleVariables(
+  defaultEventAccentScheme,
+);
 
 function formatDuration(minutes: number, t: TFunction<"translation">): string {
   if (minutes <= 0) {
@@ -158,6 +238,60 @@ function isSameDay(a: Date, b: Date): boolean {
     a.getMonth() === b.getMonth() &&
     a.getDate() === b.getDate()
   );
+}
+
+function normalizeDateToStartOfDay(date: Date): Date {
+  const normalized = new Date(date);
+  normalized.setHours(0, 0, 0, 0);
+  return normalized;
+}
+
+function getEventOccurrenceDates(event: CalendarEvent): Date[] {
+  const rawStart = new Date(event.start);
+
+  if (Number.isNaN(rawStart.getTime())) {
+    return [];
+  }
+
+  const startDate = normalizeDateToStartOfDay(rawStart);
+  const rawEnd = new Date(event.end);
+  const endDate = Number.isNaN(rawEnd.getTime())
+    ? new Date(startDate)
+    : normalizeDateToStartOfDay(rawEnd);
+
+  const startTime = startDate.getTime();
+  const endTime = Math.max(startTime, endDate.getTime());
+  const days: Date[] = [];
+  const cursor = new Date(startDate);
+
+  while (cursor.getTime() <= endTime) {
+    days.push(new Date(cursor));
+    cursor.setDate(cursor.getDate() + 1);
+    cursor.setHours(0, 0, 0, 0);
+  }
+
+  return days;
+}
+
+function doesEventOccurOnDate(event: CalendarEvent, targetDate: Date): boolean {
+  const rawStart = new Date(event.start);
+
+  if (Number.isNaN(rawStart.getTime())) {
+    return false;
+  }
+
+  const eventStart = normalizeDateToStartOfDay(rawStart);
+  const rawEnd = new Date(event.end);
+  const eventEnd = Number.isNaN(rawEnd.getTime())
+    ? new Date(eventStart)
+    : normalizeDateToStartOfDay(rawEnd);
+  const normalizedTarget = normalizeDateToStartOfDay(targetDate);
+
+  const startTime = eventStart.getTime();
+  const endTime = Math.max(startTime, eventEnd.getTime());
+  const targetTime = normalizedTarget.getTime();
+
+  return targetTime >= startTime && targetTime <= endTime;
 }
 
 function formatDateForInput(date: Date): string {
@@ -298,6 +432,30 @@ function CalendarSection(): ReactElement {
     [events],
   );
 
+  const eventAccentStylesById = useMemo(() => {
+    const assignments = new Map<string, CSSProperties>();
+
+    sortedEvents.forEach((event) => {
+      assignments.set(
+        event.id,
+        createAccentStyleVariables(getEventAccentSchemeForId(event.id)),
+      );
+    });
+
+    return assignments;
+  }, [sortedEvents]);
+
+  const getEventAccentStyle = useCallback(
+    (event: CalendarEvent | null | undefined) => {
+      if (!event) {
+        return defaultEventAccentStyle;
+      }
+
+      return eventAccentStylesById.get(event.id) ?? defaultEventAccentStyle;
+    },
+    [eventAccentStylesById],
+  );
+
   const today = useMemo(() => {
     const reference = new Date();
     reference.setHours(0, 0, 0, 0);
@@ -405,7 +563,7 @@ function CalendarSection(): ReactElement {
       const dayDate = new Date(cursor);
       const key = getDateKey(dayDate);
       const eventsOnDay = filteredEvents.filter((event) =>
-        isSameDay(new Date(event.start), dayDate),
+        doesEventOccurOnDate(event, dayDate),
       );
 
       days.push({
@@ -443,45 +601,49 @@ function CalendarSection(): ReactElement {
     const weekBuckets = new Map<string, WeekBucket>();
 
     filteredEvents.forEach((event) => {
-      const startDate = new Date(event.start);
-      const weekStart = startOfWeek(startDate);
-      const weekKey = getDateKey(weekStart);
+      const occurrenceDates = getEventOccurrenceDates(event);
 
-      if (!weekBuckets.has(weekKey)) {
-        const weekEnd = endOfWeek(new Date(weekStart));
+      occurrenceDates.forEach((occurrenceDate) => {
+        const weekStart = startOfWeek(occurrenceDate);
+        const weekKey = getDateKey(weekStart);
 
-        weekBuckets.set(weekKey, {
-          id: weekKey,
-          label: t("calendar.weekView.weekLabel", {
-            start: rangeFormatter.format(weekStart),
-          }),
-          range: `${rangeFormatter.format(weekStart)} – ${rangeFormatter.format(weekEnd)}`,
-          days: Array.from({ length: 7 }).map((_, index) => {
-            const dayDate = new Date(weekStart);
-            dayDate.setDate(weekStart.getDate() + index);
-            dayDate.setHours(0, 0, 0, 0);
+        if (!weekBuckets.has(weekKey)) {
+          const weekEnd = endOfWeek(new Date(weekStart));
 
-            return {
-              key: getDateKey(dayDate),
-              date: dayDate,
-              label: dayFormatter.format(dayDate),
-              events: [],
-            };
-          }),
-        });
-      }
+          weekBuckets.set(weekKey, {
+            id: weekKey,
+            label: t("calendar.weekView.weekLabel", {
+              start: rangeFormatter.format(weekStart),
+            }),
+            range: `${rangeFormatter.format(weekStart)} – ${rangeFormatter.format(weekEnd)}`,
+            days: Array.from({ length: 7 }).map((_, index) => {
+              const dayDate = new Date(weekStart);
+              dayDate.setDate(weekStart.getDate() + index);
+              dayDate.setHours(0, 0, 0, 0);
 
-      const bucket = weekBuckets.get(weekKey);
+              return {
+                key: getDateKey(dayDate),
+                date: dayDate,
+                label: dayFormatter.format(dayDate),
+                events: [],
+              };
+            }),
+          });
+        }
 
-      if (!bucket) return;
+        const bucket = weekBuckets.get(weekKey);
 
-      const matchingDay = bucket.days.find(
-        (day) => day.key === getDateKey(startDate),
-      );
+        if (!bucket) return;
 
-      if (matchingDay) {
-        matchingDay.events.push(event);
-      }
+        const occurrenceKey = getDateKey(occurrenceDate);
+        const matchingDay = bucket.days.find(
+          (day) => day.key === occurrenceKey,
+        );
+
+        if (matchingDay) {
+          matchingDay.events.push(event);
+        }
+      });
     });
 
     return Array.from(weekBuckets.values()).map((bucket) => ({
@@ -500,17 +662,22 @@ function CalendarSection(): ReactElement {
     const seen = new Map<string, DayOption>();
 
     filteredEvents.forEach((event) => {
-      const startDate = new Date(event.start);
-      const key = getDateKey(startDate);
+      const occurrenceDates = getEventOccurrenceDates(event);
 
-      if (!seen.has(key)) {
-        seen.set(key, {
-          key,
-          date: startDate,
-          label: longDayFormatter.format(startDate),
-          shortLabel: dayFormatter.format(startDate),
-        });
-      }
+      occurrenceDates.forEach((occurrenceDate) => {
+        const key = getDateKey(occurrenceDate);
+
+        if (!seen.has(key)) {
+          const labelDate = new Date(occurrenceDate);
+
+          seen.set(key, {
+            key,
+            date: labelDate,
+            label: longDayFormatter.format(labelDate),
+            shortLabel: dayFormatter.format(labelDate),
+          });
+        }
+      });
     });
 
     return Array.from(seen.values()).sort(
@@ -580,7 +747,7 @@ function CalendarSection(): ReactElement {
   );
   const eventsOnSelectedDay = selectedDay
     ? filteredEvents.filter((event) =>
-        isSameDay(new Date(event.start), selectedDay.date),
+        doesEventOccurOnDate(event, selectedDay.date),
       )
     : [];
 
@@ -918,6 +1085,11 @@ function CalendarSection(): ReactElement {
     });
   }, [activeEvent, t, timeFormatter]);
 
+  const activeEventAccentStyle = useMemo(
+    () => (activeEvent ? getEventAccentStyle(activeEvent) : undefined),
+    [activeEvent, getEventAccentStyle],
+  );
+
   const eventModalTitleId = activeEvent
     ? `calendar-event-modal-title-${activeEvent.id}`
     : undefined;
@@ -958,6 +1130,11 @@ function CalendarSection(): ReactElement {
   const upcomingEventRelativeText = useMemo(
     () => (upcomingEventStart ? formatRelativeDay(upcomingEventStart, t) : ""),
     [t, upcomingEventStart],
+  );
+
+  const upcomingEventAccentStyle = useMemo(
+    () => (upcomingEvent ? getEventAccentStyle(upcomingEvent) : undefined),
+    [getEventAccentStyle, upcomingEvent],
   );
 
   const hasInitializedMonthRef = useRef(false);
@@ -1141,11 +1318,10 @@ function CalendarSection(): ReactElement {
               </div>
               {upcomingEvent ? (
                 <span
-                  className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${typeStyles[upcomingEvent.category]}`}
+                  className="event-chip inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide"
+                  style={upcomingEventAccentStyle}
                 >
-                  <span
-                    className={`h-2.5 w-2.5 rounded-full ${categoryAccentMap[upcomingEvent.category]}`}
-                  />
+                  <span className="event-dot h-2.5 w-2.5 rounded-full" />
                   {t(`calendar.categories.${upcomingEvent.category}.label`)}
                 </span>
               ) : null}
@@ -1335,13 +1511,15 @@ function CalendarSection(): ReactElement {
                     <div className="space-y-2 text-[11px] leading-snug text-red-200/75">
                       {day.events.length > 0
                         ? day.events.map((event) => {
+                            const accentStyle = getEventAccentStyle(event);
                             const startDate = new Date(event.start);
                             const endDate = new Date(event.end);
 
                             return (
                               <div
                                 key={event.id}
-                                className="rounded-xl border border-red-500/25 bg-red-950/50 p-2 transition hover:border-red-400/45"
+                                className="event-card rounded-xl border p-2 transition"
+                                style={accentStyle}
                               >
                                 <button
                                   type="button"
@@ -1353,7 +1531,7 @@ function CalendarSection(): ReactElement {
                                       {t(event.titleKey)}
                                     </p>
                                     <span
-                                      className={`inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded-full border px-2 text-[10px] font-semibold uppercase tracking-[0.2em] ${typeStyles[event.category]}`}
+                                      className="event-chip inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded-full border px-2 text-[10px] font-semibold uppercase tracking-[0.2em]"
                                     >
                                       {t(
                                         `calendar.categories.${event.category}.shortLabel`,
@@ -1445,6 +1623,7 @@ function CalendarSection(): ReactElement {
                       <div className="space-y-3">
                         {day.events.length > 0 ? (
                           day.events.map((event) => {
+                            const accentStyle = getEventAccentStyle(event);
                             const startDate = new Date(event.start);
                             const endDate = new Date(event.end);
 
@@ -1452,7 +1631,8 @@ function CalendarSection(): ReactElement {
                               <RedSurface
                                 key={event.id}
                                 tone="glass"
-                                className="w-full rounded-xl p-3 transition hover:border-red-400/45"
+                                className="event-card w-full rounded-xl p-3 transition"
+                                style={accentStyle}
                               >
                                 <button
                                   type="button"
@@ -1470,7 +1650,7 @@ function CalendarSection(): ReactElement {
                                     {t(event.locationKey)}
                                   </p>
                                   <span
-                                    className={`mt-2 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.25em] ${typeStyles[event.category]}`}
+                                    className="event-chip mt-2 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.25em]"
                                   >
                                     {t(
                                       `calendar.categories.${event.category}.shortLabel`,
@@ -1556,6 +1736,7 @@ function CalendarSection(): ReactElement {
               <div className="mt-6 space-y-4">
                 {eventsOnSelectedDay.length > 0 ? (
                   eventsOnSelectedDay.map((event) => {
+                    const accentStyle = getEventAccentStyle(event);
                     const startDate = new Date(event.start);
                     const endDate = new Date(event.end);
 
@@ -1563,7 +1744,8 @@ function CalendarSection(): ReactElement {
                       <RedSurface
                         key={event.id}
                         tone="glass"
-                        className="w-full rounded-2xl p-5 transition hover:border-red-400/45"
+                        className="event-card w-full rounded-2xl p-5 transition"
+                        style={accentStyle}
                       >
                         <button
                           type="button"
@@ -1576,7 +1758,7 @@ function CalendarSection(): ReactElement {
                               {timeFormatter.format(endDate)}
                             </span>
                             <span
-                              className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${typeStyles[event.category]}`}
+                              className="event-chip inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide"
                             >
                               {t(`calendar.categories.${event.category}.badge`)}
                             </span>
@@ -1866,12 +2048,13 @@ function CalendarSection(): ReactElement {
         >
           <RedSurface
             tone="muted"
-            className="relative overflow-hidden rounded-3xl p-6 text-left shadow-[0_30px_80px_rgba(127,29,29,0.55)]"
+            className="event-card relative overflow-hidden rounded-3xl p-6 text-left shadow-[0_30px_80px_rgba(127,29,29,0.55)]"
+            style={activeEventAccentStyle}
           >
             <div className="flex items-start justify-between gap-4">
               <div>
                 <span
-                  className={`inline-flex items-center rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] ${typeStyles[activeEvent.category]}`}
+                  className="event-chip inline-flex items-center rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em]"
                 >
                   {t(`calendar.categories.${activeEvent.category}.badge`)}
                 </span>
