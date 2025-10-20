@@ -125,7 +125,7 @@ function Header({
   onLogout,
 }: HeaderProps) {
   const userInitials = useMemo(() => getInitials(userFullName), [userFullName]);
-  const { t, i18n } = useTranslation("header");
+  const { t, i18n } = useTranslation("translation", { keyPrefix: "header" });
   const isRTL = i18n.dir() === "rtl";
   const CollapseIcon = isRTL ? ChevronRight : ChevronLeft;
   const ExpandIcon = isRTL ? ChevronLeft : ChevronRight;
