@@ -5,7 +5,12 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "migrate": "node ./db/migrate.js"
+    "migrate": "node ./db/migrate.js",
+    "lint": "npm run lint:js && npm run lint:styles",
+    "lint:js": "eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=0",
+    "lint:js:fix": "npm run lint:js -- --fix",
+    "format": "prettier . --check",
+    "format:fix": "prettier . --write"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
