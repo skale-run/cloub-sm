@@ -2820,6 +2820,26 @@ export const fr = {
             detail: "Master feedback and physio clearance trending up",
           },
         },
+        logs: {
+          heading: "Historique récent de présence",
+          description: "Dernières confirmations d'arrivée pour votre compte",
+          requireAuth: "Connectez-vous pour consulter votre historique de présence.",
+          empty: "Aucune présence n'a encore été enregistrée pour votre profil.",
+          error: "Impossible de charger votre historique de présence pour le moment.",
+          status: {
+            present: "Présent",
+            late: "Retard",
+            excused: "Excusé",
+            absent: "Absent",
+          },
+          recordedAt: {
+            label: "Enregistré",
+            missing: "Horaire non renseigné",
+          },
+          noteLabel: "Note",
+          unknownSession: "Séance d'entraînement",
+          unknownSchedule: "Horaire indisponible",
+        },
         upcoming: {
           heading: "Upcoming check-ins",
         },

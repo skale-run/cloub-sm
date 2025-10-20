@@ -1,4 +1,4 @@
-import { useMemo, type ReactElement } from "react";
+import { useEffect, useMemo, useState, type ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
 import type { LucideIcon } from "../../lucide-react";
@@ -9,7 +9,14 @@ import {
   LineChart,
   Users,
 } from "../../lucide-react";
+import { useMember } from "../auth/MemberContext";
 import { trainingCalendarEvents } from "../calendar/calendarEvents";
+import {
+  fetchTrainingAttendance,
+  TrainingAttendanceFetchError,
+  type TrainingAttendanceLog,
+  type TrainingAttendanceStatus,
+} from "./trainingAttendanceLogs";
 
 type AttendanceWeekKey = "week14" | "week15" | "week16";
 
@@ -79,6 +86,13 @@ const statusBadgeStyles: Record<RosterStatus, string> = {
   medicalHold: "border-rose-400/30 bg-rose-500/15 text-rose-100",
 };
 
+const attendanceStatusBadgeStyles: Record<TrainingAttendanceStatus, string> = {
+  present: "border-emerald-400/30 bg-emerald-500/15 text-emerald-100",
+  late: "border-amber-400/30 bg-amber-500/15 text-amber-100",
+  excused: "border-sky-400/30 bg-sky-500/15 text-sky-100",
+  absent: "border-rose-400/30 bg-rose-500/15 text-rose-100",
+};
+
 const statusSummaryStyles: Record<
   RosterStatus,
   { icon: LucideIcon; track: string; bar: string }
@@ -146,7 +160,12 @@ const PREVIOUS_ATTENDANCE_RATE = 82;
 
 function TrainingAttendanceSection(): ReactElement {
   const { t, i18n } = useTranslation();
+  const { member, authToken, clearMember } = useMember();
   const locale = i18n.language.startsWith("ar") ? "ar-EG" : "en-US";
+
+  const [attendanceLogs, setAttendanceLogs] = useState<TrainingAttendanceLog[]>([]);
+  const [isLoadingAttendance, setIsLoadingAttendance] = useState<boolean>(false);
+  const [attendanceError, setAttendanceError] = useState<"fetch" | null>(null);
 
   const dateFormatter = useMemo(
     () =>
@@ -165,6 +184,120 @@ function TrainingAttendanceSection(): ReactElement {
         minute: "2-digit",
       }),
     [locale],
+  );
+
+  useEffect(() => {
+    if (!member?.id || !authToken) {
+      setAttendanceLogs([]);
+      setAttendanceError(null);
+      setIsLoadingAttendance(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    setIsLoadingAttendance(true);
+    setAttendanceError(null);
+
+    void fetchTrainingAttendance({
+      signal: controller.signal,
+      authToken,
+      memberId: member.id,
+    })
+      .then((logs) => {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        setAttendanceLogs(logs);
+        setAttendanceError(null);
+      })
+      .catch((error) => {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        if (
+          error instanceof TrainingAttendanceFetchError &&
+          (error.status === 401 || error.status === 403)
+        ) {
+          clearMember();
+          setAttendanceLogs([]);
+          return;
+        }
+
+        console.error("Failed to fetch training attendance", error);
+        setAttendanceLogs([]);
+        setAttendanceError("fetch");
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setIsLoadingAttendance(false);
+        }
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, [authToken, clearMember, member]);
+
+  const trainingEventsById = useMemo(() => {
+    const map = new Map<string, (typeof trainingCalendarEvents)[number]>();
+    for (const event of trainingCalendarEvents) {
+      map.set(event.id, event);
+    }
+    return map;
+  }, []);
+
+  const attendanceLogDetails = useMemo(
+    () =>
+      attendanceLogs.map((log) => {
+        const event = trainingEventsById.get(log.calendarEventId);
+        const eventStart = (() => {
+          if (!event) {
+            return null;
+          }
+
+          const parsed = new Date(event.start);
+          return Number.isNaN(parsed.getTime()) ? null : parsed;
+        })();
+
+        const recordedAt = (() => {
+          if (!log.recordedAt) {
+            return null;
+          }
+
+          const parsed = new Date(log.recordedAt);
+          return Number.isNaN(parsed.getTime()) ? null : parsed;
+        })();
+
+        const eventTitle = event
+          ? t(event.titleKey)
+          : t("information.trainingAttendance.logs.unknownSession");
+
+        const eventSchedule = eventStart
+          ? `${dateFormatter.format(eventStart)} · ${timeFormatter.format(eventStart)}`
+          : null;
+
+        const recordedAtLabel = recordedAt
+          ? `${dateFormatter.format(recordedAt)} · ${timeFormatter.format(recordedAt)}`
+          : null;
+
+        const note = log.note?.trim() ?? "";
+
+        return {
+          ...log,
+          eventTitle,
+          eventSchedule,
+          recordedAtLabel,
+          note,
+        };
+      }),
+    [attendanceLogs, dateFormatter, timeFormatter, t, trainingEventsById],
+  );
+
+  const displayedAttendanceLogs = useMemo(
+    () => attendanceLogDetails.slice(0, 5),
+    [attendanceLogDetails],
   );
 
   const attendanceSummary = useMemo(() => {
@@ -496,6 +629,89 @@ function TrainingAttendanceSection(): ReactElement {
         </RedSurface>
 
         <div className="space-y-4">
+          <RedSurface
+            as="section"
+            tone="muted"
+            className="flex flex-col gap-4 p-6 text-red-50"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h3 className="text-lg font-semibold text-red-50">
+                  {t("information.trainingAttendance.logs.heading")}
+                </h3>
+                <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                  {t("information.trainingAttendance.logs.description")}
+                </p>
+              </div>
+              <ClipboardCheck className="h-5 w-5 text-red-200/75" aria-hidden />
+            </div>
+            {!member || !authToken ? (
+              <p className="text-sm text-red-100/75">
+                {t("information.trainingAttendance.logs.requireAuth")}
+              </p>
+            ) : isLoadingAttendance ? (
+              <p className="text-sm text-red-100/75">{fallbackMessage}</p>
+            ) : attendanceError ? (
+              <p className="text-sm text-red-100/75">
+                {t("information.trainingAttendance.logs.error")}
+              </p>
+            ) : displayedAttendanceLogs.length === 0 ? (
+              <p className="text-sm text-red-100/75">
+                {t("information.trainingAttendance.logs.empty")}
+              </p>
+            ) : (
+              <ul className="space-y-3">
+                {displayedAttendanceLogs.map((log) => (
+                  <li
+                    key={log.id}
+                    className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-semibold text-red-50">
+                          {log.eventTitle}
+                        </p>
+                        <p className="text-xs uppercase tracking-[0.3em] text-red-200/70">
+                          {log.eventSchedule ??
+                            t(
+                              "information.trainingAttendance.logs.unknownSchedule",
+                            )}
+                        </p>
+                      </div>
+                      <span
+                        className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] ${attendanceStatusBadgeStyles[log.status]}`}
+                      >
+                        {t(
+                          `information.trainingAttendance.logs.status.${log.status}`,
+                        )}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-xs text-red-100/75">
+                      <span className="font-semibold text-red-100">
+                        {t(
+                          "information.trainingAttendance.logs.recordedAt.label",
+                        )}
+                        :
+                      </span>{" "}
+                      {log.recordedAtLabel ??
+                        t(
+                          "information.trainingAttendance.logs.recordedAt.missing",
+                        )}
+                    </p>
+                    {log.note ? (
+                      <p className="mt-1 text-xs text-red-100/75">
+                        <span className="font-semibold text-red-100">
+                          {t("information.trainingAttendance.logs.noteLabel")}:
+                        </span>{" "}
+                        {log.note}
+                      </p>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </RedSurface>
+
           <RedSurface
             as="aside"
             tone="muted"

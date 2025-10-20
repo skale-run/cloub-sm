@@ -2767,11 +2767,31 @@ export const en = {
             label: "Readiness index",
             value: "92%",
             detail: "Master feedback and physio clearance trending up",
-          },
         },
-        upcoming: {
-          heading: "Upcoming check-ins",
+      },
+      logs: {
+        heading: "Recent attendance activity",
+        description: "Latest check-ins for your account",
+        requireAuth: "Sign in to view your attendance history.",
+        empty: "No attendance has been recorded for your profile yet.",
+        error: "We couldn't load your attendance history right now.",
+        status: {
+          present: "Present",
+          late: "Late",
+          excused: "Excused",
+          absent: "Absent",
         },
+        recordedAt: {
+          label: "Recorded",
+          missing: "Time not recorded",
+        },
+        noteLabel: "Note",
+        unknownSession: "Training session",
+        unknownSchedule: "Schedule unavailable",
+      },
+      upcoming: {
+        heading: "Upcoming check-ins",
+      },
         followUp: {
           heading: "Follow-up actions",
           helper: "Check-in priorities this week",

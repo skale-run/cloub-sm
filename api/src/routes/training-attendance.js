@@ -1,5 +1,6 @@
 const express = require("express");
 const { query } = require("../db/pool");
+const { authenticate } = require("../middleware/authenticate");
 const {
   isValidUuid,
   normalizeOptionalString,
@@ -24,7 +25,7 @@ function formatAttendanceLog(row) {
   };
 }
 
-router.get("/", async (req, res, next) => {
+router.get("/", authenticate, async (req, res, next) => {
   try {
     const {
       memberId,
@@ -42,7 +43,15 @@ router.get("/", async (req, res, next) => {
           .json({ error: "memberId must be a valid UUID." });
       }
 
+      if (req.auth?.memberId && memberId !== req.auth.memberId) {
+        return res.status(403).json({
+          error: "You can only access attendance logs for your own account.",
+        });
+      }
+
       filterBuilder.addEquality("member_id", memberId);
+    } else if (req.auth?.memberId) {
+      filterBuilder.addEquality("member_id", req.auth.memberId);
     }
 
     if (calendarEventId !== undefined) {
