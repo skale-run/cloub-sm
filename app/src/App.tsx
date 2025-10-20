@@ -410,6 +410,10 @@ function App() {
     savedProfile?.fullName.trim() ||
     profileDraft.fullName.trim() ||
     t("app.defaults.teamMember");
+  const connectedUserProfileImage =
+    savedProfile?.profileImage.trim() ||
+    profileDraft.profileImage.trim() ||
+    "";
 
   const renderSection = () => {
     switch (currentPath) {
@@ -479,6 +483,7 @@ function App() {
           onToggleSidebar={toggleSidebar}
           pageTitle={pageTitle}
           userFullName={connectedUserName}
+          userProfileImageUrl={connectedUserProfileImage}
           hasCompletedProfile={hasCompletedProfile}
           onAvatarClick={handleAvatarClick}
           onLogout={handleLogout}

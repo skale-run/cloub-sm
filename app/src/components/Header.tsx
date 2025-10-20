@@ -8,6 +8,7 @@ type HeaderProps = {
   onToggleSidebar: () => void;
   pageTitle: string;
   userFullName: string;
+  userProfileImageUrl: string;
   hasCompletedProfile: boolean;
   onAvatarClick: () => void;
   onLogout: () => void;
@@ -41,6 +42,7 @@ type HeaderToggleButtonProps = {
 
 type HeaderAvatarButtonProps = {
   initials: string;
+  imageUrl?: string;
   onClick: () => void;
   ariaLabel: string;
 };
@@ -58,7 +60,7 @@ const actionButtonBaseClasses =
   "inline-flex items-center gap-2 rounded-2xl bg-red-900/35 px-3 py-2 text-sm font-medium text-red-100 shadow-sm ring-1 ring-inset ring-transparent transition hover:bg-red-900/60 hover:text-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-red-950";
 
 const avatarButtonClasses =
-  "flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-red-900/70 via-red-800/60 to-red-700/55 text-base font-semibold uppercase tracking-wider text-red-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition hover:from-red-900/80 hover:via-red-800/70 hover:to-red-700/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-red-950";
+  "flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-red-900/70 via-red-800/60 to-red-700/55 text-base font-semibold uppercase tracking-wider text-red-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition hover:from-red-900/80 hover:via-red-800/70 hover:to-red-700/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-red-950";
 
 function HeaderToggleButton({
   CollapseIcon,
@@ -88,7 +90,9 @@ function HeaderToggleButton({
   );
 }
 
-function HeaderAvatarButton({ ariaLabel, initials, onClick }: HeaderAvatarButtonProps) {
+function HeaderAvatarButton({ ariaLabel, initials, imageUrl, onClick }: HeaderAvatarButtonProps) {
+  const shouldShowImage = Boolean(imageUrl);
+
   return (
     <button
       type="button"
@@ -96,7 +100,17 @@ function HeaderAvatarButton({ ariaLabel, initials, onClick }: HeaderAvatarButton
       className={avatarButtonClasses}
       aria-label={ariaLabel}
     >
-      {initials}
+      {shouldShowImage ? (
+        <img
+          alt=""
+          src={imageUrl}
+          className="h-full w-full object-cover"
+          loading="lazy"
+          aria-hidden
+        />
+      ) : (
+        initials
+      )}
     </button>
   );
 }
@@ -126,11 +140,16 @@ function Header({
   onToggleSidebar,
   pageTitle,
   userFullName,
+  userProfileImageUrl,
   hasCompletedProfile,
   onAvatarClick,
   onLogout,
 }: HeaderProps) {
   const userInitials = useMemo(() => getInitials(userFullName), [userFullName]);
+  const profileImageUrl = useMemo(
+    () => userProfileImageUrl.trim(),
+    [userProfileImageUrl],
+  );
   const { t, i18n } = useTranslation("translation", { keyPrefix: "header" });
   const isRTL = i18n.dir() === "rtl";
   const CollapseIcon = isRTL ? ChevronRight : ChevronLeft;
@@ -173,6 +192,7 @@ function Header({
           <HeaderAvatarButton
             ariaLabel={avatarAriaLabel}
             initials={userInitials}
+            imageUrl={profileImageUrl || undefined}
             onClick={handleAvatarNavigation}
           />
           <HeaderLogoutButton
