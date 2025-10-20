@@ -9,6 +9,46 @@ const ALLOWED_CATEGORIES = new Set(["training", "competition"]);
 const ALLOWED_LEVELS = new Set(["regional", "national", "international"]);
 const ALLOWED_EVENT_TYPES = new Set(["competition", "entrainment", "meet", "other"]);
 
+const EVENT_TYPE_CLIENT_TO_DB = new Map([
+  ["competition", "competition"],
+  ["entrainment", "entrainment"],
+  ["meet", "meet"],
+  ["other", "other"],
+  ["training", "entrainment"],
+]);
+
+const EVENT_TYPE_DB_TO_CLIENT = new Map([
+  ["competition", "competition"],
+  ["entrainment", "training"],
+  ["meet", "meet"],
+  ["other", "other"],
+]);
+
+function mapClientEventTypeToDb(value) {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const normalized = value.trim().toLowerCase();
+  return EVENT_TYPE_CLIENT_TO_DB.get(normalized) ?? null;
+}
+
+function defaultEventTypeForCategory(category) {
+  if (category === "training") {
+    return "entrainment";
+  }
+
+  if (category === "competition") {
+    return "competition";
+  }
+
+  return null;
+}
+
+function mapDbEventTypeToClient(value) {
+  return EVENT_TYPE_DB_TO_CLIENT.get(value) ?? value;
+}
+
 function parseMembers(value) {
   if (!value) {
     return [];
@@ -53,7 +93,7 @@ function formatCalendarEvent(row) {
   const base = {
     id: row.id,
     category: row.category,
-    eventType: row.event_type,
+    eventType: mapDbEventTypeToClient(row.event_type),
     titleKey: row.title_key,
     locationKey: row.location_key,
     start: toIsoString(row.start_time),
@@ -202,8 +242,19 @@ router.post("/", async (req, res, next) => {
   } = req.body ?? {};
 
   const normalizedCategory = typeof category === "string" ? category.trim().toLowerCase() : "";
-  const normalizedEventType =
-    typeof eventType === "string" ? eventType.trim().toLowerCase() : "";
+  const eventTypeWasProvided = eventType !== undefined;
+  let normalizedEventType = null;
+
+  if (eventTypeWasProvided) {
+    normalizedEventType = mapClientEventTypeToDb(eventType);
+
+    if (!normalizedEventType) {
+      return res.status(400).json({ error: "Invalid event type provided." });
+    }
+  } else {
+    normalizedEventType = defaultEventTypeForCategory(normalizedCategory);
+  }
+
   const normalizedTitleKey = typeof titleKey === "string" ? titleKey.trim() : "";
   const normalizedLocationKey = typeof locationKey === "string" ? locationKey.trim() : "";
 
@@ -211,7 +262,7 @@ router.post("/", async (req, res, next) => {
     return res.status(400).json({ error: "Category must be training or competition." });
   }
 
-  if (!ALLOWED_EVENT_TYPES.has(normalizedEventType)) {
+  if (!normalizedEventType || !ALLOWED_EVENT_TYPES.has(normalizedEventType)) {
     return res.status(400).json({ error: "Invalid event type provided." });
   }
 
@@ -412,15 +463,26 @@ router.put("/:id", async (req, res, next) => {
     }
   }
 
-  if (typeof eventType === "string") {
-    const normalized = eventType.trim().toLowerCase();
+  if (eventType !== undefined) {
+    const mapped = mapClientEventTypeToDb(eventType);
 
-    if (!ALLOWED_EVENT_TYPES.has(normalized)) {
+    if (!mapped || !ALLOWED_EVENT_TYPES.has(mapped)) {
       return res.status(400).json({ error: "Invalid event type provided." });
     }
 
-    if (normalized !== existingRow.event_type) {
-      values.push(normalized);
+    if (mapped !== existingRow.event_type) {
+      values.push(mapped);
+      updates.push(`event_type = $${values.length}`);
+    }
+  } else if (nextCategory !== existingRow.category) {
+    const defaultType = defaultEventTypeForCategory(nextCategory);
+
+    if (!defaultType || !ALLOWED_EVENT_TYPES.has(defaultType)) {
+      return res.status(400).json({ error: "Invalid event type provided." });
+    }
+
+    if (defaultType !== existingRow.event_type) {
+      values.push(defaultType);
       updates.push(`event_type = $${values.length}`);
     }
   }
