@@ -212,16 +212,18 @@ img {
   background-color: var(--event-accent-surface-bg, transparent);
   border-color: var(--event-accent-surface-border, currentColor);
   box-shadow:
-    inset 0 0 0 0.5px color-mix(
-      in srgb,
-      var(--event-accent-border, transparent) 24%,
-      transparent
-    ),
-    0 0 0 1px color-mix(
-      in srgb,
-      var(--event-accent-surface-border, transparent) 26%,
-      transparent
-    );
+    inset 0 0 0 0.5px
+      color-mix(
+        in srgb,
+        var(--event-accent-border, transparent) 24%,
+        transparent
+      ),
+    0 0 0 1px
+      color-mix(
+        in srgb,
+        var(--event-accent-surface-border, transparent) 26%,
+        transparent
+      );
   transition:
     border-color 180ms ease,
     box-shadow 180ms ease,
@@ -236,17 +238,19 @@ img {
     var(--event-accent-surface-border, currentColor)
   );
   box-shadow:
-    inset 0 0 0 0.5px color-mix(
-      in srgb,
-      var(--event-accent-border-strong, transparent) 36%,
-      transparent
-    ),
-    0 0 0 1px color-mix(
-      in srgb,
-      var(--event-accent-border-strong, transparent) 32%,
-      transparent
-    ),
-    var(--event-accent-shadow, 0 16px 36px rgba(0, 0, 0, 0.18));
+    inset 0 0 0 0.5px
+      color-mix(
+        in srgb,
+        var(--event-accent-border-strong, transparent) 36%,
+        transparent
+      ),
+    0 0 0 1px
+      color-mix(
+        in srgb,
+        var(--event-accent-border-strong, transparent) 32%,
+        transparent
+      ),
+    var(--event-accent-shadow, 0 16px 36px rgb(0 0 0 / 18%));
 }
 
 .event-chip {
@@ -254,16 +258,18 @@ img {
   border-color: var(--event-accent-border, currentColor);
   color: var(--event-accent-chip-text, inherit);
   box-shadow:
-    inset 0 0 0 0.5px color-mix(
-      in srgb,
-      var(--event-accent-border, transparent) 45%,
-      transparent
-    ),
-    0 0 0 1px color-mix(
-      in srgb,
-      var(--event-accent-border, transparent) 32%,
-      transparent
-    );
+    inset 0 0 0 0.5px
+      color-mix(
+        in srgb,
+        var(--event-accent-border, transparent) 45%,
+        transparent
+      ),
+    0 0 0 1px
+      color-mix(
+        in srgb,
+        var(--event-accent-border, transparent) 32%,
+        transparent
+      );
   transition:
     border-color 160ms ease,
     background-color 160ms ease,
@@ -279,24 +285,22 @@ img {
     var(--event-accent-border, currentColor)
   );
   box-shadow:
-    inset 0 0 0 0.5px color-mix(
-      in srgb,
-      var(--event-accent-border-strong, transparent) 52%,
-      transparent
-    ),
-    0 0 0 1px color-mix(
-      in srgb,
-      var(--event-accent-border-strong, transparent) 38%,
-      transparent
-    );
+    inset 0 0 0 0.5px
+      color-mix(
+        in srgb,
+        var(--event-accent-border-strong, transparent) 52%,
+        transparent
+      ),
+    0 0 0 1px
+      color-mix(
+        in srgb,
+        var(--event-accent-border-strong, transparent) 38%,
+        transparent
+      );
 }
 
 .event-dot {
   background-color: var(--event-accent-base, currentColor);
-  box-shadow:
-    0 0 0 1px color-mix(
-      in srgb,
-      var(--event-accent-base, transparent) 28%,
-      transparent
-    );
+  box-shadow: 0 0 0 1px
+    color-mix(in srgb, var(--event-accent-base, transparent) 28%, transparent);
 }

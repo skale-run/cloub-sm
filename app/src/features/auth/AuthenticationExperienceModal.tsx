@@ -317,9 +317,9 @@ function AuthenticationExperienceModal({
 
     const timer = window.setTimeout(() => {
       const focusTarget = isCloseDisabled
-        ? modalRef.current?.querySelector<HTMLElement>(
+        ? (modalRef.current?.querySelector<HTMLElement>(
             "[data-auth-modal-initial-focus]",
-          ) ?? null
+          ) ?? null)
         : closeButtonRef.current;
 
       focusTarget?.focus({ preventScroll: true });
@@ -550,7 +550,9 @@ function AuthenticationExperienceModal({
             signal: controller.signal,
           });
 
-          const loginPayload = (await loginResponse.json().catch(() => null)) as {
+          const loginPayload = (await loginResponse
+            .json()
+            .catch(() => null)) as {
             error?: string;
             member?: Member;
             token?: string;
@@ -572,7 +574,10 @@ function AuthenticationExperienceModal({
               (error instanceof Error && error.name === "AbortError")
             )
           ) {
-            console.warn("Unable to automatically sign in after registration", error);
+            console.warn(
+              "Unable to automatically sign in after registration",
+              error,
+            );
           }
         }
 

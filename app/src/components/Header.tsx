@@ -137,7 +137,11 @@ function HeaderAvatarButton({
   );
 }
 
-function HeaderLogoutButton({ description, label, onClick }: HeaderLogoutButtonProps) {
+function HeaderLogoutButton({
+  description,
+  label,
+  onClick,
+}: HeaderLogoutButtonProps) {
   return (
     <button
       type="button"
@@ -151,7 +155,9 @@ function HeaderLogoutButton({ description, label, onClick }: HeaderLogoutButtonP
       </span>
       <span className="hidden flex-col text-left sm:flex">
         <span>{label}</span>
-        <span className="text-xs font-normal text-red-200/70">{description}</span>
+        <span className="text-xs font-normal text-red-200/70">
+          {description}
+        </span>
       </span>
     </button>
   );
@@ -265,7 +271,12 @@ function Header({
 
   return (
     <header className="app-header sticky top-0 z-40 bg-gradient-to-r from-red-950/90 via-red-900/70 to-red-950/90 px-2 shadow-lg backdrop-blur-xl">
-      <div className={cn(headerContainerClasses, !isSidebarOpen ? "lg:max-w-none" : undefined)}>
+      <div
+        className={cn(
+          headerContainerClasses,
+          !isSidebarOpen ? "lg:max-w-none" : undefined,
+        )}
+      >
         <div className="flex flex-1 items-center gap-3 text-red-50">
           <HeaderToggleButton
             CollapseIcon={CollapseIcon}
@@ -274,7 +285,9 @@ function Header({
             labels={toggleButtonLabels}
             onToggleSidebar={onToggleSidebar}
           />
-          <h1 className="text-lg font-semibold leading-tight text-red-50 sm:text-2xl">{pageTitle}</h1>
+          <h1 className="text-lg font-semibold leading-tight text-red-50 sm:text-2xl">
+            {pageTitle}
+          </h1>
         </div>
 
         <HeaderUserActions

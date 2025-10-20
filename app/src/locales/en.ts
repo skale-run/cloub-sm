@@ -370,8 +370,7 @@ export const en = {
       },
       states: {
         loading: "Loading the latest schedule...",
-        loadFailed:
-          "We couldn't refresh the schedule. Showing cached events.",
+        loadFailed: "We couldn't refresh the schedule. Showing cached events.",
         noEventsFiltered:
           "No events match the current focus filters. Re-enable a category or adjust your selection to view the team schedule again.",
         noDaySelected: "No day selected",

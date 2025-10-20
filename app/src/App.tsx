@@ -411,9 +411,7 @@ function App() {
     profileDraft.fullName.trim() ||
     t("app.defaults.teamMember");
   const connectedUserProfileImage =
-    savedProfile?.profileImage.trim() ||
-    profileDraft.profileImage.trim() ||
-    "";
+    savedProfile?.profileImage.trim() || profileDraft.profileImage.trim() || "";
 
   const renderSection = () => {
     switch (currentPath) {

@@ -226,16 +226,13 @@ export function normalizeCalendarEvent(event: unknown): CalendarEvent | null {
     start,
     end,
     eventType: typeof data.eventType === "string" ? data.eventType : undefined,
-    createdAt:
-      typeof data.createdAt === "string" ? data.createdAt : undefined,
-    updatedAt:
-      typeof data.updatedAt === "string" ? data.updatedAt : undefined,
+    createdAt: typeof data.createdAt === "string" ? data.createdAt : undefined,
+    updatedAt: typeof data.updatedAt === "string" ? data.updatedAt : undefined,
     members,
   };
 
   if (data.category === "training") {
-    const coachKey =
-      typeof data.coachKey === "string" ? data.coachKey : null;
+    const coachKey = typeof data.coachKey === "string" ? data.coachKey : null;
 
     if (!coachKey) {
       return null;
@@ -267,9 +264,9 @@ export function normalizeCalendarEvent(event: unknown): CalendarEvent | null {
   return null;
 }
 
-export async function fetchCalendarEvents(
-  { signal }: FetchCalendarEventsOptions = {},
-): Promise<CalendarEvent[]> {
+export async function fetchCalendarEvents({
+  signal,
+}: FetchCalendarEventsOptions = {}): Promise<CalendarEvent[]> {
   const response = await fetch(`${API_BASE_URL}/calendar-events`, { signal });
 
   if (!response.ok) {
