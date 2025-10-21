@@ -163,6 +163,8 @@ function TrainingAttendanceSection(): ReactElement {
   const { member, authToken, clearMember } = useMember();
   const locale = i18n.language.startsWith("ar") ? "ar-EG" : "en-US";
 
+  const fallbackMessage = t("common.loading", { defaultValue: "Loading…" });
+
   const [attendanceLogs, setAttendanceLogs] = useState<TrainingAttendanceLog[]>([]);
   const [isLoadingAttendance, setIsLoadingAttendance] = useState<boolean>(false);
   const [attendanceError, setAttendanceError] = useState<"fetch" | null>(null);
