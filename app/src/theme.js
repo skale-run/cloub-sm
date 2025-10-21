@@ -1,5 +1,3 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-
 import designTokenManifest from "./theme-tokens.json";
 
 export const themeManifest = designTokenManifest;
@@ -421,24 +419,6 @@ export function applyThemeToDocument(mode, target) {
   return resolvedMode;
 }
 
-function getElectronThemeBridge() {
-  if (typeof window === "undefined") return undefined;
-  return window?.electronAPI?.theme;
-}
-
-function setElectronTheme(themeSource) {
-  const bridge = getElectronThemeBridge();
-  if (!bridge || typeof bridge.set !== "function") return;
-  try {
-    const result = bridge.set(themeSource);
-    if (result && typeof result.then === "function") {
-      result.catch(() => {});
-    }
-  } catch {
-    // ignore
-  }
-}
-
 const THEME_STORAGE_KEY = "lkany:theme-mode";
 
 function readStoredMode() {
@@ -459,30 +439,6 @@ function readStoredMode() {
   }
 }
 
-function storeMode(mode) {
-  if (typeof window === "undefined") return;
-  try {
-    const normalized =
-      typeof mode === "string" ? mode.toLowerCase() : undefined;
-    if (normalized && VALID_THEME_MODES.has(normalized)) {
-      window.localStorage?.setItem(THEME_STORAGE_KEY, normalized);
-      return;
-    }
-    window.localStorage?.removeItem(THEME_STORAGE_KEY);
-  } catch {
-    // ignore
-  }
-}
-
-function clearStoredMode() {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage?.removeItem(THEME_STORAGE_KEY);
-  } catch {
-    // ignore
-  }
-}
-
 function getPreferredColorScheme() {
   if (typeof window === "undefined") return DEFAULT_THEME_MODE;
   try {
@@ -492,131 +448,4 @@ function getPreferredColorScheme() {
   } catch {
     return DEFAULT_THEME_MODE;
   }
-}
-
-function subscribeToSystemPreference(callback) {
-  if (typeof window === "undefined") return () => {};
-  const media = window.matchMedia?.("(prefers-color-scheme: dark)");
-  if (!media) return () => {};
-
-  const notify = (matches) => {
-    try {
-      callback(Boolean(matches));
-    } catch {
-      // ignore callback errors
-    }
-  };
-
-  notify(media.matches);
-
-  const listener = (event) => {
-    notify(event?.matches);
-  };
-
-  if (typeof media.addEventListener === "function") {
-    media.addEventListener("change", listener);
-    return () => media.removeEventListener("change", listener);
-  }
-
-  if (typeof media.addListener === "function") {
-    media.addListener(listener);
-    return () => media.removeListener(listener);
-  }
-
-  return () => {};
-}
-
-export function useTheme() {
-  const [themeState, setThemeState] = useState(() => {
-    const stored = readStoredMode();
-    if (stored) {
-      return { mode: stored, hasExplicitMode: true };
-    }
-    return { mode: getPreferredColorScheme(), hasExplicitMode: false };
-  });
-
-  useEffect(() => {
-    applyThemeToDocument(
-      themeState.hasExplicitMode ? themeState.mode : "system",
-    );
-  }, [themeState.mode, themeState.hasExplicitMode]);
-
-  useEffect(() => {
-    if (themeState.hasExplicitMode) {
-      storeMode(themeState.mode);
-      setElectronTheme(themeState.mode);
-      return;
-    }
-
-    clearStoredMode();
-    setElectronTheme("system");
-  }, [themeState.mode, themeState.hasExplicitMode]);
-
-  useEffect(() => {
-    if (themeState.hasExplicitMode) return undefined;
-
-    return subscribeToSystemPreference((isDark) => {
-      setThemeState((current) => {
-        if (current.hasExplicitMode) {
-          return current;
-        }
-        const nextMode = isDark ? "dark" : "light";
-        if (current.mode === nextMode) {
-          return current;
-        }
-        return { mode: nextMode, hasExplicitMode: false };
-      });
-    });
-  }, [themeState.hasExplicitMode]);
-
-  const setMode = useCallback((nextMode) => {
-    if (isSystemModeRequest(nextMode)) {
-      setThemeState(() => ({
-        mode: getPreferredColorScheme(),
-        hasExplicitMode: false,
-      }));
-      return;
-    }
-
-    setThemeState((current) => {
-      const resolved = resolveThemeMode(nextMode);
-      if (current.mode === resolved && current.hasExplicitMode) {
-        return current;
-      }
-      return { mode: resolved, hasExplicitMode: true };
-    });
-  }, []);
-
-  const toggleMode = useCallback(() => {
-    setThemeState((current) => {
-      const nextMode = current.mode === "dark" ? "light" : "dark";
-      return { mode: nextMode, hasExplicitMode: true };
-    });
-  }, []);
-
-  const resetMode = useCallback(() => {
-    setThemeState(() => ({
-      mode: getPreferredColorScheme(),
-      hasExplicitMode: false,
-    }));
-  }, []);
-
-  return useMemo(
-    () => ({
-      mode: themeState.mode,
-      isDark: themeState.mode === "dark",
-      setMode,
-      toggleMode,
-      resetMode,
-      hasExplicitMode: themeState.hasExplicitMode,
-      source: themeState.hasExplicitMode ? "explicit" : "system",
-    }),
-    [
-      themeState.mode,
-      themeState.hasExplicitMode,
-      setMode,
-      toggleMode,
-      resetMode,
-    ],
-  );
 }
