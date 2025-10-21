@@ -632,6 +632,242 @@ export const ar = {
       heading: "رؤى التقدّم",
       description: "التقدّم منذ بداية الربع نحو أهداف أداء الموسم.",
       statusChip: "متقدّم على الخطة",
+      commitsModal: {
+        trigger: {
+          label: "الكوميتات وطلبات الدمج",
+          helper: "عرض نشاط المستودع وجهوزية الإطلاق.",
+        },
+        title: "نشاط الكوميتات وطلبات الدمج",
+        subtitle: "سبرينت 24 · لوحة عمليات الدوجو",
+        metadata: [
+          { label: "المستودع", value: "dojo-hq/dash" },
+          { label: "الفرع الافتراضي", value: "main" },
+          { label: "آخر مزامنة", value: "تم التحديث منذ 8 دقائق" },
+        ],
+        tabs: {
+          changes: "التغييرات",
+          overview: "نظرة عامة",
+          heatmap: "الخريطة الحرارية",
+        },
+        changes: {
+          heading: "أحدث العمل المرسل",
+          helper: "طلبات دمج مدمجة وكوميتات مباشرة خلال آخر 72 ساعة.",
+          items: [
+            {
+              id: "pr-421",
+              kind: "pullRequest",
+              badge: "مُدمج",
+              badgeTone: "success",
+              title: "إضافة خريطة الجاهزية للنزال إلى نافذة اللوحة",
+              description:
+                "ربط تدفق حضور الدوجو بنافذة التحليل الجديدة وتنسيق مؤشرات النظرة العامة.",
+              author: "Jordan Adebayo",
+              timestamp: "تم الدمج منذ ساعتين",
+              identifier: "PR #421",
+              stats: [
+                { label: "الكوميتات", value: "4" },
+                { label: "الملفات", value: "7" },
+                { label: "المراجعات", value: "2" },
+              ],
+              reviewersLabel: "المراجعين",
+              reviewers: ["Master Amara Lewis", "Coach Hanae Idrissi"],
+              tags: ["تلميع UX", "تحليلات"],
+            },
+            {
+              id: "commit-8794",
+              kind: "commit",
+              badge: "كوميت",
+              badgeTone: "neutral",
+              title: "معايرة مخططات السرعة للجولات الكسرية",
+              description:
+                "تطبيع حسابات دورة السبارينغ وتنعيم عرض فرق الجلسات في تبويب النظرة العامة.",
+              author: "Noor El Fassi",
+              timestamp: "دُفع منذ 5 ساعات",
+              identifier: "c8794ab",
+              stats: [
+                { label: "الأسطر", value: "+186 / -42" },
+                { label: "النطاق", value: "performance-overview" },
+              ],
+              reviewersLabel: "الوحدات المتأثرة",
+              reviewers: [
+                "analytics/useVelocityTrend.ts",
+                "components/TrendSparkline.tsx",
+              ],
+              tags: ["بيانات"],
+            },
+            {
+              id: "pr-420",
+              kind: "pullRequest",
+              badge: "قيد المراجعة",
+              badgeTone: "warning",
+              title: "إظهار صحة الكوميت في نافذة العمليات",
+              description:
+                "إضافة بطاقات ملخص المستودع ودمج إشارات الجاهزية للإطلاق في تبويب الخريطة الحرارية.",
+              author: "Lina Serrano",
+              timestamp: "بانتظار المراجعة",
+              identifier: "PR #420",
+              stats: [
+                { label: "الكوميتات", value: "3" },
+                { label: "الفحوصات", value: "جميعها ناجحة" },
+                { label: "ETA", value: "مراجعة متوقعة 18:00" },
+              ],
+              reviewersLabel: "مطلوب من",
+              reviewers: ["Coach Idris", "Master Chen"],
+              tags: ["نافذة", "إطلاق"],
+            },
+          ],
+          pipeline: {
+            heading: "فحوصات التسليم",
+            items: [
+              { label: "CI · dojo-hq/dash", status: "نجح · منذ 12 دقيقة" },
+              { label: "نشر المعاينة", status: "نجح · منذ 18 دقيقة" },
+              { label: "حارس حجم الحزمة", status: "+1.2% مقابل الأساس" },
+            ],
+          },
+        },
+        overview: {
+          heading: "نظرة نشاط",
+          helper: "لقطات سرعة السبرينت 24.",
+          summary: [
+            {
+              label: "الكوميتات المدمجة",
+              value: "36",
+              helper: "+8 مقارنة بالسباق السابق",
+            },
+            {
+              label: "طلبات الدمج المدمجة",
+              value: "12",
+              helper: "زمن دورة وسطي 21 ساعة",
+            },
+            {
+              label: "زمن الاستجابة للمراجعة",
+              value: "3.6س",
+              helper: "-1.1س مقارنة بالسباق السابق",
+            },
+            {
+              label: "وتيرة النشر",
+              value: "يوميًا",
+              helper: "4 إصدارات إنتاج",
+            },
+          ],
+          quality: {
+            heading: "مؤشرات الجودة",
+            items: [
+              {
+                label: "نسبة نجاح الاختبارات",
+                value: "98%",
+                helper: "211 فحصًا عبر 12 خط أنابيب",
+              },
+              {
+                label: "تنبيهات التراجع",
+                value: "0",
+                helper: "لا تنبيهات تراجع خلال آخر أسبوعين",
+              },
+              {
+                label: "درجة الوصولية",
+                value: "96",
+                helper: "متوسط Lighthouse للأسطح الجديدة",
+              },
+            ],
+          },
+          highlights: {
+            heading: "أبرز النقاط",
+            items: [
+              {
+                title: "تشديد حارس الإطلاق",
+                detail:
+                  "النشر للإنتاج ينتظر الآن اختبارات الدخان للنافذة وتحقق عينات التحليلات.",
+              },
+              {
+                title: "تسريع توجيه المراجعين",
+                detail:
+                  "التعيين التلقائي يقرن طلبات التحليلات مع الفريق الذي يغطي فروق التوقيت.",
+              },
+            ],
+          },
+        },
+        heatmap: {
+          heading: "الخريطة الحرارية للمساهمات",
+          helper: "الكوميتات والمراجعات والدمج خلال آخر خمس أسابيع.",
+          legend: {
+            none: "لا نشاط",
+            low: "خفيف",
+            medium: "نشط",
+            high: "كثيف",
+          },
+          weeks: [
+            {
+              label: "الأسبوع 20",
+              days: [
+                { label: "الإثنين", tooltip: "4 تحديثات", intensity: "medium" },
+                { label: "الثلاثاء", tooltip: "6 تحديثات", intensity: "medium" },
+                { label: "الأربعاء", tooltip: "10 تحديثات", intensity: "high" },
+                { label: "الخميس", tooltip: "7 تحديثات", intensity: "medium" },
+                { label: "الجمعة", tooltip: "3 تحديثات", intensity: "low" },
+                { label: "السبت", tooltip: "تحديث واحد", intensity: "low" },
+                { label: "الأحد", tooltip: "لا تحديثات", intensity: "none" },
+              ],
+            },
+            {
+              label: "الأسبوع 19",
+              days: [
+                { label: "الإثنين", tooltip: "تحديثان", intensity: "low" },
+                { label: "الثلاثاء", tooltip: "5 تحديثات", intensity: "medium" },
+                { label: "الأربعاء", tooltip: "7 تحديثات", intensity: "medium" },
+                { label: "الخميس", tooltip: "4 تحديثات", intensity: "medium" },
+                { label: "الجمعة", tooltip: "5 تحديثات", intensity: "medium" },
+                { label: "السبت", tooltip: "تحديثان", intensity: "low" },
+                { label: "الأحد", tooltip: "تحديث واحد", intensity: "low" },
+              ],
+            },
+            {
+              label: "الأسبوع 18",
+              days: [
+                { label: "الإثنين", tooltip: "تحديث واحد", intensity: "low" },
+                { label: "الثلاثاء", tooltip: "3 تحديثات", intensity: "low" },
+                { label: "الأربعاء", tooltip: "5 تحديثات", intensity: "medium" },
+                { label: "الخميس", tooltip: "تحديثان", intensity: "low" },
+                { label: "الجمعة", tooltip: "4 تحديثات", intensity: "medium" },
+                { label: "السبت", tooltip: "لا تحديثات", intensity: "none" },
+                { label: "الأحد", tooltip: "لا تحديثات", intensity: "none" },
+              ],
+            },
+            {
+              label: "الأسبوع 17",
+              days: [
+                { label: "الإثنين", tooltip: "3 تحديثات", intensity: "low" },
+                { label: "الثلاثاء", tooltip: "4 تحديثات", intensity: "medium" },
+                { label: "الأربعاء", tooltip: "6 تحديثات", intensity: "medium" },
+                { label: "الخميس", tooltip: "5 تحديثات", intensity: "medium" },
+                { label: "الجمعة", tooltip: "تحديثان", intensity: "low" },
+                { label: "السبت", tooltip: "تحديث واحد", intensity: "low" },
+                { label: "الأحد", tooltip: "لا تحديثات", intensity: "none" },
+              ],
+            },
+            {
+              label: "الأسبوع 16",
+              days: [
+                { label: "الإثنين", tooltip: "تحديثان", intensity: "low" },
+                { label: "الثلاثاء", tooltip: "تحديثان", intensity: "low" },
+                { label: "الأربعاء", tooltip: "3 تحديثات", intensity: "low" },
+                { label: "الخميس", tooltip: "4 تحديثات", intensity: "medium" },
+                { label: "الجمعة", tooltip: "3 تحديثات", intensity: "low" },
+                { label: "السبت", tooltip: "لا تحديثات", intensity: "none" },
+                { label: "الأحد", tooltip: "لا تحديثات", intensity: "none" },
+              ],
+            },
+          ],
+          callouts: {
+            heading: "ملاحظات",
+            items: [
+              { label: "أعلى يوم", value: "الأسبوع 20 · الأربعاء" },
+              { label: "أهدأ فترة", value: "الأسبوع 18 · السبت-الأحد" },
+            ],
+          },
+          footnote:
+            "تم التحديث منذ 8 دقائق. الخريطة الحرارية تشمل الكوميتات والمراجعات وعمليات الدمج.",
+        },
+      },
       summaryMetrics: [
         {
           label: "تقييم الربع",

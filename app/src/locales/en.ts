@@ -638,6 +638,236 @@ export const en = {
       description:
         "Quarter-to-date progression towards the season performance targets.",
       statusChip: "Ahead of plan",
+      commitsModal: {
+        trigger: {
+          label: "Commits & PRs",
+          helper: "Review repository activity and release readiness.",
+        },
+        title: "Commits & PRs activity",
+        subtitle: "Sprint 24 · dojo operations dash",
+        metadata: [
+          { label: "Repository", value: "dojo-hq/dash" },
+          { label: "Default branch", value: "main" },
+          { label: "Synced", value: "Updated 8 minutes ago" },
+        ],
+        tabs: {
+          changes: "Changes",
+          overview: "Overview",
+          heatmap: "Heatmap",
+        },
+        changes: {
+          heading: "Latest shipped work",
+          helper:
+            "Merged pull requests and direct commits from the last 72 hours.",
+          items: [
+            {
+              id: "pr-421",
+              kind: "pullRequest",
+              badge: "Merged",
+              badgeTone: "success",
+              title:
+                "Bring match-readiness heatmap into the dashboard modal",
+              description:
+                "Connected the dojo attendance feed to the new analysis modal and aligned the overview metrics.",
+              author: "Jordan Adebayo",
+              timestamp: "Merged 2 hours ago",
+              identifier: "PR #421",
+              stats: [
+                { label: "Commits", value: "4" },
+                { label: "Files", value: "7" },
+                { label: "Reviews", value: "2" },
+              ],
+              reviewersLabel: "Reviewers",
+              reviewers: ["Master Amara Lewis", "Coach Hanae Idrissi"],
+              tags: ["UX polish", "Analytics"],
+            },
+            {
+              id: "commit-8794",
+              kind: "commit",
+              badge: "Commit",
+              badgeTone: "neutral",
+              title: "Calibrate velocity charts for fractional rounds",
+              description:
+                "Normalised sparring cycle calculations and smoothed the session delta display for the overview tab.",
+              author: "Noor El Fassi",
+              timestamp: "Pushed 5 hours ago",
+              identifier: "c8794ab",
+              stats: [
+                { label: "Lines", value: "+186 / -42" },
+                { label: "Scope", value: "performance-overview" },
+              ],
+              reviewersLabel: "Touched modules",
+              reviewers: [
+                "analytics/useVelocityTrend.ts",
+                "components/TrendSparkline.tsx",
+              ],
+              tags: ["Data"],
+            },
+            {
+              id: "pr-420",
+              kind: "pullRequest",
+              badge: "In review",
+              badgeTone: "warning",
+              title: "Surface commit health in the operations modal",
+              description:
+                "Adds repository summary tiles and integrates release readiness signals for the heatmap tab.",
+              author: "Lina Serrano",
+              timestamp: "Waiting on review",
+              identifier: "PR #420",
+              stats: [
+                { label: "Commits", value: "3" },
+                { label: "Checks", value: "All green" },
+                { label: "ETA", value: "Review due 18:00" },
+              ],
+              reviewersLabel: "Requested",
+              reviewers: ["Coach Idris", "Master Chen"],
+              tags: ["Modal", "Release"],
+            },
+          ],
+          pipeline: {
+            heading: "Delivery checks",
+            items: [
+              { label: "CI · dojo-hq/dash", status: "Pass · 12m ago" },
+              { label: "Preview deploy", status: "Pass · 18m ago" },
+              { label: "Bundle size guard", status: "+1.2% vs baseline" },
+            ],
+          },
+        },
+        overview: {
+          heading: "Activity overview",
+          helper: "Sprint 24 velocity snapshots.",
+          summary: [
+            { label: "Commits merged", value: "36", helper: "+8 vs last sprint" },
+            { label: "PRs merged", value: "12", helper: "Median cycle 21h" },
+            {
+              label: "Review turnaround",
+              value: "3.6h",
+              helper: "-1.1h vs last sprint",
+            },
+            {
+              label: "Deployment cadence",
+              value: "Daily",
+              helper: "4 production releases",
+            },
+          ],
+          quality: {
+            heading: "Quality signals",
+            items: [
+              {
+                label: "Test pass rate",
+                value: "98%",
+                helper: "211 checks across 12 pipelines",
+              },
+              {
+                label: "Rollback alerts",
+                value: "0",
+                helper: "No regression flags in the last 2 weeks",
+              },
+              {
+                label: "Accessibility score",
+                value: "96",
+                helper: "Lighthouse average for new surfaces",
+              },
+            ],
+          },
+          highlights: {
+            heading: "Highlights",
+            items: [
+              {
+                title: "Release guard tightened",
+                detail:
+                  "Production deploys now wait for modal smoke tests plus analytics sample validations.",
+              },
+              {
+                title: "Faster reviewer routing",
+                detail:
+                  "Auto-assign now pairs dojo analytics PRs with the roster covering timezone gaps.",
+              },
+            ],
+          },
+        },
+        heatmap: {
+          heading: "Contribution heatmap",
+          helper: "Commits, reviews, and merges over the last five weeks.",
+          legend: {
+            none: "No activity",
+            low: "Light",
+            medium: "Active",
+            high: "Intense",
+          },
+          weeks: [
+            {
+              label: "Week 20",
+              days: [
+                { label: "Mon", tooltip: "4 updates", intensity: "medium" },
+                { label: "Tue", tooltip: "6 updates", intensity: "medium" },
+                { label: "Wed", tooltip: "10 updates", intensity: "high" },
+                { label: "Thu", tooltip: "7 updates", intensity: "medium" },
+                { label: "Fri", tooltip: "3 updates", intensity: "low" },
+                { label: "Sat", tooltip: "1 update", intensity: "low" },
+                { label: "Sun", tooltip: "0 updates", intensity: "none" },
+              ],
+            },
+            {
+              label: "Week 19",
+              days: [
+                { label: "Mon", tooltip: "2 updates", intensity: "low" },
+                { label: "Tue", tooltip: "5 updates", intensity: "medium" },
+                { label: "Wed", tooltip: "7 updates", intensity: "medium" },
+                { label: "Thu", tooltip: "4 updates", intensity: "medium" },
+                { label: "Fri", tooltip: "5 updates", intensity: "medium" },
+                { label: "Sat", tooltip: "2 updates", intensity: "low" },
+                { label: "Sun", tooltip: "1 update", intensity: "low" },
+              ],
+            },
+            {
+              label: "Week 18",
+              days: [
+                { label: "Mon", tooltip: "1 update", intensity: "low" },
+                { label: "Tue", tooltip: "3 updates", intensity: "low" },
+                { label: "Wed", tooltip: "5 updates", intensity: "medium" },
+                { label: "Thu", tooltip: "2 updates", intensity: "low" },
+                { label: "Fri", tooltip: "4 updates", intensity: "medium" },
+                { label: "Sat", tooltip: "0 updates", intensity: "none" },
+                { label: "Sun", tooltip: "0 updates", intensity: "none" },
+              ],
+            },
+            {
+              label: "Week 17",
+              days: [
+                { label: "Mon", tooltip: "3 updates", intensity: "low" },
+                { label: "Tue", tooltip: "4 updates", intensity: "medium" },
+                { label: "Wed", tooltip: "6 updates", intensity: "medium" },
+                { label: "Thu", tooltip: "5 updates", intensity: "medium" },
+                { label: "Fri", tooltip: "2 updates", intensity: "low" },
+                { label: "Sat", tooltip: "1 update", intensity: "low" },
+                { label: "Sun", tooltip: "0 updates", intensity: "none" },
+              ],
+            },
+            {
+              label: "Week 16",
+              days: [
+                { label: "Mon", tooltip: "2 updates", intensity: "low" },
+                { label: "Tue", tooltip: "2 updates", intensity: "low" },
+                { label: "Wed", tooltip: "3 updates", intensity: "low" },
+                { label: "Thu", tooltip: "4 updates", intensity: "medium" },
+                { label: "Fri", tooltip: "3 updates", intensity: "low" },
+                { label: "Sat", tooltip: "0 updates", intensity: "none" },
+                { label: "Sun", tooltip: "0 updates", intensity: "none" },
+              ],
+            },
+          ],
+          callouts: {
+            heading: "Callouts",
+            items: [
+              { label: "Peak day", value: "Week 20 · Wed" },
+              { label: "Quiet streak", value: "Week 18 · Sat–Sun" },
+            ],
+          },
+          footnote:
+            "Updated 8 minutes ago. Heatmap includes commits, reviews, and merges.",
+        },
+      },
       summaryMetrics: [
         {
           label: "Quarter rating",

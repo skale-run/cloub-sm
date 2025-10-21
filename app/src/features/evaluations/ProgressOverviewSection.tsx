@@ -1,6 +1,7 @@
-import type { ReactElement } from "react";
+import { useState, type ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import RedSurface from "../../components/RedSurface";
+import CommitsPrsModal from "./CommitsPrsModal";
 
 type SummaryMetric = {
   label: string;
@@ -28,6 +29,7 @@ type AlertItem = {
 
 function ProgressOverviewSection(): ReactElement {
   const { t } = useTranslation();
+  const [isCommitsModalOpen, setIsCommitsModalOpen] = useState(false);
 
   const summaryMetrics = t("progressOverview.summaryMetrics", {
     returnObjects: true,
@@ -45,6 +47,18 @@ function ProgressOverviewSection(): ReactElement {
     returnObjects: true,
   }) as AlertItem[];
 
+  const commitsModalTrigger = t("progressOverview.commitsModal.trigger", {
+    returnObjects: true,
+  }) as { label: string; helper: string };
+
+  const openCommitsModal = () => {
+    setIsCommitsModalOpen(true);
+  };
+
+  const closeCommitsModal = () => {
+    setIsCommitsModalOpen(false);
+  };
+
   return (
     <section id="progress-overview" className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -56,9 +70,21 @@ function ProgressOverviewSection(): ReactElement {
             {t("progressOverview.description")}
           </p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-3xl border border-red-400/30 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
-          {t("progressOverview.statusChip")}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-2 rounded-3xl border border-red-400/30 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100">
+            {t("progressOverview.statusChip")}
+          </span>
+          <button
+            type="button"
+            onClick={openCommitsModal}
+            className="inline-flex items-center gap-2 rounded-3xl border border-red-400/30 bg-red-900/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-red-100 transition hover:border-red-400/45 hover:bg-red-900/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+            aria-label={commitsModalTrigger.label}
+            aria-description={commitsModalTrigger.helper}
+            title={commitsModalTrigger.helper}
+          >
+            {commitsModalTrigger.label}
+          </button>
+        </div>
       </div>
 
       <RedSurface
@@ -215,6 +241,10 @@ function ProgressOverviewSection(): ReactElement {
           </div>
         </RedSurface>
       </div>
+      <CommitsPrsModal
+        isOpen={isCommitsModalOpen}
+        onClose={closeCommitsModal}
+      />
     </section>
   );
 }
