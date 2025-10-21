@@ -657,6 +657,241 @@ export const fr = {
       description:
         "Suivez l'évolution des ceintures, la maîtrise des techniques et la discipline dans le cadre du plan de progression.",
       statusChip: "Ahead of plan",
+      commitsModal: {
+        trigger: {
+          label: "Commits & PRs",
+          helper:
+            "Consulter l'activité du dépôt et la préparation aux livraisons.",
+        },
+        title: "Activité des commits & PRs",
+        subtitle: "Sprint 24 · tableau de bord opérations dojo",
+        metadata: [
+          { label: "Dépôt", value: "dojo-hq/dash" },
+          { label: "Branche par défaut", value: "main" },
+          { label: "Synchronisation", value: "Mis à jour il y a 8 minutes" },
+        ],
+        tabs: {
+          changes: "Modifications",
+          overview: "Vue d'ensemble",
+          heatmap: "Heatmap",
+        },
+        changes: {
+          heading: "Derniers travaux livrés",
+          helper:
+            "Pull requests fusionnées et commits directs sur les dernières 72 heures.",
+          items: [
+            {
+              id: "pr-421",
+              kind: "pullRequest",
+              badge: "Fusionné",
+              badgeTone: "success",
+              title:
+                "Intégrer la heatmap de préparation au modal du tableau de bord",
+              description:
+                "Connexion du flux d'assiduité du dojang à la nouvelle fenêtre d'analyse et alignement des métriques de synthèse.",
+              author: "Jordan Adebayo",
+              timestamp: "Fusionné il y a 2 heures",
+              identifier: "PR #421",
+              stats: [
+                { label: "Commits", value: "4" },
+                { label: "Fichiers", value: "7" },
+                { label: "Revues", value: "2" },
+              ],
+              reviewersLabel: "Relecteurs",
+              reviewers: ["Master Amara Lewis", "Coach Hanae Idrissi"],
+              tags: ["Finition UX", "Analytique"],
+            },
+            {
+              id: "commit-8794",
+              kind: "commit",
+              badge: "Commit",
+              badgeTone: "neutral",
+              title:
+                "Calibrer les graphiques de vélocité pour les rounds fractionnaires",
+              description:
+                "Normalisation des calculs de cycle de sparring et lissage de l'écart de séance dans l'onglet de synthèse.",
+              author: "Noor El Fassi",
+              timestamp: "Poussé il y a 5 heures",
+              identifier: "c8794ab",
+              stats: [
+                { label: "Lignes", value: "+186 / -42" },
+                { label: "Portée", value: "performance-overview" },
+              ],
+              reviewersLabel: "Modules touchés",
+              reviewers: [
+                "analytics/useVelocityTrend.ts",
+                "components/TrendSparkline.tsx",
+              ],
+              tags: ["Données"],
+            },
+            {
+              id: "pr-420",
+              kind: "pullRequest",
+              badge: "En revue",
+              badgeTone: "warning",
+              title: "Mettre en avant la santé des commits dans le modal opérations",
+              description:
+                "Ajoute des tuiles de synthèse du dépôt et intègre les signaux de préparation au déploiement pour l'onglet heatmap.",
+              author: "Lina Serrano",
+              timestamp: "En attente de revue",
+              identifier: "PR #420",
+              stats: [
+                { label: "Commits", value: "3" },
+                { label: "Vérifications", value: "Tout est vert" },
+                { label: "Échéance", value: "Revue attendue 18h00" },
+              ],
+              reviewersLabel: "Demandé",
+              reviewers: ["Coach Idris", "Master Chen"],
+              tags: ["Modal", "Release"],
+            },
+          ],
+          pipeline: {
+            heading: "Contrôles de livraison",
+            items: [
+              { label: "CI · dojo-hq/dash", status: "Succès · il y a 12 min" },
+              { label: "Déploiement de prévisualisation", status: "Succès · il y a 18 min" },
+              {
+                label: "Surveillance de taille de bundle",
+                status: "+1,2 % vs référence",
+              },
+            ],
+          },
+        },
+        overview: {
+          heading: "Vue d'activité",
+          helper: "Instantanés de vélocité du sprint 24.",
+          summary: [
+            { label: "Commits fusionnés", value: "36", helper: "+8 vs sprint précédent" },
+            { label: "PRs fusionnées", value: "12", helper: "Cycle médian 21h" },
+            {
+              label: "Délai de revue",
+              value: "3,6h",
+              helper: "-1,1h vs sprint précédent",
+            },
+            {
+              label: "Cadence de déploiement",
+              value: "Quotidien",
+              helper: "4 mises en prod",
+            },
+          ],
+          quality: {
+            heading: "Signaux qualité",
+            items: [
+              {
+                label: "Taux de tests réussis",
+                value: "98%",
+                helper: "211 vérifications sur 12 pipelines",
+              },
+              {
+                label: "Alertes de rollback",
+                value: "0",
+                helper: "Aucun signal de régression sur les 2 dernières semaines",
+              },
+              {
+                label: "Score accessibilité",
+                value: "96",
+                helper: "Moyenne Lighthouse des nouvelles surfaces",
+              },
+            ],
+          },
+          highlights: {
+            heading: "Points saillants",
+            items: [
+              {
+                title: "Renforcement du garde-fou de release",
+                detail:
+                  "Les déploiements prod attendent désormais les tests fumée du modal et la validation des échantillons analytics.",
+              },
+              {
+                title: "Routage des relecteurs accéléré",
+                detail:
+                  "L'auto-assignment associe désormais les PR analytics aux relecteurs couvrant les fuseaux horaires.",
+              },
+            ],
+          },
+        },
+        heatmap: {
+          heading: "Heatmap de contributions",
+          helper: "Commits, revues et merges sur les cinq dernières semaines.",
+          legend: {
+            none: "Aucune activité",
+            low: "Léger",
+            medium: "Actif",
+            high: "Intense",
+          },
+          weeks: [
+            {
+              label: "Semaine 20",
+              days: [
+                { label: "Lun", tooltip: "4 mises à jour", intensity: "medium" },
+                { label: "Mar", tooltip: "6 mises à jour", intensity: "medium" },
+                { label: "Mer", tooltip: "10 mises à jour", intensity: "high" },
+                { label: "Jeu", tooltip: "7 mises à jour", intensity: "medium" },
+                { label: "Ven", tooltip: "3 mises à jour", intensity: "low" },
+                { label: "Sam", tooltip: "1 mise à jour", intensity: "low" },
+                { label: "Dim", tooltip: "0 mise à jour", intensity: "none" },
+              ],
+            },
+            {
+              label: "Semaine 19",
+              days: [
+                { label: "Lun", tooltip: "2 mises à jour", intensity: "low" },
+                { label: "Mar", tooltip: "5 mises à jour", intensity: "medium" },
+                { label: "Mer", tooltip: "7 mises à jour", intensity: "medium" },
+                { label: "Jeu", tooltip: "4 mises à jour", intensity: "medium" },
+                { label: "Ven", tooltip: "5 mises à jour", intensity: "medium" },
+                { label: "Sam", tooltip: "2 mises à jour", intensity: "low" },
+                { label: "Dim", tooltip: "1 mise à jour", intensity: "low" },
+              ],
+            },
+            {
+              label: "Semaine 18",
+              days: [
+                { label: "Lun", tooltip: "1 mise à jour", intensity: "low" },
+                { label: "Mar", tooltip: "3 mises à jour", intensity: "low" },
+                { label: "Mer", tooltip: "5 mises à jour", intensity: "medium" },
+                { label: "Jeu", tooltip: "2 mises à jour", intensity: "low" },
+                { label: "Ven", tooltip: "4 mises à jour", intensity: "medium" },
+                { label: "Sam", tooltip: "0 mise à jour", intensity: "none" },
+                { label: "Dim", tooltip: "0 mise à jour", intensity: "none" },
+              ],
+            },
+            {
+              label: "Semaine 17",
+              days: [
+                { label: "Lun", tooltip: "3 mises à jour", intensity: "low" },
+                { label: "Mar", tooltip: "4 mises à jour", intensity: "medium" },
+                { label: "Mer", tooltip: "6 mises à jour", intensity: "medium" },
+                { label: "Jeu", tooltip: "5 mises à jour", intensity: "medium" },
+                { label: "Ven", tooltip: "2 mises à jour", intensity: "low" },
+                { label: "Sam", tooltip: "1 mise à jour", intensity: "low" },
+                { label: "Dim", tooltip: "0 mise à jour", intensity: "none" },
+              ],
+            },
+            {
+              label: "Semaine 16",
+              days: [
+                { label: "Lun", tooltip: "2 mises à jour", intensity: "low" },
+                { label: "Mar", tooltip: "2 mises à jour", intensity: "low" },
+                { label: "Mer", tooltip: "3 mises à jour", intensity: "low" },
+                { label: "Jeu", tooltip: "4 mises à jour", intensity: "medium" },
+                { label: "Ven", tooltip: "3 mises à jour", intensity: "low" },
+                { label: "Sam", tooltip: "0 mise à jour", intensity: "none" },
+                { label: "Dim", tooltip: "0 mise à jour", intensity: "none" },
+              ],
+            },
+          ],
+          callouts: {
+            heading: "À retenir",
+            items: [
+              { label: "Pic", value: "Semaine 20 · Mer" },
+              { label: "Accalmie", value: "Semaine 18 · Sam–Dim" },
+            ],
+          },
+          footnote:
+            "Mis à jour il y a 8 minutes. La heatmap inclut commits, revues et merges.",
+        },
+      },
       summaryMetrics: [
         {
           label: "Quarter rating",
